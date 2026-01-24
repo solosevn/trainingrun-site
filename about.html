@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Training Run</title>
+    <meta name="description" content="About Training Run - the independent, fact-checked AI scoreboard.">
+    <link rel="canonical" href="https://trainingrun.ai/about">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .about-page {
+            padding-top: 120px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-header {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .about-header h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .about-content {
+            padding: 0 40px 80px;
+        }
+
+        .about-content h2 {
+            font-size: 28px;
+            margin: 50px 0 20px;
+            color: var(--text-primary);
+        }
+
+        .about-content h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .about-content p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .about-content strong {
+            color: var(--text-primary);
+        }
+
+        .mission-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-accent);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .mission-box h3 {
+            font-size: 20px;
+            color: var(--cyan);
+            margin-bottom: 15px;
+        }
+
+        .mission-box p {
+            font-size: 18px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .principles-list {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+        }
+
+        .principles-list li {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            align-items: flex-start;
+        }
+
+        .principles-list .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .principles-list h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .principles-list p {
+            font-size: 14px;
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        .contact-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .contact-section h2 {
+            margin-top: 0;
+        }
+
+        .contact-section p {
+            margin-bottom: 20px;
+        }
+
+        .contact-email {
+            font-size: 20px;
+            color: var(--cyan);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav>
+        <a href="/" class="logo">Training Run</a>
+        <ul class="nav-links">
+            <li><a href="/trsmethodology">TRS Methodology</a></li>
+            <li><a href="/scores">Current Scores</a></li>
+            <li><a href="/about" class="active">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="about-page">
+        <header class="about-header">
+            <h1>About <span class="cyan">Training Run</span></h1>
+        </header>
+
+        <div class="about-content">
+            <div class="mission-box">
+                <h3>Our Mission</h3>
+                <p>
+                    To provide the most transparent, fact-checked, and accessible measurement
+                    of AI capabilities—so the public, investors, policymakers, and developers
+                    can make informed decisions based on data, not hype.
+                </p>
+            </div>
+
+            <h2>Why We Exist</h2>
+            <p>
+                AI is evolving faster than most people can track. Every week brings new model releases,
+                benchmark claims, and capability announcements. Separating signal from noise has become
+                a full-time job.
+            </p>
+            <p>
+                <strong>Training Run</strong> exists to solve this problem. We aggregate performance data
+                from the most respected evaluation platforms, apply a transparent scoring methodology,
+                and deliver a clear, weekly snapshot of where AI models actually stand.
+            </p>
+            <p>
+                We're not affiliated with any AI company. We don't have a horse in this race.
+                We just want to give you the clearest picture possible.
+            </p>
+
+            <h2>Our Principles</h2>
+            <ul class="principles-list">
+                <li>
+                    <div class="icon">📊</div>
+                    <div>
+                        <h4>Transparency First</h4>
+                        <p>Every score we publish comes with full methodology documentation and source citations. No black boxes.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon">🔍</div>
+                    <div>
+                        <h4>Fact-Check Everything</h4>
+                        <p>We only use data from verifiable, peer-reviewed, or publicly auditable sources. We cite everything.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon">🏛️</div>
+                    <div>
+                        <h4>Independence</h4>
+                        <p>We're not funded by AI companies. Our only incentive is accuracy and usefulness to our audience.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon">🎯</div>
+                    <div>
+                        <h4>Measure What Matters</h4>
+                        <p>We focus on capabilities that matter in the real world—not just benchmarks that make for good press releases.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon">⚠️</div>
+                    <div>
+                        <h4>Know Our Limits</h4>
+                        <p>We're clear about what we don't measure. TRS is not a prediction of AGI timelines or future capabilities.</p>
+                    </div>
+                </li>
+            </ul>
+
+            <h2>The Show</h2>
+            <p>
+                Training Run is also a weekly video series that breaks down the latest in AI performance.
+                Think of it as your weekly conditioning—keeping you up to speed on what these models
+                can actually do, delivered in a format that's actually watchable.
+            </p>
+            <p>
+                New episodes drop weekly, covering the latest scores, notable movements, and
+                what they mean for the AI landscape.
+            </p>
+
+            <div class="contact-section">
+                <h2>Get in Touch</h2>
+                <p>
+                    Questions about our methodology? Suggestions for improvement?
+                    Corrections or feedback? We want to hear from you.
+                </p>
+                <a href="mailto:hello@trainingrun.ai" class="contact-email">hello@trainingrun.ai</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border: none; padding: 40px 0;">
+                <p>&copy; 2025 Training Run. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
