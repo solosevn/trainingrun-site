@@ -288,7 +288,83 @@ I need to:
 
 ---
 
-## VERSION HISTORY
+## GENERATING GRAPHICS (Terminal/Python)
+
+The simplest way to create graphics (thumbnails, title cards, end cards) is to run Python directly in Mac Terminal.
+
+**Requirements:** Python 3 with Pillow (`pip3 install Pillow`)
+
+**TikTok Title Card (1080x1920):**
+```bash
+cd ~/Desktop && python3 << 'EOF'
+from PIL import Image, ImageDraw, ImageFont
+
+img = Image.new('RGB', (1080, 1920), (10, 20, 40))
+draw = ImageDraw.Draw(img)
+
+try:
+    font_huge = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 120)
+    font_large = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 48)
+    font_medium = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 36)
+    font_small = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+except:
+    font_huge = font_large = font_medium = font_small = ImageFont.load_default()
+
+CYAN = (0, 212, 255)
+WHITE = (255, 255, 255)
+ORANGE = (255, 100, 0)
+GREY = (180, 180, 180)
+
+draw.rounded_rectangle([(380, 500), (700, 550)], radius=25, outline=CYAN, width=2)
+draw.text((540, 525), "DATE HERE", font=font_small, fill=CYAN, anchor='mm')
+draw.text((540, 700), "Training", font=font_huge, fill=CYAN, anchor='mm')
+draw.text((540, 830), "Run", font=font_huge, fill=CYAN, anchor='mm')
+draw.text((540, 950), "YOUR WEEKLY AI CONDITIONING", font=font_medium, fill=GREY, anchor='mm')
+draw.text((540, 1100), "WEEK X", font=font_large, fill=ORANGE, anchor='mm')
+draw.text((540, 1300), "AI SCOREBOARD", font=font_large, fill=WHITE, anchor='mm')
+draw.text((540, 1450), "Headline 1", font=font_medium, fill=CYAN, anchor='mm')
+draw.text((540, 1510), "Headline 2", font=font_medium, fill=CYAN, anchor='mm')
+draw.text((540, 1570), "Headline 3", font=font_medium, fill=CYAN, anchor='mm')
+
+img.save("tiktok_title.png")
+print("Saved to Desktop: tiktok_title.png")
+EOF
+```
+
+**TikTok End Card (1080x1920):**
+```bash
+cd ~/Desktop && python3 << 'EOF'
+from PIL import Image, ImageDraw, ImageFont
+
+img = Image.new('RGB', (1080, 1920), (10, 20, 40))
+draw = ImageDraw.Draw(img)
+
+try:
+    font_huge = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 100)
+    font_large = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 60)
+except:
+    font_huge = font_large = ImageFont.load_default()
+
+CYAN = (0, 212, 255)
+WHITE = (255, 255, 255)
+
+draw.text((540, 860), "trainingrun.ai", font=font_huge, fill=CYAN, anchor='mm')
+draw.text((540, 1000), "FULL EPISODE EVERY THURSDAY", font=font_large, fill=WHITE, anchor='mm')
+
+img.save("tiktok_endcard.png")
+print("Saved to Desktop: tiktok_endcard.png")
+EOF
+```
+
+**How to use:**
+1. Open Terminal on Mac
+2. 2. Copy entire code block
+   3. 3. Paste into Terminal and press Enter
+      4. 4. Image saves to Desktop
+        
+         5. ---
+        
+         6. ## VERSION HISTORY
 
 - **v1.0** (January 30, 2026) - Initial production bible created after Week 4
 
