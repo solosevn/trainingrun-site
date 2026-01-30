@@ -192,7 +192,7 @@
     const now = new Date();
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
-    document.getElementById('current-week').textContent = 'WEEK OF ' + dateStr;
+    document.getElementById('current-week').textContent = dateStr;
     </script>
 </body>
 </html>
