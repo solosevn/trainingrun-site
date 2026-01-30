@@ -356,6 +356,102 @@ print("Saved to Desktop: tiktok_endcard.png")
 EOF
 ```
 
+**Scoreboard Graphic (1920x1080):**
+```bash
+cd ~/Desktop && python3 << 'EOF'
+from PIL import Image, ImageDraw, ImageFont
+
+img = Image.new('RGB', (1920, 1080), (10, 20, 32))
+draw = ImageDraw.Draw(img)
+
+try:
+    font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 72)
+    font_subtitle = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+    font_rank = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 32)
+    font_model = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 32)
+    font_company = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 22)
+    font_score = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 42)
+    font_change = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+except:
+    font_title = font_subtitle = font_rank = font_model = font_company = font_score = font_change = ImageFont.load_default()
+
+CYAN = (0, 212, 255)
+WHITE = (255, 255, 255)
+GREEN = (0, 230, 118)
+RED = (255, 82, 82)
+GOLD = (255, 193, 7)
+GREY = (120, 120, 120)
+ROW_BG = (18, 30, 42)
+
+TOP1_HIGHLIGHT = (70, 50, 20)
+TOP2_HIGHLIGHT = (45, 50, 55)
+TOP3_HIGHLIGHT = (50, 40, 30)
+
+draw.text((80, 40), "TRAINING RUN", font=font_subtitle, fill=CYAN)
+draw.text((80, 80), "THE SCOREBOARD", font=font_title, fill=WHITE)
+draw.text((80, 170), "Week of DATE HERE", font=font_subtitle, fill=CYAN)
+
+models = [
+    (1, "Model Name", "Company", 95.4, +0.2),
+    (2, "Model Name", "Company", 94.8, +0.2),
+    (3, "Model Name", "Company", 94.3, +0.2),
+    (4, "Model Name", "Company", 93.2, -0.2),
+    (5, "Model Name", "Company", 93.0, +0.2),
+    (6, "Model Name", "Company", 91.8, +0.6),
+    (7, "Model Name", "Company", 90.9, +0.2),
+]
+
+y_start = 230
+row_height = 100
+
+for i, (rank, model, company, score, change) in enumerate(models):
+    y = y_start + i * row_height
+
+    if rank == 1:
+        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=TOP1_HIGHLIGHT)
+    elif rank == 2:
+        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=TOP2_HIGHLIGHT)
+    elif rank == 3:
+        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=TOP3_HIGHLIGHT)
+    else:
+        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=ROW_BG)
+
+    rank_colors = {1: GOLD, 2: (160, 160, 160), 3: (205, 127, 50)}
+    box_color = rank_colors.get(rank, (50, 65, 80))
+    draw.rounded_rectangle([(90, y + 18), (145, y + 68)], radius=10, fill=box_color)
+    draw.text((117, y + 43), str(rank), font=font_rank, fill=(10, 20, 32) if rank <= 3 else WHITE, anchor='mm')
+
+    draw.text((175, y + 25), model, font=font_model, fill=WHITE)
+    draw.text((175, y + 58), company, font=font_company, fill=GREY)
+
+    draw.text((1500, y + 43), f"{score}", font=font_score, fill=WHITE, anchor='mm')
+
+    if change > 0:
+        change_color = GREEN
+        change_text = f"+{change}"
+        arrow_x = 1650
+        arrow_y = y + 43
+        draw.polygon([(arrow_x, arrow_y - 12), (arrow_x - 10, arrow_y + 8), (arrow_x + 10, arrow_y + 8)], fill=GREEN)
+    elif change < 0:
+        change_color = RED
+        change_text = str(change)
+        arrow_x = 1650
+        arrow_y = y + 43
+        draw.polygon([(arrow_x, arrow_y + 12), (arrow_x - 10, arrow_y - 8), (arrow_x + 10, arrow_y - 8)], fill=RED)
+    else:
+        change_color = GREY
+        change_text = "0.0"
+        arrow_x = 1650
+        arrow_y = y + 43
+        draw.ellipse([(arrow_x - 6, arrow_y - 6), (arrow_x + 6, arrow_y + 6)], fill=GREY)
+
+    draw.text((1780, y + 43), change_text, font=font_change, fill=change_color, anchor='mm')
+
+img.save("scoreboard.png")
+print("Saved to Desktop: scoreboard.png")
+EOF
+```
+
 **How to use:**
 1. Open Terminal on Mac
 2. 2. Copy entire code block
