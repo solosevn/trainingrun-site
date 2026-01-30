@@ -28,7 +28,7 @@
       </nav>
 
     <section class="hero">
-            <div class="hero-badge">WEEK OF JANUARY 20, 2026</div>
+            <div class="hero-badge"><span id="current-week"></span></div>
             <h1>Training Run</h1>
             <p class="tagline">Your Weekly AI Conditioning</p>
             <p class="hero-description">
@@ -188,6 +188,12 @@
                             </div>
               </div>
     </footer>
+<script>
+    const now = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
+    document.getElementById('current-week').textContent = 'WEEK OF ' + dateStr;
+    </script>
 </body>
 </html>
     </footer></p></em></strong>
