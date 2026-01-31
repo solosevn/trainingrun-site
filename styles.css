@@ -868,3 +868,39 @@ footer {
      letter-spacing: 0.5px;
 }
 
+
+/* Data Table Styling - Verify Our Data page */
+.data-table {
+     width: 100%;
+     max-width: 900px;
+     margin: 0 auto 40px auto;
+}
+
+.data-table table {
+     width: 100%;
+     table-layout: fixed;
+     border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+     padding: 12px 20px;
+     text-align: left;
+     vertical-align: top;
+}
+
+.data-table th:first-child,
+.data-table td:first-child {
+     width: 30%;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2) {
+     width: 35%;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+     width: 35%;
+}
+
