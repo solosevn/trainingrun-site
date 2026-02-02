@@ -1,426 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRS Methodology | Training Run</title>
-    <meta name="description" content="The complete methodology behind the Training Run Score (TRS) - how we measure and rank AI model performance with full source citations.">
-    <meta property="og:title" content="TRS Methodology | Training Run">
-    <meta property="og:description" content="Transparent, fact-checked methodology for scoring AI models. Full source citations.">
-    <link rel="canonical" href="https://trainingrun.ai/trsmethodology">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>TRS Methodology | Training Run</title>
+        <meta name="description" content="The complete methodology behind the Training Run Score (TRS) - how we measure and rank AI model performance with full source citations.">
+        <meta property="og:title" content="TRS Methodology | Training Run">
+        <meta property="og:description" content="Transparent, fact-checked methodology for scoring AI models. Full source citations.">
+        <link rel="canonical" href="https://trainingrun.ai/trsmethodology">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
 <body>
-    <div class="bg-animation"></div>
-
-    <nav>
-        <a href="/" class="logo">Training Run</a>
-        <ul class="nav-links">
-            <li><a href="/trsmethodology" class="active">TRS Methodology</a></li>
-            <li><a href="/scores">Current Scores</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-    </nav>
-
+        <div class="bg-animation"></div>div>
+        <nav>
+                    <a href="/" class="logo">Training Run</a>a>
+                    <ul class="nav-links">
+                                    <li><a href="/trsmethodology" class="active">TRS Methodology</a>a></li>
+                                <li><a href="/scores">Current Scores</a>a></li>
+                                <li><a href="/about">About</a>a></li>
+                    </ul>ul>
+        </nav>
     <article class="methodology-page">
-        <header class="page-header">
-            <h1>TRS <span class="cyan">Methodology</span></h1>
-            <p class="page-intro">
-                The Training Run Score (TRS) is a composite metric designed to provide a clear,
-                comparable measure of AI model capabilities. This page documents our complete
-                methodology with full source citations.
-            </p>
-            <p class="last-updated">Last Updated: January 24, 2026</p>
-        </header>
-
-        <section class="method-section">
-            <h2>Executive Summary</h2>
-            <div class="summary-box">
-                <p>
-                    The TRS aggregates performance data from established benchmarks into a single 0-100 score.
-                    We weight six dimensions based on their relevance to real-world AI utility:
-                </p>
-                <div class="formula-display">
-                    <code>TRS = (R × 0.25) + (C × 0.25) + (H × 0.20) + (K × 0.15) + (E × 0.10) + (S × 0.05)</code>
-                </div>
-                <p class="formula-note">
-                    Where R = Reasoning, C = Coding, H = Human Preference, K = Knowledge, E = Efficiency, S = Safety
-                </p>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>1. Reasoning & Logic (25%)</h2>
-            <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>
-                    The ability to solve novel problems requiring multi-step reasoning, logical deduction,
-                    and genuine understanding—not pattern matching from training data.
-                </p>
-
-                <h3>Primary Data Sources</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>ARC-AGI-2 (ARC Prize Foundation)</h4>
-                        <p>
-                            The Abstraction and Reasoning Corpus tests novel reasoning on tasks specifically
-                            designed to require thinking through new problems. Unlike traditional benchmarks,
-                            ARC tasks cannot be solved through memorization.
-                        </p>
-                        <ul class="source-details">
-                            <li><strong>Current best baseline:</strong> 31% accuracy</li>
-                            <li><strong>With refinement loops:</strong> 54% accuracy</li>
-                            <li><strong>Human average:</strong> 60% accuracy</li>
-                        </ul>
-                        <a href="https://arcprize.org/" target="_blank" rel="noopener" class="source-link">
-                            Source: arcprize.org
-                        </a>
-                    </div>
-
-                    <div class="source-item">
-                        <h4>GPQA Diamond (NYU, Anthropic, et al.)</h4>
-                        <p>
-                            Graduate-level science questions written by PhD experts, validated to be
-                            answerable by domain experts but challenging for non-experts.
-                        </p>
-                        <a href="https://arxiv.org/abs/2311.12022" target="_blank" rel="noopener" class="source-link">
-                            Source: arXiv:2311.12022
-                        </a>
-                    </div>
-
-                    <div class="source-item">
-                        <h4>MATH (Hendrycks et al.)</h4>
-                        <p>
-                            Competition-level mathematics problems from AMC, AIME, and Olympiad competitions
-                            requiring multi-step mathematical reasoning.
-                        </p>
-                        <a href="https://arxiv.org/abs/2103.03874" target="_blank" rel="noopener" class="source-link">
-                            Source: arXiv:2103.03874
-                        </a>
-                    </div>
-                </div>
-
-                <h3>Score Calculation</h3>
-                <p>
-                    We normalize each benchmark to a 0-100 scale where 100 represents the current
-                    state-of-the-art performance. The Reasoning score is a weighted average:
-                </p>
-                <code class="calc-formula">R = (ARC × 0.40) + (GPQA × 0.35) + (MATH × 0.25)</code>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>2. Coding Proficiency (25%)</h2>
-            <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>
-                    Real-world programming ability: writing functional code, debugging, understanding
-                    codebases, and solving actual software engineering problems.
-                </p>
-
-                <h3>Primary Data Sources</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>SWE-Bench Verified (Princeton, OpenAI)</h4>
-                        <p>
-                            Real GitHub issues from popular Python repositories. Models must understand
-                            the codebase, identify the bug, and generate a working fix. Human-verified
-                            subset ensures accuracy.
-                        </p>
-                        <a href="https://www.swebench.com/" target="_blank" rel="noopener" class="source-link">
-                            Source: swebench.com
-                        </a>
-                    </div>
-
-                    <div class="source-item">
-                        <h4>HumanEval (OpenAI)</h4>
-                        <p>
-                            164 hand-written programming problems testing code generation from docstrings.
-                            Measures functional correctness via unit tests.
-                        </p>
-                        <a href="https://arxiv.org/abs/2107.03374" target="_blank" rel="noopener" class="source-link">
-                            Source: arXiv:2107.03374
-                        </a>
-                    </div>
-
-                    <div class="source-item">
-                        <h4>MBPP (Google)</h4>
-                        <p>
-                            974 crowd-sourced Python programming problems designed to be solvable by
-                            entry-level programmers, testing basic programming proficiency.
-                        </p>
-                        <a href="https://arxiv.org/abs/2108.07732" target="_blank" rel="noopener" class="source-link">
-                            Source: arXiv:2108.07732
-                        </a>
-                    </div>
-                </div>
-
-                <h3>Score Calculation</h3>
-                <code class="calc-formula">C = (SWE-Bench × 0.50) + (HumanEval × 0.30) + (MBPP × 0.20)</code>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>3. Human Preference (20%)</h2>
-            <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>
-                    What do actual users prefer when comparing model outputs? This captures qualities
-                    that benchmarks miss: helpfulness, clarity, tone, and overall satisfaction.
-                </p>
-
-                <h3>Primary Data Source</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>LMSYS Chatbot Arena (UC Berkeley)</h4>
-                        <p>
-                            The gold standard for human preference evaluation. Users engage in blind
-                            side-by-side comparisons, voting for the better response without knowing
-                            which model produced it. Over 1 million votes collected.
-                        </p>
-                        <ul class="source-details">
-                            <li><strong>Methodology:</strong> Elo rating system (like chess)</li>
-                            <li><strong>Sample size:</strong> 1,000,000+ human votes</li>
-                            <li><strong>Blind comparison:</strong> Users don't know which model is which</li>
-                        </ul>
-                        <a href="https://chat.lmsys.org/" target="_blank" rel="noopener" class="source-link">
-                            Source: LMSYS.org
-                        </a>
-                        <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener" class="source-link">
-                            Methodology Paper: arXiv:2403.04132
-                        </a>
-                    </div>
-                </div>
-
-                <h3>Score Calculation</h3>
-                <p>
-                    We convert Elo ratings to a 0-100 scale where 100 = highest-rated model
-                    and scores are proportionally distributed based on Elo differences.
-                </p>
-                <code class="calc-formula">H = ((Model_Elo - Min_Elo) / (Max_Elo - Min_Elo)) × 100</code>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>4. Knowledge & Comprehension (15%)</h2>
-            <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>
-                    Breadth and depth of factual knowledge across academic domains, plus the ability
-                    to comprehend and reason about complex information.
-                </p>
-
-                <h3>Primary Data Sources</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>MMLU (Hendrycks et al.)</h4>
-                        <p>
-                            Massive Multitask Language Understanding: 57 subjects ranging from STEM
-                            to humanities, from elementary to professional level. 14,000+ questions.
-                        </p>
-                        <a href="https://arxiv.org/abs/2009.03300" target="_blank" rel="noopener" class="source-link">
-                            Source: arXiv:2009.03300
-                        </a>
-                    </div>
-
-                    <div class="source-item">
-                        <h4>TruthfulQA (Lin et al.)</h4>
-                        <p>
-                            Tests whether models generate truthful answers to questions where humans
-                            might be tempted to give false but popular answers.
-                        </p>
-                        <a href="https://arxiv.org/abs/2109.07958" target="_blank" rel="noopener" class="source-link">
-                            Source: arXiv:2109.07958
-                        </a>
-                    </div>
-                </div>
-
-                <h3>Score Calculation</h3>
-                <code class="calc-formula">K = (MMLU × 0.70) + (TruthfulQA × 0.30)</code>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>5. Efficiency & Cost (10%)</h2>
-            <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>
-                    Performance per dollar. A model that achieves 90% of the best model's performance
-                    at 10% of the cost provides significant value—we quantify this.
-                </p>
-
-                <h3>Data Sources</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>API Pricing (Official Provider Documentation)</h4>
-                        <p>
-                            We track official API pricing from OpenAI, Anthropic, Google, and other
-                            providers. Prices are recorded at time of scoring.
-                        </p>
-                        <ul class="source-details">
-                            <li>OpenAI: <a href="https://openai.com/pricing" target="_blank" rel="noopener">openai.com/pricing</a></li>
-                            <li>Anthropic: <a href="https://anthropic.com/pricing" target="_blank" rel="noopener">anthropic.com/pricing</a></li>
-                            <li>Google: <a href="https://cloud.google.com/vertex-ai/pricing" target="_blank" rel="noopener">cloud.google.com/vertex-ai/pricing</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <h3>Score Calculation</h3>
-                <p>
-                    We calculate a capability-adjusted cost score:
-                </p>
-                <code class="calc-formula">E = (Average_Benchmark_Score / Cost_Per_1M_Tokens) × Normalization_Factor</code>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>6. Safety & Reliability (5%)</h2>
-            <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>
-                    Consistency, resistance to jailbreaks, refusal of harmful requests, and overall
-                    trustworthiness. Models that hallucinate or behave unpredictably are penalized.
-                </p>
-
-                <h3>Data Sources</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>Model Provider Safety Reports</h4>
-                        <p>
-                            We incorporate published safety evaluations from model providers where available,
-                            noting that these are self-reported.
-                        </p>
-                    </div>
-
-                    <div class="source-item">
-                        <h4>Independent Red Team Evaluations</h4>
-                        <p>
-                            Where third-party safety evaluations exist (academic papers, independent audits),
-                            we incorporate these findings.
-                        </p>
-                    </div>
-                </div>
-
-                <h3>Note on Safety Scoring</h3>
-                <p class="caution-note">
-                    Safety evaluation is an evolving field. Our safety scores should be considered
-                    directional indicators rather than comprehensive assessments. We update our
-                    methodology as better evaluation frameworks emerge.
-                </p>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>Important Limitations</h2>
-            <div class="limitations-box">
-                <h3>What TRS Does NOT Measure</h3>
-                <ul>
-                    <li><strong>Future capabilities:</strong> TRS measures current performance, not trajectory or potential</li>
-                    <li><strong>AGI proximity:</strong> We make no claims about artificial general intelligence</li>
-                    <li><strong>Real-world deployment:</strong> Benchmark performance may not reflect production use</li>
-                    <li><strong>Specialized tasks:</strong> Domain-specific applications may vary significantly</li>
-                </ul>
-
-                <h3>Known Biases & Limitations</h3>
-                <ul>
-                    <li>English-language bias in most benchmarks</li>
-                    <li>Potential training data contamination (models may have seen benchmark questions)</li>
-                    <li>Benchmarks may not capture emerging capabilities</li>
-                    <li>Self-reported safety data from providers</li>
-                </ul>
-
-                <p class="transparency-note">
-                    We are committed to transparency about our methodology's limitations. If you identify
-                    issues or have suggestions for improvement, contact us.
-                </p>
-            </div>
-        </section>
-
-        <section class="method-section">
-            <h2>Update Frequency</h2>
-            <p>
-                TRS scores are updated <strong>weekly</strong>, typically published on Mondays.
-                When benchmark data sources update or new models are released, we incorporate
-                the changes in the next weekly update.
-            </p>
-        </section>
-
-        <section class="method-section">
-            <h2>Full Citation List</h2>
-            <div class="citations-list">
-                <h3>Academic Papers</h3>
-                <ol>
-                    <li>
-                        Chollet, F. (2019). "On the Measure of Intelligence." <em>arXiv:1911.01547</em>
-                        <a href="https://arxiv.org/abs/1911.01547" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Hendrycks, D., et al. (2021). "Measuring Massive Multitask Language Understanding." <em>ICLR 2021</em>
-                        <a href="https://arxiv.org/abs/2009.03300" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Chen, M., et al. (2021). "Evaluating Large Language Models Trained on Code." <em>arXiv:2107.03374</em>
-                        <a href="https://arxiv.org/abs/2107.03374" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Jimenez, C.E., et al. (2024). "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?" <em>ICLR 2024</em>
-                        <a href="https://arxiv.org/abs/2310.06770" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Rein, D., et al. (2023). "GPQA: A Graduate-Level Google-Proof Q&A Benchmark." <em>arXiv:2311.12022</em>
-                        <a href="https://arxiv.org/abs/2311.12022" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Chiang, W., et al. (2024). "Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference." <em>arXiv:2403.04132</em>
-                        <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Lin, S., et al. (2022). "TruthfulQA: Measuring How Models Mimic Human Falsehoods." <em>ACL 2022</em>
-                        <a href="https://arxiv.org/abs/2109.07958" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Hendrycks, D., et al. (2021). "Measuring Mathematical Problem Solving With the MATH Dataset." <em>NeurIPS 2021</em>
-                        <a href="https://arxiv.org/abs/2103.03874" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                    <li>
-                        Austin, J., et al. (2021). "Program Synthesis with Large Language Models." <em>arXiv:2108.07732</em>
-                        <a href="https://arxiv.org/abs/2108.07732" target="_blank" rel="noopener">[Link]</a>
-                    </li>
-                </ol>
-
-                <h3>Evaluation Platforms</h3>
-                <ul>
-                    <li>LMSYS Chatbot Arena: <a href="https://chat.lmsys.org/" target="_blank" rel="noopener">https://chat.lmsys.org/</a></li>
-                    <li>ARC Prize: <a href="https://arcprize.org/" target="_blank" rel="noopener">https://arcprize.org/</a></li>
-                    <li>SWE-Bench: <a href="https://www.swebench.com/" target="_blank" rel="noopener">https://www.swebench.com/</a></li>
-                    <li>Papers With Code: <a href="https://paperswithcode.com/" target="_blank" rel="noopener">https://paperswithcode.com/</a></li>
-                </ul>
-            </div>
-        </section>
-
-    </article>
-
+            <header class="page-header">
+                        <h1>TRS <span class="cyan">Methodology</span>span></h1>
+                        <p class="page-intro">The Training Run Score (TRS) is a composite metric designed to provide a clear, comparable measure of AI model capabilities. This page documents our complete methodology with full source citations.</p>p>
+                        <p class="last-updated">Last Updated: February 2, 2026</p>p>
+            </header>header>
+            <section class="method-section">
+                        <h2>Executive Summary</h2>
+                        <div class="summary-box">
+                                        <p>The TRS aggregates performance data from established benchmarks into a single 0-100 score. We weight six dimensions based on their relevance to real-world AI utility:</p>
+                                        <div class="formula-display">
+                                                            <code>TRS = (R x 0.25) + (C x 0.25) + (H x 0.20) + (K x 0.15) + (E x 0.10) + (S x 0.05)</code>
+                                        </div>div>
+                                        <p class="formula-note">Where R = Reasoning, C = Coding, H = Human Preference, K = Knowledge, E = Efficiency, S = Safety</p>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>1. Reasoning and Logic (25%)</h2>
+                        <div class="method-content">
+                                        <h3>What We Measure</h3>
+                                        <p>The ability to solve novel problems requiring multi-step reasoning, logical deduction, and genuine understanding.</p>
+                                        <h3>Primary Data Sources</h3>
+                                        <div class="source-citation">
+                                                            <div class="source-item">
+                                                                                    <h4>ARC-AGI-2 (ARC Prize Foundation)</h4>
+                                                                                    <p>The Abstraction and Reasoning Corpus tests novel reasoning on tasks specifically designed to require thinking through new problems.</p>
+                                                                                    <ul class="source-details">
+                                                                                                                <li><strong>Current best baseline:</strong> 31% accuracy</li>
+                                                                                                                <li><strong>With refinement loops:</strong> 54% accuracy</li>
+                                                                                                                <li><strong>Human average:</strong>strong> 60% accuracy</li>
+                                                                                        </ul>ul>
+                                                                                    <a href="https://arcprize.org/" target="_blank" rel="noopener" class="source-link">Source: arcprize.org</a>a>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>GPQA Diamond (NYU, Anthropic, et al.)</h4>
+                                                                                    <p>Graduate-level science questions written by PhD experts.</p>
+                                                                                    <a href="https://arxiv.org/abs/2311.12022" target="_blank" rel="noopener" class="source-link">Source: arXiv:2311.12022</a>a>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>MATH (Hendrycks et al.)</h4>
+                                                                                    <p>Competition-level mathematics problems from AMC, AIME, and Olympiad competitions.</p>
+                                                                                    <a href="https://arxiv.org/abs/2103.03874" target="_blank" rel="noopener" class="source-link">Source: arXiv:2103.03874</a>a>
+                                                            </div>div>
+                                        </div>div>
+                                        <h3>Score Calculation</h3>
+                                        <code class="calc-formula">R = (ARC x 0.40) + (GPQA x 0.35) + (MATH x 0.25)</code>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>2. Coding Proficiency (25%)</h2>
+                        <div class="method-content">
+                                        <h3>What We Measure</h3>
+                                        <p>Can this model actually write code that works? Real software engineering tasks that mirror what professional developers face daily.</p>
+                                        <h3>Why This Matters for TRS</h3>
+                                        <p>Coding ability is one of the clearest demonstrations of an AI model's practical intelligence. A model that can debug complex codebases, implement features across multiple files, and write maintainable code provides genuine utility.</p>
+                                        <h3>Primary Data Sources</h3>
+                                        <div class="source-citation">
+                                                            <div class="source-item">
+                                                                                    <h4>SWE-Bench Verified (50% of Coding Score)</h4>
+                                                                                    <p>Percentage of real GitHub issues resolved correctly. These are actual bugs and feature requests from production repositories.</p>
+                                                                                    <a href="https://www.swebench.com/" target="_blank" rel="noopener" class="source-link">Source: swebench.com</a>a>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>LiveCodeBench (25% of Coding Score)</h4>
+                                                                                    <p>Performance on coding problems released after model training cutoffs. Eliminates benchmark contamination.</p>
+                                                                                    <a href="https://livecodebench.github.io/" target="_blank" rel="noopener" class="source-link">Source: livecodebench.github.io</a>a>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>SciCode (15% of Coding Score)</h4>
+                                                                                    <p>Ability to solve scientific research coding challenges.</p>
+                                                                                    <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: scicode-bench.github.io</a>a>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>Legacy Benchmarks (10% of Coding Score)</h4>
+                                                                                    <p>HumanEval and MBPP measure basic coding competency on isolated function problems.</p>
+                                                                                    <a href="https://arxiv.org/abs/2107.03374" target="_blank" rel="noopener" class="source-link">Source: arXiv:2107.03374 (HumanEval)</a>a>
+                                                                                    <a href="https://arxiv.org/abs/2108.07732" target="_blank" rel="noopener" class="source-link">Source: arXiv:2108.07732 (MBPP)</a>a>
+                                                            </div>div>
+                                        </div>div>
+                                        <h3>Score Calculation</h3>
+                                        <code class="calc-formula">C = (C_SWE x 0.50) + (C_LCB x 0.25) + (C_SciCode x 0.15) + (C_Legacy x 0.10)</code>
+                                        <p class="formula-note">Where: C_SWE = Normalized SWE-Bench Verified score, C_LCB = Normalized LiveCodeBench score, C_SciCode = Normalized SciCode score, C_Legacy = Average of normalized HumanEval and MBPP scores</p>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>3. Human Preference (20%)</h2>
+                        <div class="method-content">
+                                        <h3>What We Measure</h3>
+                                        <p>When real people compare model outputs side-by-side, which model do they actually like more? This captures helpfulness, clarity, tone, and instruction-following.</p>
+                                        <h3>Why We Use LMSYS Chatbot Arena</h3>
+                                        <p>We use LMSYS Chatbot Arena as our primary signal because it is the most widely adopted, transparent, and actively maintained open platform for live LLM comparisons.</p>
+                                        <ul class="source-details">
+                                                            <li><strong>Blind, pairwise voting:</strong> Users chat with two anonymous models and vote for the better response.</li>
+                                                            <li><strong>Large-scale:</strong> Hundreds of thousands to over a million human preference votes.</li>
+                                                            <li><strong>Elo rating system:</strong>strong> Similar to chess, maintains stable relative rankings.</li>
+                                                            <li><strong>Model-agnostic:</strong> Both proprietary and open-weight models evaluated equally.</li>
+                                        </ul>ul>
+                                        <h3>Known Limitations</h3>
+                                        <ul class="source-details">
+                                                            <li><strong>Prompt and user bias:</strong> Skewed toward English and tech-savvy users.</li>
+                                                            <li><strong>Style vs. substance:</strong>strong> Style can influence wins.</li>
+                                                            <li><strong>Elo nuances:</strong> Small gaps may not be statistically meaningful.</li>
+                                                            <li><strong>Partial observability:</strong> Only aggregate ratings are public.</li>
+                                        </ul>ul>
+                                        <h3>Primary Data Source</h3>
+                                        <div class="source-citation">
+                                                            <div class="source-item">
+                                                                                    <h4>LMSYS Chatbot Arena (UC Berkeley, LMSYS Group)</h4>
+                                                                                    <p>Live, web-based evaluation where users interact with two anonymous models and vote for the better response.</p>
+                                                                                    <a href="https://chat.lmsys.org/" target="_blank" rel="noopener" class="source-link">Source: chat.lmsys.org</a>a>
+                                                                                    <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener" class="source-link">Methodology: arXiv:2403.04132</a>a>
+                                                            </div>div>
+                                        </div>div>
+                                        <h3>Score Calculation</h3>
+                                        <code class="calc-formula">H = ((Model_Elo - Min_Elo) / (Max_Elo - Min_Elo)) x 100</code>
+                                        <p class="formula-note">Maps the lowest-rated model to 0, highest to 100. Human Preference contributes 20% of TRS.</p>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>4. Knowledge and Comprehension (15%)</h2>
+                        <div class="method-content">
+                                        <h3>What We Measure</h3>
+                                        <p>Breadth and depth of factual knowledge across academic domains.</p>
+                                        <h3>Primary Data Sources</h3>
+                                        <div class="source-citation">
+                                                            <div class="source-item">
+                                                                                    <h4>MMLU (Hendrycks et al.)</h4>
+                                                                                    <p>57 subjects from STEM to humanities, 14,000+ questions.</p>
+                                                                                    <a href="https://arxiv.org/abs/2009.03300" target="_blank" rel="noopener" class="source-link">Source: arXiv:2009.03300</a>a>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>TruthfulQA (Lin et al.)</h4>
+                                                                                    <p>Tests whether models generate truthful answers.</p>
+                                                                                    <a href="https://arxiv.org/abs/2109.07958" target="_blank" rel="noopener" class="source-link">Source: arXiv:2109.07958</a>a>
+                                                            </div>div>
+                                        </div>div>
+                                        <h3>Score Calculation</h3>
+                                        <code class="calc-formula">K = (MMLU x 0.70) + (TruthfulQA x 0.30)</code>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>5. Efficiency and Cost (10%)</h2>
+                        <div class="method-content">
+                                        <h3>What We Measure</h3>
+                                        <p>Performance per dollar.</p>
+                                        <h3>Data Sources</h3>
+                                        <div class="source-citation">
+                                                            <div class="source-item">
+                                                                                    <h4>API Pricing</h4>
+                                                                                    <p>Official pricing from OpenAI, Anthropic, Google.</p>
+                                                            </div>div>
+                                        </div>div>
+                                        <h3>Score Calculation</h3>
+                                        <code class="calc-formula">E = (Average_Benchmark_Score / Cost_Per_1M_Tokens) x Normalization_Factor</code>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>6. Safety and Reliability (5%)</h2>
+                        <div class="method-content">
+                                        <h3>What We Measure</h3>
+                                        <p>Consistency, resistance to jailbreaks, refusal of harmful requests.</p>
+                                        <h3>Data Sources</h3>
+                                        <div class="source-citation">
+                                                            <div class="source-item">
+                                                                                    <h4>Model Provider Safety Reports</h4>
+                                                                                    <p>Published safety evaluations from providers.</p>
+                                                            </div>div>
+                                                            <div class="source-item">
+                                                                                    <h4>Independent Red Team Evaluations</h4>
+                                                                                    <p>Third-party safety evaluations where available.</p>
+                                                            </div>div>
+                                        </div>div>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>Important Limitations</h2>
+                        <div class="limitations-box">
+                                        <h3>What TRS Does NOT Measure</h3>
+                                        <ul>
+                                                                <li><strong>Future capabilities:</strong> TRS measures current performance only</li>
+                                                            <li><strong>AGI proximity:</strong> We make no claims about AGI</li>
+                                                            <li><strong>Real-world deployment:</strong>strong> Benchmark performance may differ from production</li>
+                                        </ul>
+                                        <h3>Known Biases</h3>
+                                        <ul>
+                                                            <li>English-language bias in most benchmarks</li>
+                                                            <li>Potential training data contamination</li>
+                                                            <li>Self-reported safety data from providers</li>
+                                        </ul>
+                        </div>div>
+            </section>section>
+            <section class="method-section">
+                        <h2>Update Frequency</h2>
+                        <p>TRS scores are updated <strong>weekly</strong>, typically on Mondays.</p>
+            </section>section>
+            <section class="method-section">
+                        <h2>Full Citation List</h2>
+                        <div class="citations-list">
+                                        <h3>Evaluation Platforms</h3>
+                                        <ul>
+                                                            <li>LMSYS Chatbot Arena: <a href="https://chat.lmsys.org/" target="_blank" rel="noopener">chat.lmsys.org</a>a></li>
+                                                            <li>ARC Prize: <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>a></li>
+                                                            <li>SWE-Bench: <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a>a></li>
+                                                            <li>LiveCodeBench: <a href="https://livecodebench.github.io/" target="_blank" rel="noopener">livecodebench.github.io</a>a></li>
+                                                            <li>SciCode: <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener">scicode-bench.github.io</a>a></li>
+                                        </ul>
+                        </div>div>
+            </section>section>
+    </article>article>
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="/" class="logo">Training Run</a>
-                    <p>Your weekly AI conditioning.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Resources</h4>
-                    <a href="/trsmethodology">TRS Methodology</a>
-                    <a href="/scores">Current Scores</a>
-                    <a href="/about">About Us</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Training Run. All rights reserved.</p>
-            </div>
-        </div>
+                <div class="container">
+                                <div class="footer-content">
+                                                    <div class="footer-brand">
+                                                                            <a href="/" class="logo">Training Run</a>a>
+                                                                            <p>Your weekly AI conditioning.</p>
+                                                    </div>div>
+                                                    <div class="footer-links">
+                                                                            <h4>Resources</h4>
+                                                                            <a href="/trsmethodology">TRS Methodology</a>a>
+                                                                            <a href="/scores">Current Scores</a>a>
+                                                                            <a href="/about">About Us</a>a>
+                                                    </div>div>
+                                </div>div>
+                                <div class="footer-bottom">
+                                                    <p>&copy; 2026 Training Run. All rights reserved.</p>
+                                </div>div>
+                </div>div>
     </footer>
 </body>
-</html>
+</html>html>
+    </footer></p></li></li></strong></strong></li>
+                                        </ul></p></p></strong></strong></li></li></strong></strong></li></li></strong></strong></li></p></p></li></strong></strong></li></code></p></h2></h1></li></li>
+        </nav>
+</body></title>
+    </head>
