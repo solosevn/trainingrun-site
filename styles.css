@@ -309,6 +309,7 @@ section {
 /* Trust Section */
 .trust-section {
     background: linear-gradient(180deg, transparent 0%, rgba(138, 43, 226, 0.02) 50%, transparent 100%);
+       text-align: center;
 }
 
 .trust-section h2 {
