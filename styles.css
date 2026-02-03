@@ -225,7 +225,7 @@ section {
     font-size: 18px;
     color: var(--text-secondary);
     max-width: 700px;
-    margin-bottom: 50px;
+       margin: 0 auto 50px auto;
 }
 
 /* Intro Section */
