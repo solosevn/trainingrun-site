@@ -20,7 +20,7 @@ A weekly AI news show that tracks and scores AI model performance. We aggregate 
 ### PHASE 1: Research & Data (Monday-Tuesday)
 
 **1. Gather Current Scores**
-- LMSYS Arena: https://chat.lmsys.org/ (Elo ratings, human preference)
+- LMSYS Arena: https://huggingface.co/spaces/lmarena-ai/chatbot-arena/ (Elo ratings, human preference)
 - SWE-Bench: https://www.swebench.com/ (coding benchmarks)
 - ARC Prize: https://arcprize.org/ (reasoning/AGI benchmarks)
 
@@ -223,7 +223,7 @@ trainingrun.ai/
 ## DATA SOURCES
 
 **Primary Benchmarks:**
-- LMSYS Chatbot Arena: https://chat.lmsys.org/
+- LMSYS Chatbot Arena: https://huggingface.co/spaces/lmarena-ai/chatbot-arena/
 - SWE-Bench Verified: https://www.swebench.com/
 - ARC-AGI-2: https://arcprize.org/
 
