@@ -16,7 +16,7 @@
         <a href="/" class="logo">Training Run</a>
         <ul class="nav-links">
             <li><a href="/scores.html">Scores</a></li>
-            <li><a href="/sources.html">Verify Our Data</a>/li>
+            <li><a href="/sources.html">Verify Our Data</a></li>
             <li><a href="/trsmethodology.html">Methodology</a></li>
             <li><a href="/about.html">About</a></li>
         </ul>
@@ -25,7 +25,7 @@
         <header class="page-header">
             <h1>Verify Our <span class="cyan">Data</span></h1>
             <p class="page-intro">Every data source we use. Click any link to verify our numbers yourself.</p>
-            <p class="last-updated">Last Updated: January 31, 2026</p>
+            <p class="last-updated">Last Updated: February 5, 2026</p>
         </header>
 
         <!-- Section 1: TRS Benchmark Sources -->
@@ -33,7 +33,7 @@
             <h2>TRS Benchmark Sources</h2>
             <div class="data-table"><table><thead><tr><th>Source</th><th>URL</th><th>Used For</th></tr></thead><tbody>
                 <tr><td>LMSYS Chatbot Arena</td><td><a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena" target="_blank">Chatbot Arena</a></td><td>Human preference Elo ratings</td></tr>
-                              <tr><td>AI Prediction Arena</td><td><a href="https://www.predictionarena.ai" target="_blank">predictionarena.ai</a></td><td>Real-money trading</td></tr>
+                <tr><td>AI Prediction Arena</td><td><a href="https://www.predictionarena.ai" target="_blank">predictionarena.ai</a></td><td>Real-money trading</td></tr>
                 <tr><td>SWE-Bench Verified</td><td><a href="https://swebench.com" target="_blank">swebench.com</a></td><td>Coding benchmark</td></tr>
                 <tr><td>ARC-AGI-2</td><td><a href="https://arcprize.org" target="_blank">arcprize.org</a></td><td>Reasoning/AGI</td></tr>
                 <tr><td>LiveCodeBench</td><td><a href="https://livecodebench.github.io" target="_blank">livecodebench.github.io</a></td><td>Coding</td></tr>
@@ -55,11 +55,103 @@
         <!-- Section 3: The Specialists Sources -->
         <section class="method-section">
             <h2>The Specialists Sources</h2>
-            <div class="data-table"><table><thead><tr><th>Source</th><th>URL</th><th>Used For</th></tr></thead><tbody>
-                <tr><td>Artificial Analysis (LiveCodeBench)</td><td><a href="https://artificialanalysis.ai/evaluations/livecodebench" target="_blank">artificialanalysis.ai/evaluations/livecodebench</a></td><td>Coding specialist ranking</td></tr>
-                <tr><td>LMSYS Chatbot Arena</td><td><a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/?leaderboard" target="_blank">huggingface.co/spaces/lmarena-ai/chatbot-arena/?leaderboard</a></td><td>Human preference specialist</td></tr>
-                <tr><td>Artificial Analysis (Models)</td><td><a href="https://artificialanalysis.ai/models" target="_blank">artificialanalysis.ai/models</a></td><td>Best value calculation</td></tr>
-            </tbody></table></div>
+
+            <!-- Category 1: CODING -->
+            <h2 style="color: #00f0ff; font-size: 1.8rem; margin-bottom: 1rem;">Category 1: CODING</h2>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                <p style="color: #cbd5e1;">Identifies the AI model that solves the most coding problems correctly using contamination-free benchmarks.</p>
+                <div style="background: #0f172a; border-radius: 8px; padding: 1rem; margin: 1rem 0; text-align: center; font-weight: bold; color: #00f0ff;">
+                    Metric: LiveCodeBench Score (% of problems solved correctly)
+                </div>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">Primary Data Source</h3>
+                <p style="color: #cbd5e1;">
+                    <strong>LiveCodeBench via Artificial Analysis</strong><br>
+                    LiveCodeBench tests models on coding problems released AFTER model training cutoffs, eliminating data contamination concerns that plague other benchmarks.
+                </p>
+                <a href="https://artificialanalysis.ai/evaluations/livecodebench" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: underline; font-weight: bold;">
+                    → artificialanalysis.ai/evaluations/livecodebench
+                </a>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">What It Measures</h3>
+                <p style="color: #cbd5e1;">Percentage of coding problems solved correctly on first attempt. Higher = better coder.</p>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">How to Verify</h3>
+                <ol style="color: #cbd5e1; padding-left: 1.5rem; line-height: 1.6;">
+                    <li>Visit <a href="https://artificialanalysis.ai/evaluations/livecodebench" target="_blank" style="color: #00f0ff;">artificialanalysis.ai/evaluations/livecodebench</a></li>
+                    <li>Find the model with the highest score (pass@1 %)</li>
+                    <li>Compare to our featured Coding Specialist</li>
+                </ol>
+            </div>
+
+            <!-- Category 2: HUMAN PREFERENCE -->
+            <h2 style="color: #00f0ff; font-size: 1.8rem; margin: 3rem 0 1rem;">Category 2: HUMAN PREFERENCE</h2>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                <p style="color: #cbd5e1;">Identifies the AI model most preferred by real humans in blind, side-by-side comparisons (helpfulness, coherence, safety, etc.).</p>
+                <div style="background: #0f172a; border-radius: 8px; padding: 1rem; margin: 1rem 0; text-align: center; font-weight: bold; color: #00f0ff;">
+                    Metric: Chatbot Arena Elo Rating (higher = more preferred)
+                </div>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">Primary Data Source</h3>
+                <p style="color: #cbd5e1;">
+                    <strong>LMSYS Chatbot Arena (now LMArena/Arena.ai)</strong><br>
+                    Crowdsourced Elo from millions of anonymous human votes on pairwise blind battles—no company influence, pure preference.
+                </p>
+                <a href="https://lmarena.ai/?leaderboard" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: underline; font-weight: bold;">
+                    → lmarena.ai/?leaderboard (or chat.lmsys.org/?leaderboard for legacy view)
+                </a>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">What It Measures</h3>
+                <p style="color: #cbd5e1;">Elo score from real user votes (typically 1000–1500+ range for top models). Reflects practical "which one would you use?" preference.</p>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">How to Verify</h3>
+                <ol style="color: #cbd5e1; padding-left: 1.5rem; line-height: 1.6;">
+                    <li>Visit <a href="https://lmarena.ai/?leaderboard" target="_blank" style="color: #00f0ff;">lmarena.ai/?leaderboard</a></li>
+                    <li>Sort by Elo rating and find the top model</li>
+                    <li>Compare to our featured Human Preference Specialist</li>
+                </ol>
+            </div>
+
+            <!-- Category 3: BEST VALUE -->
+            <h2 style="color: #00f0ff; font-size: 1.8rem; margin: 3rem 0 1rem;">Category 3: BEST VALUE</h2>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                <p style="color: #cbd5e1;">Identifies the most cost-effective model (performance per dollar spent on inference).</p>
+                <div style="background: #0f172a; border-radius: 8px; padding: 1rem; margin: 1rem 0; text-align: center; font-weight: bold; color: #00f0ff;">
+                    Metric: Value Score (Intelligence/Efficiency ÷ Price per M tokens; tiers: Best / Great / Good)
+                </div>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">Primary Data Source</h3>
+                <p style="color: #cbd5e1;">
+                    <strong>Artificial Analysis Model Pricing & Efficiency</strong><br>
+                    Independent pricing (USD/M tokens), output speed (tokens/s), and intelligence index. Blended for value (e.g., TRS × tps / price).
+                </p>
+                <a href="https://artificialanalysis.ai/models" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: underline; font-weight: bold;">
+                    → artificialanalysis.ai/models (filter by Price, Speed, Intelligence)
+                </a>
+                <br><br>
+                <a href="https://artificialanalysis.ai/pricing" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: underline;">
+                    → Pricing details page (if separate)
+                </a>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">What It Measures</h3>
+                <p style="color: #cbd5e1;">Cost-efficiency: High performance (TRS/intelligence) at low inference cost. Tiers based on calculated score thresholds.</p>
+            </div>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem;">
+                <h3 style="color: #00f0ff; margin-bottom: 0.5rem;">How to Verify</h3>
+                <ol style="color: #cbd5e1; padding-left: 1.5rem; line-height: 1.6;">
+                    <li>Visit <a href="https://artificialanalysis.ai/models" target="_blank" style="color: #00f0ff;">artificialanalysis.ai/models</a></li>
+                    <li>Sort/filter by Price, Output Speed, Intelligence Index</li>
+                    <li>Calculate value (e.g., Intelligence × Speed ÷ Price) and compare tiers to our ranking</li>
+                </ol>
+            </div>
         </section>
 
         <!-- Section 4: Weekly News Download Sources -->
@@ -128,7 +220,7 @@
             <h2>Deep Thought Sources</h2>
             <div class="data-table"><table><thead><tr><th>Source</th><th>URL</th><th>Used For</th></tr></thead><tbody>
                 <tr><td>ForecastBench</td><td><a href="https://forecastbench.org" target="_blank">forecastbench.org</a></td><td>Forecast accuracy</td></tr>
-                              <tr><td>AI Prediction Arena</td><td><a href="https://www.predictionarena.ai" target="_blank">predictionarena.ai</a></td><td>Trading performance</td></tr>
+                <tr><td>AI Prediction Arena</td><td><a href="https://www.predictionarena.ai" target="_blank">predictionarena.ai</a></td><td>Trading performance</td></tr>
             </tbody></table></div>
         </section>
 
