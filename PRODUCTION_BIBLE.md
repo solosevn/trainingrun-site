@@ -9,7 +9,7 @@
 
 ## WHAT IS TRAINING RUN?
 
-A weekly AI news show that tracks and scores AI model performance. We aggregate data from respected benchmarks (LMSYS Arena, SWE-Bench, ARC-AGI) and deliver it in an engaging video format with AI-generated avatars.
+A weekly AI news show that tracks and scores AI model performance. We aggregate data from respected benchmarks (LMSYS Arena, SWE-Bench, ARC-AGI, HELM Safety, TrustLLM, MLCommons AILuminate, OpenRouter) and deliver it in an engaging video format with AI-generated avatars.
 
 **Core Philosophy:** Independent, transparent, fact-checked rankings. No hype - just data.
 
@@ -25,13 +25,14 @@ A weekly AI news show that tracks and scores AI model performance. We aggregate 
 - ARC Prize: https://arcprize.org/ (reasoning/AGI benchmarks)
 
 **2. Calculate TRS (Training Run Score)**
-TRS is a weighted composite:
-- Reasoning: 25%
-- Coding: 25%
-- Human Preference: 20%
-- Knowledge: 15%
-- Efficiency: 10%
-- Safety: 5%
+TRS is a weighted composite (V2.4):
+- Safety: 21%
+- Reasoning: 20%
+- Coding: 20%
+- Human Preference: 18%
+- Knowledge: 8%
+- Efficiency: 7%
+- Usage Adoption: 6%
 
 **3. Track Week-over-Week Changes**
 - Note which models moved up/down
