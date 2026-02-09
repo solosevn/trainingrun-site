@@ -27,20 +27,20 @@
         <header class="page-header">
             <h1>TRS <span class="cyan">Methodology</span></h1>
             <p class="page-intro">The Training Run Score (TRS) is a composite metric designed to provide a clear, comparable measure of AI model capabilities. This page documents our complete methodology with full source citations.</p>
-            <p class="last-updated">Last Updated: February 2, 2026</p>
+            <p class="last-updated">Last Updated: February 11, 2026</p>
         </header>
         <section class="method-section">
             <h2>Executive Summary</h2>
             <div class="summary-box">
-                <p>The TRS aggregates performance data from established benchmarks into a single 0-100 score. We weight six dimensions based on their relevance to real-world AI utility:</p>
+                <p>The TRS aggregates performance data from established benchmarks into a single 0-100 score. We weight seven dimensions based on their relevance to real-world AI utility:</p>
                 <div class="formula-display">
-                    <code>TRS = (R x 0.25) + (C x 0.25) + (H x 0.20) + (K x 0.15) + (E x 0.10) + (S x 0.05)</code>
+                    <code>TRS = (S x 0.21) + (R x 0.20) + (C x 0.20) + (H x 0.18) + (K x 0.08) + (E x 0.07) + (U x 0.06)</code>
                 </div>
-                <p class="formula-note">Where R = Reasoning, C = Coding, H = Human Preference, K = Knowledge, E = Efficiency, S = Safety</p>
+                <p class="formula-note">Where S = Safety, R = Reasoning, C = Coding, H = Human Preference, K = Knowledge, E = Efficiency, U = Usage Adoption</p>
             </div>
         </section>
         <section class="method-section">
-            <h2>1. Reasoning and Logic (25%)</h2>
+            <h2>1. Reasoning and Logic (20%)</h2>
             <div class="method-content">
                 <h3>What We Measure</h3>
                 <p>The ability to solve novel problems requiring multi-step reasoning, logical deduction, and genuine understanding.</p>
@@ -72,7 +72,7 @@
             </div>
         </section>
         <section class="method-section">
-            <h2>2. Coding Proficiency (25%)</h2>
+            <h2>2. Coding Proficiency (20%)</h2>
             <div class="method-content">
                 <h3>What We Measure</h3>
                 <p>Can this model actually write code that works? Real software engineering tasks that mirror what professional developers face daily.</p>
@@ -108,7 +108,7 @@
             </div>
         </section>
         <section class="method-section">
-            <h2>3. Human Preference (20%)</h2>
+            <h2>3. Human Preference (18%)</h2>
             <div class="method-content">
                 <h3>What We Measure</h3>
                 <p>When real people compare model outputs side-by-side, which model do they actually like more? This captures helpfulness, clarity, tone, and instruction-following.</p>
@@ -138,11 +138,11 @@
                 </div>
                 <h3>Score Calculation</h3>
                 <code class="calc-formula">H = ((Model_Elo - Min_Elo) / (Max_Elo - Min_Elo)) x 100</code>
-                <p class="formula-note">Maps the lowest-rated model to 0, highest to 100. Human Preference contributes 20% of TRS.</p>
+                <p class="formula-note">Maps the lowest-rated model to 0, highest to 100. Human Preference contributes 18% of TRS.</p>
             </div>
         </section>
         <section class="method-section">
-            <h2>4. Knowledge and Comprehension (15%)</h2>
+            <h2>4. Knowledge and Comprehension (8%)</h2>
             <div class="method-content">
                 <h3>What We Measure</h3>
                 <p>Breadth and depth of factual knowledge across academic domains.</p>
@@ -164,7 +164,7 @@
             </div>
         </section>
         <section class="method-section">
-            <h2>5. Efficiency and Cost (10%)</h2>
+            <h2>5. Efficiency and Cost (7%)</h2>
             <div class="method-content">
                 <h3>What We Measure</h3>
                 <p>Performance per dollar.</p>
@@ -180,21 +180,61 @@
             </div>
         </section>
         <section class="method-section">
-            <h2>6. Safety and Reliability (5%)</h2>
+            <h2>6. Safety and Reliability (21%)</h2>
             <div class="method-content">
                 <h3>What We Measure</h3>
-                <p>Consistency, resistance to jailbreaks, refusal of harmful requests.</p>
-                <h3>Data Sources</h3>
+                <p>Harm avoidance, fairness, misuse prevention, adversarial robustness, and company-level safety governance. Safety is weighted highest because responsible AI ensures progress does not derail due to unchecked risks, while maintaining strong weights on Reasoning and Coding to drive technological advancement.</p>
+                <h3>Why Safety Is Weighted #1</h3>
+                <p>Multiple independent, quantifiable benchmarks now exist to measure AI safety objectively. By weighting safety highest, TRS incentivizes the development of models that are both capable and responsible, enabling high abundance for all humanity without stifling innovation.</p>
+                <h3>Sub-Component Breakdown</h3>
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>Model Provider Safety Reports</h4>
-                        <p>Published safety evaluations from providers.</p>
+                        <h4>Harm Avoidance (40% of Safety Score)</h4>
+                        <p>Source: HELM Safety (Stanford CRFM). Unified framework aggregating 5 sub-benchmarks across 24+ models with 0-1 normalized scores.</p>
+                        <a href="https://crfm.stanford.edu/helm/safety/latest/" target="_blank" rel="noopener" class="source-link">crfm.stanford.edu/helm/safety</a>
                     </div>
                     <div class="source-item">
-                        <h4>Independent Red Team Evaluations</h4>
-                        <p>Third-party safety evaluations where available.</p>
+                        <h4>Fairness (30% of Safety Score)</h4>
+                        <p>Source: TrustLLM. Comprehensive trustworthiness evaluation covering fairness, privacy, robustness, and ethical alignment across major LLMs.</p>
+                        <a href="https://trustllmbenchmark.github.io/TrustLLM-Website/" target="_blank" rel="noopener" class="source-link">trustllmbenchmark.github.io</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>Misuse Prevention (20% of Safety Score)</h4>
+                        <p>Source: MLCommons AI Luminate. Industry consortium standard testing 12 hazard categories with 24,000+ prompts per language.</p>
+                        <a href="https://ailuminate.mlcommons.org/benchmarks/" target="_blank" rel="noopener" class="source-link">ailuminate.mlcommons.org/benchmarks</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>Governance (10% of Safety Score)</h4>
+                        <p>Sources: AI Safety Index (expert-reviewed company-level safety practices, 35 indicators, A-F grades) and Enkrypt AI Leaderboard (NIST RMF + OWASP Top 10 aligned, 200+ models, continuously updated).</p>
+                        <a href="https://futureoflife.org/ai-safety-index-winter-2025/" target="_blank" rel="noopener" class="source-link">futureoflife.org/ai-safety-index</a>
+                        <a href="https://leaderboard.enkryptai.com/" target="_blank" rel="noopener" class="source-link">leaderboard.enkryptai.com</a>
                     </div>
                 </div>
+                <h3>Score Calculation</h3>
+                <p><code class="calc-formula">S = (HELM_Safety x 0.40) + (TrustLLM x 0.30) + (AILuminate x 0.20) + (Governance x 0.10)</code></p>
+            </div>
+        </section>
+        <section class="method-section">
+            <h2>7. Usage Adoption (6%)</h2>
+            <div class="method-content">
+                <h3>What We Measure</h3>
+                <p>Real-world adoption and developer usage patterns, measured by normalized token consumption share across models and providers.</p>
+                <h3>Data Source</h3>
+                <div class="source-citation">
+                    <div class="source-item">
+                        <h4>OpenRouter Rankings</h4>
+                        <p>Token consumption data across 300+ models from 60+ providers. Normalized token share in key categories.</p>
+                        <a href="https://openrouter.ai/rankings" target="_blank" rel="noopener" class="source-link">openrouter.ai/rankings</a>
+                    </div>
+                </div>
+                <h3>Known Limitations</h3>
+                <ul class="source-details">
+                    <li><strong>Measures popularity, not quality</strong> - High usage does not equal high performance</li>
+                    <li><strong>Platform selection bias</strong> - Reflects OpenRouter user base, not all AI usage</li>
+                    <li><strong>Not independently auditable</strong> - Token data is self-reported by OpenRouter</li>
+                </ul>
+                <h3>Score Calculation</h3>
+                <p><code class="calc-formula">U = (Model_Token_Share / Max_Token_Share) x 100</code></p>
             </div>
         </section>
         <section class="method-section">
@@ -228,6 +268,22 @@
                     <li>SWE-Bench: <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a></li>
                     <li>LiveCodeBench: <a href="https://livecodebench.github.io/" target="_blank" rel="noopener">livecodebench.github.io</a></li>
                     <li>SciCode: <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener">scicode-bench.github.io</a></li>
+                </ul>
+                <h3>Safety Benchmarks</h3>
+                <ul>
+                    <li>HELM Safety (Stanford CRFM): <a href="https://crfm.stanford.edu/helm/safety/latest/" target="_blank" rel="noopener">crfm.stanford.edu/helm/safety</a></li>
+                    <li>TrustLLM: <a href="https://trustllmbenchmark.github.io/TrustLLM-Website/" target="_blank" rel="noopener">trustllmbenchmark.github.io</a></li>
+                    <li>MLCommons AI Luminate: <a href="https://ailuminate.mlcommons.org/benchmarks/" target="_blank" rel="noopener">ailuminate.mlcommons.org/benchmarks</a></li>
+                    <li>AI Safety Index (FLI): <a href="https://futureoflife.org/ai-safety-index-winter-2025/" target="_blank" rel="noopener">futureoflife.org/ai-safety-index</a></li>
+                    <li>Enkrypt AI Leaderboard: <a href="https://leaderboard.enkryptai.com/" target="_blank" rel="noopener">leaderboard.enkryptai.com</a></li>
+                </ul>
+                <h3>Usage Adoption</h3>
+                <ul>
+                    <li>OpenRouter Rankings: <a href="https://openrouter.ai/rankings" target="_blank" rel="noopener">openrouter.ai/rankings</a></li>
+                </ul>
+                <h3>Efficiency and Pricing</h3>
+                <ul>
+                    <li>Artificial Analysis: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener">artificialanalysis.ai</a></li>
                 </ul>
             </div>
         </section>
