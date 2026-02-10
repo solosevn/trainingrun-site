@@ -1,0 +1,110 @@
+{
+  "formula_version": "1.0",
+  "checksum": "ab6f5437ca964bd61a5f46ca2b1a7db6a96255f4eab53420ee413d3b6b361f4d",
+  "weights": {
+    "factuality_simpleqa": 0.2,
+    "factuality_newsguard": 0.2,
+    "neutrality_trackingai": 0.25,
+    "neutrality_anthropic": 0.05,
+    "hallucination_vectara": 0.15,
+    "hallucination_artificialanalysis": 0.05,
+    "calibration_simpleqa": 0.1
+  },
+  "dates": [
+    "2026-02-09"
+  ],
+  "models": [
+    {
+      "name": "Claude Sonnet 4.5",
+      "company": "Anthropic",
+      "rank": 1,
+      "scores": [82.0]
+    },
+    {
+      "name": "Gemini 2.5 Pro",
+      "company": "Google",
+      "rank": 2,
+      "scores": [80.9]
+    },
+    {
+      "name": "Grok 3",
+      "company": "xAI",
+      "rank": 3,
+      "scores": [77.5]
+    },
+    {
+      "name": "Claude Opus 4",
+      "company": "Anthropic",
+      "rank": 4,
+      "scores": [75.1]
+    },
+    {
+      "name": "GPT-5",
+      "company": "OpenAI",
+      "rank": 5,
+      "scores": [73.9]
+    },
+    {
+      "name": "Claude Opus 4.5",
+      "company": "Anthropic",
+      "rank": 6,
+      "scores": [73.7]
+    },
+    {
+      "name": "Gemini 2.5 Flash",
+      "company": "Google",
+      "rank": 7,
+      "scores": [72.3]
+    },
+    {
+      "name": "GPT-4.1",
+      "company": "OpenAI",
+      "rank": 8,
+      "scores": [71.6]
+    },
+    {
+      "name": "GPT-4o",
+      "company": "OpenAI",
+      "rank": 9,
+      "scores": [69.7]
+    },
+    {
+      "name": "Llama 4 Maverick",
+      "company": "Meta",
+      "rank": 10,
+      "scores": [64.8]
+    },
+    {
+      "name": "Mistral Large",
+      "company": "Mistral",
+      "rank": 11,
+      "scores": [62.7]
+    },
+    {
+      "name": "DeepSeek V3",
+      "company": "DeepSeek",
+      "rank": 12,
+      "scores": [61.0]
+    },
+    {
+      "name": "Perplexity",
+      "company": "Perplexity",
+      "rank": 13,
+      "scores": [60.4]
+    },
+    {
+      "name": "DeepSeek R1",
+      "company": "DeepSeek",
+      "rank": 14,
+      "scores": [59.1]
+    }
+  ],
+  "timeline_events": [
+    {
+      "date": "2026-02-09",
+      "event": "TRUscore V1.0 launches \u2014 Bible V2.5",
+      "label": "TRUscore Launch",
+      "company": "Anthropic"
+    }
+  ]
+}
