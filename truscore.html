@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-20ZZ8BG99X');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUscore Methodology | Training Run</title>
+    <meta name="description" content="The complete methodology behind TRUscore - measuring AI truthfulness, neutrality, and factual reliability. Independent data, zero ideology.">
+    <meta property="og:title" content="TRUscore Methodology | Training Run">
+    <meta property="og:description" content="Transparent, fact-checked methodology for AI truth measurement. Full source citations.">
+    <link rel="canonical" href="https://trainingrun.ai/truscore">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav>
+        <a href="/" class="logo">Training Run</a>
+        <ul class="nav-links">
+            <li><a href="/trsmethodology">TRS Methodology</a></li>
+            <li><a href="/truscore" class="active">TRUscore</a></li>
+            <li><a href="/scores">Current Scores</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+
+    <article class="methodology-page">
+        <header class="page-header">
+            <h1>TRUscore <span class="cyan">Methodology</span></h1>
+            <p class="page-intro">
+                TRUscore is an independent data axis measuring AI truthfulness, neutrality, and factual reliability.
+                Unlike TRS (which measures overall capability), TRUscore measures whether a model can be trusted to tell you the truth.
+                This page documents our complete methodology with full source citations.
+            </p>
+            <p class="last-updated">Last Updated: February 9, 2026</p>
+        </header>
+
+        <section class="method-section">
+            <h2>Why TRUscore Exists</h2>
+            <div class="summary-box">
+                <p>
+                    AI models are increasingly used to inform decisions, shape opinions, and deliver information to billions of people.
+                    The people behind the keys — the engineers, the companies, the institutions — should not be using AI to further their own ideological views.
+                    TRUscore exists to hold AI models accountable to one standard: verifiable truth.
+                </p>
+                <p class="formula-note">
+                    Truth has no ideology. Truth has no party. Truth is verifiable or it isn’t truth.
+                </p>
+            </div>
+        </section>
+
+        <section class="method-section">
+            <h2>The Four Pillars</h2>
+            <div class="method-content">
+                <div class="formula-display">
+                    <code>TRUscore = Factuality (40%) + Neutrality (30%) + Hallucination (20%) + Calibration (10%)</code>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Pillar</th>
+                            <th>Weight</th>
+                            <th>Why This Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Factuality</td>
+                            <td>40%</td>
+                            <td>Getting facts right is the core of truth. Everything else is secondary if the model cannot answer correctly.</td>
+                        </tr>
+                        <tr>
+                            <td>Neutrality</td>
+                            <td>30%</td>
+                            <td>Bias is the second biggest threat to truth. A model can be factually correct but systematically distort reality through ideological framing.</td>
+                        </tr>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>20%</td>
+                            <td>Invention is a distinct failure mode — the model isn’t biased, it’s just making things up. Less common in frontier models, but catastrophic when it happens.</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration</td>
+                            <td>10%</td>
+                            <td>The honesty check. A model that says “I don’t know” is more trustworthy than one that confidently lies.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="method-section">
+            <h2>Pillar 1: Factuality (40%)</h2>
+            <div class="method-content">
+                <div class="source-citation">
+                    <div class="source-item">
+                        <h4>SimpleQA — 20%</h4>
+                        <p>
+                            4,326 fact-seeking questions graded as Correct / Incorrect / Not Attempted. Created by OpenAI as an independent benchmark.
+                            42+ models scored. Tests hard factual accuracy on short-form questions.
+                        </p>
+                        <a href="https://kaggle.com/benchmarks/openai/simpleqa" target="_blank" class="source-link">kaggle.com/benchmarks/openai/simpleqa</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>NewsGuard AI False Claims Monitor — 20%</h4>
+                        <p>
+                            Monthly test of 11 leading chatbots against 10 real-world false claims currently circulating in the news.
+                            Each model tested 30 times with neutral, leading, and malicious prompts.
+                            Created by NewsGuard, an established media credibility organization that rates 100,000+ news sources. Completely independent.
+                        </p>
+                        <a href="https://newsguardtech.com/ai-false-claims-monitor" target="_blank" class="source-link">newsguardtech.com/ai-false-claims-monitor</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="method-section">
+            <h2>Pillar 2: Neutrality (30%)</h2>
+            <div class="method-content">
+                <div class="source-citation">
+                    <div class="source-item">
+                        <h4>TrackingAI.org Political Compass — 25%</h4>
+                        <p>
+                            27 AI models scored daily on the 62-question Political Compass Test. Each model plotted on Economic Left/Right (X) and Social Authoritarian/Libertarian (Y) axes.
+                            Scale: -10 to +10. Perfectly neutral = (0,0). The only source on the internet that scores AI political bias every single day.
+                        </p>
+                        <div class="formula-display">
+                            <code>Neutrality = 100 - (√(x² + y²) / √200) × 100</code>
+                        </div>
+                        <a href="https://trackingai.org/political-test" target="_blank" class="source-link">trackingai.org/political-test</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>Anthropic Paired Prompts Evaluation — 5%</h4>
+                        <p>
+                            1,350 prompt pairs across 150 political topics, each tested from two opposing ideological perspectives.
+                            Measures even-handedness percentage. Methodology open-sourced on GitHub. Cross-validates TrackingAI with a different approach.
+                        </p>
+                        <a href="https://anthropic.com/news/political-even-handedness" target="_blank" class="source-link">anthropic.com/news/political-even-handedness</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="method-section">
+            <h2>Pillar 3: Hallucination (20%)</h2>
+            <div class="method-content">
+                <div class="source-citation">
+                    <div class="source-item">
+                        <h4>Vectara Hallucination Leaderboard — 15%</h4>
+                        <p>
+                            Hallucination percentage rates for 30+ models tested across 7,700+ articles in 7 domains
+                            (news, science, medicine, legal, sports, business, education). Uses HHEM-2.3 hallucination evaluation model.
+                            The industry standard for hallucination measurement.
+                        </p>
+                        <a href="https://huggingface.co/spaces/vectara/leaderboard" target="_blank" class="source-link">huggingface.co/spaces/vectara/leaderboard</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>Artificial Analysis Omniscience — 5%</h4>
+                        <p>
+                            Factual recall and hallucination rates across economically relevant domains. Independent test runs on dedicated hardware.
+                            Cross-validates Vectara with different methodology.
+                        </p>
+                        <a href="https://artificialanalysis.ai/evaluations/omniscience" target="_blank" class="source-link">artificialanalysis.ai/evaluations/omniscience</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="method-section">
+            <h2>Pillar 4: Calibration (10%)</h2>
+            <div class="method-content">
+                <div class="source-citation">
+                    <div class="source-item">
+                        <h4>SimpleQA “Not Attempted” Rate — 10%</h4>
+                        <p>
+                            The percentage of questions each model declines to answer rather than guessing.
+                            Built into the same SimpleQA benchmark used for Pillar 1, measuring a different dimension.
+                            A model that says “I don’t know” when unsure is more truthful than one that confidently fabricates.
+                        </p>
+                        <a href="https://kaggle.com/benchmarks/openai/simpleqa" target="_blank" class="source-link">kaggle.com/benchmarks/openai/simpleqa (Not Attempted column)</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="method-section">
+            <h2>Complete TRUscore Formula</h2>
+            <div class="method-content">
+                <div class="formula-display">
+                    <code>TRUscore = (SimpleQA_Correct × 0.20) + (NewsGuard_TruthRate × 0.20) + (TrackingAI_Neutrality × 0.25) + (Anthropic_EvenHanded × 0.05) + (Vectara_NonHallucination × 0.15) + (ArtificialAnalysis_Accuracy × 0.05) + (SimpleQA_Calibration × 0.10)</code>
+                </div>
+                <p class="formula-note">
+                    All scores normalized 0–100 (matching TRS convention). Top-performing model on each sub-metric = 100, others proportional.
+                </p>
+            </div>
+        </section>
+    </article>
+</body>
+</html>
