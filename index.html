@@ -22,6 +22,126 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .todays-scores-section {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .todays-scores-section .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .todays-scores-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+        .todays-scores-section .view-all-link {
+            font-size: 0.9rem;
+            color: #00e5ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .todays-scores-section .view-all-link:hover {
+            opacity: 0.8;
+        }
+        .todays-scores-section .section-subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+        .live-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .score-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .score-card:hover {
+            border-color: rgba(0,229,255,0.3);
+            transform: translateY(-2px);
+        }
+        .score-card.rank-1 {
+            border-color: rgba(0,229,255,0.3);
+            background: rgba(0,229,255,0.05);
+        }
+        .score-rank {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .score-card.rank-1 .score-rank {
+            background: linear-gradient(135deg, #00e5ff, #7c4dff);
+            color: #fff;
+        }
+        .score-model-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .score-company {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 16px;
+        }
+        .score-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00e5ff, #7c4dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        .score-delta {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .score-delta.positive { color: #00e676; }
+        .score-delta.negative { color: #ff5252; }
+        .score-delta.neutral { color: rgba(255,255,255,0.4); }
+        .score-label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+        @media (max-width: 900px) {
+            .live-scores-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .live-scores-grid { grid-template-columns: repeat(2, 1fr); }
+            .todays-scores-section { padding: 40px 20px; }
+        }
+    </style>
 </head>
 <body>
     <div class="bg-animation"></div>
@@ -51,6 +171,19 @@
         </div>
         <p class="scores-date">Week 5 &bull; February 5, 2026</p>
     </section>
+
+    <!-- Today's TRSbench Scores - Live Data -->
+    <section class="todays-scores-section">
+        <div class="section-header">
+            <h2>Today's TRSbench Scores</h2>
+            <a href="/scores" class="view-all-link">View Full Rankings &rarr;</a>
+        </div>
+        <p class="section-subtitle">Live composite scores updated weekly &mdash; powered by 7 independent data sources</p>
+        <div id="live-scores-grid" class="live-scores-grid">
+            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
+        </div>
+    </section>
+
 
     <section class="intro-section">
         <div class="container">
@@ -267,6 +400,55 @@
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
         document.getElementById('current-week').textContent = dateStr;
+    </script>
+
+
+    <script>
+        // Fetch and render live TRSbench scores
+        (function() {
+            fetch('trs-data.json?v=' + Date.now())
+                .then(r => r.json())
+                .then(data => {
+                    const grid = document.getElementById('live-scores-grid');
+                    if (!grid || !data.models) return;
+                    
+                    const dates = data.dates || [];
+                    const lastIdx = dates.length - 1;
+                    const prevIdx = Math.max(0, lastIdx - 7);
+                    
+                    // Sort by rank, take top 5
+                    const sorted = data.models
+                        .filter(m => m.scores && m.scores[lastIdx] != null)
+                        .sort((a, b) => (a.rank || 999) - (b.rank || 999))
+                        .slice(0, 5);
+                    
+                    if (sorted.length === 0) {
+                        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
+                        return;
+                    }
+                    
+                    grid.innerHTML = sorted.map((model, i) => {
+                        const score = model.scores[lastIdx];
+                        const prevScore = model.scores[prevIdx];
+                        const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
+                        const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
+                        const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
+                        const rankClass = i === 0 ? ' rank-1' : '';
+                        
+                        return '<div class="score-card' + rankClass + '">' +
+                            '<div class="score-rank">' + (i + 1) + '</div>' +
+                            '<div class="score-model-name">' + model.name + '</div>' +
+                            '<div class="score-company">' + model.company + '</div>' +
+                            '<div class="score-value">' + score.toFixed(1) + '</div>' +
+                            '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
+                            '<div class="score-label">TRS Score</div>' +
+                        '</div>';
+                    }).join('');
+                })
+                .catch(err => {
+                    console.error('Failed to load TRS data:', err);
+                });
+        })();
     </script>
 </body>
 </html>
