@@ -75,8 +75,19 @@
             transform: translateY(-2px);
         }
         .score-card.rank-1 {
-            border-color: rgba(0,229,255,0.3);
-            background: rgba(0,229,255,0.05);
+            border-color: rgba(255,215,0,0.5);
+            background: rgba(255,215,0,0.06);
+            box-shadow: 0 0 20px rgba(255,215,0,0.15);
+        }
+        .score-card.rank-2 {
+            border-color: rgba(192,192,192,0.5);
+            background: rgba(192,192,192,0.05);
+            box-shadow: 0 0 16px rgba(192,192,192,0.12);
+        }
+        .score-card.rank-3 {
+            border-color: rgba(205,127,50,0.5);
+            background: rgba(205,127,50,0.05);
+            box-shadow: 0 0 14px rgba(205,127,50,0.12);
         }
         .score-rank {
             display: inline-block;
@@ -91,8 +102,19 @@
             margin-bottom: 12px;
         }
         .score-card.rank-1 .score-rank {
-            background: linear-gradient(135deg, #00e5ff, #7c4dff);
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            font-weight: 800;
+        }
+        .score-card.rank-2 .score-rank {
+            background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
+            color: #000;
+            font-weight: 800;
+        }
+        .score-card.rank-3 .score-rank {
+            background: linear-gradient(135deg, #cd7f32, #a0622e);
             color: #fff;
+            font-weight: 800;
         }
         .score-model-name {
             font-family: 'Space Grotesk', sans-serif;
@@ -172,10 +194,10 @@
         <p class="scores-date">Week 5 &bull; February 5, 2026</p>
     </section>
 
-    <!-- Today's TRSbench Scores - Live Data -->
+    <!-- Today's TRSbench - Live Data -->
     <section class="todays-scores-section">
         <div class="section-header">
-            <h2>Today's TRSbench Scores</h2>
+            <h2>Today's TRSbench</h2>
             <a href="/scores" class="view-all-link">View Full Rankings &rarr;</a>
         </div>
         <p class="section-subtitle">Live composite scores updated weekly &mdash; powered by 7 independent data sources</p>
@@ -433,7 +455,7 @@
                         const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
                         const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
                         const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                        const rankClass = i === 0 ? ' rank-1' : '';
+                        const rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
                         
                         return '<div class="score-card' + rankClass + '">' +
                             '<div class="score-rank">' + (i + 1) + '</div>' +
@@ -441,7 +463,7 @@
                             '<div class="score-company">' + model.company + '</div>' +
                             '<div class="score-value">' + score.toFixed(1) + '</div>' +
                             '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                            '<div class="score-label">TRS Score</div>' +
+                            '<div class="score-label">TRSbench</div>' +
                         '</div>';
                     }).join('');
                 })
