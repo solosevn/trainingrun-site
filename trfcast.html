@@ -55,6 +55,145 @@
             color: var(--text-muted);
         }
 
+        /* ========== Chart Model Header ========== */
+        .trfcast-chart-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .trfcast-chart-info .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .trfcast-chart-info .meta .company-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .trfcast-chart-info .meta .model-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .trfcast-score-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .trfcast-score-row .big-score {
+            font-size: 34px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -1px;
+        }
+
+        .trfcast-score-row .score-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .trfcast-score-row .score-delta {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .trfcast-score-row .score-rank {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        .trfcast-score-row .hover-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Compare All Button */
+        .trfcast-compare-btn {
+            position: absolute;
+            top: 14px;
+            left: 18px;
+            z-index: 2;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .trfcast-compare-btn.on {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+        }
+
+        .trfcast-compare-btn.off {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-muted);
+        }
+
+        /* Custom Legend */
+        .trfcast-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 0 4px;
+        }
+
+        .trfcast-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.12s;
+            color: var(--text-muted);
+        }
+
+        .trfcast-legend-item.sel {
+            opacity: 1;
+            color: var(--text-primary);
+        }
+
+        .trfcast-legend-item:not(.sel) {
+            opacity: 0.55;
+        }
+
+        .trfcast-legend-item:hover {
+            opacity: 1;
+        }
+
+        .trfcast-legend-swatch {
+            width: 8px;
+            height: 3px;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
         /* ========== Chart Section ========== */
         .chart-section {
             padding: 40px 40px 60px;
@@ -86,399 +225,88 @@
         }
 
         /* ========== Leaderboard Table ========== */
-        .leaderboard-section {
-            padding: 40px 40px 60px;
-        }
-
-        .leaderboard-section h2 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .leaderboard-section .section-sub {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .leaderboard-wrap {
-            overflow-x: auto;
-            border-radius: 16px;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            min-width: 820px;
-        }
-
-        .leaderboard-table thead {
-            background: rgba(0, 212, 255, 0.06);
-        }
-
-        .leaderboard-table th {
-            padding: 14px 16px;
-            text-align: left;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--cyan);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-bottom: 1px solid var(--border-accent);
-            white-space: nowrap;
-        }
-
-        .leaderboard-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: var(--text-secondary);
-            vertical-align: middle;
-        }
-
-        .leaderboard-table tbody tr {
-            transition: background 0.15s;
-        }
-
-        .leaderboard-table tbody tr:hover {
-            background: rgba(0, 212, 255, 0.03);
-        }
-
-        .leaderboard-table .rank-cell {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--text-primary);
-            width: 56px;
-            text-align: center;
-        }
-
-        .leaderboard-table .model-name {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 15px;
-        }
-
-        .leaderboard-table .company-name {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .score-cell {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 18px;
-            color: var(--cyan);
-        }
-
-        .delta-positive {
-            color: #4ecdc4;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .delta-negative {
-            color: #ff6b6b;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .delta-neutral {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
+        .leaderboard-section { padding: 40px 40px 60px; }
+        .leaderboard-section h2 { font-size: 28px; margin-bottom: 8px; color: var(--text-primary); }
+        .leaderboard-section .section-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 30px; }
+        .leaderboard-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border-subtle); }
+        .leaderboard-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 820px; }
+        .leaderboard-table thead { background: rgba(0, 212, 255, 0.06); }
+        .leaderboard-table th { padding: 14px 16px; text-align: left; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid var(--border-accent); white-space: nowrap; }
+        .leaderboard-table td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary); vertical-align: middle; }
+        .leaderboard-table tbody tr { transition: background 0.15s; }
+        .leaderboard-table tbody tr:hover { background: rgba(0, 212, 255, 0.03); }
+        .leaderboard-table .rank-cell { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-primary); width: 56px; text-align: center; }
+        .leaderboard-table .model-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--text-primary); font-size: 15px; }
+        .leaderboard-table .company-name { color: var(--text-muted); font-size: 13px; }
+        .score-cell { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: var(--cyan); }
+        .delta-positive { color: #4ecdc4; font-weight: 600; font-size: 13px; }
+        .delta-negative { color: #ff6b6b; font-weight: 600; font-size: 13px; }
+        .delta-neutral { color: var(--text-muted); font-size: 13px; }
 
         /* Pillar Badges */
-        .pillar-badges {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
-        .pillar-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 600;
-            font-family: 'Space Grotesk', sans-serif;
-            white-space: nowrap;
-            border: 1px solid transparent;
-        }
-
-        .pillar-badge .pillar-label {
-            color: var(--text-muted);
-            font-weight: 400;
-            font-size: 10px;
-        }
-
-        .pillar-badge.forecasting {
-            background: rgba(0, 212, 255, 0.08);
-            border-color: rgba(0, 212, 255, 0.2);
-            color: #00d4ff;
-        }
-
-        .pillar-badge.trading {
-            background: rgba(78, 205, 196, 0.08);
-            border-color: rgba(78, 205, 196, 0.2);
-            color: #4ecdc4;
-        }
-
-        .pillar-badge.calibration {
-            background: rgba(138, 43, 226, 0.08);
-            border-color: rgba(138, 43, 226, 0.2);
-            color: #b366ff;
-        }
-
-        .pillar-badge.financial_reasoning {
-            background: rgba(255, 193, 7, 0.08);
-            border-color: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
-
-        .pillar-badge.market_intelligence {
-            background: rgba(255, 107, 107, 0.08);
-            border-color: rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-        }
-
-        .pillar-badge.null-score {
-            opacity: 0.35;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.02);
-            border-color: rgba(255, 255, 255, 0.06);
-        }
-
-        .sources-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 12px;
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            background: rgba(0, 212, 255, 0.08);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            color: var(--cyan);
-        }
-
-        /* Gold/Silver/Bronze row highlights */
-        .leaderboard-table tbody tr.rank-1 {
-            background: rgba(255, 215, 0, 0.04);
-        }
-        .leaderboard-table tbody tr.rank-2 {
-            background: rgba(192, 192, 192, 0.03);
-        }
-        .leaderboard-table tbody tr.rank-3 {
-            background: rgba(205, 127, 50, 0.03);
-        }
+        .pillar-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+        .pillar-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; font-family: 'Space Grotesk', sans-serif; white-space: nowrap; border: 1px solid transparent; }
+        .pillar-badge .pillar-label { color: var(--text-muted); font-weight: 400; font-size: 10px; }
+        .pillar-badge.forecasting { background: rgba(0, 212, 255, 0.08); border-color: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .pillar-badge.trading { background: rgba(78, 205, 196, 0.08); border-color: rgba(78, 205, 196, 0.2); color: #4ecdc4; }
+        .pillar-badge.calibration { background: rgba(138, 43, 226, 0.08); border-color: rgba(138, 43, 226, 0.2); color: #b366ff; }
+        .pillar-badge.financial_reasoning { background: rgba(255, 193, 7, 0.08); border-color: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .pillar-badge.market_intelligence { background: rgba(255, 107, 107, 0.08); border-color: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .pillar-badge.null-score { opacity: 0.35; color: var(--text-muted); background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.06); }
+        .sources-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.2); color: var(--cyan); }
+        .leaderboard-table tbody tr.rank-1 { background: rgba(255, 215, 0, 0.04); }
+        .leaderboard-table tbody tr.rank-2 { background: rgba(192, 192, 192, 0.03); }
+        .leaderboard-table tbody tr.rank-3 { background: rgba(205, 127, 50, 0.03); }
 
         /* ========== Pillars Section ========== */
-        .pillars-section {
-            padding: 40px 40px 60px;
-        }
-
-        .pillars-section h2 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .pillars-section .section-sub {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .pillars-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 20px;
-        }
-
-        .pillar-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 28px 24px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pillar-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .pillar-card:hover {
-            border-color: var(--cyan);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.12);
-        }
-
-        .pillar-card:hover::before {
-            opacity: 1;
-        }
-
+        .pillars-section { padding: 40px 40px 60px; }
+        .pillars-section h2 { font-size: 28px; margin-bottom: 8px; color: var(--text-primary); }
+        .pillars-section .section-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 30px; }
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; }
+        .pillar-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 28px 24px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; opacity: 0; transition: opacity 0.3s ease; }
+        .pillar-card:hover { border-color: var(--cyan); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0, 212, 255, 0.12); }
+        .pillar-card:hover::before { opacity: 1; }
         .pillar-card.p-forecasting::before { background: linear-gradient(90deg, #00d4ff, #0099cc); }
         .pillar-card.p-trading::before { background: linear-gradient(90deg, #4ecdc4, #2db5a8); }
         .pillar-card.p-calibration::before { background: linear-gradient(90deg, #8a2be2, #b366ff); }
         .pillar-card.p-financial::before { background: linear-gradient(90deg, #ffc107, #ff9800); }
         .pillar-card.p-market::before { background: linear-gradient(90deg, #ff6b6b, #ee5a24); }
-
-        .pillar-card .pillar-weight {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
+        .pillar-card .pillar-weight { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 10px; }
         .pillar-card.p-forecasting .pillar-weight { color: #00d4ff; }
         .pillar-card.p-trading .pillar-weight { color: #4ecdc4; }
         .pillar-card.p-calibration .pillar-weight { color: #b366ff; }
         .pillar-card.p-financial .pillar-weight { color: #ffc107; }
         .pillar-card.p-market .pillar-weight { color: #ff6b6b; }
-
-        .pillar-card h3 {
-            font-size: 17px;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .pillar-card p {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        .pillar-card .pillar-sources {
-            margin-top: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
+        .pillar-card h3 { font-size: 17px; color: var(--text-primary); margin-bottom: 8px; }
+        .pillar-card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
+        .pillar-card .pillar-sources { margin-top: 12px; font-size: 12px; color: var(--text-secondary); font-style: italic; }
 
         /* ========== Methodology Summary ========== */
-        .methodology-summary {
-            padding: 40px 40px 60px;
-        }
-
-        .methodology-summary h2 {
-            font-size: 28px;
-            margin-bottom: 25px;
-            color: var(--text-primary);
-        }
-
-        .formula-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-accent);
-            border-radius: 14px;
-            padding: 35px;
-        }
-
-        .formula-box p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-bottom: 15px;
-            line-height: 1.7;
-        }
-
-        .formula-box .formula-display {
-            background: var(--bg-darker);
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .formula-box .formula-display code {
-            font-family: 'Space Grotesk', monospace;
-            font-size: 15px;
-            color: var(--cyan);
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .formula-box .formula-note {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .source-links-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .source-link-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(0, 212, 255, 0.05);
-            border: 1px solid rgba(0, 212, 255, 0.15);
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--cyan);
-            transition: all 0.2s;
-        }
-
-        .source-link-chip:hover {
-            background: rgba(0, 212, 255, 0.1);
-            border-color: var(--cyan);
-        }
+        .methodology-summary { padding: 40px 40px 60px; }
+        .methodology-summary h2 { font-size: 28px; margin-bottom: 25px; color: var(--text-primary); }
+        .formula-box { background: var(--bg-card); border: 1px solid var(--border-accent); border-radius: 14px; padding: 35px; }
+        .formula-box p { color: var(--text-secondary); font-size: 15px; margin-bottom: 15px; line-height: 1.7; }
+        .formula-box .formula-display { background: var(--bg-darker); border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .formula-box .formula-display code { font-family: 'Space Grotesk', monospace; font-size: 15px; color: var(--cyan); white-space: pre-wrap; word-break: break-word; }
+        .formula-box .formula-note { font-size: 13px; color: var(--text-muted); font-style: italic; }
+        .source-links-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+        .source-link-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 8px; font-size: 13px; color: var(--cyan); transition: all 0.2s; }
+        .source-link-chip:hover { background: rgba(0, 212, 255, 0.1); border-color: var(--cyan); }
 
         /* ========== Responsive ========== */
         @media (max-width: 768px) {
-            .trfcast-header {
-                padding: 40px 20px 30px;
-            }
-            .chart-section,
-            .leaderboard-section,
-            .pillars-section,
-            .methodology-summary {
-                padding: 30px 20px 40px;
-            }
-            .pillars-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .chart-container {
-                padding: 20px 12px 15px;
-            }
-            .source-links-row {
-                flex-direction: column;
-            }
+            .trfcast-header { padding: 40px 20px 30px; }
+            .chart-section, .leaderboard-section, .pillars-section, .methodology-summary { padding: 30px 20px 40px; }
+            .pillars-grid { grid-template-columns: 1fr 1fr; }
+            .chart-container { padding: 20px 12px 15px; }
+            .source-links-row { flex-direction: column; }
         }
 
         @media (max-width: 480px) {
-            .pillars-grid {
-                grid-template-columns: 1fr;
-            }
-            .pillar-badges {
-                gap: 3px;
-            }
-            .pillar-badge {
-                font-size: 10px;
-                padding: 2px 6px;
-            }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .pillar-badges { gap: 3px; }
+            .pillar-badge { font-size: 10px; padding: 2px 6px; }
         }
     </style>
 </head>
@@ -513,8 +341,27 @@
     <section class="chart-section">
         <h2>Score History <span class="cyan">&mdash; Top 10</span></h2>
         <p class="section-sub">Daily composite TRFcast scores since January 1, 2026</p>
+
+        <!-- Model info + score (updates on hover like TRSbench) -->
+        <div class="trfcast-chart-info" id="trfcast-info">
+            <div class="avatar" id="trf-avatar" style="background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(0,212,255,0.07));border:1px solid rgba(0,212,255,0.27);color:#00d4ff">G</div>
+            <div class="meta">
+                <div class="company-label" id="trf-company">Loading&hellip;</div>
+                <div class="model-title" id="trf-model">Loading&hellip;</div>
+            </div>
+        </div>
+        <div class="trfcast-score-row" id="trf-score-row">
+            <span class="big-score" id="trf-score" style="color:#00d4ff">&mdash;</span>
+            <span class="score-label">TRFcast</span>
+            <span class="score-delta" id="trf-delta"></span>
+            <span class="score-rank" id="trf-rank"></span>
+            <span class="hover-date" id="trf-hdate"></span>
+        </div>
+
         <div class="chart-container">
+            <button class="trfcast-compare-btn on" id="trf-compare-btn">Compare All &#10003;</button>
             <canvas id="trfcast-chart"></canvas>
+            <div class="trfcast-legend" id="trf-legend"></div>
         </div>
     </section>
 
@@ -644,40 +491,120 @@
         </div>
     </div>
 </footer>
-
 <script>
 (function () {
-    /* ===== Color palette for chart lines ===== */
-    const MODEL_COLORS = [
-        '#00d4ff', /* cyan */
-        '#ff6b6b', /* coral */
-        '#4ecdc4', /* teal */
-        '#ffc107', /* amber */
-        '#b366ff', /* violet */
-        '#ff9f43', /* orange */
-        '#00e676', /* green */
-        '#ff4081', /* pink */
-        '#18ffff', /* light cyan */
-        '#eeff41'  /* lime */
+    var MODEL_COLORS = [
+        '#00d4ff','#ff6b6b','#4ecdc4','#ffc107','#b366ff',
+        '#ff9f43','#00e676','#ff4081','#18ffff','#eeff41'
     ];
 
-    const PILLAR_KEYS = ['forecasting', 'trading', 'calibration', 'financial_reasoning', 'market_intelligence'];
-    const PILLAR_LABELS = {
-        forecasting: 'FC',
-        trading: 'TR',
-        calibration: 'CA',
-        financial_reasoning: 'FR',
-        market_intelligence: 'MI'
-    };
-    const PILLAR_CLASSES = {
-        forecasting: 'forecasting',
-        trading: 'trading',
-        calibration: 'calibration',
-        financial_reasoning: 'financial_reasoning',
-        market_intelligence: 'market_intelligence'
+    var PILLAR_KEYS = ['forecasting','trading','calibration','financial_reasoning','market_intelligence'];
+    var PILLAR_LABELS = {forecasting:'FC',trading:'TR',calibration:'CA',financial_reasoning:'FR',market_intelligence:'MI'};
+    var PILLAR_CLASSES = {forecasting:'forecasting',trading:'trading',calibration:'calibration',financial_reasoning:'financial_reasoning',market_intelligence:'market_intelligence'};
+    var MEDAL = {1:'\u{1F947}',2:'\u{1F948}',3:'\u{1F949}'};
+
+    /* State */
+    var selectedModel = 0;
+    var compareAll = true;
+    var trfChart = null;
+    var chartModels = [];
+    var chartDates = [];
+
+    function fmtDate(d) {
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var p = d.split('-');
+        return months[parseInt(p[1])-1] + ' ' + parseInt(p[2]) + ', ' + p[0];
+    }
+
+    function shortDate(d) {
+        var p = d.split('-');
+        return p[1] + '/' + p[2];
+    }
+
+    function updateHeader(modelIdx, dateIdx) {
+        var m = chartModels[modelIdx];
+        if (!m) return;
+        var mc = MODEL_COLORS[modelIdx % MODEL_COLORS.length];
+        var scores = m.scores;
+        var idx = (dateIdx != null) ? dateIdx : scores.length - 1;
+        var score = scores[idx];
+        var prevScore = (idx > 0) ? scores[idx - 1] : null;
+        var delta = (score != null && prevScore != null) ? (score - prevScore) : null;
+
+        document.getElementById('trf-avatar').textContent = m.name.charAt(0);
+        document.getElementById('trf-avatar').style.background = 'linear-gradient(135deg,' + mc + '33,' + mc + '11)';
+        document.getElementById('trf-avatar').style.borderColor = mc + '44';
+        document.getElementById('trf-avatar').style.color = mc;
+        document.getElementById('trf-company').textContent = m.company + ' \u00b7 TRFcast';
+        document.getElementById('trf-model').textContent = m.name;
+        document.getElementById('trf-score').textContent = (score != null) ? score.toFixed(2) : '\u2014';
+        document.getElementById('trf-score').style.color = mc;
+        document.getElementById('trf-rank').textContent = 'Rank #' + m.rank;
+
+        var deltaEl = document.getElementById('trf-delta');
+        if (delta != null) {
+            deltaEl.textContent = (delta >= 0 ? '\u25b2' : '\u25bc') + ' ' + Math.abs(delta).toFixed(2);
+            deltaEl.style.color = delta >= 0 ? '#3fb950' : '#f85149';
+        } else {
+            deltaEl.textContent = '';
+        }
+
+        var hdateEl = document.getElementById('trf-hdate');
+        if (dateIdx != null && chartDates[dateIdx]) {
+            hdateEl.textContent = fmtDate(chartDates[dateIdx]);
+        } else {
+            hdateEl.textContent = '';
+        }
+    }
+
+    function updateLegend() {
+        var items = document.querySelectorAll('.trfcast-legend-item');
+        items.forEach(function(el, i) {
+            if (i === selectedModel) {
+                el.classList.add('sel');
+                el.style.background = MODEL_COLORS[i % MODEL_COLORS.length] + '22';
+            } else {
+                el.classList.remove('sel');
+                el.style.background = 'transparent';
+            }
+        });
+    }
+
+    function updateChartVisibility() {
+        if (!trfChart) return;
+        trfChart.data.datasets.forEach(function(ds, i) {
+            ds.hidden = !compareAll && i !== selectedModel;
+            ds.borderWidth = (i === selectedModel) ? 3 : (compareAll ? 1.5 : 2);
+            ds.borderColor = MODEL_COLORS[i % MODEL_COLORS.length];
+            if (compareAll && i !== selectedModel) {
+                /* Slightly dimmer for non-selected in compare mode */
+            }
+        });
+        trfChart.update('none');
+    }
+
+    function selectModel(idx) {
+        selectedModel = idx;
+        updateHeader(idx, null);
+        updateLegend();
+        updateChartVisibility();
+    }
+
+    /* Compare All toggle */
+    window.trfToggleCompare = function() {
+        compareAll = !compareAll;
+        var btn = document.getElementById('trf-compare-btn');
+        if (compareAll) {
+            btn.className = 'trfcast-compare-btn on';
+            btn.innerHTML = 'Compare All &#10003;';
+        } else {
+            btn.className = 'trfcast-compare-btn off';
+            btn.textContent = 'Compare All';
+        }
+        updateChartVisibility();
     };
 
-    const MEDAL = { 1: '\u{1F947}', 2: '\u{1F948}', 3: '\u{1F949}' };
+    document.getElementById('trf-compare-btn').addEventListener('click', window.trfToggleCompare);
 
     fetch('/trf-data.json?v=' + Date.now())
         .then(function (r) { return r.json(); })
@@ -691,61 +618,79 @@
                 '<tr><td colspan="7" style="text-align:center;color:var(--warning);padding:40px;">Failed to load data. Please refresh.</td></tr>';
         });
 
-    /* ===== Chart ===== */
     function renderChart(data) {
-        var dates = data.dates || [];
-        var models = (data.models || [])
+        chartDates = data.dates || [];
+        chartModels = (data.models || [])
             .slice()
             .sort(function (a, b) { return (a.rank || 999) - (b.rank || 999); })
             .slice(0, 10);
 
-        var labels = dates.map(function (d) {
-            var parts = d.split('-');
-            return parts[1] + '/' + parts[2];
-        });
+        var labels = chartDates.map(function (d) { return shortDate(d); });
 
-        var datasets = models.map(function (m, i) {
+        var datasets = chartModels.map(function (m, i) {
             return {
                 label: m.name,
                 data: m.scores,
                 borderColor: MODEL_COLORS[i % MODEL_COLORS.length],
                 backgroundColor: 'transparent',
-                borderWidth: 2,
+                borderWidth: i === 0 ? 3 : 1.5,
                 pointRadius: 0,
                 pointHoverRadius: 4,
                 pointHoverBackgroundColor: MODEL_COLORS[i % MODEL_COLORS.length],
-                    pointHoverBorderColor: '#ffffff',
-                    pointHoverBorderWidth: 1.5,
+                pointHoverBorderColor: '#ffffff',
+                pointHoverBorderWidth: 1.5,
                 tension: 0.35
             };
         });
 
-        var ctx = document.getElementById('trfcast-chart').getContext('2d');
-        /* Crosshair plugin to match TRSbench hover style */
-            var crosshairPlugin = {
-                id: 'crosshair',
-                afterDraw: function(chart) {
-                    if (chart.tooltip && chart.tooltip._active && chart.tooltip._active.length) {
-                        var activePoint = chart.tooltip._active[0];
-                        var ctx2 = chart.ctx;
-                        var x = activePoint.element.x;
-                        var topY = chart.scales.y.top;
-                        var bottomY = chart.scales.y.bottom;
-                        ctx2.save();
-                        ctx2.beginPath();
-                        ctx2.setLineDash([3, 3]);
-                        ctx2.moveTo(x, topY);
-                        ctx2.lineTo(x, bottomY);
-                        ctx2.lineWidth = 1;
-                        ctx2.strokeStyle = 'rgba(96, 96, 112, 0.6)';
-                        ctx2.stroke();
-                        ctx2.restore();
-                    }
+        /* Build custom legend */
+        var legendEl = document.getElementById('trf-legend');
+        legendEl.innerHTML = chartModels.map(function(m, i) {
+            var c = MODEL_COLORS[i % MODEL_COLORS.length];
+            var cls = i === 0 ? 'trfcast-legend-item sel' : 'trfcast-legend-item';
+            var bg = i === 0 ? c + '22' : 'transparent';
+            return '<span class="' + cls + '" data-idx="' + i + '" style="background:' + bg + '">' +
+                '<span class="trfcast-legend-swatch" style="background:' + c + '"></span>' +
+                m.name + '</span>';
+        }).join('');
+
+        legendEl.addEventListener('click', function(e) {
+            var item = e.target.closest('.trfcast-legend-item');
+            if (!item) return;
+            var idx = parseInt(item.getAttribute('data-idx'));
+            if (!isNaN(idx)) selectModel(idx);
+        });
+
+        /* Initialize header with first model */
+        updateHeader(0, null);
+
+        /* Crosshair plugin */
+        var crosshairPlugin = {
+            id: 'crosshair',
+            afterDraw: function(chart) {
+                if (chart.tooltip && chart.tooltip._active && chart.tooltip._active.length) {
+                    var activePoint = chart.tooltip._active[0];
+                    var ctx2 = chart.ctx;
+                    var x = activePoint.element.x;
+                    var topY = chart.scales.y.top;
+                    var bottomY = chart.scales.y.bottom;
+                    ctx2.save();
+                    ctx2.beginPath();
+                    ctx2.setLineDash([3, 3]);
+                    ctx2.moveTo(x, topY);
+                    ctx2.lineTo(x, bottomY);
+                    ctx2.lineWidth = 1;
+                    ctx2.strokeStyle = 'rgba(96, 96, 112, 0.6)';
+                    ctx2.stroke();
+                    ctx2.restore();
                 }
-            };
-            new Chart(ctx, {
+            }
+        };
+
+        var ctx = document.getElementById('trfcast-chart').getContext('2d');
+        trfChart = new Chart(ctx, {
             type: 'line',
-                plugins: [crosshairPlugin],
+            plugins: [crosshairPlugin],
             data: { labels: labels, datasets: datasets },
             options: {
                 responsive: true,
@@ -755,31 +700,20 @@
                     intersect: false
                 },
                 plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            color: 'rgba(255,255,255,0.7)',
-                            font: { family: "'Inter', sans-serif", size: 12 },
-                            boxWidth: 14,
-                            boxHeight: 3,
-                            padding: 16,
-                            usePointStyle: false
-                        }
-                    },
+                    legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(10,10,26,0.95)',
-                        titleColor: '#ffffff',
-                        bodyColor: 'rgba(255,255,255,0.8)',
-                        borderColor: 'rgba(0,212,255,0.3)',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        padding: 12,
-                        titleFont: { family: "'Space Grotesk', sans-serif", weight: '600' },
-                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
-                        callbacks: {
-                            label: function (ctx) {
-                                return ' ' + ctx.dataset.label + ': ' + (ctx.parsed.y != null ? ctx.parsed.y.toFixed(2) : '--');
+                        enabled: false,
+                        mode: 'index',
+                        intersect: false,
+                        external: function(context) {
+                            var tooltip = context.tooltip;
+                            if (!tooltip || tooltip.opacity === 0 || !tooltip.dataPoints || !tooltip.dataPoints.length) {
+                                /* Mouse left chart - revert to latest */
+                                updateHeader(selectedModel, null);
+                                return;
                             }
+                            var dataIndex = tooltip.dataPoints[0].dataIndex;
+                            updateHeader(selectedModel, dataIndex);
                         }
                     }
                 },
@@ -806,11 +740,9 @@
             }
         });
 
-        /* Resize canvas height */
         document.getElementById('trfcast-chart').parentElement.style.height = '450px';
     }
 
-    /* ===== Leaderboard ===== */
     function renderLeaderboard(data) {
         var dates = data.dates || [];
         var lastIdx = dates.length - 1;
@@ -821,14 +753,13 @@
             .sort(function (a, b) { return (a.rank || 999) - (b.rank || 999); });
 
         var rows = models.map(function (m) {
-           var score = (m.scores && m.scores[lastIdx] != null) ? m.scores[lastIdx] : null;
+            var score = (m.scores && m.scores[lastIdx] != null) ? m.scores[lastIdx] : null;
             var prevScore = (m.scores && m.scores[weekAgoIdx] != null) ? m.scores[weekAgoIdx] : null;
             var delta = (score != null && prevScore != null) ? (score - prevScore) : null;
 
             var rankDisplay = MEDAL[m.rank] || m.rank;
             var rankClass = (m.rank >= 1 && m.rank <= 3) ? ' rank-' + m.rank : '';
 
-            /* Delta display */
             var deltaHtml;
             if (delta === null) {
                 deltaHtml = '<span class="delta-neutral">&mdash;</span>';
@@ -840,7 +771,6 @@
                 deltaHtml = '<span class="delta-neutral">0.00</span>';
             }
 
-            /* Pillar badges */
             var pillars = m.pillar_scores || {};
             var badgesHtml = PILLAR_KEYS.map(function (key) {
                 var val = pillars[key];
