@@ -182,7 +182,7 @@ function App({DATES,MODELS,EVENTS,WEIGHTS}){
   const [hp,setHp]=useState(null);
   const [hrm,setHrm]=useState(null);
   const [companyFilter,setCompanyFilter]=useState("All");
-  const [compareAll,setCompareAll]=useState(false);
+  const [compareAll,setCompareAll]=useState(true);
   const ref=useRef(null);
 
   const model=MODELS[sel];
@@ -358,7 +358,8 @@ function App({DATES,MODELS,EVENTS,WEIGHTS}){
           !compareAll&&linePath&&React.createElement("path",{d:linePath,fill:"none",stroke:mc,strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round"}),
           compareAll&&(()=>{const p=buildPath(model.scores);return p.linePath?React.createElement("path",{d:p.linePath,fill:"none",stroke:mc,strokeWidth:"3",strokeLinecap:"round",strokeLinejoin:"round"}):null;})(),
           // Data points (show dots for small datasets)
-          validPairs.map(p=>React.createElement("circle",{key:p.i,cx:toX(p.i),cy:toY(p.s),r:hp===p.i?6:4,fill:hp===p.i?mc:C.card,stroke:mc,strokeWidth:"2",style:{transition:"r 0.1s"}})),
+          !compareAll&&validPairs.length<=14&&validPairs.map(p=>React.createElement("circle",{key:p.i,cx:toX(p.i),cy:toY(p.s),r:hp===p.i?5:2.5,fill:hp===p.i?mc:C.card,stroke:mc,strokeWidth:"1.5",style:{transition:"r 0.1s"}})),
+hp!==null&&visScores[hp]!==null&&React.createElement("circle",{cx:toX(hp),cy:toY(visScores[hp]),r:5,fill:mc,stroke:"#fff",strokeWidth:"1.5"}),
           // Hover crosshair
           hp!==null&&visScores[hp]!==null&&React.createElement("g",null,
             React.createElement("line",{x1:toX(hp),x2:toX(hp),y1:pT,y2:pT+pH,stroke:C.dim,strokeWidth:"1",strokeDasharray:"3,3"}),
