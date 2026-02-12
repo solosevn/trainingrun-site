@@ -172,6 +172,7 @@
         <a href="/" class="logo">Training Run</a>
         <ul class="nav-links">
             <li><a href="/trsmethodology">TRS Methodology</a></li>
+        <li><a href="/trfcast">TRFcast</a></li>
             <li><a href="/sources">Verify Our Data</a></li>
             <li><a href="/scores">Current Scores</a></li>
             <li><a href="/about">About</a></li>
@@ -187,10 +188,11 @@
             Transparent methodology. Cited sources. No hype—just data.
         </p>
         <div class="hero-cta" style="flex-direction:column;align-items:center;">
-            <div style="display:flex;gap:16px;justify-content:center;margin-bottom:16px;">
+            <div style="display:flex;gap:16px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;">
                 <a href="/scores" class="cta-button secondary">View TRSbench</a>
                 <a href="/truscore-scores" class="cta-button secondary">View TRUscore</a>
-            </div>
+            
+            <a href="/trfcast" class="cta-button secondary">View TRFcast</a></div>
             <a href="https://youtu.be/-Y094_7rwWc" target="_blank" class="cta-button primary">Watch Latest Episode</a>
         </div>
         <p class="scores-date">Week 5 &bull; 2026</p>
@@ -207,6 +209,19 @@
             <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
         </div>
     </section>
+
+    <!-- Today's TRFcast - Live Data -->
+    <section class="todays-scores-section">
+        <div class="section-header">
+            <h2>Today's TRFcast</h2>
+            <a href="/trfcast" class="view-all-link">View Full Rankings &rarr;</a>
+        </div>
+        <p class="section-subtitle">AI forecasting &amp; trading performance &mdash; scored across 5 independent pillars</p>
+        <div id="trfcast-scores-grid" class="live-scores-grid">
+            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
+        </div>
+    </section>
+
 
 
     <section class="intro-section">
@@ -350,11 +365,11 @@
                     <h3>GIGABURN</h3>
                     <p>The AI power burn in gigawatts</p>
                 </a>
-                <a href="/deep-thought" class="segment-card">
-                    <div class="segment-icon">🔮</div>
-                    <h3>Deep Thought</h3>
-                    <p>AI prediction accuracy</p>
-                </a>
+                <a href="/trfcast" class="segment-card">
+                <div class="segment-icon">📈</div>
+                <h3>TRFcast</h3>
+                <p>AI forecasting &amp; trading scores</p>
+            </a>
             </div>
             <a href="/sources" class="learn-more">Verify All Sources &amp; Methodology &rarr;</a>
         </div>
@@ -407,7 +422,7 @@
                 <div class="footer-links">
                     <h4>More Segments</h4>
                     <a href="/gigaburn">GIGABURN</a>
-                    <a href="/deep-thought">Deep Thought</a>
+                    <a href="/trfcast">TRFcast</a>
                     <a href="/news">Weekly News</a>
                     <a href="/sources">All Sources</a>
                 </div>
@@ -474,5 +489,52 @@
                 });
         })();
     </script>
+<script>
+// Fetch and render live TRFcast scores
+(function() {
+    fetch('trf-data.json?v=' + Date.now())
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var grid = document.getElementById('trfcast-scores-grid');
+            if (!grid || !data.models) return;
+
+            var dates = data.dates || [];
+            var lastIdx = dates.length - 1;
+            var prevIdx = Math.max(0, lastIdx - 7);
+
+            var sorted = data.models
+                .filter(function(m) { return m.scores && m.scores[lastIdx] != null; })
+                .sort(function(a, b) { return (a.rank || 999) - (b.rank || 999); })
+                .slice(0, 5);
+
+            if (sorted.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
+                return;
+            }
+
+            grid.innerHTML = sorted.map(function(model, i) {
+                var score = model.scores[lastIdx];
+                var prevScore = model.scores[prevIdx];
+                var delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
+                var deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
+                var deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
+                var rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
+
+                return '<div class="score-card' + rankClass + '">' +
+                    '<div class="score-rank">' + (i + 1) + '</div>' +
+                    '<div class="score-model-name">' + model.name + '</div>' +
+                    '<div class="score-company">' + model.company + '</div>' +
+                    '<div class="score-value">' + score.toFixed(1) + '</div>' +
+                    '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
+                    '<div class="score-label">TRFcast</div>' +
+                    '</div>';
+            }).join('');
+        })
+        .catch(function(err) {
+            console.error('Failed to load TRFcast data:', err);
+        });
+})();
+</script>
+
 </body>
 </html>
