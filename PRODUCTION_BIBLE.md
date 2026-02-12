@@ -34,6 +34,39 @@ TRS is a weighted composite (V2.4):
 - Efficiency: 7%
 - Usage Adoption: 6%
 
+**2b. Calculate TRFcast (Training Run Forecast)**
+TRFcast is a weighted composite of 9 sub-metrics from 4 independent platforms, measuring AI forecasting and financial intelligence.
+
+**5 Pillars:**
+- Forecasting Accuracy: 30% (ForecastBench baseline 20% + tournament 10%)
+- Trading Performance: 25% (Rallies.ai returns 15% + Alpha Arena returns 10%)
+- Prediction Calibration: 20% (ForecastBench difficulty-adjusted calibration)
+- Financial Reasoning: 15% (FinanceArena QA 8% + comparative ELO 7%)
+- Market Intelligence: 10% (Alpha Arena Sharpe 5% + Rallies win rate 5%)
+
+**Formula:**
+```
+TRFcast = ForecastBench_Baseline (20%) + ForecastBench_Tournament (10%)
+        + Rallies_Returns (15%) + AlphaArena_Returns (10%)
+        + ForecastBench_Calibration (20%)
+        + FinanceArena_QA (8%) + FinanceArena_Compare (7%)
+        + AlphaArena_Sharpe (5%) + Rallies_WinRate (5%)
+```
+
+**Scoring:** Each model scored 0-100 per sub-metric (top performer = 100, others proportional). Weighted sum = final daily TRFcast score.
+
+**Data Sources:**
+- ForecastBench: https://forecastbench.org (baseline Brier, tournament, calibration)
+- Rallies.ai: https://rallies.ai (portfolio returns, win rate)
+- nof1.ai Alpha Arena: https://nof1.ai (returns, Sharpe ratio)
+- FinanceArena: https://huggingface.co/spaces/TheFinAI/FinanceArena (QA accuracy, ELO)
+
+**19 Models Tracked:** Grok 4.20, O3, Gemini 2.5 Pro, Claude 3.5 Sonnet, GPT-4.1, Claude 3.7 Sonnet, Grok 3, DeepSeek R1, DeepSeek V3, Gemini 2.0 Flash, GPT-4o, Llama 4 Maverick, Llama 3.3 70B, Mistral Large, Claude 3.5 Haiku, Gemini 2.5 Flash, GPT-4.1 mini, Grok 3 mini, GPT-4.1 nano
+
+**Data File:** trf-data.json (auto-fetched by trfcast.html and index.html)
+- Structure: formula_version, weights, dates[], models[] with daily scores and pillar breakdowns
+- Updated daily with latest platform data
+
 **3. Track Week-over-Week Changes**
 - Note which models moved up/down
 - Identify "Rookie of the Week" (biggest mover)
@@ -189,10 +222,12 @@ Track AI job market:
 ## WEBSITE STRUCTURE
 
 trainingrun.ai/
-- index.html (Homepage)
+- index.html (Homepage - live TRS + TRFcast scores)
 - scores.html (TRS Scoreboard)
+- trfcast.html (TRFcast tracker - chart, leaderboard, 5 pillars)
 - trsmethodology.html (How we calculate TRS)
 - about.html (About page)
+- trf-data.json (TRFcast daily scores for 19 models)
 - styles.css (Styling)
 - CNAME (Domain config)
 
@@ -463,8 +498,10 @@ EOF
         
          6. ## VERSION HISTORY
 
+- **v2.6** (February 12, 2026) - Added TRFcast methodology (5 pillars, 9 sub-metrics, 4 platforms), updated website structure with trfcast.html and trf-data.json
+- **v2.4** (February 9, 2026) - Updated TRS weights
 - **v1.0** (January 30, 2026) - Initial production bible created after Week 4
 
 ---
 
-*Last updated: January 30, 2026*
+*Last updated: February 12, 2026*
