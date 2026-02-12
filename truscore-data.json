@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "3db484ea69776c0575c2836add060803a6dbb39976f225a8b645296fe242198a",
+  "checksum": "02d7bd1c9479bf9665c89687ce3466ab92cb62fad6e199e97f4e241c6518ad9b",
   "weights": {
     "factuality_simpleqa": 0.2,
     "factuality_newsguard": 0.2,
@@ -52,7 +52,8 @@
     "2026-02-08",
     "2026-02-09",
     "2026-02-10",
-    "2026-02-11"
+    "2026-02-11",
+    "2026-02-12"
   ],
   "models": [
     {
@@ -101,6 +102,7 @@
         82.0,
         82.0,
         82.1,
+        82.2,
         82.2
       ]
     },
@@ -150,7 +152,8 @@
         80.9,
         80.9,
         81.0,
-        81.1
+        81.1,
+        81.2
       ]
     },
     {
@@ -199,6 +202,7 @@
         77.4,
         77.5,
         77.6,
+        77.7,
         77.7
       ]
     },
@@ -245,6 +249,7 @@
         75.0,
         75.1,
         75.2,
+        75.1,
         75.1,
         75.1,
         75.1,
@@ -297,7 +302,8 @@
         73.9,
         73.9,
         73.9,
-        73.9
+        73.9,
+        74.0
       ]
     },
     {
@@ -343,6 +349,7 @@
         73.7,
         73.9,
         73.5,
+        73.7,
         73.7,
         73.7,
         73.7,
@@ -395,6 +402,7 @@
         72.0,
         72.3,
         72.3,
+        72.4,
         72.4
       ]
     },
@@ -444,6 +452,7 @@
         71.6,
         71.6,
         71.6,
+        71.7,
         71.7
       ]
     },
@@ -490,6 +499,7 @@
         69.7,
         69.6,
         69.8,
+        69.7,
         69.7,
         69.7,
         69.7,
@@ -542,7 +552,8 @@
         64.8,
         64.8,
         64.8,
-        64.8
+        64.8,
+        64.9
       ]
     },
     {
@@ -591,7 +602,8 @@
         62.7,
         62.7,
         62.7,
-        62.7
+        62.7,
+        62.8
       ]
     },
     {
@@ -640,6 +652,7 @@
         60.9,
         61.0,
         61.0,
+        61.1,
         61.1
       ]
     },
@@ -689,7 +702,8 @@
         60.5,
         60.4,
         60.4,
-        60.4
+        60.4,
+        60.5
       ]
     },
     {
@@ -738,6 +752,7 @@
         58.9,
         59.1,
         59.1,
+        59.2,
         59.2
       ]
     }
@@ -745,7 +760,7 @@
   "timeline_events": [
     {
       "date": "2026-01-01",
-      "event": "TRUscore tracking begins \u2014 baseline scores established",
+      "event": "TRUscore tracking begins — baseline scores established",
       "label": "Tracking Begins",
       "company": "Anthropic"
     },
@@ -757,7 +772,7 @@
     },
     {
       "date": "2026-01-22",
-      "event": "NewsGuard methodology refresh \u2014 stricter criteria",
+      "event": "NewsGuard methodology refresh — stricter criteria",
       "label": "NewsGuard Refresh",
       "company": "Google"
     },
@@ -769,7 +784,7 @@
     },
     {
       "date": "2026-02-09",
-      "event": "TRUscore V1.0 launches \u2014 Bible V2.5",
+      "event": "TRUscore V1.0 launches — Bible V2.5",
       "label": "TRUscore Launch",
       "company": "Anthropic"
     }
