@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-20ZZ8BG99X');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRFcast | Training Run</title>
+    <meta name="description" content="TRFcast - Training Run Forecast. Measuring how well AI models predict the future across 5 independent pillars: forecasting, trading, calibration, financial reasoning, and market intelligence.">
+    <meta property="og:title" content="TRFcast Scores | Training Run">
+    <meta property="og:description" content="AI forecasting and trading performance tracker. 19 models scored across 5 pillars from 4 independent platforms.">
+    <link rel="canonical" href="https://trainingrun.ai/trfcast">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+    <style>
+        /* ========== TRFcast Page Layout ========== */
+        .trfcast-page {
+            padding-top: 120px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .trfcast-header {
+            text-align: center;
+            padding: 60px 40px 40px;
+        }
+
+        .trfcast-header h1 {
+            font-size: clamp(40px, 8vw, 64px);
+            margin-bottom: 20px;
+        }
+
+        .trfcast-header .page-intro {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 750px;
+            margin: 0 auto 15px;
+            line-height: 1.7;
+        }
+
+        .trfcast-header .last-updated {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ========== Chart Section ========== */
+        .chart-section {
+            padding: 40px 40px 60px;
+        }
+
+        .chart-section h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .chart-section .section-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 30px 25px 20px;
+            position: relative;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            max-height: 450px;
+        }
+
+        /* ========== Leaderboard Table ========== */
+        .leaderboard-section {
+            padding: 40px 40px 60px;
+        }
+
+        .leaderboard-section h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .leaderboard-section .section-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .leaderboard-wrap {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 820px;
+        }
+
+        .leaderboard-table thead {
+            background: rgba(0, 212, 255, 0.06);
+        }
+
+        .leaderboard-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-bottom: 1px solid var(--border-accent);
+            white-space: nowrap;
+        }
+
+        .leaderboard-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            vertical-align: middle;
+        }
+
+        .leaderboard-table tbody tr {
+            transition: background 0.15s;
+        }
+
+        .leaderboard-table tbody tr:hover {
+            background: rgba(0, 212, 255, 0.03);
+        }
+
+        .leaderboard-table .rank-cell {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-primary);
+            width: 56px;
+            text-align: center;
+        }
+
+        .leaderboard-table .model-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .leaderboard-table .company-name {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .score-cell {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--cyan);
+        }
+
+        .delta-positive {
+            color: #4ecdc4;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .delta-negative {
+            color: #ff6b6b;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .delta-neutral {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Pillar Badges */
+        .pillar-badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .pillar-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+
+        .pillar-badge .pillar-label {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 10px;
+        }
+
+        .pillar-badge.forecasting {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .pillar-badge.trading {
+            background: rgba(78, 205, 196, 0.08);
+            border-color: rgba(78, 205, 196, 0.2);
+            color: #4ecdc4;
+        }
+
+        .pillar-badge.calibration {
+            background: rgba(138, 43, 226, 0.08);
+            border-color: rgba(138, 43, 226, 0.2);
+            color: #b366ff;
+        }
+
+        .pillar-badge.financial_reasoning {
+            background: rgba(255, 193, 7, 0.08);
+            border-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .pillar-badge.market_intelligence {
+            background: rgba(255, 107, 107, 0.08);
+            border-color: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .pillar-badge.null-score {
+            opacity: 0.35;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .sources-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: var(--cyan);
+        }
+
+        /* Gold/Silver/Bronze row highlights */
+        .leaderboard-table tbody tr.rank-1 {
+            background: rgba(255, 215, 0, 0.04);
+        }
+        .leaderboard-table tbody tr.rank-2 {
+            background: rgba(192, 192, 192, 0.03);
+        }
+        .leaderboard-table tbody tr.rank-3 {
+            background: rgba(205, 127, 50, 0.03);
+        }
+
+        /* ========== Pillars Section ========== */
+        .pillars-section {
+            padding: 40px 40px 60px;
+        }
+
+        .pillars-section h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .pillars-section .section-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 20px;
+        }
+
+        .pillar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 28px 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.12);
+        }
+
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+
+        .pillar-card.p-forecasting::before { background: linear-gradient(90deg, #00d4ff, #0099cc); }
+        .pillar-card.p-trading::before { background: linear-gradient(90deg, #4ecdc4, #2db5a8); }
+        .pillar-card.p-calibration::before { background: linear-gradient(90deg, #8a2be2, #b366ff); }
+        .pillar-card.p-financial::before { background: linear-gradient(90deg, #ffc107, #ff9800); }
+        .pillar-card.p-market::before { background: linear-gradient(90deg, #ff6b6b, #ee5a24); }
+
+        .pillar-card .pillar-weight {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pillar-card.p-forecasting .pillar-weight { color: #00d4ff; }
+        .pillar-card.p-trading .pillar-weight { color: #4ecdc4; }
+        .pillar-card.p-calibration .pillar-weight { color: #b366ff; }
+        .pillar-card.p-financial .pillar-weight { color: #ffc107; }
+        .pillar-card.p-market .pillar-weight { color: #ff6b6b; }
+
+        .pillar-card h3 {
+            font-size: 17px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .pillar-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .pillar-card .pillar-sources {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* ========== Methodology Summary ========== */
+        .methodology-summary {
+            padding: 40px 40px 60px;
+        }
+
+        .methodology-summary h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+        }
+
+        .formula-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-accent);
+            border-radius: 14px;
+            padding: 35px;
+        }
+
+        .formula-box p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .formula-box .formula-display {
+            background: var(--bg-darker);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .formula-box .formula-display code {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 15px;
+            color: var(--cyan);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .formula-box .formula-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .source-links-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .source-link-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--cyan);
+            transition: all 0.2s;
+        }
+
+        .source-link-chip:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--cyan);
+        }
+
+        /* ========== Responsive ========== */
+        @media (max-width: 768px) {
+            .trfcast-header {
+                padding: 40px 20px 30px;
+            }
+            .chart-section,
+            .leaderboard-section,
+            .pillars-section,
+            .methodology-summary {
+                padding: 30px 20px 40px;
+            }
+            .pillars-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .chart-container {
+                padding: 20px 12px 15px;
+            }
+            .source-links-row {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+            .pillar-badges {
+                gap: 3px;
+            }
+            .pillar-badge {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-animation"></div>
+
+<nav>
+    <a href="/" class="logo">Training Run</a>
+    <ul class="nav-links">
+        <li><a href="/trsmethodology">TRS Methodology</a></li>
+        <li><a href="/trfcast" class="active">TRFcast</a></li>
+        <li><a href="/scores">Current Scores</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+</nav>
+
+<a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
+
+<div class="trfcast-page">
+
+    <!-- Header -->
+    <header class="trfcast-header">
+        <h1>TRFcast <span class="cyan">Scores</span></h1>
+        <p class="page-intro">
+            Training Run Forecast &mdash; measuring how well AI models predict the future across 5 independent pillars.
+        </p>
+        <p class="last-updated">Last Updated: February 12, 2026</p>
+    </header>
+
+    <!-- Chart Section -->
+    <section class="chart-section">
+        <h2>Score History <span class="cyan">&mdash; Top 10</span></h2>
+        <p class="section-sub">Daily composite TRFcast scores since January 1, 2026</p>
+        <div class="chart-container">
+            <canvas id="trfcast-chart"></canvas>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section">
+        <h2>Full <span class="cyan">Leaderboard</span></h2>
+        <p class="section-sub">All 19 models ranked by composite TRFcast score</p>
+        <div class="leaderboard-wrap">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Rank</th>
+                        <th>Model</th>
+                        <th>Company</th>
+                        <th>Score</th>
+                        <th>7d Change</th>
+                        <th>Pillar Breakdown</th>
+                        <th style="text-align:center">Sources</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:40px;">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 5 Pillars Section -->
+    <section class="pillars-section">
+        <h2>The 5 <span class="cyan">Pillars</span></h2>
+        <p class="section-sub">Each pillar measures a distinct dimension of AI forecasting and financial intelligence</p>
+        <div class="pillars-grid">
+            <div class="pillar-card p-forecasting">
+                <div class="pillar-weight">30%</div>
+                <h3>Forecasting Accuracy</h3>
+                <p>ForecastBench baseline Brier scores and tournament performance. Measures raw prediction accuracy on real-world events.</p>
+                <div class="pillar-sources">ForecastBench (baseline + tournament)</div>
+            </div>
+            <div class="pillar-card p-trading">
+                <div class="pillar-weight">25%</div>
+                <h3>Trading Performance</h3>
+                <p>Live portfolio returns from Rallies.ai and nof1.ai Alpha Arena. Real money, real markets, real accountability.</p>
+                <div class="pillar-sources">Rallies.ai + Alpha Arena</div>
+            </div>
+            <div class="pillar-card p-calibration">
+                <div class="pillar-weight">20%</div>
+                <h3>Prediction Calibration</h3>
+                <p>Difficulty-adjusted calibration from ForecastBench. Measures whether models know what they know and what they don't.</p>
+                <div class="pillar-sources">ForecastBench calibration</div>
+            </div>
+            <div class="pillar-card p-financial">
+                <div class="pillar-weight">15%</div>
+                <h3>Financial Reasoning</h3>
+                <p>FinanceArena QA accuracy and comparative reasoning ELO. Tests understanding of financial concepts and relationships.</p>
+                <div class="pillar-sources">FinanceArena (QA + ELO)</div>
+            </div>
+            <div class="pillar-card p-market">
+                <div class="pillar-weight">10%</div>
+                <h3>Market Intelligence</h3>
+                <p>Alpha Arena Sharpe ratio and Rallies.ai win rate. Rewards consistent risk-adjusted returns over lucky bets.</p>
+                <div class="pillar-sources">Alpha Arena Sharpe + Rallies win rate</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Summary -->
+    <section class="methodology-summary">
+        <h2>How TRFcast is <span class="cyan">Calculated</span></h2>
+        <div class="formula-box">
+            <p>
+                TRFcast is a weighted composite of 9 sub-metrics drawn from 4 independent platforms.
+                Each model is scored 0&ndash;100 on each sub-metric (top performer = 100, others proportional).
+                The weighted sum produces the final daily TRFcast score.
+            </p>
+            <div class="formula-display">
+                <code>TRFcast = ForecastBench_Baseline (20%) + ForecastBench_Tournament (10%)
++ Rallies_Returns (15%) + AlphaArena_Returns (10%)
++ ForecastBench_Calibration (20%)
++ FinanceArena_QA (8%) + FinanceArena_Compare (7%)
++ AlphaArena_Sharpe (5%) + Rallies_WinRate (5%)</code>
+            </div>
+            <p class="formula-note">
+                Models with null sub-metrics are scored only on available data, normalized proportionally. All source data is publicly verifiable.
+            </p>
+            <div class="source-links-row">
+                <a href="https://www.forecastbench.org/" target="_blank" rel="noopener" class="source-link-chip">ForecastBench</a>
+                <a href="https://rallies.ai/" target="_blank" rel="noopener" class="source-link-chip">Rallies.ai</a>
+                <a href="https://nof1.ai/" target="_blank" rel="noopener" class="source-link-chip">nof1.ai Alpha Arena</a>
+                <a href="https://financearena.ai/" target="_blank" rel="noopener" class="source-link-chip">FinanceArena</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="/" class="logo">Training Run</a>
+                <p>Your weekly AI conditioning.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="/trsmethodology">TRS Methodology</a>
+                <a href="/trfcast">TRFcast</a>
+                <a href="/scores">Current Scores</a>
+                <a href="/about">About Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Scores</h4>
+                <a href="/scores">TRSbench</a>
+                <a href="/truscore-scores">TRUscore</a>
+                <a href="/trfcast">TRFcast</a>
+                <a href="/sources">Verify Our Data</a>
+            </div>
+            <div class="footer-links">
+                <h4>More</h4>
+                <a href="/truscore">TRUscore Methodology</a>
+                <a href="/specialists">The Specialists</a>
+                <a href="/sources">All Sources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Training Run. All rights reserved.</p>
+            <p class="footer-disclaimer">Training Run is an independent publication and is not affiliated with any AI company.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function () {
+    /* ===== Color palette for chart lines ===== */
+    const MODEL_COLORS = [
+        '#00d4ff', /* cyan */
+        '#ff6b6b', /* coral */
+        '#4ecdc4', /* teal */
+        '#ffc107', /* amber */
+        '#b366ff', /* violet */
+        '#ff9f43', /* orange */
+        '#00e676', /* green */
+        '#ff4081', /* pink */
+        '#18ffff', /* light cyan */
+        '#eeff41'  /* lime */
+    ];
+
+    const PILLAR_KEYS = ['forecasting', 'trading', 'calibration', 'financial_reasoning', 'market_intelligence'];
+    const PILLAR_LABELS = {
+        forecasting: 'FC',
+        trading: 'TR',
+        calibration: 'CA',
+        financial_reasoning: 'FR',
+        market_intelligence: 'MI'
+    };
+    const PILLAR_CLASSES = {
+        forecasting: 'forecasting',
+        trading: 'trading',
+        calibration: 'calibration',
+        financial_reasoning: 'financial_reasoning',
+        market_intelligence: 'market_intelligence'
+    };
+
+    const MEDAL = { 1: '\u{1F947}', 2: '\u{1F948}', 3: '\u{1F949}' };
+
+    fetch('/trf-data.json?v=' + Date.now())
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            renderChart(data);
+            renderLeaderboard(data);
+        })
+        .catch(function (err) {
+            console.error('TRFcast: failed to load data', err);
+            document.getElementById('leaderboard-body').innerHTML =
+                '<tr><td colspan="7" style="text-align:center;color:var(--warning);padding:40px;">Failed to load data. Please refresh.</td></tr>';
+        });
+
+    /* ===== Chart ===== */
+    function renderChart(data) {
+        var dates = data.dates || [];
+        var models = (data.models || [])
+            .slice()
+            .sort(function (a, b) { return (a.rank || 999) - (b.rank || 999); })
+            .slice(0, 10);
+
+        var labels = dates.map(function (d) {
+            var parts = d.split('-');
+            return parts[1] + '/' + parts[2];
+        });
+
+        var datasets = models.map(function (m, i) {
+            return {
+                label: m.name,
+                data: m.scores,
+                borderColor: MODEL_COLORS[i % MODEL_COLORS.length],
+                backgroundColor: 'transparent',
+                borderWidth: 2,
+                pointRadius: 0,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: MODEL_COLORS[i % MODEL_COLORS.length],
+                tension: 0.35
+            };
+        });
+
+        var ctx = document.getElementById('trfcast-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: { labels: labels, datasets: datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: 'rgba(255,255,255,0.7)',
+                            font: { family: "'Inter', sans-serif", size: 12 },
+                            boxWidth: 14,
+                            boxHeight: 3,
+                            padding: 16,
+                            usePointStyle: false
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(10,10,26,0.95)',
+                        titleColor: '#ffffff',
+                        bodyColor: 'rgba(255,255,255,0.8)',
+                        borderColor: 'rgba(0,212,255,0.3)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        titleFont: { family: "'Space Grotesk', sans-serif", weight: '600' },
+                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                        callbacks: {
+                            label: function (ctx) {
+                                return ' ' + ctx.dataset.label + ': ' + (ctx.parsed.y != null ? ctx.parsed.y.toFixed(2) : '--');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                        ticks: {
+                            color: 'rgba(255,255,255,0.4)',
+                            font: { family: "'Inter', sans-serif", size: 11 },
+                            maxTicksLimit: 12
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 105,
+                        grid: { color: 'rgba(255,255,255,0.06)', drawBorder: false },
+                        ticks: {
+                            color: 'rgba(255,255,255,0.4)',
+                            font: { family: "'Inter', sans-serif", size: 11 },
+                            callback: function (v) { return v; }
+                        }
+                    }
+                }
+            }
+        });
+
+        /* Resize canvas height */
+        document.getElementById('trfcast-chart').parentElement.style.height = '450px';
+    }
+
+    /* ===== Leaderboard ===== */
+    function renderLeaderboard(data) {
+        var dates = data.dates || [];
+        var lastIdx = dates.length - 1;
+        var weekAgoIdx = Math.max(0, lastIdx - 7);
+
+        var models = (data.models || [])
+            .slice()
+            .sort(function (a, b) { return (a.rank || 999) - (b.rank || 999); });
+
+        var rows = models.map(function (m) {
+           var score = (m.scores && m.scores[lastIdx] != null) ? m.scores[lastIdx] : null;
+            var prevScore = (m.scores && m.scores[weekAgoIdx] != null) ? m.scores[weekAgoIdx] : null;
+            var delta = (score != null && prevScore != null) ? (score - prevScore) : null;
+
+            var rankDisplay = MEDAL[m.rank] || m.rank;
+            var rankClass = (m.rank >= 1 && m.rank <= 3) ? ' rank-' + m.rank : '';
+
+            /* Delta display */
+            var deltaHtml;
+            if (delta === null) {
+                deltaHtml = '<span class="delta-neutral">&mdash;</span>';
+            } else if (delta > 0) {
+                deltaHtml = '<span class="delta-positive">+' + delta.toFixed(2) + '</span>';
+            } else if (delta < 0) {
+                deltaHtml = '<span class="delta-negative">' + delta.toFixed(2) + '</span>';
+            } else {
+                deltaHtml = '<span class="delta-neutral">0.00</span>';
+            }
+
+            /* Pillar badges */
+            var pillars = m.pillar_scores || {};
+            var badgesHtml = PILLAR_KEYS.map(function (key) {
+                var val = pillars[key];
+                var cls = PILLAR_CLASSES[key];
+                if (val === null || val === undefined) {
+                    return '<span class="pillar-badge null-score"><span class="pillar-label">' + PILLAR_LABELS[key] + '</span> &mdash;</span>';
+                }
+                return '<span class="pillar-badge ' + cls + '"><span class="pillar-label">' + PILLAR_LABELS[key] + '</span> ' + val.toFixed(1) + '</span>';
+            }).join('');
+
+            return '<tr class="' + rankClass.trim() + '">' +
+                '<td class="rank-cell">' + rankDisplay + '</td>' +
+                '<td class="model-name">' + m.name + '</td>' +
+                '<td class="company-name">' + m.company + '</td>' +
+                '<td class="score-cell">' + (score != null ? score.toFixed(2) : '--') + '</td>' +
+                '<td>' + deltaHtml + '</td>' +
+                '<td><div class="pillar-badges">' + badgesHtml + '</div></td>' +
+                '<td style="text-align:center"><span class="sources-badge">' + (m.source_count || 0) + '</span></td>' +
+                '</tr>';
+        }).join('');
+
+        document.getElementById('leaderboard-body').innerHTML = rows;
+    }
+
+})();
+</script>
+
+</body>
+</html>
