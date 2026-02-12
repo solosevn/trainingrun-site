@@ -210,6 +210,18 @@
         </div>
     </section>
 
+    <!-- Today's TRUscore - Live Data -->
+    <section class="todays-scores-section">
+        <div class="section-header">
+            <h2>Today’s TRUscore</h2>
+            <a href="/truscore-scores" class="view-all-link">View Full Rankings &rarr;</a>
+        </div>
+        <p class="section-subtitle">AI truth &amp; reliability — factuality, neutrality, hallucination &amp; calibration</p>
+        <div id="truscore-scores-grid" class="live-scores-grid">
+            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
+        </div>
+    </section>
+
     <!-- Today's TRFcast - Live Data -->
     <section class="todays-scores-section">
         <div class="section-header">
@@ -489,6 +501,53 @@
                 });
         })();
     </script>
+<script>
+// Fetch and render live TRUscore scores
+(function() {
+    fetch('truscore-data.json?v=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+            const grid = document.getElementById('truscore-scores-grid');
+            if (!grid || !data.models) return;
+
+            const dates = data.dates || [];
+            const lastIdx = dates.length - 1;
+            const prevIdx = Math.max(0, lastIdx - 7);
+
+            const sorted = data.models
+                .filter(m => m.scores && m.scores[lastIdx] != null)
+                .sort((a, b) => (a.rank || 999) - (b.rank || 999))
+                .slice(0, 5);
+
+            if (sorted.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
+                return;
+            }
+
+            grid.innerHTML = sorted.map((model, i) => {
+                const score = model.scores[lastIdx];
+                const prevScore = model.scores[prevIdx];
+                const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
+                const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
+                const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
+                const rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
+
+                return '<div class="score-card' + rankClass + '">' +
+                    '<div class="score-rank">' + (i + 1) + '</div>' +
+                    '<div class="score-model-name">' + model.name + '</div>' +
+                    '<div class="score-company">' + model.company + '</div>' +
+                    '<div class="score-value">' + score.toFixed(1) + '</div>' +
+                    '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
+                    '<div class="score-label">TRUscore</div>' +
+                    '</div>';
+            }).join('');
+        })
+        .catch(err => {
+            console.error('Failed to load TRUscore data:', err);
+        });
+})();
+</script>
+
 <script>
 // Fetch and render live TRFcast scores
 (function() {
