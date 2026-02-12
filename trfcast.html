@@ -712,15 +712,40 @@
                 backgroundColor: 'transparent',
                 borderWidth: 2,
                 pointRadius: 0,
-                pointHoverRadius: 5,
+                pointHoverRadius: 4,
                 pointHoverBackgroundColor: MODEL_COLORS[i % MODEL_COLORS.length],
+                    pointHoverBorderColor: '#ffffff',
+                    pointHoverBorderWidth: 1.5,
                 tension: 0.35
             };
         });
 
         var ctx = document.getElementById('trfcast-chart').getContext('2d');
-        new Chart(ctx, {
+        /* Crosshair plugin to match TRSbench hover style */
+            var crosshairPlugin = {
+                id: 'crosshair',
+                afterDraw: function(chart) {
+                    if (chart.tooltip && chart.tooltip._active && chart.tooltip._active.length) {
+                        var activePoint = chart.tooltip._active[0];
+                        var ctx2 = chart.ctx;
+                        var x = activePoint.element.x;
+                        var topY = chart.scales.y.top;
+                        var bottomY = chart.scales.y.bottom;
+                        ctx2.save();
+                        ctx2.beginPath();
+                        ctx2.setLineDash([3, 3]);
+                        ctx2.moveTo(x, topY);
+                        ctx2.lineTo(x, bottomY);
+                        ctx2.lineWidth = 1;
+                        ctx2.strokeStyle = 'rgba(96, 96, 112, 0.6)';
+                        ctx2.stroke();
+                        ctx2.restore();
+                    }
+                }
+            };
+            new Chart(ctx, {
             type: 'line',
+                plugins: [crosshairPlugin],
             data: { labels: labels, datasets: datasets },
             options: {
                 responsive: true,
