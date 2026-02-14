@@ -1,0 +1,18 @@
+{
+  "formula_version": "1.0",
+  "checksum": "placeholder",
+  "weights": {
+    "swebench_verified": 0.17,
+    "swe_rebench": 0.13,
+    "livecodebench": 0.15,
+    "bigcodebench": 0.1,
+    "terminal_bench_hard": 0.12,
+    "swebench_pro": 0.08,
+    "scicode": 0.15,
+    "arena_code_elo": 0.1
+  },
+  "dates": [
+    "2026-02-14"
+  ],
+  "models": []
+}
