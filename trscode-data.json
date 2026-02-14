@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "placeholder",
+  "checksum": "3ac7c07d474006d25dff819be1281f2efe4541d74a41b2326e58148646fc21cd",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -14,5 +14,682 @@
   "dates": [
     "2026-02-14"
   ],
-  "models": []
+  "models": [
+    {
+      "name": "Claude Opus 4.5",
+      "company": "Anthropic",
+      "rank": 1,
+      "scores": [
+        63.3
+      ],
+      "pillar_scores": {
+        "issue_resolution": 88.6,
+        "code_generation": 58.5,
+        "agentic_coding": 92.0,
+        "scientific": null,
+        "human_preference": 95.9
+      },
+      "source_count": 4,
+      "raw_data": {
+        "swebench_verified_pct": 74.4,
+        "swe_rebench_pass1": 43.8,
+        "livecodebench_pct": 46.9,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 63.1,
+        "swebench_pro_pct": 45.89,
+        "scicode_pct": null,
+        "arena_code_elo": 1503
+      }
+    },
+    {
+      "name": "Claude Sonnet 4.5",
+      "company": "Anthropic",
+      "rank": 2,
+      "scores": [
+        59.5
+      ],
+      "pillar_scores": {
+        "issue_resolution": 89.3,
+        "code_generation": 58.7,
+        "agentic_coding": 78.5,
+        "scientific": null,
+        "human_preference": 88.7
+      },
+      "source_count": 4,
+      "raw_data": {
+        "swebench_verified_pct": 70.6,
+        "swe_rebench_pass1": 47.1,
+        "livecodebench_pct": 47.1,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 46.5,
+        "swebench_pro_pct": 43.6,
+        "scicode_pct": null,
+        "arena_code_elo": 1390
+      }
+    },
+    {
+      "name": "Gemini 3 Pro",
+      "company": "Google",
+      "rank": 3,
+      "scores": [
+        55.3
+      ],
+      "pillar_scores": {
+        "issue_resolution": 93.3,
+        "code_generation": null,
+        "agentic_coding": 90.3,
+        "scientific": null,
+        "human_preference": 92.5
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 77.4,
+        "swe_rebench_pass1": 46.7,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 64.7,
+        "swebench_pro_pct": 43.3,
+        "scicode_pct": null,
+        "arena_code_elo": 1449
+      }
+    },
+    {
+      "name": "GPT-5.2",
+      "company": "OpenAI",
+      "rank": 4,
+      "scores": [
+        53.2
+      ],
+      "pillar_scores": {
+        "issue_resolution": 94.4,
+        "code_generation": null,
+        "agentic_coding": 75.8,
+        "scientific": null,
+        "human_preference": 94.0
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 71.8,
+        "swe_rebench_pass1": 51.7,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 64.9,
+        "swebench_pro_pct": 29.94,
+        "scicode_pct": null,
+        "arena_code_elo": 1473
+      }
+    },
+    {
+      "name": "Claude Opus 4.6",
+      "company": "Anthropic",
+      "rank": 5,
+      "scores": [
+        49.9
+      ],
+      "pillar_scores": {
+        "issue_resolution": 96.1,
+        "code_generation": null,
+        "agentic_coding": 93.1,
+        "scientific": null,
+        "human_preference": 100.0
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 74.4,
+        "swe_rebench_pass1": 51.7,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 69.9,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1567
+      }
+    },
+    {
+      "name": "Gemini 2.5 Pro",
+      "company": "Google",
+      "rank": 6,
+      "scores": [
+        47.3
+      ],
+      "pillar_scores": {
+        "issue_resolution": 68.0,
+        "code_generation": 90.9,
+        "agentic_coding": 43.4,
+        "scientific": null,
+        "human_preference": 77.1
+      },
+      "source_count": 4,
+      "raw_data": {
+        "swebench_verified_pct": 53.6,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": 73.6,
+        "bigcodebench_pct": 36.5,
+        "terminalbench_hard_pct": 32.6,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1208
+      }
+    },
+    {
+      "name": "GPT-5.1",
+      "company": "OpenAI",
+      "rank": 7,
+      "scores": [
+        42.6
+      ],
+      "pillar_scores": {
+        "issue_resolution": 87.7,
+        "code_generation": null,
+        "agentic_coding": 63.4,
+        "scientific": null,
+        "human_preference": 88.7
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 66.0,
+        "swe_rebench_pass1": 48.5,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 47.6,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1390
+      }
+    },
+    {
+      "name": "Qwen3-Coder-480B",
+      "company": "Alibaba",
+      "rank": 8,
+      "scores": [
+        42.1
+      ],
+      "pillar_scores": {
+        "issue_resolution": 74.1,
+        "code_generation": null,
+        "agentic_coding": 60.3,
+        "scientific": null,
+        "human_preference": 81.9
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 69.6,
+        "swe_rebench_pass1": 31.7,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 27.2,
+        "swebench_pro_pct": 38.7,
+        "scicode_pct": null,
+        "arena_code_elo": 1284
+      }
+    },
+    {
+      "name": "DeepSeek V3.2",
+      "company": "DeepSeek",
+      "rank": 9,
+      "scores": [
+        40.0
+      ],
+      "pillar_scores": {
+        "issue_resolution": 73.5,
+        "code_generation": null,
+        "agentic_coding": 43.3,
+        "scientific": null,
+        "human_preference": 87.7
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 60.0,
+        "swe_rebench_pass1": 37.5,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 39.6,
+        "swebench_pro_pct": 15.56,
+        "scicode_pct": null,
+        "arena_code_elo": 1375
+      }
+    },
+    {
+      "name": "GPT-5",
+      "company": "OpenAI",
+      "rank": 10,
+      "scores": [
+        39.6
+      ],
+      "pillar_scores": {
+        "issue_resolution": 91.1,
+        "code_generation": null,
+        "agentic_coding": 78.5,
+        "scientific": null,
+        "human_preference": 89.0
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 71.8,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 49.6,
+        "swebench_pro_pct": 41.78,
+        "scicode_pct": null,
+        "arena_code_elo": 1395
+      }
+    },
+    {
+      "name": "Kimi K2 Thinking",
+      "company": "Moonshot AI",
+      "rank": 11,
+      "scores": [
+        38.7
+      ],
+      "pillar_scores": {
+        "issue_resolution": 81.6,
+        "code_generation": null,
+        "agentic_coding": 47.5,
+        "scientific": null,
+        "human_preference": 85.3
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 63.4,
+        "swe_rebench_pass1": 43.8,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 35.7,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1336
+      }
+    },
+    {
+      "name": "GLM-4.6",
+      "company": "Zhipu AI",
+      "rank": 12,
+      "scores": [
+        38.1
+      ],
+      "pillar_scores": {
+        "issue_resolution": 78.3,
+        "code_generation": null,
+        "agentic_coding": 26.8,
+        "scientific": null,
+        "human_preference": 86.7
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 68.2,
+        "swe_rebench_pass1": 37.1,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 24.5,
+        "swebench_pro_pct": 9.67,
+        "scicode_pct": null,
+        "arena_code_elo": 1358
+      }
+    },
+    {
+      "name": "Gemini 3 Flash",
+      "company": "Google",
+      "rank": 13,
+      "scores": [
+        37.0
+      ],
+      "pillar_scores": {
+        "issue_resolution": 88.3,
+        "code_generation": null,
+        "agentic_coding": 80.5,
+        "scientific": null,
+        "human_preference": 92.2
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": 46.7,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 64.3,
+        "swebench_pro_pct": 34.63,
+        "scicode_pct": null,
+        "arena_code_elo": 1444
+      }
+    },
+    {
+      "name": "DeepSeek R1",
+      "company": "DeepSeek",
+      "rank": 14,
+      "scores": [
+        35.4
+      ],
+      "pillar_scores": {
+        "issue_resolution": 41.0,
+        "code_generation": 95.6,
+        "agentic_coding": null,
+        "scientific": 42.6,
+        "human_preference": null
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": 21.7,
+        "livecodebench_pct": 73.1,
+        "bigcodebench_pct": 40.5,
+        "terminalbench_hard_pct": null,
+        "swebench_pro_pct": null,
+        "scicode_pct": 4.6,
+        "arena_code_elo": null
+      }
+    },
+    {
+      "name": "Claude Sonnet 4",
+      "company": "Anthropic",
+      "rank": 15,
+      "scores": [
+        33.5
+      ],
+      "pillar_scores": {
+        "issue_resolution": 91.9,
+        "code_generation": 69.7,
+        "agentic_coding": 93.0,
+        "scientific": null,
+        "human_preference": null
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 72.4,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": 55.9,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": null,
+        "swebench_pro_pct": 42.7,
+        "scicode_pct": null,
+        "arena_code_elo": null
+      }
+    },
+    {
+      "name": "Claude Haiku 4.5",
+      "company": "Anthropic",
+      "rank": 16,
+      "scores": [
+        29.6
+      ],
+      "pillar_scores": {
+        "issue_resolution": 51.5,
+        "code_generation": null,
+        "agentic_coding": 66.6,
+        "scientific": null,
+        "human_preference": 83.4
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": 40.6,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 35.5,
+        "swebench_pro_pct": 39.45,
+        "scicode_pct": null,
+        "arena_code_elo": 1307
+      }
+    },
+    {
+      "name": "MiniMax M2.1",
+      "company": "MiniMax",
+      "rank": 17,
+      "scores": [
+        29.0
+      ],
+      "pillar_scores": {
+        "issue_resolution": 59.9,
+        "code_generation": null,
+        "agentic_coding": 64.5,
+        "scientific": null,
+        "human_preference": 89.8
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": 31.7,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 36.6,
+        "swebench_pro_pct": 36.81,
+        "scicode_pct": null,
+        "arena_code_elo": 1407
+      }
+    },
+    {
+      "name": "Devstral 2",
+      "company": "Mistral",
+      "rank": 18,
+      "scores": [
+        28.5
+      ],
+      "pillar_scores": {
+        "issue_resolution": 69.6,
+        "code_generation": null,
+        "agentic_coding": null,
+        "scientific": null,
+        "human_preference": 76.6
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": 53.8,
+        "swe_rebench_pass1": 37.5,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": null,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1201
+      }
+    },
+    {
+      "name": "GPT-5 Mini",
+      "company": "OpenAI",
+      "rank": 19,
+      "scores": [
+        27.1
+      ],
+      "pillar_scores": {
+        "issue_resolution": 71.0,
+        "code_generation": null,
+        "agentic_coding": 46.3,
+        "scientific": null,
+        "human_preference": null
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": 59.8,
+        "swe_rebench_pass1": 35.0,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 34.8,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": null
+      }
+    },
+    {
+      "name": "Kimi K2 Instruct",
+      "company": "Moonshot AI",
+      "rank": 20,
+      "scores": [
+        27.1
+      ],
+      "pillar_scores": {
+        "issue_resolution": 60.2,
+        "code_generation": null,
+        "agentic_coding": 48.7,
+        "scientific": null,
+        "human_preference": null
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": 43.8,
+        "swe_rebench_pass1": 34.3,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 27.8,
+        "swebench_pro_pct": 27.67,
+        "scicode_pct": null,
+        "arena_code_elo": null
+      }
+    },
+    {
+      "name": "Claude Opus 4",
+      "company": "Anthropic",
+      "rank": 21,
+      "scores": [
+        26.4
+      ],
+      "pillar_scores": {
+        "issue_resolution": 92.9,
+        "code_generation": 70.6,
+        "agentic_coding": null,
+        "scientific": null,
+        "human_preference": null
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": 73.2,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": 56.6,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": null,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": null
+      }
+    },
+    {
+      "name": "Kimi K2.5",
+      "company": "Moonshot AI",
+      "rank": 22,
+      "scores": [
+        25.5
+      ],
+      "pillar_scores": {
+        "issue_resolution": 71.6,
+        "code_generation": null,
+        "agentic_coding": 57.5,
+        "scientific": null,
+        "human_preference": 92.3
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": 37.9,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 43.2,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1447
+      }
+    },
+    {
+      "name": "GLM-4.7",
+      "company": "Zhipu AI",
+      "rank": 23,
+      "scores": [
+        24.7
+      ],
+      "pillar_scores": {
+        "issue_resolution": 78.1,
+        "code_generation": null,
+        "agentic_coding": 44.5,
+        "scientific": null,
+        "human_preference": 92.0
+      },
+      "source_count": 3,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": 41.3,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 33.4,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1442
+      }
+    },
+    {
+      "name": "GLM-5",
+      "company": "Zhipu AI",
+      "rank": 24,
+      "scores": [
+        19.6
+      ],
+      "pillar_scores": {
+        "issue_resolution": 79.6,
+        "code_generation": null,
+        "agentic_coding": null,
+        "scientific": null,
+        "human_preference": 92.5
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": 42.1,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": null,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1449
+      }
+    },
+    {
+      "name": "Claude Opus 4.1",
+      "company": "Anthropic",
+      "rank": 25,
+      "scores": [
+        14.9
+      ],
+      "pillar_scores": {
+        "issue_resolution": null,
+        "code_generation": null,
+        "agentic_coding": 50.6,
+        "scientific": null,
+        "human_preference": 88.8
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 38.0,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1391
+      }
+    },
+    {
+      "name": "Grok 4",
+      "company": "xAI",
+      "rank": 26,
+      "scores": [
+        12.2
+      ],
+      "pillar_scores": {
+        "issue_resolution": null,
+        "code_generation": null,
+        "agentic_coding": 36.2,
+        "scientific": null,
+        "human_preference": 78.9
+      },
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": null,
+        "swe_rebench_pass1": null,
+        "livecodebench_pct": null,
+        "bigcodebench_pct": null,
+        "terminalbench_hard_pct": 27.2,
+        "swebench_pro_pct": null,
+        "scicode_pct": null,
+        "arena_code_elo": 1237
+      }
+    }
+  ]
 }
