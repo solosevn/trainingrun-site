@@ -189,6 +189,7 @@
         <a href="/" class="logo">Training Run</a>
         <ul class="nav-links">
             <li><a href="/trsmethodology" class="active">TRS Methodology</a></li>
+            <li><a href="/trscode">TRScode</a></li>
             <li><a href="/scores">Current Scores</a></li>
             <li><a href="/about">About</a></li>
         </ul>
@@ -216,7 +217,7 @@
         <header class="page-header">
             <h1>TRS <span class="cyan">Methodology</span></h1>
             <p class="page-intro">The Training Run Score (TRS) is a composite metric designed to provide a clear, comparable measure of AI model capabilities. This page documents our complete methodology with full source citations.</p>
-            <p class="last-updated">Last Updated: February 11, 2026</p>
+            <p class="last-updated">Last Updated: February 14, 2026</p>
         </header>
         <section class="method-section" id="section-exec-summary">
             <h2>Executive Summary</h2>
@@ -322,40 +323,68 @@
         
             </div></section>
         <section class="method-section" id="section-coding">
-            <h2>2. Coding Proficiency (20%)</h2>
-            <div class="section-content">
+          <h2>2. Coding Proficiency (20%)</h2>
+          <div class="section-content">
             <div class="method-content">
-                <h3>What We Measure</h3>
-                <p>Can this model actually write code that works? Real software engineering tasks that mirror what professional developers face daily.</p>
-                <h3>Why This Matters for TRS</h3>
-                <p>Coding ability is one of the clearest demonstrations of an AI model's practical intelligence. A model that can debug complex codebases, implement features across multiple files, and write maintainable code provides genuine utility.</p>
-                <h3>Primary Data Sources</h3>
-                <div class="source-citation">
-                    <div class="source-item">
-                        <h4>SWE-Bench Verified (50% of Coding Score)</h4>
-                        <p>Percentage of real GitHub issues resolved correctly. These are actual bugs and feature requests from production repositories.</p>
-                        <a href="https://www.swebench.com/" target="_blank" rel="noopener" class="source-link">Source: swebench.com</a>
-                    </div>
-                    <div class="source-item">
-                        <h4>LiveCodeBench (25% of Coding Score)</h4>
-                        <p>Performance on coding problems released after model training cutoffs. Eliminates benchmark contamination.</p>
-                        <a href="https://livecodebench.github.io/" target="_blank" rel="noopener" class="source-link">Source: livecodebench.github.io</a>
-                    </div>
-                    <div class="source-item">
-                        <h4>SciCode (15% of Coding Score)</h4>
-                        <p>Ability to solve scientific research coding challenges.</p>
-                        <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: scicode-bench.github.io</a>
-                    </div>
-                    <div class="source-item">
-                        <h4>Legacy Benchmarks (10% of Coding Score)</h4>
-                        <p>HumanEval and MBPP measure basic coding competency on isolated function problems.</p>
-                        <a href="https://arxiv.org/abs/2107.03374" target="_blank" rel="noopener" class="source-link">Source: arXiv:2107.03374 (HumanEval)</a>
-                        <a href="https://arxiv.org/abs/2108.07732" target="_blank" rel="noopener" class="source-link">Source: arXiv:2108.07732 (MBPP)</a>
-                    </div>
+              <h3>What We Measure</h3>
+              <p>Can this model actually write code that works? Real software engineering tasks that mirror what professional developers face daily — from fixing production bugs to autonomous terminal navigation.</p>
+
+              <div class="source-item" style="background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,212,255,0.02)); border-color: rgba(0,212,255,0.25); margin: 20px 0;">
+                <h4 style="color: #00d4ff;">TRScode — Standalone Coding Intelligence Score</h4>
+                <p>TRScode is Training Run’s dedicated coding composite — a weighted score built from 8 sub-metrics across 7 independent platforms. It provides a deeper, coding-only view beyond the 20% coding weight in the overall TRS. TRScode uses a 5-pillar structure: Real-World Issue Resolution (30%), Code Generation (25%), Agentic Coding (20%), Scientific &amp; Specialized (15%), and Human Preference (10%).</p>
+                <a href="/trscode" class="source-link" style="color: #00d4ff;">Explore TRScode Scores →</a>
+              </div>
+
+              <h3>Why This Matters for TRS</h3>
+              <p>Coding ability is one of the clearest demonstrations of an AI model’s practical intelligence. A model that can debug complex codebases, implement features across multiple files, navigate terminals autonomously, and write maintainable code provides genuine utility.</p>
+
+              <h3>Primary Data Sources</h3>
+              <div class="source-citation">
+                <div class="source-item">
+                  <h4>SWE-Bench Verified (17% of TRScode)</h4>
+                  <p>Percentage of real GitHub issues resolved correctly. These are actual bugs and feature requests from production repositories, verified by human annotators.</p>
+                  <a href="https://www.swebench.com/" target="_blank" rel="noopener" class="source-link">Source: swebench.com</a>
                 </div>
-                <h3>Score Calculation</h3>
-                <code class="calc-formula">C = (C_SWE x 0.50) + (C_LCB x 0.25) + (C_SciCode x 0.15) + (C_Legacy x 0.10)</code>
-                <p class="formula-note">Where: C_SWE = Normalized SWE-Bench Verified score, C_LCB = Normalized LiveCodeBench score, C_SciCode = Normalized SciCode score, C_Legacy = Average of normalized HumanEval and MBPP scores</p>
+                <div class="source-item">
+                  <h4>SWE-rebench (13% of TRScode)</h4>
+                  <p>A contamination-resistant fork of SWE-bench with fresh issues drawn after training cutoffs, ensuring genuine evaluation of issue resolution ability.</p>
+                  <a href="https://www.swe-rebench.com/" target="_blank" rel="noopener" class="source-link">Source: swe-rebench.com</a>
+                </div>
+                <div class="source-item">
+                  <h4>LiveCodeBench (15% of TRScode)</h4>
+                  <p>Performance on coding problems released after model training cutoffs. Eliminates benchmark contamination through continuously updated competitive programming challenges.</p>
+                  <a href="https://livecodebench.github.io/" target="_blank" rel="noopener" class="source-link">Source: livecodebench.github.io</a>
+                </div>
+                <div class="source-item">
+                  <h4>BigCodeBench (10% of TRScode)</h4>
+                  <p>Complex, multi-step function-level code generation tasks requiring library usage and compositional reasoning.</p>
+                  <a href="https://bigcode-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: bigcode-bench.github.io</a>
+                </div>
+                <div class="source-item">
+                  <h4>Terminal-Bench Hard (12% of TRScode)</h4>
+                  <p>Autonomous terminal navigation and multi-step software engineering tasks. Tests whether models can operate real development environments without human hand-holding.</p>
+                  <a href="https://github.com/NVIDIA/Terminal-Bench" target="_blank" rel="noopener" class="source-link">Source: github.com/NVIDIA/Terminal-Bench</a>
+                </div>
+                <div class="source-item">
+                  <h4>SWE-bench Pro (8% of TRScode)</h4>
+                  <p>Professional-grade software engineering evaluation with more complex, multi-file changes required across larger codebases.</p>
+                  <a href="https://www.swebench.com/" target="_blank" rel="noopener" class="source-link">Source: swebench.com</a>
+                </div>
+                <div class="source-item">
+                  <h4>SciCode (15% of TRScode)</h4>
+                  <p>Research-level coding across mathematics, physics, chemistry, and biology. Tests whether models can write code that solves real scientific problems.</p>
+                  <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: scicode-bench.github.io</a>
+                </div>
+                <div class="source-item">
+                  <h4>Chatbot Arena Code ELO (10% of TRScode)</h4>
+                  <p>Blind head-to-head coding comparisons judged by real developers. The only metric based on human evaluation rather than automated benchmarks.</p>
+                  <a href="https://lmarena.ai/" target="_blank" rel="noopener" class="source-link">Source: lmarena.ai</a>
+                </div>
+              </div>
+
+              <h3>Score Calculation</h3>
+              <code class="calc-formula">TRScode = SWE-bench_Verified (17%) + SWE-rebench (13%) + LiveCodeBench (15%) + BigCodeBench (10%) + Terminal-Bench_Hard (12%) + SWE-bench_Pro (8%) + SciCode (15%) + Arena_Code_ELO (10%)</code>
+              <p class="formula-note">Each model is scored 0–100 on each sub-metric (top performer = 100, others proportional). Models must have non-null scores in at least 2 of 5 pillars. Missing pillars contribute zero (Option B). The TRS Coding dimension draws from the TRScode composite.</p>
             </div>
         
             </div></section>
