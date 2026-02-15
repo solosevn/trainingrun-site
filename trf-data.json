@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "236856561a8f34589b7f95559d508b8946575bf02eb957d6727b916ce95dfc30",
+  "checksum": "2709ee1717b19b7e933afb89f9a0ff6fcac2a5932d1186fd683d714abf595dc0",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,

@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "10af6e84e8412528fef6c17793e8a8038bcc4f9e2d01ee1970271856b3c4f625",
+  "checksum": "7962feb80b1309ecdf10f542c92dacbd74588a5f05074d7628c5b64d1b736105",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,

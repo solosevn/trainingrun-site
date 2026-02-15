@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "859827652b62f13a265c02f2166a25c4912ba8956ccf6e15ce40e35b869a7b02",
+  "checksum": "de740a1a745bd189fc3ff57a32dca4e386f4b17389a1a9965d8553545ffb4b99",
   "weights": {
     "factuality_simpleqa": 0.2,
     "factuality_newsguard": 0.2,
