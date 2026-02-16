@@ -11,7 +11,7 @@
       </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRAgents â Training Run</title>
+<title>TRAgents — Training Run</title>
 <link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -54,7 +54,7 @@
 
 <footer>
   <div class="container">
-    <p style="text-align:center;padding:40px">Â© 2026 Training Run</p>
+    <p style="text-align:center;padding:40px">© 2026 Training Run</p>
   </div>
 </footer>
 
@@ -62,7 +62,7 @@
 (function(){
   var d=new Date(),months=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var el=document.getElementById("trs-updated-date");
-  if(el)el.textContent="Daily scores Â· Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
+  if(el)el.textContent="Daily scores · Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
 })();
 </script>
 
@@ -297,7 +297,7 @@ function App({DATES,MODELS,EVENTS}){
           React.createElement("h1",{style:{fontSize:"20px",fontWeight:600,margin:0,letterSpacing:"-0.3px"}},model.name)
         )
       ),
-      // Score line â all dynamic on hover
+      // Score line — all dynamic on hover
       React.createElement("div",{style:{display:"flex",alignItems:"baseline",gap:"10px",marginBottom:"6px",flexWrap:"wrap"}},
         React.createElement("span",{style:{fontSize:"34px",fontWeight:700,color:mc,letterSpacing:"-1px"}},
           displayScore!==null?displayScore.toFixed(2):"\u2014"
