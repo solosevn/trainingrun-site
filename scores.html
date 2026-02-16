@@ -1,11 +1,4 @@
-<Data integrity!—verified===false
-      155
-      
-Data integrity check failed
-      Dverified===false
-      Ou26a0
-      180
-      Page_DownPage_DownPage_DownPage_DownPage_DownCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
       <!-- Google tag (gtag.js) -->
@@ -268,9 +261,8 @@ function App({DATES,MODELS,EVENTS}){
   const buildPath=(modelScores)=>{
     const vis=modelScores.slice(startIdx);
     const pairs=vis.map((s,i)=>({s,i})).filter(p=>p.s!==null);
-    if(pairs.length<2)return{linePath:"",areaPath:""}
-failed
-      const pts=pairs.map(p=>`${toX(p.i)},${toY(p.s)}`);
+    if(pairs.length<2)return{linePath:"",areaPath:""};
+    const pts=pairs.map(p=>`${toX(p.i)},${toY(p.s)}`);
     const lp=`M${pts.join(" L")}`;
     const ap=`${lp} L${toX(pairs[pairs.length-1].i)},${pT+pH} L${toX(pairs[0].i)},${pT+pH} Z`;
     return{linePath:lp,areaPath:ap};
