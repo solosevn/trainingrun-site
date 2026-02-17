@@ -360,6 +360,11 @@
       "date": "2026-02-10",
       "event": "SEAL MCP Atlas updated",
       "company": "Google"
+    },
+    {
+      "date": "2026-02-16",
+      "event": "Qwen 3.5 released (pending qualification)",
+      "company": "Alibaba"
     }
   ],
   "checksum": "c9c3768d5e4311e226d874e83d69c4168dd6fcf5992caa05fe9289c5be54165d"
