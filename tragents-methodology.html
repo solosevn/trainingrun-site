@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-20ZZ8BG99X');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAgents Methodology â Training Run</title>
+    <meta name="description" content="TRAgents Methodology â How we measure autonomous AI agent performance across 6 pillars and 22 verified sources.">
+    <meta property="og:title" content="TRAgents Methodology â Training Run">
+    <meta property="og:description" content="TRAgents Methodology â How we measure autonomous AI agent performance across 6 pillars and 22 verified sources.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ââ Methodology Page Styles ââ */
+
+        .methodology-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 140px 40px 60px;
+        }
+
+        /* Title block */
+        .meth-hero {
+            text-align: center;
+            padding-bottom: 50px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 50px;
+        }
+        .meth-badge {
+            display: inline-block;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 11px;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+        .meth-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin: 10px 0 6px;
+            color: #fff;
+        }
+        .meth-title .tr { color: #00d4ff; text-shadow: 0 0 30px rgba(0,212,255,0.4); }
+        .meth-title .agents { color: #ff3333; text-shadow: 0 0 30px rgba(255,51,51,0.35); }
+        .meth-title .word { color: rgba(255,255,255,0.85); }
+        .meth-tagline {
+            font-size: 16px;
+            color: #a0a0b0;
+            margin: 12px 0 18px;
+            font-weight: 400;
+            font-style: italic;
+        }
+        .meth-version {
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Section headings */
+        .meth-section {
+            margin-bottom: 56px;
+        }
+        .meth-section-number {
+            display: inline-block;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.18);
+            color: #00d4ff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .meth-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 0 18px;
+            letter-spacing: -0.5px;
+        }
+        .meth-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #e0e0e8;
+            margin: 28px 0 12px;
+        }
+        .meth-section p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #b0b0c0;
+            margin: 0 0 16px;
+        }
+        .meth-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px;
+        }
+        .meth-section ul li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+            line-height: 1.75;
+            color: #b0b0c0;
+            margin-bottom: 10px;
+        }
+        .meth-section ul li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00d4ff;
+        }
+
+        /* Formula block */
+        .formula-block {
+            background: rgba(0,212,255,0.04);
+            border: 1px solid rgba(0,212,255,0.15);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin: 24px 0 32px;
+            text-align: center;
+        }
+        .formula-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+        .formula-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #e0e0e8;
+            line-height: 1.8;
+        }
+        .formula-text .fw { color: #00d4ff; font-weight: 700; }
+
+        /* Tables */
+        .meth-table-wrap {
+            overflow-x: auto;
+            margin: 20px 0 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+        .meth-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .meth-table thead th {
+            background: rgba(0,212,255,0.08);
+            color: #00d4ff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0,212,255,0.15);
+            white-space: nowrap;
+        }
+        .meth-table tbody td {
+            padding: 13px 16px;
+            color: #c0c0d0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            vertical-align: top;
+        }
+        .meth-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .meth-table tbody tr:hover {
+            background: rgba(0,212,255,0.03);
+        }
+        .meth-table .pillar-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .meth-table .weight-badge {
+            display: inline-block;
+            background: rgba(0,212,255,0.12);
+            color: #00d4ff;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            min-width: 38px;
+            text-align: center;
+        }
+        .meth-table .source-link {
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .meth-table .source-link:hover {
+            text-decoration: underline;
+        }
+        .meth-table .source-name {
+            font-weight: 500;
+            color: #e0e0e8;
+        }
+        .meth-table .pillar-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .pillar-tag.task { background: rgba(59,130,246,0.15); color: #60a5fa; }
+        .pillar-tag.cost { background: rgba(16,185,129,0.15); color: #34d399; }
+        .pillar-tag.tool { background: rgba(168,85,247,0.15); color: #c084fc; }
+        .pillar-tag.safety { background: rgba(239,68,68,0.15); color: #f87171; }
+        .pillar-tag.access { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .pillar-tag.multi { background: rgba(0,212,255,0.15); color: #00d4ff; }
+
+        /* Weight rationale cards */
+        .weight-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 14px;
+            transition: border-color 0.2s;
+        }
+        .weight-card:hover {
+            border-color: rgba(0,212,255,0.2);
+        }
+        .weight-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .weight-card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .weight-card-pct {
+            font-size: 13px;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+        .weight-card p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #a0a0b0;
+            margin: 0;
+        }
+
+        /* Qualification / data integrity boxes */
+        .info-box {
+            background: rgba(0,212,255,0.03);
+            border-left: 3px solid #00d4ff;
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin: 20px 0 16px;
+        }
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #b0b0c0;
+            margin: 0 0 8px;
+        }
+        .info-box p:last-child { margin-bottom: 0; }
+
+        /* Relationship table special */
+        .rel-table .benchmark-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: #fff;
+            font-size: 15px;
+        }
+        .rel-table .benchmark-name .tr-part { color: #00d4ff; }
+        .rel-table .question-col {
+            color: #00d4ff;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        /* Bottom quote */
+        .meth-quote {
+            text-align: center;
+            padding: 40px 0 10px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin-top: 50px;
+        }
+        .meth-quote p {
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(255,255,255,0.35);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Divider */
+        .meth-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 50px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .methodology-container { padding: 120px 20px 40px; }
+            .meth-title { font-size: 34px; }
+            .meth-section h2 { font-size: 22px; }
+            .formula-block { padding: 20px 16px; }
+            .formula-text { font-size: 13px; }
+            .meth-table { font-size: 12px; }
+            .meth-table thead th, .meth-table tbody td { padding: 10px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-animation"></div>
+
+<nav>
+    <a href="/" class="logo">Training Run</a>
+    <ul class="nav-links">
+        <li><a href="/tragents-methodology" class="active"><span style="color:#00d4ff">TR</span><span style="color:#ff3333">Agents</span> Methodology</a></li>
+        <li><a href="/tragents-scores"><span style="color:#00d4ff">TR</span><span style="color:#ff3333">Agents</span></a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+</nav>
+<a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
+
+<div class="methodology-container">
+
+    <!-- âââ Hero âââ -->
+    <div class="meth-hero">
+        <span class="meth-badge">Training Run</span>
+        <h1 class="meth-title"><span class="tr">TR</span><span class="agents">Agents</span> <span class="word">Methodology</span></h1>
+        <p class="meth-tagline">Measuring how well AI models perform as autonomous agents</p>
+        <p class="meth-version">Version 1.0 | February 2026</p>
+    </div>
+
+    <!-- âââ Section 1 â What is TRAgents? âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 1</span>
+        <h2>What is TRAgents?</h2>
+        <p>TRAgents is the interactive daily agentic AI benchmark tracker. It tracks composite TRAgents scores measuring how well AI models perform as autonomous agents across real-world tasks, updated daily.</p>
+        <p>Unlike TRSbench (which measures overall capability) or TRUscore (which measures truthfulness), TRAgents measures whether a model can be trusted to act autonomously &mdash; reliably, safely, and affordably.</p>
+    </div>
+
+    <div class="meth-divider"></div>
+
+    <!-- âââ Section 2 â The TRAgents Formula âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 2</span>
+        <h2>The TRAgents Formula</h2>
+
+        <div class="formula-block">
+            <div class="formula-label">Composite Score</div>
+            <div class="formula-text">
+                TRAgents = Task Completion <span class="fw">(25%)</span>
+                + Cost Efficiency <span class="fw">(20%)</span>
+                + Tool Reliability <span class="fw">(20%)</span>
+                + Safety &amp; Security <span class="fw">(15%)</span>
+                + Accessibility <span class="fw">(10%)</span>
+                + Multi-Model Efficiency <span class="fw">(10%)</span>
+            </div>
+        </div>
+
+        <div class="meth-table-wrap">
+            <table class="meth-table">
+                <thead>
+                    <tr>
+                        <th>Pillar</th>
+                        <th>Weight</th>
+                        <th>What It Measures</th>
+                        <th>Primary Sources</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="pillar-name">Task Completion</td>
+                        <td><span class="weight-badge">25%</span></td>
+                        <td>Can the agent finish multi-step real-world jobs correctly?</td>
+                        <td>GAIA, SWE-bench Verified, OSWorld, tau-squared-bench</td>
+                    </tr>
+                    <tr>
+                        <td class="pillar-name">Cost Efficiency</td>
+                        <td><span class="weight-badge">20%</span></td>
+                        <td>Cost per successfully completed task ($/task)</td>
+                        <td>HAL cost data, ARC-AGI cost/task, Galileo cost/session, Artificial Analysis</td>
+                    </tr>
+                    <tr>
+                        <td class="pillar-name">Tool Reliability</td>
+                        <td><span class="weight-badge">20%</span></td>
+                        <td>Correct tool calls, API usage, no hallucinated actions</td>
+                        <td>SEAL Agentic Tool Use, MCPToolBench++, Docker Tool-Calling Eval, ToolComp</td>
+                    </tr>
+                    <tr>
+                        <td class="pillar-name">Safety &amp; Security</td>
+                        <td><span class="weight-badge">15%</span></td>
+                        <td>Prompt injection resistance, safe autonomous behavior</td>
+                        <td>ToolEmu, ST-WebAgentBench, OS-Harm, PASB</td>
+                    </tr>
+                    <tr>
+                        <td class="pillar-name">Accessibility</td>
+                        <td><span class="weight-badge">10%</span></td>
+                        <td>Open-weight availability, hardware reqs, framework support</td>
+                        <td>HuggingFace model cards, Ollama compat, OpenRouter availability</td>
+                    </tr>
+                    <tr>
+                        <td class="pillar-name">Multi-Model Efficiency</td>
+                        <td><span class="weight-badge">10%</span></td>
+                        <td>Performance in router/worker configurations</td>
+                        <td>NVIDIA Orchestrator research, HAL scaffold data, framework benchmarks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="meth-divider"></div>
+
+    <!-- âââ Section 3 â Why These Weights? âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 3</span>
+        <h2>Why These Weights?</h2>
+
+        <div class="weight-card">
+            <div class="weight-card-header">
+                <span class="weight-card-title">Task Completion</span>
+                <span class="weight-card-pct">25%</span>
+            </div>
+            <p>The fundamental question. If the agent can't finish the job, nothing else matters.</p>
+        </div>
+
+        <div class="weight-card">
+            <div class="weight-card-header">
+                <span class="weight-card-title">Cost Efficiency</span>
+                <span class="weight-card-pct">20%</span>
+            </div>
+            <p>The #1 practical concern. Agents consume 5&ndash;20x more tokens than simple chat. Multi-model routing cuts costs 60&ndash;80%.</p>
+        </div>
+
+        <div class="weight-card">
+            <div class="weight-card-header">
+                <span class="weight-card-title">Tool Reliability</span>
+                <span class="weight-card-pct">20%</span>
+            </div>
+            <p>What separates agents from chatbots. A model can be intelligent enough to plan the right steps but fail when it tries to call tools.</p>
+        </div>
+
+        <div class="weight-card">
+            <div class="weight-card-header">
+                <span class="weight-card-title">Safety &amp; Security</span>
+                <span class="weight-card-pct">15%</span>
+            </div>
+            <p>Agents take actions &mdash; and when they fail, they fail catastrophically. 900 malicious skills found on ClawHub, a one-click RCE exploit affected 135,000+ instances.</p>
+        </div>
+
+        <div class="weight-card">
+            <div class="weight-card-header">
+                <span class="weight-card-title">Accessibility</span>
+                <span class="weight-card-pct">10%</span>
+            </div>
+            <p>Answers &ldquo;Can I actually run this?&rdquo; Binary qualifier more than performance gradient.</p>
+        </div>
+
+        <div class="weight-card">
+            <div class="weight-card-header">
+                <span class="weight-card-title">Multi-Model Efficiency</span>
+                <span class="weight-card-pct">10%</span>
+            </div>
+            <p>How the real world deploys agents. NVIDIA's Orchestrator-8B proved that a trained router beats GPT-5 at 30% of the cost.</p>
+        </div>
+    </div>
+
+    <div class="meth-divider"></div>
+
+    <!-- âââ Section 4 â All 22 Verified Sources âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 4</span>
+        <h2>All 22 Verified Sources</h2>
+
+        <div class="meth-table-wrap">
+            <table class="meth-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Source</th>
+                        <th>Weight</th>
+                        <th>Pillar</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="source-name">GAIA Benchmark (Princeton HAL)</td>
+                        <td><span class="weight-badge">8%</span></td>
+                        <td><span class="pillar-tag task">Task Completion</span></td>
+                        <td><a class="source-link" href="https://hal.cs.princeton.edu/gaia" target="_blank" rel="noopener">hal.cs.princeton.edu/gaia</a></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="source-name">SWE-bench Verified</td>
+                        <td><span class="weight-badge">7%</span></td>
+                        <td><span class="pillar-tag task">Task Completion</span></td>
+                        <td><a class="source-link" href="https://swebench.com" target="_blank" rel="noopener">swebench.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="source-name">OSWorld</td>
+                        <td><span class="weight-badge">5%</span></td>
+                        <td><span class="pillar-tag task">Task Completion</span></td>
+                        <td><a class="source-link" href="https://os-world.github.io" target="_blank" rel="noopener">os-world.github.io</a></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="source-name">tau-squared-bench (Sierra)</td>
+                        <td><span class="weight-badge">5%</span></td>
+                        <td><span class="pillar-tag task">Task Completion</span></td>
+                        <td><a class="source-link" href="https://taubench.com" target="_blank" rel="noopener">taubench.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="source-name">HAL Cost-Per-Task (Princeton)</td>
+                        <td><span class="weight-badge">8%</span></td>
+                        <td><span class="pillar-tag cost">Cost Efficiency</span></td>
+                        <td><a class="source-link" href="https://hal.cs.princeton.edu" target="_blank" rel="noopener">hal.cs.princeton.edu</a></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="source-name">ARC-AGI Cost-Per-Task</td>
+                        <td><span class="weight-badge">5%</span></td>
+                        <td><span class="pillar-tag cost">Cost Efficiency</span></td>
+                        <td><a class="source-link" href="https://arcprize.org/arc-agi-2" target="_blank" rel="noopener">arcprize.org/arc-agi-2</a></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="source-name">Galileo Agent Leaderboard</td>
+                        <td><span class="weight-badge">4%</span></td>
+                        <td><span class="pillar-tag cost">Cost Efficiency</span></td>
+                        <td><a class="source-link" href="https://huggingface.co/spaces/galileo-ai/agent-leaderboard" target="_blank" rel="noopener">huggingface.co/spaces/galileo-ai/agent-leaderboard</a></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="source-name">Artificial Analysis Pricing</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag cost">Cost Efficiency</span></td>
+                        <td><a class="source-link" href="https://artificialanalysis.ai" target="_blank" rel="noopener">artificialanalysis.ai</a></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="source-name">SEAL Agentic Tool Use (Scale AI)</td>
+                        <td><span class="weight-badge">8%</span></td>
+                        <td><span class="pillar-tag tool">Tool Reliability</span></td>
+                        <td><a class="source-link" href="https://scale.com/leaderboard" target="_blank" rel="noopener">scale.com/leaderboard</a></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td class="source-name">MCPToolBench++</td>
+                        <td><span class="weight-badge">5%</span></td>
+                        <td><span class="pillar-tag tool">Tool Reliability</span></td>
+                        <td><a class="source-link" href="https://arxiv.org" target="_blank" rel="noopener">arxiv.org</a></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td class="source-name">Docker Tool-Calling Eval</td>
+                        <td><span class="weight-badge">4%</span></td>
+                        <td><span class="pillar-tag tool">Tool Reliability</span></td>
+                        <td><a class="source-link" href="https://docker.com/blog" target="_blank" rel="noopener">docker.com/blog</a></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td class="source-name">ToolComp (Scale AI)</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag tool">Tool Reliability</span></td>
+                        <td><a class="source-link" href="https://scale.com/leaderboard" target="_blank" rel="noopener">scale.com/leaderboard</a></td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td class="source-name">ToolEmu</td>
+                        <td><span class="weight-badge">5%</span></td>
+                        <td><span class="pillar-tag safety">Safety &amp; Security</span></td>
+                        <td><a class="source-link" href="https://toolemu.github.io" target="_blank" rel="noopener">toolemu.github.io</a></td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td class="source-name">ST-WebAgentBench</td>
+                        <td><span class="weight-badge">4%</span></td>
+                        <td><span class="pillar-tag safety">Safety &amp; Security</span></td>
+                        <td><a class="source-link" href="https://arxiv.org" target="_blank" rel="noopener">arxiv.org</a></td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td class="source-name">OS-Harm</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag safety">Safety &amp; Security</span></td>
+                        <td><a class="source-link" href="https://arxiv.org" target="_blank" rel="noopener">arxiv.org</a></td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td class="source-name">PASB</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag safety">Safety &amp; Security</span></td>
+                        <td><a class="source-link" href="https://arxiv.org" target="_blank" rel="noopener">arxiv.org</a></td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td class="source-name">HuggingFace Model Cards</td>
+                        <td><span class="weight-badge">4%</span></td>
+                        <td><span class="pillar-tag access">Accessibility</span></td>
+                        <td><a class="source-link" href="https://huggingface.co" target="_blank" rel="noopener">huggingface.co</a></td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td class="source-name">Ollama Library</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag access">Accessibility</span></td>
+                        <td><a class="source-link" href="https://ollama.com/library" target="_blank" rel="noopener">ollama.com/library</a></td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td class="source-name">OpenRouter Rankings</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag access">Accessibility</span></td>
+                        <td><a class="source-link" href="https://openrouter.ai/rankings" target="_blank" rel="noopener">openrouter.ai/rankings</a></td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td class="source-name">NVIDIA Orchestrator Research</td>
+                        <td><span class="weight-badge">5%</span></td>
+                        <td><span class="pillar-tag multi">Multi-Model</span></td>
+                        <td><a class="source-link" href="https://nvidia.com" target="_blank" rel="noopener">nvidia.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td class="source-name">HAL Scaffold Comparison</td>
+                        <td><span class="weight-badge">3%</span></td>
+                        <td><span class="pillar-tag multi">Multi-Model</span></td>
+                        <td><a class="source-link" href="https://hal.cs.princeton.edu" target="_blank" rel="noopener">hal.cs.princeton.edu</a></td>
+                    </tr>
+                    <tr>
+                        <td>22</td>
+                        <td class="source-name">Artificial Analysis Token Efficiency</td>
+                        <td><span class="weight-badge">2%</span></td>
+                        <td><span class="pillar-tag multi">Multi-Model</span></td>
+                        <td><a class="source-link" href="https://artificialanalysis.ai" target="_blank" rel="noopener">artificialanalysis.ai</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="meth-divider"></div>
+
+    <!-- âââ Section 5 â Qualification Rules âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 5</span>
+        <h2>Qualification Rules</h2>
+
+        <div class="info-box">
+            <p>A model must have non-null scores in at least <strong style="color:#00d4ff">3 of the 6</strong> TRAgents pillars to appear on the leaderboard.</p>
+            <p>Models with null pillars are scored on available data only, with weights normalized proportionally.</p>
+            <p><strong style="color:#e0e0e8">Discovery-first:</strong> every daily update scans ALL models on ALL agentic benchmark source platforms.</p>
+        </div>
+    </div>
+
+    <div class="meth-divider"></div>
+
+    <!-- âââ Section 6 â Data Integrity âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 6</span>
+        <h2>Data Integrity</h2>
+
+        <div class="info-box">
+            <p><strong style="color:#e0e0e8">SHA-256 checksum verification</strong> is built into the scoreboard page.</p>
+            <p>Checksum is computed from the canonical string of model names and scores.</p>
+            <p>If the integrity check fails, a warning banner appears on the scoreboard.</p>
+        </div>
+    </div>
+
+    <div class="meth-divider"></div>
+
+    <!-- âââ Section 7 â Relationship to Other Benchmarks âââ -->
+    <div class="meth-section">
+        <span class="meth-section-number">Section 7</span>
+        <h2>Relationship to Other Training Run Benchmarks</h2>
+
+        <div class="meth-table-wrap">
+            <table class="meth-table rel-table">
+                <thead>
+                    <tr>
+                        <th>Benchmark</th>
+                        <th>Measures</th>
+                        <th>Question It Answers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="benchmark-name"><span class="tr-part">TR</span>Sbench</span></td>
+                        <td>Overall AI model capability (7 dimensions)</td>
+                        <td class="question-col">Which model is best overall?</td>
+                    </tr>
+                    <tr>
+                        <td><span class="benchmark-name"><span class="tr-part">TR</span>Uscore</span></td>
+                        <td>Truth, factuality, neutrality, hallucination</td>
+                        <td class="question-col">Which model tells the truth?</td>
+                    </tr>
+                    <tr>
+                        <td><span class="benchmark-name"><span class="tr-part">TR</span>Fcast</span></td>
+                        <td>Forecasting and trading performance (5 pillars)</td>
+                        <td class="question-col">Which model predicts the future?</td>
+                    </tr>
+                    <tr>
+                        <td><span class="benchmark-name"><span class="tr-part">TR</span>Scode</span></td>
+                        <td>Coding proficiency (5 pillars, 8 sources)</td>
+                        <td class="question-col">Which model writes the best code?</td>
+                    </tr>
+                    <tr>
+                        <td><span class="benchmark-name"><span class="tr-part">TR</span>Agents</span></td>
+                        <td>Autonomous agent performance (6 pillars, 22 sources)</td>
+                        <td class="question-col">Which model works best as an agent?</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- âââ Bottom Quote âââ -->
+    <div class="meth-quote">
+        <p>Truth has no ideology. Truth has no party. Truth is verifiable or it isn't truth.</p>
+    </div>
+
+</div>
+
+<footer>
+    <div class="container">
+        <p style="text-align:center;padding:40px">&copy; 2026 Training Run</p>
+    </div>
+</footer>
+
+</body>
+</html>
