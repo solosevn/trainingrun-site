@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Training Run - ${page}</title>
+  <title>TRFcast — Training Run</title>
   <style>
     body { background:#0d1117; color:#c9d1d9; font-family:sans-serif; margin:0; padding:20px; }
     .container { max-width:1400px; margin:auto; }
@@ -12,49 +12,33 @@
     th, td { padding:12px; border-bottom:1px solid #30363d; text-align:left; }
     th { background:#21262d; }
     .positive { color:#56d364; } .negative { color:#f85149; }
-    .error { color:#f85149; font-size:1.2em; margin:20px 0; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Training Run - ${page}</h1>
-    <p>Loading data...</p>
-    <table id="data-table">
+    <h1>TRFcast — Training Run</h1>
+    <p id="update">Loading data...</p>
+    <table>
       <thead>
         <tr><th>Rank</th><th>Model</th><th>Company</th><th>Latest Score</th><th>Change</th></tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="tbody"></tbody>
     </table>
-    <div id="error-msg" class="error"></div>
   </div>
-
   <script>
-    const dataFile = '${page === "scores" ? "trs-data" : page === "tragents-scores" ? "tragent-data" : page === "trfcast-scores" ? "trf-data" : page === "trscode-scores" ? "trscode-data" : "truscore-data"}.json';
-    fetch(dataFile + '?' + Date.now())
-      .then(r => {
-        if (!r.ok) throw new Error(`Fetch failed: ${r.status} - ${r.statusText}`);
-        return r.json();
-      })
+    fetch('trf-data.json?' + Date.now())
+      .then(r => r.json())
       .then(data => {
-        document.querySelector('p').textContent = `Updated ${data.dates?.[data.dates.length-1] || 'N/A'}`;
-        const tbody = document.querySelector('#data-table tbody');
-        tbody.innerHTML = '';
+        document.getElementById('update').textContent = 'Updated ' + data.dates[data.dates.length-1];
+        const tbody = document.getElementById('tbody');
         data.models.forEach((m, i) => {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${i+1}</td>
-            <td>${m.name || 'N/A'}</td>
-            <td>${m.company || 'N/A'}</td>
-            <td>${m.scores?.[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
-            <td class="${m.change > 0 ? 'positive' : m.change < 0 ? 'negative' : ''}">
-              ${m.change > 0 ? '+' : ''}${(m.change || 0).toFixed(2)}
-            </td>
-          `;
+          row.innerHTML = `<td>${i+1}</td><td>${m.name}</td><td>${m.company || 'N/A'}</td><td>${m.scores[m.scores.length-1]?.toFixed(2) || 'N/A'}</td><td class="${m.change > 0 ? 'positive' : 'negative'}">${m.change > 0 ? '+' : ''}${(m.change || 0).toFixed(2)}</td>`;
           tbody.appendChild(row);
         });
       })
       .catch(e => {
-        document.getElementById('error-msg').textContent = 'Error: ' + e.message;
+        document.body.innerHTML += '<p style="color:red">Error: ' + e.message + '</p>';
         console.error(e);
       });
   </script>
