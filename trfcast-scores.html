@@ -3,106 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRFcast — Training Run</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.min.js"></script>
+  <title>Training Run - ${page}</title>
   <style>
-    body { background:#0d1117; color:#c9d1d9; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; margin:0; padding:20px; }
+    body { background:#0d1117; color:#c9d1d9; font-family:sans-serif; margin:0; padding:20px; }
     .container { max-width:1400px; margin:auto; }
     h1 { color:#58a6ff; }
-    .chart { height:500px; background:#161b22; border-radius:8px; padding:10px; margin:20px 0; }
-    table { width:100%; border-collapse:collapse; }
-    th, td { padding:12px; text-align:left; border-bottom:1px solid #30363d; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { padding:12px; border-bottom:1px solid #30363d; text-align:left; }
     th { background:#21262d; }
     .positive { color:#56d364; } .negative { color:#f85149; }
-    button, select { background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:8px 12px; margin:5px; cursor:pointer; border-radius:6px; }
-    .warning { color:#f85149; background:#1f0f0f; padding:10px; border-radius:6px; margin:10px 0; }
+    .error { color:#f85149; font-size:1.2em; margin:20px 0; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <div class="container">
+    <h1>Training Run - ${page}</h1>
+    <p>Loading data...</p>
+    <table id="data-table">
+      <thead>
+        <tr><th>Rank</th><th>Model</th><th>Company</th><th>Latest Score</th><th>Change</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="error-msg" class="error"></div>
+  </div>
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
-    const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
-
-    const TRFcast = () => {
-      const [data, setData] = useState(null);
-      const [range, setRange] = useState('ALL');
-      const [compare, setCompare] = useState(false);
-
-      useEffect(() => {
-        fetch('trf-data.json?' + Date.now())
-          .then(r => r.json())
-          .then(setData)
-          .catch(e => console.error(e));
-      }, []);
-
-      if (!data) return <div>Loading...</div>;
-
-      const len = {ALL: data.dates.length, '1D':1, '1W':7, '2W':14, '1M':30}[range] || data.dates.length;
-      const start = data.dates.length - len;
-      const chartData = data.dates.slice(start).map((d, i) => {
-        const entry = { date: d };
-        data.models.forEach(m => entry[m.name] = m.scores[start + i] ?? null);
-        return entry;
+  <script>
+    const dataFile = '${page === "scores" ? "trs-data" : page === "tragents-scores" ? "tragent-data" : page === "trfcast-scores" ? "trf-data" : page === "trscode-scores" ? "trscode-data" : "truscore-data"}.json';
+    fetch(dataFile + '?' + Date.now())
+      .then(r => {
+        if (!r.ok) throw new Error(`Fetch failed: ${r.status} - ${r.statusText}`);
+        return r.json();
+      })
+      .then(data => {
+        document.querySelector('p').textContent = `Updated ${data.dates?.[data.dates.length-1] || 'N/A'}`;
+        const tbody = document.querySelector('#data-table tbody');
+        tbody.innerHTML = '';
+        data.models.forEach((m, i) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${i+1}</td>
+            <td>${m.name || 'N/A'}</td>
+            <td>${m.company || 'N/A'}</td>
+            <td>${m.scores?.[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
+            <td class="${m.change > 0 ? 'positive' : m.change < 0 ? 'negative' : ''}">
+              ${m.change > 0 ? '+' : ''}${(m.change || 0).toFixed(2)}
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(e => {
+        document.getElementById('error-msg').textContent = 'Error: ' + e.message;
+        console.error(e);
       });
-
-      return (
-        <div className="container">
-          <h1>TRFcast — Training Run</h1>
-          <p>WEEK 7 Daily scores · Updated {data.dates[data.dates.length-1]}</p>
-          <div>
-            <button onClick={() => setCompare(!compare)}>{compare ? 'Exit Compare' : 'Compare Models'}</button>
-            <select value={range} onChange={e => setRange(e.target.value)}>
-              <option value="1D">1 Day</option>
-              <option value="1W">1 Week</option>
-              <option value="2W">2 Weeks</option>
-              <option value="1M">1 Month</option>
-              <option value="ALL">All Time</option>
-            </select>
-          </div>
-
-          <div className="chart">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#30363d" />
-                <XAxis dataKey="date" stroke="#c9d1d9" />
-                <YAxis stroke="#c9d1d9" />
-                <Tooltip contentStyle={{background:'#161b22', border:'#30363d'}} />
-                <Legend />
-                {data.models.slice(0, compare ? 8 : 5).map((m, i) => (
-                  <Line key={m.name} dataKey={m.name} stroke={['#58a6ff','#f78166','#85e043','#e34c26','#ea4aaa','#f6c95e','#a78bfa','#79c6e4'][i%8]} dot={false} activeDot={{r:8}} strokeWidth={2} />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-
-          <table>
-            <thead>
-              <tr><th>Rank</th><th>Model</th><th>Company</th><th>Score</th><th>Change</th></tr>
-            </thead>
-            <tbody>
-              {data.models.map((m, i) => (
-                <tr key={m.name}>
-                  <td>{i+1}</td>
-                  <td>{m.name}</td>
-                  <td>{m.company}</td>
-                  <td>{m.scores[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
-                  <td className={m.change > 0 ? 'positive' : m.change < 0 ? 'negative' : ''}>
-                    {m.change > 0 ? '+' : ''}{(m.change || 0).toFixed(2)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-    };
-
-    ReactDOM.render(<TRFcast />, document.getElementById('root'));
   </script>
 </body>
 </html>
