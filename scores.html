@@ -7,17 +7,17 @@
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.min.js"></script>
   <style>
     body { background:#0d1117; color:#c9d1d9; font-family:sans-serif; margin:0; padding:20px; }
     .container { max-width:1400px; margin:auto; }
     h1 { color:#58a6ff; }
-    .chart { height:400px; background:#161b22; border-radius:8px; padding:10px; }
-    .leaderboard { margin-top:20px; }
+    .chart { height:500px; background:#161b22; border-radius:8px; padding:10px; margin:20px 0; }
     table { width:100%; border-collapse:collapse; }
-    th, td { padding:12px; text-align:left; border-bottom:1px solid #30363d; }
+    th, td { padding:12px; border-bottom:1px solid #30363d; }
     th { background:#21262d; }
-    .positive { color:#56d364; }
-    .negative { color:#f85149; }
+    .positive { color:#56d364; } .negative { color:#f85149; }
+    button, select { background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:8px; margin:5px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -25,94 +25,95 @@
 
   <script type="text/babel">
     const { useState, useEffect } = React;
+    const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
 
     const TRSbenchApp = () => {
       const [data, setData] = useState(null);
-      const [error, setError] = useState(null);
       const [timeRange, setTimeRange] = useState('ALL');
       const [compareMode, setCompareMode] = useState(false);
-      const [selectedModels, setSelectedModels] = useState([]);
 
       useEffect(() => {
-        fetch('trs-data.json')
+        fetch('trs-data.json?v=' + Date.now())  // Cache bust
           .then(res => res.json())
-          .then(json => {
-            // Simple checksum verify (from bible)
-            const canonical = JSON.stringify(json.models.map(m => m.scores), null, 0);
-              .then(h => Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2,'0')).join(''));
-            hash.then(h => {
-              setData(json);
-            });
-          })
+          .then(setData)
+          .catch(err => console.error('Data load error:', err));
       }, []);
 
-      if (error) return <div style={{color:'red'}}>{error}</div>;
-      if (!data) return <div>Loading...</div>;
+      if (!data) return <div>Loading TRSbench...</div>;
 
-      const filteredScores = data.models.map(m => ({
-        ...m,
-        scores: m.scores.slice(-getRangeLength(timeRange, data.dates.length))
-      }));
-
-      const getRangeLength = (range, total) => {
-        if (range === '1D') return 1;
-        if (range === '1W') return 7;
-        if (range === '2W') return 14;
-        if (range === '1M') return 30;
-        return total;
-      };
-
-      // Sparkline mini-chart (simple SVG)
-      const Sparkline = ({ scores }) => {
-        if (!scores || scores.length < 2) return null;
-        const max = Math.max(...scores.filter(s => s !== null));
-        const min = Math.min(...scores.filter(s => s !== null));
-        const points = scores.map((s,i) => {
-          if (s === null) return null;
-          const x = (i / (scores.length-1)) * 100;
-          const y = 100 - ((s - min) / (max - min || 1)) * 100;
-          return `${x},${y}`;
-        }).filter(p => p).join(' ');
-        return <svg width="80" height="30" viewBox="0 0 100 100"><polyline points={points} fill="none" stroke="#58a6ff" strokeWidth="2"/></svg>;
-      };
+      const rangeLen = { '1D':1, '1W':7, '2W':14, '1M':30, 'ALL':data.dates.length }[timeRange] || data.dates.length;
+      const startIdx = data.dates.length - rangeLen;
+      const dates = data.dates.slice(startIdx);
+      const chartData = dates.map((date, idx) => {
+        const entry = { date };
+        data.models.forEach(m => {
+          entry[m.name] = m.scores[startIdx + idx] ?? null;
+        });
+        return entry;
+      });
 
       return (
         <div className="container">
           <h1>TRSbench — Training Run</h1>
           <p>WEEK 5 Daily scores · Updated {data.dates[data.dates.length-1]}</p>
-          {error && <p style={{color:'orange'}}>{error}</p>}
 
           <div>
-            <button onClick={() => setCompareMode(!compareMode)}>{compareMode ? 'Exit Compare' : 'Compare All'}</button>
-            <select onChange={e => setTimeRange(e.target.value)}>
-              <option>1D</option><option>1W</option><option>2W</option><option>1M</option><option>ALL</option>
+            <button onClick={() => setCompareMode(!compareMode)}>
+              {compareMode ? 'Exit Compare' : 'Compare Models'}
+            </button>
+            <select value={timeRange} onChange={e => setTimeRange(e.target.value)}>
+              <option value="1D">1 Day</option>
+              <option value="1W">1 Week</option>
+              <option value="2W">2 Weeks</option>
+              <option value="1M">1 Month</option>
+              <option value="ALL">All Time</option>
             </select>
           </div>
 
-          <div className="chart"> {/* Placeholder for full chart lib - add Recharts/Chart.js if needed */ }
-            <p>Interactive Chart Area (Sparklines + Hover in full version)</p>
+          <div className="chart">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#30363d" />
+                <XAxis dataKey="date" stroke="#c9d1d9" />
+                <YAxis stroke="#c9d1d9" />
+                <Tooltip contentStyle={{ background: '#161b22', border: '#30363d', color: '#c9d1d9' }} />
+                <Legend />
+                {data.models.slice(0, compareMode ? 10 : 5).map((m, i) => (
+                  <Line 
+                    key={m.name} 
+                    type="monotone" 
+                    dataKey={m.name} 
+                    stroke={['#58a6ff', '#f78166', '#85e043', '#e34c26', '#ea4aaa', '#f6c95e', '#a78bfa'][i % 7]} 
+                    dot={false} 
+                    activeDot={{ r: 8 }} 
+                    strokeWidth={2}
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
           </div>
 
-          <div className="leaderboard">
-            <table>
-              <thead>
-                <tr><th>Rank</th><th>Model</th><th>Company</th><th>TRS Score</th><th>Change</th><th>Sparkline</th><th>Pillars</th></tr>
-              </thead>
-              <tbody>
-                {filteredScores.map((m, i) => (
-                  <tr key={m.name}>
-                    <td>{i+1}</td>
-                    <td>{m.name}</td>
-                    <td>{m.company}</td>
-                    <td>{m.scores[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
-                    <td className={m.change > 0 ? 'positive' : 'negative'}>{m.change > 0 ? '+' : ''}{m.change?.toFixed(2)}</td>
-                    <td><Sparkline scores={m.scores} /></td>
-                    <td>Pillars: Safety 21%, Reasoning 20%...</td> {/* Expand per bible */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th><th>Model</th><th>Company</th><th>TRS Score</th><th>Change</th><th>Pillars</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.models.map((m, i) => (
+                <tr key={m.name}>
+                  <td>{i+1}</td>
+                  <td>{m.name}</td>
+                  <td>{m.company}</td>
+                  <td>{m.scores[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
+                  <td className={m.change > 0 ? 'positive' : m.change < 0 ? 'negative' : ''}>
+                    {m.change > 0 ? '+' : ''}{(m.change || 0).toFixed(2)}
+                  </td>
+                  <td>Safety 21%, Reasoning 20%, Coding 20%, etc.</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       );
     };
