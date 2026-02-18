@@ -1,46 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRSbench — Training Run</title>
-  <style>
-    body { background:#0d1117; color:#c9d1d9; font-family:sans-serif; margin:0; padding:20px; }
-    .container { max-width:1400px; margin:auto; }
-    h1 { color:#58a6ff; }
-    table { width:100%; border-collapse:collapse; margin-top:20px; }
-    th, td { padding:12px; border-bottom:1px solid #30363d; text-align:left; }
-    th { background:#21262d; }
-    .positive { color:#56d364; } .negative { color:#f85149; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRFcast â Training Run</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  /* Chart-specific */
+  #trs-chart-root button { font-family: 'Inter', -apple-system, sans-serif; }
+  #trs-chart-root { padding-top: 20px; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>TRSbench — Training Run</h1>
-    <p id="update">Loading data...</p>
-    <table>
-      <thead>
-        <tr><th>Rank</th><th>Model</th><th>Company</th><th>Latest Score</th><th>Change</th></tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
+
+<div class="bg-animation"></div>
+
+<nav>
+  <a href="/" class="logo">Training Run</a>
+  <ul class="nav-links">
+    <li><a href="/trsmethodology">TRS Methodology</a></li>
+    <li><a href="/scores" class="active">TRFcast</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<div class="container" style="padding-top:120px">
+
+  <!-- Section header -->
+  <div style="text-align:center;padding:60px 0 10px">
+    <span style="display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:4px 14px;font-size:11px;color:#00d4ff;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:14px">Training Run</span>
+    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRFcast</h1>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+      <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 5</span>
+      <span id="trs-updated-date" style="font-size:13px;color:#a0a0b0"></span>
+    </div>
   </div>
-  <script>
-    fetch('trs-data.json?' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('update').textContent = 'Updated ' + data.dates[data.dates.length-1];
-        const tbody = document.getElementById('tbody');
-        data.models.forEach((m, i) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${i+1}</td><td>${m.name}</td><td>${m.company || 'N/A'}</td><td>${m.scores[m.scores.length-1]?.toFixed(2) || 'N/A'}</td><td class="${m.change > 0 ? 'positive' : 'negative'}">${m.change > 0 ? '+' : ''}${(m.change || 0).toFixed(2)}</td>`;
-          tbody.appendChild(row);
-        });
+
+  <!-- Interactive TRS Daily Chart -->
+  <div id="trs-chart-root"></div>
+  <p style="text-align:center;padding:30px 0 10px;color:var(--text-muted);font-size:13px">Full methodology at <a href="/trsmethodology">/trsmethodology</a> | Updated Daily</p>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p style="text-align:center;padding:40px">&copy; 2026 Training Run</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var d=new Date(),months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var el=document.getElementById("trs-updated-date");
+  if(el)el.textContent="Daily scores \u00b7 Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
+})();
+</script>
+
+<!-- React and Babel CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<!-- React TRS Daily Benchmark Chart -->
+<script type="text/babel">
+const {useState,useRef,useMemo,useEffect} = React;
+
+const C = {
+  bg:"#050510",card:"rgba(20, 20, 40, 0.85)",border:"rgba(0, 212, 255, 0.2)",text:"#ffffff",
+  muted:"#a0a0b0",dim:"#606070",green:"#3fb950",red:"#f85149",
+  accent:"#00d4ff",hover:"rgba(0, 212, 255, 0.08)",tip:"rgba(15, 15, 35, 0.95)",
+  glow:"0 0 20px rgba(0, 212, 255, 0.1)",
+};
+
+const CC = {
+  Google:"#4285F4",OpenAI:"#10a37f",Anthropic:"#d4a574",
+  xAI:"#e8e8e8",DeepSeek:"#6e56cf",Meta:"#0668E1",Alibaba:"#FF6A00",
+};
+
+const TIME_RANGES = [
+  {label:"1D",days:1},{label:"1W",days:7},{label:"2W",days:14},{label:"1M",days:31},{label:"ALL",days:999},
+];
+
+// SHA-256 integrity verification (Web Crypto API)
+async function verifyChecksum(data){
+  try{
+    if(!crypto||!crypto.subtle)return null; // null = unavailable (e.g. file:// context), not failed
+    if(!data.checksum)return null;
+    const names=data.models.map(m=>m.name).join("|");
+    const scores=data.models.flatMap(m=>m.scores.map(s=>s===null?"null":(s%1===0?s.toFixed(1):String(s)))).join(",");
+    const canonical=names+":"+scores;
+    const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(canonical));
+    const hash=Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    return hash===data.checksum;
+  }catch(e){return null;} // null = couldn't verify, not a failure
+}
+
+// Schema validation
+function validateData(data){
+  if(!data||typeof data!=="object")return"Invalid JSON structure";
+  if(!Array.isArray(data.dates)||data.dates.length===0)return"Missing or empty dates array";
+  if(!Array.isArray(data.models)||data.models.length===0)return"Missing or empty models array";
+  for(const m of data.models){
+    if(!m.name||!m.company||!Array.isArray(m.scores))return"Invalid model: "+m.name;
+    if(m.scores.length!==data.dates.length)return"Score count mismatch for "+m.name;
+    for(const s of m.scores){if(s!==null&&(typeof s!=="number"||s<0||s>100))return"Invalid score in "+m.name;}
+  }
+  return null;
+}
+
+// Data loader wrapper component
+function DataLoader(){
+  const [data,setData]=useState(null);
+  const [error,setError]=useState(null);
+  const [verified,setVerified]=useState(null);
+
+  useEffect(()=>{
+    fetch("trf-data.json?v="+Date.now())
+      .then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
+      .then(async(d)=>{
+        const schemaErr=validateData(d);
+        if(schemaErr){setError("Data validation failed: "+schemaErr);return;}
+        const ok=await verifyChecksum(d);
+        setVerified(ok);
+        // Transform events for chart
+        const events=(d.timeline_events||[]).map(e=>({date:e.date,label:e.label||e.event,color:CC[e.company]||C.accent}));
+        setData({DATES:d.dates,MODELS:d.models.map(m=>({name:m.name,company:m.company,scores:m.scores})),EVENTS:events});
       })
-      .catch(e => {
-        document.body.innerHTML += '<p style="color:red">Error: ' + e.message + '</p>';
-        console.error(e);
-      });
-  </script>
+      .catch(e=>setError("Failed to load score data: "+e.message));
+  },[]);
+
+  if(error)return React.createElement("div",{style:{textAlign:"center",padding:"60px 20px",color:C.red}},
+    React.createElement("div",{style:{fontSize:"16px",fontWeight:600,marginBottom:"8px"}},"Data Error"),
+    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},error)
+  );
+  if(!data)return React.createElement("div",{style:{textAlign:"center",padding:"80px 20px"}},
+    React.createElement("div",{style:{width:"32px",height:"32px",border:"3px solid "+C.border,borderTopColor:C.accent,borderRadius:"50%",margin:"0 auto 16px",animation:"trs-spin 0.8s linear infinite"}}),
+    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRFcast data..."),
+    React.createElement("style",null,"@keyframes trs-spin{to{transform:rotate(360deg)}}")
+  );
+  return React.createElement(React.Fragment,null,
+    verified===false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
+      "\u26a0\ufe0f Data integrity check failed â scores may have been modified"
+    ),
+    React.createElement(App,{DATES:data.DATES,MODELS:data.MODELS,EVENTS:data.EVENTS})
+  );
+}
+
+function fmtDate(d){const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];const p=d.split("-");return m[parseInt(p[1])-1]+" "+parseInt(p[2]);}
+function fmtDateYear(d){return fmtDate(d)+", "+d.split("-")[0];}
+
+// Get ranks for all models at a specific absolute day index
+function getRankAtDay(models,dayIdx){
+  const ranked=models.map((m,i)=>({idx:i,score:m.scores[dayIdx]})).filter(r=>r.score!==null).sort((a,b)=>b.score-a.score);
+  const result={};ranked.forEach((r,rank)=>{result[r.idx]=rank+1;});return result;
+}
+
+function SparkLine({scores,color,w=56,h=20}){
+  const valid=scores.filter(s=>s!==null);
+  if(valid.length<2)return null;
+  const mn=Math.min(...valid)-0.3,mx=Math.max(...valid)+0.3,rng=mx-mn||1;
+  const pts=valid.map((s,i)=>{const x=(i/(valid.length-1))*w;const y=h-((s-mn)/rng)*h;return`${x},${y}`;}).join(" ");
+  return React.createElement("svg",{width:w,height:h,style:{display:"block"}},
+    React.createElement("polyline",{fill:"none",stroke:color,strokeWidth:"1.5",points:pts})
+  );
+}
+
+function App({DATES,MODELS,EVENTS}){
+  const [sel,setSel]=useState(0);
+  const [tr,setTr]=useState(4);
+  const [hp,setHp]=useState(null);
+  const [hrm,setHrm]=useState(null);
+  const [companyFilter,setCompanyFilter]=useState("All");
+  const [compareAll,setCompareAll]=useState(false);
+  const ref=useRef(null);
+
+  const model=MODELS[sel];
+  const mc=CC[model.company]||C.accent;
+  const totalDays=DATES.length;
+  const range=TIME_RANGES[tr];
+  const startIdx=Math.max(0,totalDays-range.days);
+
+  const visScores=model.scores.slice(startIdx);
+  const visDates=DATES.slice(startIdx);
+  const validPairs=visScores.map((s,i)=>({s,i,d:visDates[i]})).filter(p=>p.s!==null);
+
+  // Compute the absolute day index for the hovered point
+  const hpAbsIdx=hp!==null?(startIdx+hp):null;
+
+  // Dynamic score: show hovered day's score, or latest
+  const lastValidScore=validPairs.length>0?validPairs[validPairs.length-1].s:null;
+  const hpScore=hp!==null?visScores[hp]:null;
+  const displayScore=hpScore!==null?hpScore:lastValidScore;
+
+  // Dynamic day-over-day change: at hovered point, show change from previous day
+  const computeChange=(absIdx)=>{
+    if(absIdx===null||absIdx<1)return null;
+    const cur=model.scores[absIdx];
+    const prev=model.scores[absIdx-1];
+    if(cur===null||prev===null)return null;
+    return cur-prev;
+  };
+  const latestAbsIdx=totalDays-1;
+  const displayChange=hpAbsIdx!==null?computeChange(hpAbsIdx):computeChange(latestAbsIdx);
+
+  // Dynamic rank: recalculate at hovered day
+  const displayRanks=hpAbsIdx!==null?getRankAtDay(MODELS,hpAbsIdx):getRankAtDay(MODELS,latestAbsIdx);
+  const displayRank=displayRanks[sel];
+  const latestRanks=getRankAtDay(MODELS,latestAbsIdx);
+  const prevRanks=getRankAtDay(MODELS,latestAbsIdx-1);
+
+  const rankedModels=useMemo(()=>{
+    let list=MODELS.map((m,i)=>({
+      ...m,idx:i,rank:latestRanks[i]||99,prevRank:prevRanks[i]||99,
+      latestScore:m.scores[totalDays-1],
+    })).sort((a,b)=>a.rank-b.rank);
+    if(companyFilter!=="All") list=list.filter(m=>m.company===companyFilter);
+    return list;
+  },[companyFilter]);
+
+  const movers=useMemo(()=>{
+    let best={name:"",change:-999},worst={name:"",change:999};
+    MODELS.forEach(m=>{
+      const vs=m.scores.slice(startIdx).filter(s=>s!==null);
+      if(vs.length<2)return;
+      const ch=vs[vs.length-1]-vs[0];
+      if(ch>best.change)best={name:m.name,company:m.company,change:ch};
+      if(ch<worst.change)worst={name:m.name,company:m.company,change:ch};
+    });
+    return{best,worst};
+  },[startIdx]);
+
+  // Chart dimensions
+  const W=700,H=320,pL=52,pR=16,pT=30,pB=44;
+  const pW=W-pL-pR,pH=H-pT-pB;
+
+  // Y scale: use ALL models range if compareAll, else selected model
+  const allVisScores=MODELS.flatMap(m=>m.scores.slice(startIdx).filter(s=>s!==null));
+  const selVisScores=validPairs.map(p=>p.s);
+  const scaleScores=compareAll?allVisScores:(selVisScores.length?selVisScores:allVisScores);
+  const yMin=Math.floor(Math.min(...scaleScores)*2)/2-0.5;
+  const yMax=Math.ceil(Math.max(...scaleScores)*2)/2+0.5;
+  const yRng=yMax-yMin||1;
+
+  const toX=(i)=>pL+(visDates.length<=1?pW/2:(i/(visDates.length-1))*pW);
+  const toY=(v)=>pT+pH-((v-yMin)/yRng)*pH;
+
+  const grids=[];for(let v=Math.ceil(yMin);v<=Math.floor(yMax);v+=1)grids.push(v);
+
+  // Build line paths for all models (used in compare mode)
+  const buildPath=(modelScores)=>{
+    const vis=modelScores.slice(startIdx);
+    const pairs=vis.map((s,i)=>({s,i})).filter(p=>p.s!==null);
+    if(pairs.length<2)return{linePath:"",areaPath:""};
+    const pts=pairs.map(p=>`${toX(p.i)},${toY(p.s)}`);
+    const lp=`M${pts.join(" L")}`;
+    const ap=`${lp} L${toX(pairs[pairs.length-1].i)},${pT+pH} L${toX(pairs[0].i)},${pT+pH} Z`;
+    return{linePath:lp,areaPath:ap};
+  };
+
+  const selPaths=buildPath(model.scores);
+  const linePath=selPaths.linePath;
+  const areaPath=selPaths.areaPath;
+
+  const labelStep=Math.max(1,Math.floor(visDates.length/7));
+  const xLabels=visDates.filter((_,i)=>i%labelStep===0||i===visDates.length-1);
+  const visEvents=EVENTS.filter(e=>visDates.includes(e.date));
+
+  const handleMouse=(e)=>{
+    if(!ref.current)return;
+    const rect=ref.current.getBoundingClientRect();
+    const scale=W/rect.width;
+    const x=(e.clientX-rect.left)*scale-pL;
+    if(x<0||x>pW){setHp(null);return;}
+    const idx=Math.round((x/pW)*(visDates.length-1));
+    setHp(Math.max(0,Math.min(visDates.length-1,idx)));
+  };
+
+  return React.createElement("div",{style:{display:"flex",maxWidth:"1240px",margin:"0 auto",padding:"0 24px 20px",gap:"20px"}},
+    // Left
+    React.createElement("div",{style:{flex:1,minWidth:0}},
+      // Header
+      React.createElement("div",{style:{display:"flex",alignItems:"flex-start",gap:"14px",marginBottom:"14px"}},
+        React.createElement("div",{style:{width:"48px",height:"48px",borderRadius:"12px",background:`linear-gradient(135deg,${mc}33,${mc}11)`,border:`1px solid ${mc}44`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px",fontWeight:700,color:mc,flexShrink:0}},model.name.charAt(0)),
+        React.createElement("div",{style:{flex:1}},
+          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRFcast"),
+          React.createElement("h1",{style:{fontSize:"20px",fontWeight:600,margin:0,letterSpacing:"-0.3px"}},model.name)
+        )
+      ),
+      // Score line â all dynamic on hover
+      React.createElement("div",{style:{display:"flex",alignItems:"baseline",gap:"10px",marginBottom:"6px",flexWrap:"wrap"}},
+        React.createElement("span",{style:{fontSize:"34px",fontWeight:700,color:mc,letterSpacing:"-1px"}},
+          displayScore!==null?displayScore.toFixed(2):"\u2014"
+        ),
+        React.createElement("span",{style:{fontSize:"13px",color:C.muted}},"TRS Score"),
+        displayChange!==null&&React.createElement("span",{style:{fontSize:"13px",fontWeight:600,color:displayChange>=0?C.green:C.red}},
+          (displayChange>=0?"\u25b2":"\u25bc")+" "+Math.abs(displayChange).toFixed(2)
+        ),
+        displayRank&&React.createElement("span",{style:{fontSize:"11px",color:C.dim,marginLeft:"4px"}},"Rank #"+displayRank),
+        hp!==null&&React.createElement("span",{style:{fontSize:"11px",color:C.dim,marginLeft:"auto"}},fmtDateYear(visDates[hp]))
+      ),
+      // Chart
+      React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:`1px solid ${C.border}`,padding:"14px",marginBottom:"10px",position:"relative",boxShadow:C.glow}},
+        // Watermark
+        React.createElement("div",{style:{position:"absolute",top:"14px",right:"18px",fontSize:"12px",color:C.dim,display:"flex",alignItems:"center",gap:"5px",opacity:0.5,zIndex:1}},
+          React.createElement("svg",{width:14,height:14,viewBox:"0 0 24 24",fill:"none"},
+            React.createElement("circle",{cx:12,cy:12,r:10,fill:C.accent,opacity:"0.5"}),
+            React.createElement("path",{d:"M8 12l2.5 2.5L16 9",stroke:"#fff",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round"})
+          ),"TrainingRun.AI"
+        ),
+        // Compare All toggle
+        React.createElement("div",{style:{position:"absolute",top:"14px",left:"18px",zIndex:1}},
+          React.createElement("button",{onClick:()=>setCompareAll(!compareAll),style:{
+            background:compareAll?C.accent+"33":"transparent",border:`1px solid ${compareAll?C.accent:C.border}`,
+            borderRadius:"6px",padding:"4px 10px",fontSize:"11px",fontWeight:600,cursor:"pointer",
+            color:compareAll?C.accent:C.muted,transition:"all 0.15s"
+          }},compareAll?"Compare All \u2713":"Compare All")
+        ),
+        React.createElement("svg",{ref,width:W,height:H,style:{display:"block",width:"100%",height:"auto",cursor:"crosshair"},viewBox:`0 0 ${W} ${H}`,onMouseMove:handleMouse,onMouseLeave:()=>setHp(null)},
+          // Defs
+          React.createElement("defs",null,
+            React.createElement("linearGradient",{id:"ag",x1:"0",y1:"0",x2:"0",y2:"1"},
+              React.createElement("stop",{offset:"0%",stopColor:mc,stopOpacity:compareAll?"0.05":"0.18"}),
+              React.createElement("stop",{offset:"100%",stopColor:mc,stopOpacity:"0.01"})
+            )
+          ),
+          // Grid
+          grids.map(v=>React.createElement("g",{key:v},
+            React.createElement("line",{x1:pL,x2:W-pR,y1:toY(v),y2:toY(v),stroke:C.border,strokeWidth:"0.5",strokeDasharray:"2,4"}),
+            React.createElement("text",{x:pL-8,y:toY(v)+4,textAnchor:"end",fill:C.dim,fontSize:"10.5"},v.toFixed(0))
+          )),
+          // X labels
+          xLabels.map(d=>{const i=visDates.indexOf(d);return React.createElement("text",{key:d,x:toX(i),y:H-6,textAnchor:"middle",fill:C.muted,fontSize:"10.5"},fmtDate(d));}),
+          // Event markers
+          visEvents.map(ev=>{const i=visDates.indexOf(ev.date);return React.createElement("g",{key:ev.date},
+            React.createElement("line",{x1:toX(i),x2:toX(i),y1:pT,y2:pT+pH,stroke:ev.color,strokeWidth:"1",strokeDasharray:"4,3",opacity:"0.4"}),
+            React.createElement("circle",{cx:toX(i),cy:pT-1,r:3,fill:ev.color,opacity:"0.6"})
+          );}),
+
+          // === Compare All mode: draw ALL model lines ===
+          compareAll&&MODELS.map((m,mi)=>{
+            if(mi===sel)return null;
+            const mColor=CC[m.company]||C.accent;
+            const paths=buildPath(m.scores);
+            if(!paths.linePath)return null;
+            return React.createElement("g",{key:mi},
+              React.createElement("path",{d:paths.linePath,fill:"none",stroke:mColor,
+                strokeWidth:"1.2",strokeLinecap:"round",strokeLinejoin:"round",
+                opacity:0.45,style:{transition:"opacity 0.15s"}})
+            );
+          }),
+
+          // === Single model mode: area + glow + line ===
+          !compareAll&&areaPath&&React.createElement("path",{d:areaPath,fill:"url(#ag)"}),
+          !compareAll&&linePath&&React.createElement("path",{d:linePath,fill:"none",stroke:mc,strokeWidth:"5",strokeLinecap:"round",strokeLinejoin:"round",opacity:"0.12"}),
+          !compareAll&&linePath&&React.createElement("path",{d:linePath,fill:"none",stroke:mc,strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round"}),
+
+          // Selected model line on top in compare mode
+          compareAll&&(()=>{const p=buildPath(model.scores);return p.linePath?React.createElement("path",{d:p.linePath,fill:"none",stroke:mc,strokeWidth:"3",strokeLinecap:"round",strokeLinejoin:"round"}):null;})(),
+
+          // Points
+          !compareAll&&validPairs.length<=14&&validPairs.map(p=>React.createElement("circle",{key:p.i,cx:toX(p.i),cy:toY(p.s),r:hp===p.i?5:2.5,fill:hp===p.i?mc:C.card,stroke:mc,strokeWidth:"1.5",style:{transition:"r 0.1s"}})),
+          hp!==null&&visScores[hp]!==null&&React.createElement("circle",{cx:toX(hp),cy:toY(visScores[hp]),r:5,fill:mc,stroke:"#fff",strokeWidth:"1.5"}),
+
+          // Crosshair
+          hp!==null&&visScores[hp]!==null&&React.createElement("g",null,
+            React.createElement("line",{x1:toX(hp),x2:toX(hp),y1:pT,y2:pT+pH,stroke:C.dim,strokeWidth:"1",strokeDasharray:"3,3"}),
+            React.createElement("line",{x1:pL,x2:W-pR,y1:toY(visScores[hp]),y2:toY(visScores[hp]),stroke:C.dim,strokeWidth:"0.5",strokeDasharray:"3,3"})
+          ),
+
+          // Compare mode: show dots for all models at hover point
+          compareAll&&hp!==null&&MODELS.map((m,mi)=>{
+            const s=m.scores[startIdx+hp];
+            if(s===null)return null;
+            const mColor=CC[m.company]||C.accent;
+            return React.createElement("circle",{key:mi,cx:toX(hp),cy:toY(s),r:mi===sel?5:3,
+              fill:mi===sel?mColor:C.card,stroke:mColor,strokeWidth:"1.5",opacity:mi===sel?1:0.7});
+          }),
+
+          // Tooltip
+          hp!==null&&visScores[hp]!==null&&(()=>{
+            const tx=toX(hp),ty=toY(visScores[hp]);const tw=130,th=50;
+            let ttx=tx-tw/2;if(ttx<pL)ttx=pL;if(ttx+tw>W-pR)ttx=W-pR-tw;
+            const tty=ty<pT+60?ty+16:ty-th-14;
+            return React.createElement("g",null,
+              React.createElement("rect",{x:ttx,y:tty,width:tw,height:th,rx:"8",fill:C.tip,stroke:C.border,strokeWidth:"1"}),
+              React.createElement("text",{x:ttx+tw/2,y:tty+19,textAnchor:"middle",fill:C.text,fontSize:"14",fontWeight:"600"},visScores[hp].toFixed(2)+" TRS"),
+              React.createElement("text",{x:ttx+tw/2,y:tty+37,textAnchor:"middle",fill:C.muted,fontSize:"11"},fmtDateYear(visDates[hp]))
+            );
+          })()
+        ),
+
+        // Compare All legend (below chart inside card)
+        compareAll&&React.createElement("div",{style:{display:"flex",flexWrap:"wrap",gap:"10px",marginTop:"10px",padding:"0 4px"}},
+          MODELS.map((m,mi)=>{
+            const mColor=CC[m.company]||C.accent;
+            const isSel=mi===sel;
+            return React.createElement("span",{key:mi,onClick:()=>setSel(mi),style:{
+              display:"flex",alignItems:"center",gap:"4px",fontSize:"10px",cursor:"pointer",
+              padding:"2px 6px",borderRadius:"4px",
+              background:isSel?`${mColor}22`:"transparent",
+              color:isSel?C.text:C.muted,opacity:isSel?1:0.7,transition:"all 0.12s"
+            }},
+              React.createElement("div",{style:{width:"8px",height:"3px",borderRadius:"2px",background:mColor}}),
+              m.name
+            );
+          })
+        )
+      ),
+      // Bottom bar
+      React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"20px",padding:"0 2px"}},
+        React.createElement("div",{style:{fontSize:"12px",color:C.muted}},
+          React.createElement("span",{style:{fontWeight:600,color:C.text}},MODELS.length+" Models"),
+          React.createElement("span",{style:{margin:"0 8px",color:C.dim}},"|"),
+          fmtDateYear(DATES[DATES.length-1])
+        ),
+        React.createElement("div",{style:{display:"flex",gap:"2px",background:C.card,borderRadius:"8px",border:`1px solid ${C.border}`,padding:"3px"}},
+          TIME_RANGES.map((t,i)=>
+            React.createElement("button",{key:t.label,onClick:()=>{setTr(i);setHp(null);},style:{
+              background:tr===i?C.accent:"transparent",color:tr===i?"#fff":C.muted,
+              border:"none",borderRadius:"6px",padding:"5px 11px",fontSize:"11.5px",fontWeight:600,cursor:"pointer",transition:"all 0.15s"
+            }},t.label)
+          )
+        )
+      ),
+      // Key Events
+      React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:`1px solid ${C.border}`,padding:"18px",boxShadow:C.glow}},
+        React.createElement("div",{style:{fontSize:"13px",fontWeight:600,marginBottom:"12px"}},"Key Events"),
+        React.createElement("div",{style:{display:"flex",flexDirection:"column",gap:"8px"}},
+          EVENTS.map(ev=>
+            React.createElement("div",{key:ev.date,style:{display:"flex",alignItems:"center",gap:"10px",fontSize:"12px"}},
+              React.createElement("div",{style:{width:"8px",height:"8px",borderRadius:"50%",background:ev.color,flexShrink:0}}),
+              React.createElement("span",{style:{color:C.muted,minWidth:"52px"}},fmtDate(ev.date)),
+              React.createElement("span",{style:{color:C.text}},ev.label)
+            )
+          )
+        )
+      )
+    ),
+    // Right Sidebar
+    React.createElement("div",{style:{width:"330px",flexShrink:0}},
+      React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:`1px solid ${C.border}`,padding:"18px",boxShadow:C.glow}},
+        React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px"}},
+          React.createElement("span",{style:{fontSize:"14px",fontWeight:600}},"Rankings"),
+          React.createElement("span",{style:{fontSize:"11px",color:C.muted,background:C.bg,padding:"3px 10px",borderRadius:"20px"}},fmtDate(DATES[DATES.length-1]))
+        ),
+        React.createElement("div",{style:{display:"flex",gap:"8px",marginBottom:"16px"}},
+          React.createElement("div",{style:{flex:1,background:`linear-gradient(135deg,${C.green}22,${C.green}08)`,border:`1px solid ${C.green}33`,borderRadius:"10px",padding:"10px",textAlign:"center"}},
+            React.createElement("div",{style:{fontSize:"10px",color:C.green,marginBottom:"3px",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.5px"}},"Top Gainer"),
+            React.createElement("div",{style:{fontSize:"13px",fontWeight:700,marginBottom:"2px"}},movers.best.name.split(" ").slice(0,2).join(" ")),
+            React.createElement("div",{style:{fontSize:"12px",color:C.green,fontWeight:600}},"+"+movers.best.change.toFixed(2))
+          ),
+          React.createElement("div",{style:{flex:1,background:`linear-gradient(135deg,${C.red}22,${C.red}08)`,border:`1px solid ${C.red}33`,borderRadius:"10px",padding:"10px",textAlign:"center"}},
+            React.createElement("div",{style:{fontSize:"10px",color:C.red,marginBottom:"3px",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.5px"}},"Biggest Drop"),
+            React.createElement("div",{style:{fontSize:"13px",fontWeight:700,marginBottom:"2px"}},movers.worst.name.split(" ").slice(0,2).join(" ")),
+            React.createElement("div",{style:{fontSize:"12px",color:C.red,fontWeight:600}},movers.worst.change.toFixed(2))
+          )
+        ),
+        React.createElement("div",{style:{display:"flex",gap:"4px",flexWrap:"wrap",marginBottom:"14px"}},
+          ["All",...[...new Set(MODELS.map(m=>m.company))]].map(cat=>
+            React.createElement("span",{key:cat,onClick:()=>setCompanyFilter(cat),style:{
+              fontSize:"10.5px",padding:"3px 9px",borderRadius:"20px",cursor:"pointer",
+              background:companyFilter===cat?C.accent:"transparent",
+              color:companyFilter===cat?"#fff":C.muted,
+              border:`1px solid ${companyFilter===cat?C.accent:C.border}`,transition:"all 0.15s"
+            }},cat)
+          )
+        ),
+        React.createElement("div",{style:{display:"flex",flexDirection:"column",gap:"1px"}},
+          rankedModels.map(m=>{
+            const isSel=m.idx===sel;const isHov=m.idx===hrm;
+            const rc=(m.prevRank||99)-(m.rank||99);
+            const mcc=CC[m.company]||C.accent;
+            const lc=m.latestScore!==null&&m.scores[totalDays-2]!==null?(m.latestScore-m.scores[totalDays-2]):null;
+            return React.createElement("div",{key:m.idx,onClick:()=>setSel(m.idx),onMouseEnter:()=>setHrm(m.idx),onMouseLeave:()=>setHrm(null),
+              style:{display:"flex",alignItems:"center",gap:"8px",padding:"9px 10px",borderRadius:"8px",cursor:"pointer",
+                background:isSel?`${mcc}15`:isHov?C.hover:"transparent",
+                border:isSel?`1px solid ${mcc}30`:"1px solid transparent",transition:"all 0.12s"}
+            },
+              React.createElement("span",{style:{fontSize:"11px",fontWeight:700,color:m.rank<=3?mcc:C.dim,width:"18px",textAlign:"center"}},m.rank),
+              React.createElement("div",{style:{width:"30px",height:"30px",borderRadius:"8px",background:`${mcc}18`,border:`1px solid ${mcc}33`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"12px",fontWeight:700,color:mcc,flexShrink:0}},m.name.charAt(0)),
+              React.createElement("div",{style:{flex:1,minWidth:0}},
+                React.createElement("div",{style:{fontSize:"12px",fontWeight:isSel?600:500,color:isSel?C.text:C.muted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},m.name),
+                React.createElement("div",{style:{fontSize:"10px",color:C.dim}},m.company)
+              ),
+              React.createElement(SparkLine,{scores:m.scores,color:mcc,w:44,h:16}),
+              React.createElement("div",{style:{textAlign:"right",minWidth:"50px"}},
+                React.createElement("div",{style:{fontSize:"14px",fontWeight:700,color:C.text}},m.latestScore!==null?m.latestScore.toFixed(1):"\u2014"),
+                React.createElement("div",{style:{fontSize:"10px",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",gap:"2px",
+                  color:lc!==null?(lc>=0?C.green:C.red):C.dim}},
+                  rc>0&&React.createElement("span",{style:{color:C.green,fontSize:"8px"}},"\u25b2"+rc),
+                  rc<0&&React.createElement("span",{style:{color:C.red,fontSize:"8px"}},"\u25bc"+Math.abs(rc)),
+                  lc!==null?React.createElement("span",null,(lc>=0?"+":"")+lc.toFixed(2)):null
+                )
+              )
+            );
+          })
+        )
+      ),
+      // Formula card
+      React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:`1px solid ${C.border}`,padding:"16px",marginTop:"12px",boxShadow:C.glow}},
+        React.createElement("div",{style:{fontSize:"12px",fontWeight:600,marginBottom:"10px"}},"TRS Weights"),
+        [["Safety","21%",C.green],["Reasoning","20%",C.accent],["Coding","20%","#f0883e"],["Human Pref","18%",CC.Google],["Knowledge","8%","#bc8cff"],["Efficiency","7%",C.muted],["Usage","6%","#f778ba"]].map(([n,w,c])=>
+          React.createElement("div",{key:n,style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}},
+            React.createElement("div",{style:{width:"6px",height:"6px",borderRadius:"50%",background:c}}),
+            React.createElement("span",{style:{fontSize:"11px",color:C.muted,flex:1}},n),
+            React.createElement("span",{style:{fontSize:"11px",fontWeight:600,color:C.text}},w)
+          )
+        )
+      )
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("trs-chart-root")).render(React.createElement(DataLoader));
+</script>
+
+
 </body>
 </html>
