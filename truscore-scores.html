@@ -88,18 +88,33 @@
       if (error) return <div style={{textAlign:'center', padding:'100px', color:'red', fontSize:'1.5rem'}}>Error: {error}<br/><br/>Try refreshing or check console.</div>;
 
       return (
-        <div>
-          <h2 style={{textAlign:'center'}}>TRUscore Leaderboard</h2>
-          <div style={{maxWidth:'1200px', margin:'0 auto'}}>
-            {data.models.slice(0,5).map((m, i) => (
-              <div key={i} style={{padding:'16px', borderBottom:'1px solid #333', display:'flex', justifyContent:'space-between'}}>
-                <span>{i+1}. {m.name} ({m.company})</span>
-                <span style={{color:'#00d4ff'}}>{m.scores[m.scores.length-1]?.toFixed(2) || 'N/A'}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
+  <div style={{textAlign:'center', padding:'60px', color:'#fff'}}>
+    <h2>TRUScore Debug Mode</h2>
+    {loading && <p>Loading data...</p>}
+    {error && <p style={{color:'red'}}>Error: {error}</p>}
+    {data ? (
+      <div>
+        <p>Data loaded! Models count: {data.models?.length || 0}</p>
+        <p>Dates count: {data.dates?.length || 0}</p>
+        <pre style={{textAlign:'left', background:'#111', padding:'16px', borderRadius:'8px', maxWidth:'800px', margin:'20px auto'}}>
+          {JSON.stringify(data, null, 2)}
+        </pre>
+        {data.models?.length > 0 ? (
+          data.models.slice(0,5).map((m, i) => (
+            <div key={i} style={{padding:'12px', borderBottom:'1px solid #333', display:'flex', justifyContent:'space-between'}}>
+              <span>{i+1}. {m.name} ({m.company || 'N/A'})</span>
+              <span style={{color:'#00d4ff'}}>{m.scores?.[m.scores.length-1]?.toFixed(2) || 'N/A'}</span>
+            </div>
+          ))
+        ) : (
+          <p>No models in data — check truscore-data.json</p>
+        )}
+      </div>
+    ) : (
+      <p>No data object — check fetch or JSON</p>
+    )}
+  </div>
+);
     };
 
     ReactDOM.createRoot(document.getElementById('tru-chart-root')).render(<DataLoader />);
