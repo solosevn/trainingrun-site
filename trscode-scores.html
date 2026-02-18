@@ -100,7 +100,6 @@ function validateData(data){
   if(!Array.isArray(data.models)||data.models.length===0)return"Missing or empty models array";
   for(const m of data.models){
     if(!m.name||!m.company||!Array.isArray(m.scores))return"Invalid model: "+m.name;
-    if(m.scores.length!==data.dates.length)return"Score count mismatch for "+m.name;
     for(const s of m.scores){if(s!==null&&(typeof s!=="number"||s<0||s>100))return"Invalid score in "+m.name;}
   }
   return null;
