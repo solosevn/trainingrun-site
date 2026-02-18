@@ -76,7 +76,7 @@
      .then(json => {
     /* Temporarily disabled to get page rendering */
     /* if (!json.dates || !json.models || json.models.some(m => m.scores.length !== json.dates.length)) { */
-    /*   throw new Error('Score count mismatch - check JSON'); */
+    /*   
     /* } */
 
     setData(json);
