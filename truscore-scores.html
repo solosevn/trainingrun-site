@@ -73,18 +73,15 @@
             if (!res.ok) throw new Error('Failed to load data');
             return res.json();
           })
-    /* Temporarily disabled to get page rendering
-if (!json.dates || !json.models || json.models.some(m => m.scores.length !== json.dates.length)) {
-  throw new Error('Score count mismatch - check JSON');
-}
-*/
-setData(json);
-setLoading(false);
-          })
-          .catch(err => {
-            setError(err.message);
-            setLoading(false);
-          });
+     .then(json => {
+    /* Temporarily disabled to get page rendering */
+    /* if (!json.dates || !json.models || json.models.some(m => m.scores.length !== json.dates.length)) { */
+    /*   throw new Error('Score count mismatch - check JSON'); */
+    /* } */
+
+    setData(json);
+    setLoading(false);
+  })
       }, []);
 
       if (loading) return <div style={{textAlign:'center', padding:'100px', fontSize:'1.5rem'}}>Loading TRUscore data...</div>;
