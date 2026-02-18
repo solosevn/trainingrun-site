@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRScode â Training Run</title>
+<title>TRSbench â Training Run</title>
 <link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   /* Chart-specific */
-  #trs-chart-root button { font-family: 'Inter', -apple-system, sans-serif; }
-  #trs-chart-root { padding-top: 20px; }
+  #trscode-chart-root button { font-family: 'Inter', -apple-system, sans-serif; }
+  #trscode-chart-root { padding-top: 20px; }
 </style>
 </head>
 <body>
@@ -20,7 +20,7 @@
   <a href="/" class="logo">Training Run</a>
   <ul class="nav-links">
     <li><a href="/trsmethodology">TRS Methodology</a></li>
-    <li><a href="/scores" class="active">TRScode</a></li>
+    <li><a href="/scores" class="active">TRSbench</a></li>
     <li><a href="/about">About</a></li>
   </ul>
 </nav>
@@ -30,7 +30,7 @@
   <!-- Section header -->
   <div style="text-align:center;padding:60px 0 10px">
     <span style="display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:4px 14px;font-size:11px;color:#00d4ff;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:14px">Training Run</span>
-    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRScode</h1>
+    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRSbench</h1>
     <div style="display:flex;align-items:center;justify-content:center;gap:12px">
       <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 5</span>
       <span id="trs-updated-date" style="font-size:13px;color:#a0a0b0"></span>
@@ -38,7 +38,7 @@
   </div>
 
   <!-- Interactive TRS Daily Chart -->
-  <div id="trs-chart-root"></div>
+  <div id="trscode-chart-root"></div>
   <p style="text-align:center;padding:30px 0 10px;color:var(--text-muted);font-size:13px">Full methodology at <a href="/trsmethodology">/trsmethodology</a> | Updated Daily</p>
 
 </div>
@@ -49,13 +49,6 @@
   </div>
 </footer>
 
-<script>
-(function(){
-  var d=new Date(),months=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var el=document.getElementById("trs-updated-date");
-  if(el)el.textContent="Daily scores \u00b7 Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
-})();
-</script>
 
 <!-- React and Babel CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -82,14 +75,17 @@ const TIME_RANGES = [
   {label:"1D",days:1},{label:"1W",days:7},{label:"2W",days:14},{label:"1M",days:31},{label:"ALL",days:999},
 ];
 
+// SHA-256 integrity verification (Web Crypto API)
 async function verifyChecksum(data){
   try{
     if(!crypto||!crypto.subtle)return null; // null = unavailable (e.g. file:// context), not failed
+    if(!data.checksum)return null;
     const names=data.models.map(m=>m.name).join("|");
     const scores=data.models.flatMap(m=>m.scores.map(s=>s===null?"null":(s%1===0?s.toFixed(1):String(s)))).join(",");
     const canonical=names+":"+scores;
     const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(canonical));
     const hash=Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    return hash===data.checksum;
   }catch(e){return null;} // null = couldn't verify, not a failure
 }
 
@@ -100,6 +96,7 @@ function validateData(data){
   if(!Array.isArray(data.models)||data.models.length===0)return"Missing or empty models array";
   for(const m of data.models){
     if(!m.name||!m.company||!Array.isArray(m.scores))return"Invalid model: "+m.name;
+    if(m.scores.length!==data.dates.length)return"Score count mismatch for "+m.name;
     for(const s of m.scores){if(s!==null&&(typeof s!=="number"||s<0||s>100))return"Invalid score in "+m.name;}
   }
   return null;
@@ -108,6 +105,7 @@ function validateData(data){
 // Data loader wrapper component
 function DataLoader(){
   const [data,setData]=useState(null);
+  const [error,setError]=useState(null);
   const [verified,setVerified]=useState(null);
 
   useEffect(()=>{
@@ -115,12 +113,14 @@ function DataLoader(){
       .then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
       .then(async(d)=>{
         const schemaErr=validateData(d);
+        if(schemaErr){setError("Data validation failed: "+schemaErr);return;}
         const ok=await verifyChecksum(d);
         setVerified(ok);
         // Transform events for chart
         const events=(d.timeline_events||[]).map(e=>({date:e.date,label:e.label||e.event,color:CC[e.company]||C.accent}));
         setData({DATES:d.dates,MODELS:d.models.map(m=>({name:m.name,company:m.company,scores:m.scores})),EVENTS:events});
       })
+      .catch(e=>setError("Failed to load score data: "+e.message));
   },[]);
 
   if(error)return React.createElement("div",{style:{textAlign:"center",padding:"60px 20px",color:C.red}},
@@ -129,11 +129,12 @@ function DataLoader(){
   );
   if(!data)return React.createElement("div",{style:{textAlign:"center",padding:"80px 20px"}},
     React.createElement("div",{style:{width:"32px",height:"32px",border:"3px solid "+C.border,borderTopColor:C.accent,borderRadius:"50%",margin:"0 auto 16px",animation:"trs-spin 0.8s linear infinite"}}),
-    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRScode data..."),
+    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRSbench data..."),
     React.createElement("style",null,"@keyframes trs-spin{to{transform:rotate(360deg)}}")
   );
   return React.createElement(React.Fragment,null,
     verified===false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
+      "\u26a0\ufe0f Data integrity check failed â scores may have been modified"
     ),
     React.createElement(App,{DATES:data.DATES,MODELS:data.MODELS,EVENTS:data.EVENTS})
   );
@@ -276,7 +277,7 @@ function App({DATES,MODELS,EVENTS}){
       React.createElement("div",{style:{display:"flex",alignItems:"flex-start",gap:"14px",marginBottom:"14px"}},
         React.createElement("div",{style:{width:"48px",height:"48px",borderRadius:"12px",background:`linear-gradient(135deg,${mc}33,${mc}11)`,border:`1px solid ${mc}44`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px",fontWeight:700,color:mc,flexShrink:0}},model.name.charAt(0)),
         React.createElement("div",{style:{flex:1}},
-          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRScode"),
+          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRSbench"),
           React.createElement("h1",{style:{fontSize:"20px",fontWeight:600,margin:0,letterSpacing:"-0.3px"}},model.name)
         )
       ),
@@ -505,9 +506,10 @@ function App({DATES,MODELS,EVENTS}){
   );
 }
 
-ReactDOM.createRoot(document.getElementById("trs-chart-root")).render(React.createElement(DataLoader));
+ReactDOM.createRoot(document.getElementById("trscode-chart-root")).render(React.createElement(DataLoader));
 </script>
 
 
 </body>
 </html>
+<script>async function loadData(){try{const r=await fetch("trscode-data.json");const d=await r.json();ReactDOM.render(React.createElement(App,{DATES:d.DATES,MODELS:d.MODELS,EVENTS:d.EVENTS}),document.getElementById("trscode-chart-root"));}catch(e){console.error(e);}}</script><script>loadData();</script>

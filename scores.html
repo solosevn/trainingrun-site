@@ -49,13 +49,6 @@
   </div>
 </footer>
 
-<script>
-(function(){
-  var d=new Date(),months=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var el=document.getElementById("trs-updated-date");
-  if(el)el.textContent="Daily scores \u00b7 Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
-})();
-</script>
 
 <!-- React and Babel CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -519,3 +512,4 @@ ReactDOM.createRoot(document.getElementById("trs-chart-root")).render(React.crea
 
 </body>
 </html>
+<script>async function loadData(){try{const r=await fetch("trs-data.json");const d=await r.json();ReactDOM.render(React.createElement(App,{DATES:d.DATES,MODELS:d.MODELS,EVENTS:d.EVENTS}),document.getElementById("trs-chart-root"));}catch(e){console.error(e);}}</script><script>loadData();</script>

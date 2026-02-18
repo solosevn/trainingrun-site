@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
-      <script>
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-20ZZ8BG99X');
-      </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRAgents â Training Run</title>
+<title>TRSbench â Training Run</title>
 <link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   /* Chart-specific */
-  #trs-chart-root button { font-family: 'Inter', -apple-system, sans-serif; }
-  #trs-chart-root { padding-top: 20px; }
+  #tragents-chart-root button { font-family: 'Inter', -apple-system, sans-serif; }
+  #tragents-chart-root { padding-top: 20px; }
 </style>
 </head>
 <body>
@@ -27,51 +19,43 @@
 <nav>
   <a href="/" class="logo">Training Run</a>
   <ul class="nav-links">
-    <li><a href="/tragents-methodology">TRAgents Methodology</a></li>
-    <li><a href="/tragents-scores" class="active">TRAgents</a></li>
+    <li><a href="/trsmethodology">TRS Methodology</a></li>
+    <li><a href="/scores" class="active">TRSbench</a></li>
     <li><a href="/about">About</a></li>
   </ul>
 </nav>
-    <a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
 
 <div class="container" style="padding-top:120px">
 
   <!-- Section header -->
   <div style="text-align:center;padding:60px 0 10px">
     <span style="display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:4px 14px;font-size:11px;color:#00d4ff;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:14px">Training Run</span>
-    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRAgents</h1>
+    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRSbench</h1>
     <div style="display:flex;align-items:center;justify-content:center;gap:12px">
-      <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 7</span>
+      <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 5</span>
       <span id="trs-updated-date" style="font-size:13px;color:#a0a0b0"></span>
     </div>
   </div>
 
-  <!-- Interactive TRAgents Daily Chart -->
-  <div id="trs-chart-root"></div>
-  <p style="text-align:center;padding:30px 0 10px;color:var(--text-muted);font-size:13px">Full methodology at <a href="/tragents-methodology">/tragents-methodology</a> | Updated Daily</p>
+  <!-- Interactive TRS Daily Chart -->
+  <div id="tragents-chart-root"></div>
+  <p style="text-align:center;padding:30px 0 10px;color:var(--text-muted);font-size:13px">Full methodology at <a href="/trsmethodology">/trsmethodology</a> | Updated Daily</p>
 
 </div>
 
 <footer>
   <div class="container">
-    <p style="text-align:center;padding:40px">Â© 2026 Training Run</p>
+    <p style="text-align:center;padding:40px">&copy; 2026 Training Run</p>
   </div>
 </footer>
 
-<script>
-(function(){
-  var d=new Date(),months=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var el=document.getElementById("trs-updated-date");
-  if(el)el.textContent="Daily scores Â· Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
-})();
-</script>
 
 <!-- React and Babel CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 
-<!-- React TRAgents Daily Benchmark Chart -->
+<!-- React TRS Daily Benchmark Chart -->
 <script type="text/babel">
 const {useState,useRef,useMemo,useEffect} = React;
 
@@ -84,21 +68,24 @@ const C = {
 
 const CC = {
   Google:"#4285F4",OpenAI:"#10a37f",Anthropic:"#d4a574",
-  xAI:"#e8e8e8",DeepSeek:"#6e56cf",Meta:"#0668E1",Alibaba:"#FF6A00","Zhipu AI":"#1a73e8","Moonshot AI":"#FF4081",MiniMax:"#00C9A7",Mistral:"#F97316",
+  xAI:"#e8e8e8",DeepSeek:"#6e56cf",Meta:"#0668E1",Alibaba:"#FF6A00",
 };
 
 const TIME_RANGES = [
   {label:"1D",days:1},{label:"1W",days:7},{label:"2W",days:14},{label:"1M",days:31},{label:"ALL",days:999},
 ];
 
+// SHA-256 integrity verification (Web Crypto API)
 async function verifyChecksum(data){
   try{
     if(!crypto||!crypto.subtle)return null; // null = unavailable (e.g. file:// context), not failed
+    if(!data.checksum)return null;
     const names=data.models.map(m=>m.name).join("|");
     const scores=data.models.flatMap(m=>m.scores.map(s=>s===null?"null":(s%1===0?s.toFixed(1):String(s)))).join(",");
     const canonical=names+":"+scores;
     const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(canonical));
     const hash=Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    return hash===data.checksum;
   }catch(e){return null;} // null = couldn't verify, not a failure
 }
 
@@ -109,6 +96,7 @@ function validateData(data){
   if(!Array.isArray(data.models)||data.models.length===0)return"Missing or empty models array";
   for(const m of data.models){
     if(!m.name||!m.company||!Array.isArray(m.scores))return"Invalid model: "+m.name;
+    if(m.scores.length!==data.dates.length)return"Score count mismatch for "+m.name;
     for(const s of m.scores){if(s!==null&&(typeof s!=="number"||s<0||s>100))return"Invalid score in "+m.name;}
   }
   return null;
@@ -117,6 +105,7 @@ function validateData(data){
 // Data loader wrapper component
 function DataLoader(){
   const [data,setData]=useState(null);
+  const [error,setError]=useState(null);
   const [verified,setVerified]=useState(null);
 
   useEffect(()=>{
@@ -124,12 +113,14 @@ function DataLoader(){
       .then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
       .then(async(d)=>{
         const schemaErr=validateData(d);
+        if(schemaErr){setError("Data validation failed: "+schemaErr);return;}
         const ok=await verifyChecksum(d);
         setVerified(ok);
         // Transform events for chart
         const events=(d.timeline_events||[]).map(e=>({date:e.date,label:e.label||e.event,color:CC[e.company]||C.accent}));
         setData({DATES:d.dates,MODELS:d.models.map(m=>({name:m.name,company:m.company,scores:m.scores})),EVENTS:events});
       })
+      .catch(e=>setError("Failed to load score data: "+e.message));
   },[]);
 
   if(error)return React.createElement("div",{style:{textAlign:"center",padding:"60px 20px",color:C.red}},
@@ -138,11 +129,12 @@ function DataLoader(){
   );
   if(!data)return React.createElement("div",{style:{textAlign:"center",padding:"80px 20px"}},
     React.createElement("div",{style:{width:"32px",height:"32px",border:"3px solid "+C.border,borderTopColor:C.accent,borderRadius:"50%",margin:"0 auto 16px",animation:"trs-spin 0.8s linear infinite"}}),
-    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRAgents data..."),
+    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRSbench data..."),
     React.createElement("style",null,"@keyframes trs-spin{to{transform:rotate(360deg)}}")
   );
   return React.createElement(React.Fragment,null,
     verified===false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
+      "\u26a0\ufe0f Data integrity check failed â scores may have been modified"
     ),
     React.createElement(App,{DATES:data.DATES,MODELS:data.MODELS,EVENTS:data.EVENTS})
   );
@@ -173,7 +165,7 @@ function App({DATES,MODELS,EVENTS}){
   const [hp,setHp]=useState(null);
   const [hrm,setHrm]=useState(null);
   const [companyFilter,setCompanyFilter]=useState("All");
-  const [compareAll,setCompareAll]=useState(true);
+  const [compareAll,setCompareAll]=useState(false);
   const ref=useRef(null);
 
   const model=MODELS[sel];
@@ -285,7 +277,7 @@ function App({DATES,MODELS,EVENTS}){
       React.createElement("div",{style:{display:"flex",alignItems:"flex-start",gap:"14px",marginBottom:"14px"}},
         React.createElement("div",{style:{width:"48px",height:"48px",borderRadius:"12px",background:`linear-gradient(135deg,${mc}33,${mc}11)`,border:`1px solid ${mc}44`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px",fontWeight:700,color:mc,flexShrink:0}},model.name.charAt(0)),
         React.createElement("div",{style:{flex:1}},
-          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRAgents"),
+          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRSbench"),
           React.createElement("h1",{style:{fontSize:"20px",fontWeight:600,margin:0,letterSpacing:"-0.3px"}},model.name)
         )
       ),
@@ -294,9 +286,9 @@ function App({DATES,MODELS,EVENTS}){
         React.createElement("span",{style:{fontSize:"34px",fontWeight:700,color:mc,letterSpacing:"-1px"}},
           displayScore!==null?displayScore.toFixed(2):"\u2014"
         ),
-        React.createElement("span",{style:{fontSize:"13px",color:C.muted}},"TRAgents Score"),
+        React.createElement("span",{style:{fontSize:"13px",color:C.muted}},"TRS Score"),
         displayChange!==null&&React.createElement("span",{style:{fontSize:"13px",fontWeight:600,color:displayChange>=0?C.green:C.red}},
-          (displayChange>=0?"\u25B2":"\u25BC")+" "+Math.abs(displayChange).toFixed(2)
+          (displayChange>=0?"\u25b2":"\u25bc")+" "+Math.abs(displayChange).toFixed(2)
         ),
         displayRank&&React.createElement("span",{style:{fontSize:"11px",color:C.dim,marginLeft:"4px"}},"Rank #"+displayRank),
         hp!==null&&React.createElement("span",{style:{fontSize:"11px",color:C.dim,marginLeft:"auto"}},fmtDateYear(visDates[hp]))
@@ -386,7 +378,7 @@ function App({DATES,MODELS,EVENTS}){
             const tty=ty<pT+60?ty+16:ty-th-14;
             return React.createElement("g",null,
               React.createElement("rect",{x:ttx,y:tty,width:tw,height:th,rx:"8",fill:C.tip,stroke:C.border,strokeWidth:"1"}),
-              React.createElement("text",{x:ttx+tw/2,y:tty+19,textAnchor:"middle",fill:C.text,fontSize:"14",fontWeight:"600"},visScores[hp].toFixed(2)+" TRAgents"),
+              React.createElement("text",{x:ttx+tw/2,y:tty+19,textAnchor:"middle",fill:C.text,fontSize:"14",fontWeight:"600"},visScores[hp].toFixed(2)+" TRS"),
               React.createElement("text",{x:ttx+tw/2,y:tty+37,textAnchor:"middle",fill:C.muted,fontSize:"11"},fmtDateYear(visDates[hp]))
             );
           })()
@@ -490,8 +482,8 @@ function App({DATES,MODELS,EVENTS}){
                 React.createElement("div",{style:{fontSize:"14px",fontWeight:700,color:C.text}},m.latestScore!==null?m.latestScore.toFixed(1):"\u2014"),
                 React.createElement("div",{style:{fontSize:"10px",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"flex-end",gap:"2px",
                   color:lc!==null?(lc>=0?C.green:C.red):C.dim}},
-                  rc>0&&React.createElement("span",{style:{color:C.green,fontSize:"8px"}},"\u25B2"+rc),
-                  rc<0&&React.createElement("span",{style:{color:C.red,fontSize:"8px"}},"\u25BC"+Math.abs(rc)),
+                  rc>0&&React.createElement("span",{style:{color:C.green,fontSize:"8px"}},"\u25b2"+rc),
+                  rc<0&&React.createElement("span",{style:{color:C.red,fontSize:"8px"}},"\u25bc"+Math.abs(rc)),
                   lc!==null?React.createElement("span",null,(lc>=0?"+":"")+lc.toFixed(2)):null
                 )
               )
@@ -501,8 +493,8 @@ function App({DATES,MODELS,EVENTS}){
       ),
       // Formula card
       React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:`1px solid ${C.border}`,padding:"16px",marginTop:"12px",boxShadow:C.glow}},
-        React.createElement("div",{style:{fontSize:"12px",fontWeight:600,marginBottom:"10px"}},"TRAgents Weights"),
-        [["Task Completion","25%",C.green],["Cost Efficiency","20%",C.accent],["Tool Reliability","20%","#f0883e"],["Safety & Security","15%",CC.Google],["Accessibility","10%","#bc8cff"],["Multi-Model","10%","#f778ba"]].map(([n,w,c])=>
+        React.createElement("div",{style:{fontSize:"12px",fontWeight:600,marginBottom:"10px"}},"TRS Weights"),
+        [["Safety","21%",C.green],["Reasoning","20%",C.accent],["Coding","20%","#f0883e"],["Human Pref","18%",CC.Google],["Knowledge","8%","#bc8cff"],["Efficiency","7%",C.muted],["Usage","6%","#f778ba"]].map(([n,w,c])=>
           React.createElement("div",{key:n,style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}},
             React.createElement("div",{style:{width:"6px",height:"6px",borderRadius:"50%",background:c}}),
             React.createElement("span",{style:{fontSize:"11px",color:C.muted,flex:1}},n),
@@ -514,9 +506,10 @@ function App({DATES,MODELS,EVENTS}){
   );
 }
 
-ReactDOM.createRoot(document.getElementById("trs-chart-root")).render(React.createElement(DataLoader));
+ReactDOM.createRoot(document.getElementById("tragents-chart-root")).render(React.createElement(DataLoader));
 </script>
 
 
 </body>
 </html>
+<script>async function loadData(){try{const r=await fetch("tragent-data.json");const d=await r.json();ReactDOM.render(React.createElement(App,{DATES:d.DATES,MODELS:d.MODELS,EVENTS:d.EVENTS}),document.getElementById("tragents-chart-root"));}catch(e){console.error(e);}}</script><script>loadData();</script>
