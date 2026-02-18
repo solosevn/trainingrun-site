@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
-      <script>
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-20ZZ8BG99X');
-      </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TRSbench â Training Run</title>
@@ -32,7 +24,6 @@
     <li><a href="/about">About</a></li>
   </ul>
 </nav>
-    <a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
 
 <div class="container" style="padding-top:120px">
 
@@ -84,7 +75,7 @@ const C = {
 
 const CC = {
   Google:"#4285F4",OpenAI:"#10a37f",Anthropic:"#d4a574",
-  xAI:"#e8e8e8",DeepSeek:"#6e56cf",Meta:"#0668E1",Alibaba:"#FF6A00","Zhipu AI":"#1a73e8","Moonshot AI":"#FF4500",MiniMax:"#00C9A7",Mistral:"#F97316",
+  xAI:"#e8e8e8",DeepSeek:"#6e56cf",Meta:"#0668E1",Alibaba:"#FF6A00",
 };
 
 const TIME_RANGES = [
@@ -181,7 +172,7 @@ function App({DATES,MODELS,EVENTS}){
   const [hp,setHp]=useState(null);
   const [hrm,setHrm]=useState(null);
   const [companyFilter,setCompanyFilter]=useState("All");
-  const [compareAll,setCompareAll]=useState(true);
+  const [compareAll,setCompareAll]=useState(false);
   const ref=useRef(null);
 
   const model=MODELS[sel];
