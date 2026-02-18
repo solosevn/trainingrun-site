@@ -87,31 +87,33 @@
       if (loading) return <div style={{textAlign:'center', padding:'100px', fontSize:'1.5rem'}}>Loading TRUscore data...</div>;
       if (error) return <div style={{textAlign:'center', padding:'100px', color:'red', fontSize:'1.5rem'}}>Error: {error}<br/><br/>Try refreshing or check console.</div>;
 
-      return (
-  <div style={{textAlign:'center', padding:'60px', color:'#fff'}}>
-    <h2>TRUScore Debug Mode</h2>
-    {loading && <p>Loading data...</p>}
-    {error && <p style={{color:'red'}}>Error: {error}</p>}
-    {data ? (
-      <div>
-        <p>Data loaded! Models count: {data.models?.length || 0}</p>
-        <p>Dates count: {data.dates?.length || 0}</p>
-        <pre style={{textAlign:'left', background:'#111', padding:'16px', borderRadius:'8px', maxWidth:'800px', margin:'20px auto'}}>
-          {JSON.stringify(data, null, 2)}
-        </pre>
-        {data.models?.length > 0 ? (
-          data.models.slice(0,5).map((m, i) => (
-            <div key={i} style={{padding:'12px', borderBottom:'1px solid #333', display:'flex', justifyContent:'space-between'}}>
-              <span>{i+1}. {m.name} ({m.company || 'N/A'})</span>
-              <span style={{color:'#00d4ff'}}>{m.scores?.[m.scores.length-1]?.toFixed(2) || 'N/A'}</span>
-            </div>
-          ))
-        ) : (
-          <p>No models in data — check truscore-data.json</p>
-        )}
+     return (
+  <div style={{textAlign:'center', padding:'60px', color:'#fff', maxWidth:'1200px', margin:'0 auto'}}>
+    <h2>TRUScore Debug Mode - Data Loaded</h2>
+    <p>Models count: {data?.models?.length || 'N/A'}</p>
+    <p>Dates count: {data?.dates?.length || 'N/A'}</p>
+
+    {data && data.models && Array.isArray(data.models) && data.models.length > 0 ? (
+      <div style={{marginTop:'40px'}}>
+        <h3>Top 5 Models (Latest Score)</h3>
+        {data.models.slice(0, 5).map((m, i) => (
+          <div key={i} style={{padding:'16px', borderBottom:'1px solid #444', display:'flex', justifyContent:'space-between', fontSize:'1.1rem'}}>
+            <span>{i+1}. {m.name || 'Unnamed Model'} ({m.company || 'N/A'})</span>
+            <span style={{color:'#00d4ff', fontWeight:'bold'}}>
+              {m.scores && m.scores.length > 0 
+                ? m.scores[m.scores.length - 1]?.toFixed(2) || 'N/A' 
+                : 'N/A'}
+            </span>
+          </div>
+        ))}
       </div>
     ) : (
-      <p>No data object — check fetch or JSON</p>
+      <p style={{color:'orange', marginTop:'40px'}}>
+        No valid models array found. Raw data preview:
+        <pre style={{textAlign:'left', background:'#111', padding:'16px', borderRadius:'8px', overflow:'auto', maxHeight:'400px', marginTop:'20px'}}>
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </p>
     )}
   </div>
 );
