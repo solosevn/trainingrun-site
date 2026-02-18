@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRAgents — Training Run</title>
+  <title>TRSbench — Training Run</title>
   <style>
     body { background:#0d1117; color:#c9d1d9; font-family:sans-serif; margin:0; padding:20px; }
     .container { max-width:1400px; margin:auto; }
@@ -16,7 +16,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>TRAgents — Training Run</h1>
+    <h1>TRSbench — Training Run</h1>
     <p id="update">Loading data...</p>
     <table>
       <thead>
@@ -26,7 +26,7 @@
     </table>
   </div>
   <script>
-    fetch('tragent-data.json?' + Date.now())
+    fetch('trs-data.json?' + Date.now())
       .then(r => r.json())
       .then(data => {
         document.getElementById('update').textContent = 'Updated ' + data.dates[data.dates.length-1];
