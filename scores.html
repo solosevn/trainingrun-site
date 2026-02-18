@@ -4,86 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TRSbench — Training Run</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     body { background:#0d1117; color:#c9d1d9; font-family:sans-serif; margin:0; padding:20px; }
-    .container { max-width:1400px; margin:auto; text-align:center; }
+    .container { max-width:1400px; margin:auto; }
     h1 { color:#58a6ff; }
-    .loading { font-size:2em; margin:100px 0; color:#58a6ff; }
-    .error { color:#f85149; font-size:1.5em; margin:50px; }
     table { width:100%; border-collapse:collapse; margin-top:20px; }
-    th, td { padding:12px; border-bottom:1px solid #30363d; }
+    th, td { padding:12px; border-bottom:1px solid #30363d; text-align:left; }
     th { background:#21262d; }
     .positive { color:#56d364; } .negative { color:#f85149; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <div class="container">
+    <h1>TRSbench — Training Run</h1>
+    <p>WEEK 7 Daily scores · Updated February 18, 2026</p>
+    <p>If data loads, table will appear below. Check browser console for errors if blank.</p>
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Model</th><th>Company</th><th>Latest Score</th><th>Change</th></tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
-
-    const ErrorBoundary = ({children}) => {
-      const [error, setError] = useState(null);
-      if (error) return <div className="error">Render error: {error.message}</div>;
-      try { return children; } catch (e) { setError(e); return null; }
-    };
-
-    const TRSbench = () => {
-      const [data, setData] = useState(null);
-      const [error, setError] = useState(null);
-
-      useEffect(() => {
-        console.log("Starting fetch for trs-data.json");
-        fetch('trs-data.json?' + Date.now())
-          .then(r => {
-            console.log("Fetch response status:", r.status);
-            if (!r.ok) throw new Error("Fetch failed: " + r.status);
-            return r.json();
-          })
-          .then(d => {
-            console.log("Data loaded successfully:", d);
-            setData(d);
-          })
-          .catch(e => {
-            console.error("Fetch error:", e);
-            setError(e.message);
-          });
-      }, []);
-
-      if (error) return <div className="error">Error loading data: {error}</div>;
-      if (!data) return <div className="loading">Loading TRSbench data... (check console for details)</div>;
-
-      return (
-        <div className="container">
-          <h1>TRSbench — Training Run</h1>
-          <p>Updated {data.dates?.[data.dates.length-1] || 'N/A'}</p>
-          <p>Data loaded – {data.models?.length || 0} models found</p>
-          <table>
-            <thead>
-              <tr><th>Rank</th><th>Model</th><th>Latest Score</th></tr>
-            </thead>
-            <tbody>
-              {data.models?.map((m, i) => (
-                <tr key={i}>
-                  <td>{i+1}</td>
-                  <td>{m.name}</td>
-                  <td>{m.scores?.[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
-                </tr>
-              )) || <tr><td colSpan="3">No models</td></tr>}
-            </tbody>
-          </table>
-        </div>
-      );
-    };
-
-    ReactDOM.render(
-      <ErrorBoundary><TRSbench /></ErrorBoundary>,
-      document.getElementById('root')
-    );
-    console.log("Render called");
+  <script>
+    fetch('trs-data.json?' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        console.log("Data loaded:", data);
+        const tbody = document.getElementById('table-body');
+        data.models.forEach((m, i) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${i+1}</td>
+            <td>${m.name}</td>
+            <td>${m.company || 'N/A'}</td>
+            <td>${m.scores?.[m.scores.length-1]?.toFixed(2) || 'N/A'}</td>
+            <td class="${m.change > 0 ? 'positive' : m.change < 0 ? 'negative' : ''}">
+              ${m.change > 0 ? '+' : ''}${(m.change || 0).toFixed(2)}
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(e => {
+        console.error("Fetch error:", e);
+        document.body.innerHTML += '<p style="color:red">Error loading data: ' + e.message + '</p>';
+      });
   </script>
 </body>
 </html>
