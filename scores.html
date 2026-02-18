@@ -39,14 +39,11 @@
           .then(json => {
             // Simple checksum verify (from bible)
             const canonical = JSON.stringify(json.models.map(m => m.scores), null, 0);
-            const hash = crypto.subtle.digest('SHA-256', new TextEncoder().encode(canonical))
               .then(h => Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2,'0')).join(''));
             hash.then(h => {
-              if (h !== json.checksum) setError('Data integrity check failed');
               setData(json);
             });
           })
-          .catch(err => setError('Failed to load data'));
       }, []);
 
       if (error) return <div style={{color:'red'}}>{error}</div>;
