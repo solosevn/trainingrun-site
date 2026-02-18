@@ -11,7 +11,7 @@
       </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRSbench â Training Run</title>
+<title>TRFcast â Training Run</title>
 <link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -28,7 +28,7 @@
   <a href="/" class="logo">Training Run</a>
   <ul class="nav-links">
     <li><a href="/trsmethodology">TRS Methodology</a></li>
-    <li><a href="/scores" class="active">TRSbench</a></li>
+    <li><a href="/scores" class="active">TRFcast</a></li>
     <li><a href="/about">About</a></li>
   </ul>
 </nav>
@@ -39,7 +39,7 @@
   <!-- Section header -->
   <div style="text-align:center;padding:60px 0 10px">
     <span style="display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:4px 14px;font-size:11px;color:#00d4ff;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:14px">Training Run</span>
-    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRSbench</h1>
+    <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRFcast</h1>
     <div style="display:flex;align-items:center;justify-content:center;gap:12px">
       <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 5</span>
       <span id="trs-updated-date" style="font-size:13px;color:#a0a0b0"></span>
@@ -145,7 +145,7 @@ function DataLoader(){
   );
   if(!data)return React.createElement("div",{style:{textAlign:"center",padding:"80px 20px"}},
     React.createElement("div",{style:{width:"32px",height:"32px",border:"3px solid "+C.border,borderTopColor:C.accent,borderRadius:"50%",margin:"0 auto 16px",animation:"trs-spin 0.8s linear infinite"}}),
-    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRSbench data..."),
+    React.createElement("div",{style:{fontSize:"13px",color:C.muted}},"Loading TRFcast data..."),
     React.createElement("style",null,"@keyframes trs-spin{to{transform:rotate(360deg)}}")
   );
   return React.createElement(React.Fragment,null,
@@ -293,7 +293,7 @@ function App({DATES,MODELS,EVENTS}){
       React.createElement("div",{style:{display:"flex",alignItems:"flex-start",gap:"14px",marginBottom:"14px"}},
         React.createElement("div",{style:{width:"48px",height:"48px",borderRadius:"12px",background:`linear-gradient(135deg,${mc}33,${mc}11)`,border:`1px solid ${mc}44`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px",fontWeight:700,color:mc,flexShrink:0}},model.name.charAt(0)),
         React.createElement("div",{style:{flex:1}},
-          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRSbench"),
+          React.createElement("div",{style:{fontSize:"11px",color:C.muted,marginBottom:"2px"}},model.company+" \u00b7 TRFcast"),
           React.createElement("h1",{style:{fontSize:"20px",fontWeight:600,margin:0,letterSpacing:"-0.3px"}},model.name)
         )
       ),
