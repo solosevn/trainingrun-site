@@ -19,7 +19,7 @@
 <nav>
   <a href="/" class="logo">Training Run</a>
   <ul class="nav-links">
-    <li><a href="/trsmethodology">TRS Methodology</a></li>
+    <li><a href="/trsmethodology">TRAgents Methodology</a></li>
     <li><a href="/scores" class="active">TRSbench</a></li>
     <li><a href="/about">About</a></li>
   </ul>
@@ -494,7 +494,7 @@ function App({DATES,MODELS,EVENTS}){
       // Formula card
       React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:`1px solid ${C.border}`,padding:"16px",marginTop:"12px",boxShadow:C.glow}},
         React.createElement("div",{style:{fontSize:"12px",fontWeight:600,marginBottom:"10px"}},"TRS Weights"),
-        [["Safety","21%",C.green],["Reasoning","20%",C.accent],["Coding","20%","#f0883e"],["Human Pref","18%",CC.Google],["Knowledge","8%","#bc8cff"],["Efficiency","7%",C.muted],["Usage","6%","#f778ba"]].map(([n,w,c])=>
+        [["Task Success","25%",C.green],["Efficiency","20%",C.accent],["Reasoning","20%","#f0883e"],["Planning","15%",CC.Google],["Memory","10%","#bc8cff"],["Tool Use","10%",C.muted],["null,"#f778ba"]].map(([n,w,c])=>
           React.createElement("div",{key:n,style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}},
             React.createElement("div",{style:{width:"6px",height:"6px",borderRadius:"50%",background:c}}),
             React.createElement("span",{style:{fontSize:"11px",color:C.muted,flex:1}},n),
