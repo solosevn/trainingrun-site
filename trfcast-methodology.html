@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TRFcast Methodology - Independent data axis measuring AI model forecasting performance across 5 pillars and 4 live platforms.">
+    <meta name="keywords" content="TRFcast, AI forecasting, model evaluation, methodology, Training Run">
+    <meta name="canonical" content="https://trainingrun.ai/trfcast-methodology">
+    <title>TRFcast Methodology | Training Run</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-20ZZ8BG99X');
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/styles.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e17;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(10, 14, 23, 0.95);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-right: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #00e5ff;
+            font-size: 1.4rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            opacity: 0.8;
+        }
+
+        .nav-logo svg {
+            width: 32px;
+            height: 32px;
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #e0e0e0;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00e5ff;
+        }
+
+        .nav-links a.active {
+            color: #00e5ff;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00e5ff, transparent);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        article.methodology-page {
+            padding: 4rem 0;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00e5ff;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 3rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-button:hover {
+            gap: 0.75rem;
+        }
+
+        .back-button::before {
+            content: '\2190ÂÂ';
+            font-size: 1.2rem;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        h1 .cyan {
+            color: #00e5ff;
+        }
+
+        .updated-date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+            display: inline-block;
+        }
+
+        .intro {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #c0c0c0;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border-left: 3px solid #00e5ff;
+            background: rgba(0, 229, 255, 0.05);
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 3rem 0 1.5rem 0;
+            color: #ffffff;
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #00e5ff;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Pillars Grid */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0 3rem 0;
+        }
+
+        .pillar-card {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(0, 229, 255, 0.05));
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .pillar-card:hover {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(0, 229, 255, 0.08));
+            border-color: rgba(0, 229, 255, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .pillar-number {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pillar-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar-percentage {
+            font-size: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: #00e5ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-description {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        /* Detail Sections */
+        .pillar-detail {
+            background: rgba(0, 229, 255, 0.05);
+            border-left: 3px solid #00e5ff;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .metric-item {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .metric-name {
+            font-weight: 600;
+            color: #00e5ff;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .source {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 229, 255, 0.1);
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .source strong {
+            color: #00e5ff;
+        }
+
+        /* Formula Section */
+        .formula-section {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(0, 229, 255, 0.02));
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .formula-code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            line-height: 1.6;
+            color: #00e5ff;
+            margin: 1rem 0;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        /* Data Sources Table */
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .source-card {
+            background: rgba(10, 20, 40, 0.5);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .source-card:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            background: rgba(10, 20, 40, 0.8);
+        }
+
+        .source-name {
+            font-weight: 700;
+            color: #00e5ff;
+            margin-bottom: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .source-url {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .source-coverage {
+            color: #c0c0c0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .source-weight {
+            display: inline-block;
+            background: rgba(0, 229, 255, 0.2);
+            color: #00e5ff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 14, 23, 0.95);
+            border-top: 1px solid rgba(0, 229, 255, 0.1);
+            padding: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        footer p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #00e5ff;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        footer a:hover {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav .container {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            article.methodology-page {
+                padding: 2rem 0;
+            }
+
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/" class="nav-logo">
+                <svg viewBox="0 0 32 32" fill="currentColor">
+                    <path d="M16 2L4 8v8c0 8 12 12 12 12s12-4 12-12V8l-12-6z"/>
+                </svg>
+                Training Run
+            </a>
+            <ul class="nav-links">
+                <li><a href="/trfcast-methodology" class="active">TRFcast Methodology</a></li>
+                <li><a href="/trfcast-scores">TRFcast Tracker</a></li>
+                <li><a href="/scores">TRSbench</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <article class="methodology-page">
+        <div class="container">
+            <a href="/" class="back-button">Back to Home</a>
+
+            <h1>TRFcast <span class="cyan">Methodology</span></h1>
+            <span class="updated-date">Last Updated: February 19, 2026</span>
+
+            <div class="intro">
+                <p>TRFcast is an independent data axis measuring how well AI models predict the future &mdash; across forecasting, trading, calibration, financial reasoning, and market intelligence. Unlike TRS (which measures overall capability), TRFcast measures whether a model can see what's coming. This page documents our complete methodology with full source citations.</p>
+            </div>
+
+            <!-- Why TRFcast Exists -->
+            <section>
+                <h2>Why TRFcast Exists</h2>
+                <p>AI models are increasingly used to make financial decisions, predict market movements, and forecast real-world events. But which models actually predict the future accurately? Existing benchmarks test knowledge and reasoning &mdash; not forecasting ability. TRFcast fills this gap with 5 independent pillars drawn from 4 live forecasting and trading platforms. Every score is derived from real predictions with verifiable outcomes. No synthetic benchmarks. No self-reported metrics. Just real forecasting performance.</p>
+            </section>
+
+            <!-- The Five Pillars -->
+            <section>
+                <h2>The Five Pillars</h2>
+                <p>TRFcast aggregates forecasting performance across five distinct dimensions, each measured on live platforms with real-world outcomes:</p>
+
+                <div class="pillars-grid">
+                    <div class="pillar-card">
+                        <div class="pillar-number">Pillar 1</div>
+                        <div class="pillar-name">Forecasting Accuracy</div>
+                        <div class="pillar-percentage">30%</div>
+                        <div class="pillar-description">How accurately does the model predict real-world events?</div>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-number">Pillar 2</div>
+                        <div class="pillar-name">Trading Performance</div>
+                        <div class="pillar-percentage">25%</div>
+                        <div class="pillar-description">How well does the model perform in live trading?</div>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-number">Pillar 3</div>
+                        <div class="pillar-name">Prediction Calibration</div>
+                        <div class="pillar-percentage">20%</div>
+                        <div class="pillar-description">Does the model know what it knows and what it doesn't?</div>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-number">Pillar 4</div>
+                        <div class="pillar-name">Financial Reasoning</div>
+                        <div class="pillar-percentage">15%</div>
+                        <div class="pillar-description">Can the model understand financial concepts?</div>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div class="pillar-number">Pillar 5</div>
+                        <div class="pillar-name">Market Intelligence</div>
+                        <div class="pillar-percentage">10%</div>
+                        <div class="pillar-description">Does the model make consistent, risk-adjusted decisions?</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pillar Details -->
+            <section>
+                <h2>Pillar Details</h2>
+
+                <div>
+                    <h3>Pillar 1: Forecasting Accuracy &mdash; 30%</h3>
+                    <div class="pillar-detail">
+                        <div class="metric-item">
+                            <div class="metric-name">ForecastBench Baseline Brier Score (20%)</div>
+                            <div class="metric-value">Lower Brier = better calibrated predictions on real-world questions</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-name">ForecastBench Tournament Performance (10%)</div>
+                            <div class="metric-value">Competitive ranking against other models in structured prediction tournaments</div>
+                        </div>
+                        <div class="source"><strong>Source:</strong> ForecastBench (forecastbench.org)</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Pillar 2: Trading Performance &mdash; 25%</h3>
+                    <div class="pillar-detail">
+                        <div class="metric-item">
+                            <div class="metric-name">Rallies.ai Returns (15%)</div>
+                            <div class="metric-value">Actual portfolio performance on the Rallies.ai platform</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-name">Alpha Arena Returns (10%)</div>
+                            <div class="metric-value">Returns from nof1.ai's Alpha Arena competitive trading environment</div>
+                        </div>
+                        <div class="source"><strong>Sources:</strong> Rallies.ai + nof1.ai Alpha Arena</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Pillar 3: Prediction Calibration &mdash; 20%</h3>
+                    <div class="pillar-detail">
+                        <div class="metric-item">
+                            <div class="metric-name">ForecastBench Calibration (20%)</div>
+                            <div class="metric-value">How well a model's confidence levels match actual outcome frequencies</div>
+                        </div>
+                        <div class="source"><strong>Source:</strong> ForecastBench (forecastbench.org)</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Pillar 4: Financial Reasoning &mdash; 15%</h3>
+                    <div class="pillar-detail">
+                        <div class="metric-item">
+                            <div class="metric-name">FinanceArena QA Accuracy (8%)</div>
+                            <div class="metric-value">Percentage correct on financial question-answering benchmarks</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-name">FinanceArena Comparative ELO (7%)</div>
+                            <div class="metric-value">Head-to-head reasoning comparison rankings</div>
+                        </div>
+                        <div class="source"><strong>Source:</strong> FinanceArena (financearena.ai)</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Pillar 5: Market Intelligence &mdash; 10%</h3>
+                    <div class="pillar-detail">
+                        <div class="metric-item">
+                            <div class="metric-name">Alpha Arena Sharpe Ratio (5%)</div>
+                            <div class="metric-value">Risk-adjusted return quality from nof1.ai</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-name">Rallies.ai Win Rate (5%)</div>
+                            <div class="metric-value">Consistency of winning trades on the Rallies.ai platform</div>
+                        </div>
+                        <div class="source"><strong>Sources:</strong> Alpha Arena Sharpe + Rallies.ai Win Rate</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Formula -->
+            <section>
+                <h2>Complete Formula</h2>
+                <div class="formula-section">
+                    <p>TRFcast combines all 9 sub-metrics into a single normalized score:</p>
+                    <div class="formula-code">TRFcast = ForecastBench_Baseline (20%)
+    + ForecastBench_Tournament (10%)
+    + Rallies_Returns (15%)
+    + AlphaArena_Returns (10%)
+    + ForecastBench_Calibration (20%)
+    + FinanceArena_QA (8%)
+    + FinanceArena_Compare (7%)
+    + AlphaArena_Sharpe (5%)
+    + Rallies_WinRate (5%)</div>
+                    <p style="margin-top: 1.5rem; color: #a0a0a0;">Models with null sub-metrics are scored only on available data, normalized proportionally. All source data is publicly verifiable.</p>
+                </div>
+            </section>
+
+            <!-- Key Differentiator -->
+            <section>
+                <h2>Key Differentiator: Discovery-First Approach</h2>
+                <p>TRFcast uses a discovery-first approach. Unlike benchmarks with fixed model lists, every daily update scans ALL models on ALL 4 source platforms. Any model from any company in the world can qualify if it appears across enough sources to produce scores in at least 3 of the 5 pillars. New entrants are discovered and added automatically.</p>
+            </section>
+
+            <!-- Data Sources -->
+            <section>
+                <h2>Data Sources</h2>
+                <p>All TRFcast scores are derived from these 4 independent, live platforms:</p>
+
+                <div class="sources-grid">
+                    <div class="source-card">
+                        <div class="source-name">ForecastBench</div>
+                        <div class="source-url">forecastbench.org</div>
+                        <div class="source-coverage">Forecasting + Calibration</div>
+                        <div class="source-weight">50% of scoring</div>
+                    </div>
+
+                    <div class="source-card">
+                        <div class="source-name">Rallies.ai</div>
+                        <div class="source-url">rallies.ai</div>
+                        <div class="source-coverage">Trading + Market Intelligence</div>
+                        <div class="source-weight">20% of scoring</div>
+                    </div>
+
+                    <div class="source-card">
+                        <div class="source-name">nof1.ai Alpha Arena</div>
+                        <div class="source-url">nof1.ai</div>
+                        <div class="source-coverage">Trading + Market Intelligence</div>
+                        <div class="source-weight">15% of scoring</div>
+                    </div>
+
+                    <div class="source-card">
+                        <div class="source-name">FinanceArena</div>
+                        <div class="source-url">financearena.ai</div>
+                        <div class="source-coverage">Financial Reasoning</div>
+                        <div class="source-weight">15% of scoring</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Training Run. All rights reserved. | <a href="/about">About</a> | <a href="/contact">Contact</a></p>
+    </footer>
+</body>
+</html>
