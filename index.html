@@ -517,14 +517,14 @@ function makeCard(m, i) {
           if(i === 0) { glowStyle = 'border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 16px rgba(255,215,0,0.6),0 0 6px rgba(255,215,0,0.35);'; rankColor = '#ffd700'; }
           else if(i === 1) { glowStyle = 'border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 14px rgba(200,205,220,0.55),0 0 5px rgba(200,205,220,0.3);'; rankColor = '#c8c8dc'; }
           else if(i === 2) { glowStyle = 'border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 16px rgba(205,127,50,0.6),0 0 6px rgba(205,127,50,0.35);'; rankColor = '#cd7f32'; }
-          return '<div class="score-card' + cls + '" style="position:relative;overflow:hidden;padding:5px 5px 4px;' + glowStyle + '">' +
+          return '<div class="score-card' + cls + '" style="position:relative;overflow:hidden;padding:6px 5px 5px;' + glowStyle + '">' +
             bgImg +
             '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0px;">' +
               '<div style="font-size:14px;font-weight:700;color:' + rankColor + ';line-height:1.1;">' + rankLbl + '</div>' +
               '<div style="font-size:20px;font-weight:800;color:#ffffff;font-variant-numeric:tabular-nums;line-height:1.1;">' + m.score.toFixed(2) + '</div>' +
               '<div style="font-size:9.5px;font-weight:600;color:#c8c8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:92%;text-align:center;line-height:1.2;">' + m.name + '</div>' +
               '<div style="font-size:10px;font-weight:600;color:#8888b8;letter-spacing:0.3px;line-height:1.2;">' + (m.company||'') + '</div>' +
-              '<div style="font-size:13px;font-weight:700;color:' + dColor + ';margin-top:2px;line-height:1.1;">' + dTxt + '</div>' +
+              '<div style="font-size:13px;font-weight:700;color:' + dColor + ';margin-top:3px;line-height:1.1;">' + dTxt + '</div>' +
             '</div>' +
           '</div>';
         }
