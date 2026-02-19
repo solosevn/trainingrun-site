@@ -204,12 +204,30 @@
       flex-shrink: 0;
     }
     .ticker-badge { display: inline-flex; flex-direction: column; gap: 1px; line-height: 1.25; }
-    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(0,212,255,0.65); letter-spacing: 0.6px; text-transform: uppercase; }
+    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.6px; text-transform: uppercase; }
     .ticker-name { font-size: 12px; font-weight: 600; color: #ffffff; }
     .ticker-val  { font-size: 11px; font-weight: 700; margin-left: 2px; }
     .ticker-val.up      { color: #00e676; }
     .ticker-val.down    { color: #ff5252; }
     .ticker-val.neutral { color: rgba(0,212,255,0.85); }
+
+    /* ── Nav date badge ── */
+    .nav-date-wrap {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      white-space: nowrap;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -217,6 +235,7 @@
 
 <nav>
   <a href="/" class="logo">Training Run</a>
+  <div class="nav-date-wrap"><span id="current-week"></span></div>
   <ul class="nav-links">
     <li><a href="/sources">Verify Our Data</a></li>
     <li><a href="/about">About</a></li>
@@ -228,7 +247,6 @@
   </div>
 </div>
 <section class="hero">
-  <div class="hero-badge"><span id="current-week"></span></div>
   <h1>Training Run</h1>
   <p class="tagline">Your Weekly AI Conditioning</p>
   <p class="hero-description">
@@ -533,11 +551,11 @@ function loadBoard(url, elId, count) {
   }
   function buildTicker(datasets) {
     var benches = [
-      {label:'TRSbench', url:'/scores',          data:datasets[0]},
-      {label:'TRUscore', url:'/truscore-scores',  data:datasets[1]},
-      {label:'TRScode',  url:'/trscode-scores',   data:datasets[2]},
-      {label:'TRFcast',  url:'/trfcast-scores',   data:datasets[3]},
-      {label:'TRAgents', url:'/tragents',          data:datasets[4]}
+      {label:'TRSbench', url:'/scores',          catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">bench</span>', data:datasets[0]},
+      {label:'TRUscore', url:'/truscore-scores',  catHtml:'#1 <span style="color:#00d4ff">TRU</span><span style="color:rgba(255,255,255,0.75)">score</span>', data:datasets[1]},
+      {label:'TRScode',  url:'/trscode-scores',   catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">code</span>',  data:datasets[2]},
+      {label:'TRFcast',  url:'/trfcast-scores',   catHtml:'#1 <span style="color:#00d4ff">TRF</span><span style="color:rgba(255,255,255,0.75)">cast</span>',  data:datasets[3]},
+      {label:'TRAgents', url:'/tragents',          catHtml:'#1 <span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>', data:datasets[4]}
     ];
     var items = [];
     var bigGain = {delta:-Infinity, name:null};
@@ -552,7 +570,7 @@ function loadBoard(url, elId, count) {
         var top = models[0];
         var lu = tickerLogoUrl(top.company);
         var sv = '<span class="ticker-val neutral">'+top.scores[li].toFixed(2)+'</span>';
-        items.push(makeTickerItem(lu, top.company, '#1 '+b.label, top.name, sv, b.url));
+        items.push(makeTickerItem(lu, top.company, b.catHtml, top.name, sv, b.url));
       }
       models.forEach(function(m) {
         var s = m.scores[li], p = m.scores[pi];
