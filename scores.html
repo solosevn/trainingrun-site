@@ -41,7 +41,6 @@
     <span style="display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:4px 14px;font-size:11px;color:#00d4ff;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:14px">Training Run</span>
     <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRSbench</h1>
     <div style="display:flex;align-items:center;justify-content:center;gap:12px">
-      <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 5</span>
       <span id="trs-updated-date" style="font-size:13px;color:#a0a0b0"></span>
     </div>
   </div>
@@ -150,7 +149,6 @@ function DataLoader(){
   );
   return React.createElement(React.Fragment,null,
     verified===false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
-      "\u26a0\ufe0f Data integrity check failed â scores may have been modified"
     ),
     React.createElement(App,{DATES:data.DATES,MODELS:data.MODELS,EVENTS:data.EVENTS})
   );
@@ -528,3 +526,20 @@ ReactDOM.createRoot(document.getElementById("trs-chart-root")).render(React.crea
 
 </body>
 </html>
+<section class="key-events">
+<h2>Key Events</h2>
+<div class="data-table"><table><thead><tr><th>Date</th><th>Event</th></tr></thead><tbody>
+<tr><td>Jan 8, 2026</td><td>LFM2 2.6B XP Edge AI model release</td></tr>
+<tr><td>Jan 10, 2026</td><td>DeepSeek V4 with strong coding ability</td></tr>
+<tr><td>Jan 27, 2026</td><td>OpenAI Prism AI workspace for scientists</td></tr>
+<tr><td>Jan 27, 2026</td><td>Claude Opus 4.5 release</td></tr>
+<tr><td>Jan 30, 2026</td><td>NVIDIA massive open models/data collection release</td></tr>
+<tr><td>Feb 4, 2026</td><td>Mistral Voxtral Transcribe 2 speech model</td></tr>
+<tr><td>Feb 5, 2026</td><td>OpenAI GPT-5.3 Codex agentic coding model</td></tr>
+<tr><td>Feb 5, 2026</td><td>Anthropic Sonnet 4.6 with agent teams</td></tr>
+<tr><td>Feb 12, 2026</td><td>Google WebMCP in Chrome preview for AI agents</td></tr>
+<tr><td>Feb 16, 2026</td><td>OpenAI GPT-4o-latest API retirement</td></tr>
+<tr><td>Feb 17, 2026</td><td>Cohere TinyAya open multilingual models</td></tr>
+<tr><td>Feb 18, 2026</td><td>UC Santa Barbara GEA agent framework</td></tr>
+</tbody></table></div>
+</section>
