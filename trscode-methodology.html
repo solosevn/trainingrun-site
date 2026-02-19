@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRScode Methodology - Training Run AI Coding Benchmarks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-20ZZ8BG99X');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a1a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background-color: rgba(10, 10, 26, 0.95);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00d4ff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-brand:hover {
+            color: #00e5ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #b0b0d4;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 8px 12px;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-links a.active {
+            color: #00d4ff;
+            border-bottom: 2px solid #00d4ff;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 24px;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            color: #00e5ff;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        /* Header Section */
+        .page-header {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .last-updated {
+            font-size: 14px;
+            color: #7070a0;
+            margin-bottom: 40px;
+        }
+
+        /* Intro Box */
+        .intro-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 150, 200, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 60px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #e0e0ff;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 80px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #00d4ff;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #d0d0e0;
+        }
+
+        /* Pillar Cards */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .pillar-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 200, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 150, 200, 0.08));
+            transform: translateY(-4px);
+        }
+
+        .pillar-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .pillar-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .pillar-weight {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 12px;
+        }
+
+        .pillar-description {
+            font-size: 14px;
+            color: #b0b0d4;
+            line-height: 1.6;
+        }
+
+        /* Sources Section */
+        .sources-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-top: 30px;
+        }
+
+        .source-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(0, 150, 200, 0.04));
+            border: 1px solid rgba(0, 212, 255, 0.12);
+            border-radius: 10px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .source-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 150, 200, 0.06));
+        }
+
+        .source-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .source-weight {
+            font-size: 13px;
+            color: #7070a0;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .source-description {
+            font-size: 14px;
+            color: #b0b0d4;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .source-link {
+            font-size: 12px;
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            word-break: break-all;
+        }
+
+        .source-link:hover {
+            color: #00e5ff;
+        }
+
+        /* Formula Box */
+        .formula-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 200, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #00d4ff;
+            line-height: 1.8;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .formula-box-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .formula-notes {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .formula-notes p {
+            font-size: 14px;
+            color: #b0b0d4;
+            margin-bottom: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Data Integrity Section */
+        .integrity-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 150, 200, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .integrity-box p {
+            font-size: 16px;
+            color: #d0d0e0;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: #7070a0;
+            font-size: 14px;
+            margin-top: 80px;
+        }
+
+        /* Why These Sources List */
+        .reasons-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .reasons-list li {
+            padding: 12px 0;
+            padding-left: 24px;
+            position: relative;
+            color: #d0d0e0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .reasons-list li:before {
+            content: 'â';
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+
+            .back-button {
+                left: 20px;
+                font-size: 20px;
+            }
+
+            main {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sources-container {
+                grid-template-columns: 1fr;
+            }
+
+            .formula-box {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 12px 16px;
+                padding-left: 50px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            .back-button {
+                left: 16px;
+                font-size: 18px;
+            }
+
+            main {
+                padding: 30px 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .intro-box {
+                padding: 20px;
+                font-size: 14px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="/" class="back-button" title="Back to home"></a>
+        <a href="/" class="nav-brand">Training Run</a>
+        <ul class="nav-links">
+            <li><a href="/trscode-methodology" class="active">TRScode Methodology</a></li>
+            <li><a href="/trscode">TRScode</a></li>
+            <li><a href="/scores">TRSbench</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>TRScode Methodology</h1>
+            <p class="last-updated">Last Updated: February 19, 2026</p>
+        </div>
+
+        <!-- Intro Box -->
+        <div class="intro-box">
+            <p>TRScode is the daily AI coding leaderboard measuring who writes the best code â across 7 independent sources and 5 pillars. Unlike TRSbench (which measures overall capability), TRScode measures pure coding ability. This page documents our complete methodology with full source citations.</p>
+        </div>
+
+        <!-- Why TRScode Exists Section -->
+        <section>
+            <h2>Why TRScode Exists</h2>
+            <p>AI models are increasingly used to write, debug, and review code. But which models actually write the best code? Existing benchmarks test individual tasks â not comprehensive coding ability across multiple dimensions. TRScode fills this gap with 5 independent pillars drawn from 7 coding benchmark platforms. Every score is derived from real coding tasks with verifiable outcomes. No synthetic benchmarks. No self-reported metrics. Just real coding performance.</p>
+        </section>
+
+        <!-- The Five Pillars Section -->
+        <section>
+            <h2>The Five Pillars</h2>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-number">Pillar 1</div>
+                    <div class="pillar-title">Real-World Issue Resolution</div>
+                    <div class="pillar-weight">30%</div>
+                    <div class="pillar-description">Can the model fix real bugs in real codebases?</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">Pillar 2</div>
+                    <div class="pillar-title">Code Generation</div>
+                    <div class="pillar-weight">25%</div>
+                    <div class="pillar-description">Can the model write correct, functional code from scratch?</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">Pillar 3</div>
+                    <div class="pillar-title">Agentic Coding</div>
+                    <div class="pillar-weight">20%</div>
+                    <div class="pillar-description">Can the model operate as a real coding agent?</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">Pillar 4</div>
+                    <div class="pillar-title">Scientific & Specialized</div>
+                    <div class="pillar-weight">15%</div>
+                    <div class="pillar-description">Can the model write code requiring domain expertise?</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">Pillar 5</div>
+                    <div class="pillar-title">Human Preference</div>
+                    <div class="pillar-weight">10%</div>
+                    <div class="pillar-description">What do real developers actually prefer?</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The 7 Sources Section -->
+        <section>
+            <h2>The 7 Sources</h2>
+            <div class="sources-container">
+                <!-- Pillar 1 Sources -->
+                <div class="source-card">
+                    <div class="source-name">SWE-bench Verified</div>
+                    <div class="source-weight">17% (Pillar 1)</div>
+                    <div class="source-description">500 human-validated GitHub issues. The established industry reference for real-world code repair.</div>
+                    <a href="https://swebench.com" class="source-link" target="_blank" rel="noopener noreferrer">swebench.com</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-name">SWE-rebench</div>
+                    <div class="source-weight">13% (Pillar 1)</div>
+                    <div class="source-description">21,000+ continuously refreshed tasks from Nebius AI. Standardized ReAct scaffolding, temporal contamination controls.</div>
+                    <a href="https://swe-rebench.com" class="source-link" target="_blank" rel="noopener noreferrer">swe-rebench.com</a>
+                </div>
+
+                <!-- Pillar 2 Sources -->
+                <div class="source-card">
+                    <div class="source-name">LiveCodeBench</div>
+                    <div class="source-weight">15% (Pillar 2)</div>
+                    <div class="source-description">Continuously harvested competitive programming problems. Contamination-free by design. 62+ models tracked.</div>
+                    <a href="https://livecodebench.github.io" class="source-link" target="_blank" rel="noopener noreferrer">livecodebench.github.io</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-name">BigCodeBench</div>
+                    <div class="source-weight">10% (Pillar 2)</div>
+                    <div class="source-description">1,140 real-world software engineering tasks (ICLR 2025). 163+ models evaluated.</div>
+                    <a href="https://bigcode-bench.github.io" class="source-link" target="_blank" rel="noopener noreferrer">bigcode-bench.github.io</a>
+                </div>
+
+                <!-- Pillar 3 Sources -->
+                <div class="source-card">
+                    <div class="source-name">Terminal-Bench Hard</div>
+                    <div class="source-weight">12% (Pillar 3)</div>
+                    <div class="source-description">89 curated real terminal/agent tasks (Stanford/Laude Institute). Featured on Anthropic's Claude 4 model card.</div>
+                    <a href="https://tbench.ai" class="source-link" target="_blank" rel="noopener noreferrer">tbench.ai</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-name">SWE-bench Pro</div>
+                    <div class="source-weight">8% (Pillar 3)</div>
+                    <div class="source-description">1,865 tasks across 41 professional repositories (Scale AI).</div>
+                    <a href="https://scale.com/leaderboard" class="source-link" target="_blank" rel="noopener noreferrer">scale.com/leaderboard</a>
+                </div>
+
+                <!-- Pillar 4 Source -->
+                <div class="source-card">
+                    <div class="source-name">SciCode</div>
+                    <div class="source-weight">15% (Pillar 4)</div>
+                    <div class="source-description">338 sub-problems across 16 scientific disciplines from 6 domains (NeurIPS 2024).</div>
+                    <a href="https://scicode-bench.github.io" class="source-link" target="_blank" rel="noopener noreferrer">scicode-bench.github.io</a>
+                </div>
+
+                <!-- Pillar 5 Source -->
+                <div class="source-card">
+                    <div class="source-name">Chatbot Arena Code Elo</div>
+                    <div class="source-weight">10% (Pillar 5)</div>
+                    <div class="source-description">Code-specific category from Chatbot Arena. 6M+ blind A/B votes from real users.</div>
+                    <a href="https://lmarena.ai" class="source-link" target="_blank" rel="noopener noreferrer">lmarena.ai</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Formula Section -->
+        <section>
+            <h2>The Formula</h2>
+            <div class="formula-box">
+                <div class="formula-box-content">
+                    <div>TRScode = SWE-bench Verified (17%)</div>
+                    <div>+ SWE-rebench (13%)</div>
+                    <div>+ LiveCodeBench (15%)</div>
+                    <div>+ BigCodeBench (10%)</div>
+                    <div>+ Terminal-Bench Hard (12%)</div>
+                    <div>+ SWE-bench Pro (8%)</div>
+                    <div>+ SciCode (15%)</div>
+                    <div>+ Arena Code Elo (10%)</div>
+                </div>
+                <div class="formula-notes">
+                    <p><strong>Scoring Method:</strong> Models with null sub-metrics receive zero (Option B scoring). All weights sum to 1.00.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why These 7 Sources Section -->
+        <section>
+            <h2>Why These 7 Sources</h2>
+            <ul class="reasons-list">
+                <li>7 independent organizations â no single org controls the score</li>
+                <li>4 of 7 use continuous refresh or decontamination</li>
+                <li>Multi-dimensional: bug fixing + code generation + terminal agents + scientific coding + human preference</li>
+                <li>100+ unique models across all sources combined</li>
+                <li>All sources are free, public, and independently verifiable</li>
+            </ul>
+        </section>
+
+        <!-- Data Integrity Section -->
+        <section>
+            <h2>Data Integrity</h2>
+            <div class="integrity-box">
+                <p>Every daily update includes an SHA-256 checksum. The chart page verifies this checksum on load and displays a warning if data has been modified outside the official pipeline.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Training Run</p>
+    </footer>
+</body>
+</html>
