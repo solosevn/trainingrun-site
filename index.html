@@ -1,603 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
-        <script>
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', 'G-20ZZ8BG99X');
-        </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training Run | The AI Benchmark</title>
-    <meta name="description" content="Training Run - The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype—just clarity.">
-    <meta property="og:title" content="Training Run | The AI Benchmark">
-    <meta property="og:description" content="The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype—just clarity.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://trainingrun.ai">
-    <link rel="canonical" href="https://trainingrun.ai">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-20ZZ8BG99X');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Training Run | The AI Benchmark</title>
+  <meta name="description" content="Training Run - The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.">
+  <meta property="og:title" content="Training Run | The AI Benchmark">
+  <meta property="og:description" content="The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://trainingrun.ai">
+  <link rel="canonical" href="https://trainingrun.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ââ Hero: compact, 42vh ââ */
+    .hero { min-height: 42vh; padding-bottom: 10px; }
 
-    <style>
-        .todays-scores-section {
-            padding: 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .todays-scores-section .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .todays-scores-section h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-        }
-        .todays-scores-section .view-all-link {
-            font-size: 0.9rem;
-            color: #00e5ff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-        .todays-scores-section .view-all-link:hover {
-            opacity: 0.8;
-        }
-        .todays-scores-section .section-subtitle {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.9rem;
-            margin-bottom: 32px;
-        }
-        .live-scores-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-        }
-        .score-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-        .score-card:hover {
-            border-color: rgba(0,229,255,0.3);
-            transform: translateY(-2px);
-        }
-        .score-card.rank-1 {
-            border-color: rgba(255,215,0,0.5);
-            background: rgba(255,215,0,0.06);
-            box-shadow: 0 0 20px rgba(255,215,0,0.15);
-        }
-        .score-card.rank-2 {
-            border-color: rgba(192,192,192,0.5);
-            background: rgba(192,192,192,0.05);
-            box-shadow: 0 0 16px rgba(192,192,192,0.12);
-        }
-        .score-card.rank-3 {
-            border-color: rgba(205,127,50,0.5);
-            background: rgba(205,127,50,0.05);
-            box-shadow: 0 0 14px rgba(205,127,50,0.12);
-        }
-        .score-rank {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.6);
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .score-card.rank-1 .score-rank {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #000;
-            font-weight: 800;
-        }
-        .score-card.rank-2 .score-rank {
-            background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
-            color: #000;
-            font-weight: 800;
-        }
-        .score-card.rank-3 .score-rank {
-            background: linear-gradient(135deg, #cd7f32, #a0622e);
-            color: #fff;
-            font-weight: 800;
-        }
-        .score-model-name {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #ffffff;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .score-company {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.4);
-            margin-bottom: 16px;
-        }
-        .score-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00e5ff, #7c4dff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-        .score-delta {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .score-delta.positive { color: #00e676; }
-        .score-delta.negative { color: #ff5252; }
-        .score-delta.neutral { color: rgba(255,255,255,0.4); }
-        .score-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 4px;
-        }
-        @media (max-width: 900px) {
-            .live-scores-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 600px) {
-            .live-scores-grid { grid-template-columns: repeat(2, 1fr); }
-            .todays-scores-section { padding: 40px 20px; }
-        }
-    </style>
+    /* ââ Leaderboard section ââ */
+    .leaderboards {
+      max-width: 1260px;
+      margin: -6px auto 0;
+      padding: 0 24px 40px;
+    }
+
+    /* ââ TRSbench wrapper: narrower, centered ââ */
+    .trsbench-wrapper {
+      max-width: 880px;
+      margin: 0 auto 14px;
+    }
+
+    /* ââ Section headers ââ */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .section-header.centered {
+      justify-content: center;
+      position: relative;
+    }
+    .section-header.centered .section-link { position: absolute; right: 0; }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+    .section-title .cyan { color: #00d4ff; }
+    .section-title .red  { color: #ff5252; text-shadow: 0 0 8px rgba(255,82,82,0.5); }
+
+    .section-link {
+      font-size: 10px;
+      font-weight: 600;
+      color: #5a5a80;
+      text-decoration: none;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .section-link:hover { color: #00d4ff; }
+
+    /* ââ Score card rows ââ */
+    .cards-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+    .score-card {
+      flex: 1;
+      min-width: 0;
+      background: linear-gradient(135deg, rgba(40,40,70,0.6), rgba(25,25,50,0.8));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 6px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .score-card:hover {
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-1px);
+    }
+    .score-card.gold   { background: linear-gradient(135deg,rgba(255,215,0,0.12),rgba(255,180,0,0.05));  border-color: rgba(255,215,0,0.25); }
+    .score-card.silver { background: linear-gradient(135deg,rgba(192,192,192,0.10),rgba(160,160,180,0.05)); border-color: rgba(192,192,192,0.2); }
+    .score-card.bronze { background: linear-gradient(135deg,rgba(205,127,50,0.10),rgba(180,100,40,0.05)); border-color: rgba(205,127,50,0.2); }
+
+    .card-rank   { font-size: 8px;   font-weight: 700; color: #5a5a80; margin-bottom: 1px; }
+    .score-card.gold   .card-rank { color: #ffd700; }
+    .score-card.silver .card-rank { color: #c0c0c0; }
+    .score-card.bronze .card-rank { color: #cd7f32; }
+
+    .card-score   { font-size: 14px; font-weight: 800; color: #ffffff; margin-bottom: 1px; font-variant-numeric: tabular-nums; }
+    .card-model   { font-size: 7.5px; font-weight: 600; color: #b0b0d4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; }
+    .card-company { font-size: 7px; font-weight: 500; color: #5a5a80; }
+    .card-delta   { font-size: 7px; font-weight: 700; margin-top: 1px; }
+    .card-delta.up   { color: #00e676; }
+    .card-delta.down { color: #ff5252; }
+    .card-delta.flat { color: #4a4a70; }
+
+    /* ââ 2Ã2 grid ââ */
+    .benchmarks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .benchmark-block {
+      background: rgba(255,255,255,0.015);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 8px 6px;
+    }
+    .benchmark-block .cards-row { margin-bottom: 0; }
+
+    /* ââ Responsive ââ */
+    @media (max-width: 900px) {
+      .hero { min-height: 35vh; }
+      .trsbench-wrapper { max-width: 100%; }
+      .benchmarks-grid { grid-template-columns: 1fr; gap: 12px 0; }
+      .card-score { font-size: 12px; }
+      .score-card { padding: 5px 3px; }
+    }
+    @media (max-width: 600px) {
+      .leaderboards { padding: 0 12px 30px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+<div class="bg-animation"></div>
 
-    <nav>
+<nav>
+  <a href="/" class="logo">Training Run</a>
+  <ul class="nav-links">
+    <li><a href="/sources">Verify Our Data</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge"><span id="current-week"></span></div>
+  <h1>Training Run</h1>
+  <p class="tagline">Your Weekly AI Conditioning</p>
+  <p class="hero-description">
+    The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.
+  </p>
+  <div class="hero-cta" style="flex-direction:column;align-items:center;">
+    <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Latest Episode</a>
+  </div>
+  <p class="scores-date">Week 6 &bull; 2026</p>
+</section>
+
+<!-- ââââââââââââââ LIVE LEADERBOARDS ââââââââââââââ -->
+<div class="leaderboards">
+
+  <!-- TRSbench Top 10 -->
+  <div class="trsbench-wrapper">
+    <div class="section-header centered">
+      <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>bench &mdash; Top 10</span>
+      <a href="/scores" class="section-link">View Full Rankings &rarr;</a>
+    </div>
+    <div id="trsbench-row" class="cards-row">
+      <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:20px 0;">Loading&hellip;</div>
+    </div>
+  </div>
+
+  <!-- 2Ã2 grid -->
+  <div class="benchmarks-grid">
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title">Today&rsquo;s <span class="cyan">TRU</span>score &mdash; Top 5</span>
+        <a href="/truscore-scores" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div id="truscore-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>code &mdash; Top 5</span>
+        <a href="/trscode" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div id="trscode-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title">Today&rsquo;s <span class="cyan">TRF</span>cast &mdash; Top 5</span>
+        <a href="/trfcast" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div id="trfcast-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title">Today&rsquo;s <span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5</span>
+        <a href="/tragents-scores" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div id="tragents-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ââââââââââââââ REST OF PAGE ââââââââââââââ -->
+<section class="intro-section">
+  <div class="container">
+    <h2>Why Training Run Exists</h2>
+    <p class="intro-text">
+      AI is moving fast. Too fast for most people to keep up. Every week brings new models, new benchmarks, new claims. How do you know what&rsquo;s real?
+    </p>
+    <p class="intro-text">
+      <strong>Training Run</strong> cuts through the noise. We aggregate data from the most respected evaluation platforms, apply a transparent scoring methodology, and deliver a clear picture of where AI models actually stand&mdash;updated weekly.
+    </p>
+    <p class="intro-text">
+      Whether you&rsquo;re an investor evaluating AI companies, a policymaker shaping regulation, a developer choosing which API to use, or just someone who wants to understand this technology&mdash;we&rsquo;re building the resource you need.
+    </p>
+  </div>
+</section>
+
+<section class="trs-preview">
+  <div class="container">
+    <h2>The <span class="cyan">TRSbench</span></h2>
+    <p class="section-intro">
+      Our Training Run Score (TRS) is a weighted composite of seven performance dimensions, aggregated from peer-reviewed benchmarks and public evaluation platforms.
+    </p>
+    <div class="trs-components">
+      <div class="component"><span class="weight">21%</span><h3>Safety</h3><p>Reliability and responsible behavior</p></div>
+      <div class="component"><span class="weight">20%</span><h3>Reasoning</h3><p>Complex problem-solving and logical deduction</p></div>
+      <div class="component"><span class="weight">20%</span><h3>Coding</h3><p>Real-world programming ability</p></div>
+      <div class="component"><span class="weight">18%</span><h3>Human Preference</h3><p>What users actually prefer in blind tests</p></div>
+      <div class="component"><span class="weight">8%</span><h3>Knowledge</h3><p>Breadth and accuracy across domains</p></div>
+      <div class="component"><span class="weight">7%</span><h3>Efficiency</h3><p>Performance relative to cost</p></div>
+      <div class="component"><span class="weight">6%</span><h3>Usage Adoption</h3><p>Real-world developer adoption via OpenRouter</p></div>
+    </div>
+    <a href="/trsmethodology" class="learn-more">Learn More About Our Methodology &rarr;</a>
+  </div>
+</section>
+
+<section class="trust-section">
+  <div class="container">
+    <h2>Built on Trusted Sources</h2>
+    <p class="section-intro">Every score we publish is derived from publicly verifiable data. No black boxes.</p>
+    <div class="sources-grid">
+      <div class="source-card">
+        <h3>LMSYS Chatbot Arena</h3>
+        <p>1M+ human preference votes via blind comparisons</p>
+        <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener">huggingface.co/spaces/lmarena-ai/chatbot-arena</a>
+      </div>
+      <div class="source-card">
+        <h3>ARC-AGI-2</h3>
+        <p>Novel reasoning tasks that test genuine understanding</p>
+        <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>
+      </div>
+      <div class="source-card">
+        <h3>SWE-Bench</h3>
+        <p>Real GitHub issues to measure coding ability</p>
+        <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a>
+      </div>
+      <div class="source-card">
+        <h3>MMLU / GPQA</h3>
+        <p>Graduate-level knowledge evaluation</p>
+        <a href="https://paperswithcode.com/dataset/mmlu" target="_blank" rel="noopener">paperswithcode.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="segments-section">
+  <div class="container">
+    <h2>Show <span class="cyan">Segments</span></h2>
+    <p class="section-intro">
+      Every week, Training Run covers 9 data-driven segments. Each has its own transparent methodology&mdash;click to learn how we calculate every number.
+    </p>
+    <div class="segments-grid">
+      <a href="/trsmethodology" class="segment-card"><div class="segment-icon">&#x1F4CA;</div><h3><span style="color:#00d4ff">TRS</span> Benchmark</h3><p>Weighted composite AI ranking</p></a>
+      <a href="/truscore" class="segment-card"><div class="segment-icon">&#x1F680;</div><h3><span style="color:#00d4ff">TRU</span>score</h3><p>AI truth &amp; neutrality index</p></a>
+      <a href="/trfcast" class="segment-card"><div class="segment-icon">&#x1F4C8;</div><h3><span style="color:#00d4ff">TRF</span>cast</h3><p>AI forecasting &amp; trading scores</p></a>
+      <a href="/trscode" class="segment-card"><div class="segment-icon">&#x1F4BB;</div><h3><span style="color:#00d4ff">TRS</span>code</h3><p>Who writes the best code?</p></a>
+      <a href="/news" class="segment-card"><div class="segment-icon">&#x1F4F0;</div><h3>Weekly News Download</h3><p>Truth Filter verified headlines</p></a>
+      <a href="/frontier" class="segment-card"><div class="segment-icon">&#x1F3AF;</div><h3>Frontier</h3><p>The road to AGI</p></a>
+      <a href="/churn" class="segment-card"><div class="segment-icon">&#x1F4BC;</div><h3>The Churn</h3><p>Jobs leaving. Jobs arriving.</p></a>
+      <a href="/global-race" class="segment-card"><div class="segment-icon">&#x1F30D;</div><h3>Global AI Race</h3><p>Who&rsquo;s winning AI supremacy?</p></a>
+      <a href="/gigaburn" class="segment-card"><div class="segment-icon">&#x26A1;</div><h3>GIGABURN</h3><p>The AI power burn in gigawatts</p></a>
+    </div>
+    <a href="/sources" class="learn-more">Verify All Sources &amp; Methodology &rarr;</a>
+  </div>
+</section>
+
+<section class="disclaimer-section">
+  <div class="container">
+    <div class="disclaimer-box">
+      <h3>What This Isn&rsquo;t</h3>
+      <p>
+        <strong>These aren&rsquo;t predictions about AGI timelines.</strong> That&rsquo;s not our department. These are measurements of specific capabilities, not prophecies about AI&rsquo;s future. The trend line is up. What that means? Above our pay grade.
+      </p>
+      <p>We measure what AI can do <em>today</em>. We cite our sources. We show our math. That&rsquo;s it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Watch the Show</h2>
+    <p>New episodes every week breaking down the latest in AI performance.</p>
+    <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
         <a href="/" class="logo">Training Run</a>
-        <ul class="nav-links">
-            <li><a href="/trsmethodology">TRS Methodology</a></li>
-        <li><a href="/trfcast">TRFcast</a></li>
-            <li><a href="/sources">Verify Our Data</a></li>
-            <li><a href="/scores">Current Scores</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-    </nav>
+        <p>Your weekly AI conditioning.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Resources</h4>
+        <a href="/trsmethodology">TRS Methodology</a>
+        <a href="/sources">Verify Our Data</a>
+        <a href="/scores">Current Scores</a>
+        <a href="/about">About Us</a>
+      </div>
+      <div class="footer-links">
+        <h4>Segment Methodologies</h4>
+        <a href="/truscore">TRUscore</a>
+        <a href="/trscode">TRScode</a>
+        <a href="/frontier">Frontier</a>
+        <a href="/churn">The Churn</a>
+        <a href="/global-race">Global AI Race</a>
+      </div>
+      <div class="footer-links">
+        <h4>More Segments</h4>
+        <a href="/gigaburn">GIGABURN</a>
+        <a href="/trfcast">TRFcast</a>
+        <a href="/news">Weekly News</a>
+        <a href="/sources">All Sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Training Run. All rights reserved.</p>
+      <p class="footer-disclaimer">Training Run is an independent publication and is not affiliated with any AI company.</p>
+    </div>
+  </div>
+</footer>
 
-    <section class="hero">
-        <div class="hero-badge"><span id="current-week"></span></div>
-        <h1>Training Run</h1>
-        <p class="tagline">Your Weekly AI Conditioning</p>
-        <p class="hero-description">
-            The independent AI benchmark and intelligence hub.
-            Transparent methodology. Cited sources. No hype—just clarity.
-        </p>
-        <div class="hero-cta" style="flex-direction:column;align-items:center;">
-            <div style="display:flex;gap:16px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;">
-                <a href="/scores" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TRS</span><span style="color:#fff">bench</span></a>
-                <a href="/truscore-scores" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TRU</span><span style="color:#fff">score</span></a>
-
-                <a href="/trfcast" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TRF</span><span style="color:#fff">cast</span></a>
-                <a href="/tragents-scores" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TR</span><span style="color:#ff3333;text-shadow:0 0 10px rgba(255,51,51,0.5)">Agents</span></a></div>
-            <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Latest Episode</a>
-        </div>
-        <p class="scores-date">Week 6 • 2026</p>
-    </section>
-
-    <!-- Today's TRSbench - Live Data -->
-    <section class="todays-scores-section">
-        <div class="section-header">
-            <h2>Today's <span style="color:#00d4ff">TRS</span>bench</h2>
-            <a href="/scores" class="view-all-link">View Full Rankings →</a>
-        </div>
-        <p class="section-subtitle">Live composite scores updated weekly — powered by 7 independent data sources</p>
-        <div id="live-scores-grid" class="live-scores-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
-        </div>
-    </section>
-
-    <!-- Today's TRUscore - Live Data -->
-    <section class="todays-scores-section">
-        <div class="section-header">
-            <h2>Today's <span style="color:#00d4ff">TRU</span>score</h2>
-            <a href="/truscore-scores" class="view-all-link">View Full Rankings →</a>
-        </div>
-        <p class="section-subtitle">AI truth & reliability — factuality, neutrality, hallucination & calibration</p>
-        <div id="truscore-scores-grid" class="live-scores-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
-        </div>
-    </section>
-
-    <!-- Today's TRFcast - Live Data -->
-    <section class="todays-scores-section">
-        <div class="section-header">
-            <h2>Today's <span style="color:#00d4ff">TRF</span>cast</h2>
-            <a href="/trfcast" class="view-all-link">View Full Rankings →</a>
-        </div>
-        <p class="section-subtitle">AI forecasting & trading performance — scored across 5 independent pillars</p>
-        <div id="trfcast-scores-grid" class="live-scores-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
-        </div>
-    </section>
-
-
-
-    <section class="intro-section">
-        <div class="container">
-            <h2>Why Training Run Exists</h2>
-            <p class="intro-text">
-                AI is moving fast. Too fast for most people to keep up. Every week brings new models, new benchmarks, new claims. How do you know what’s real?
-            </p>
-            <p class="intro-text">
-                <strong>Training Run</strong> cuts through the noise. We aggregate data from the most respected evaluation platforms, apply a transparent scoring methodology, and deliver a clear picture of where AI models actually stand—updated weekly.
-            </p>
-            <p class="intro-text">
-                Whether you’re an investor evaluating AI companies, a policymaker shaping regulation, a developer choosing which API to use, or just someone who wants to understand this technology—we’re building the resource you need.
-            </p>
-        </div>
-    </section>
-
-    <section class="trs-preview">
-        <div class="container">
-            <h2>The <span class="cyan">TRSbench</span></h2>
-            <p class="section-intro">
-                Our Training Run Score (TRS) is a weighted composite of seven performance dimensions, aggregated from peer-reviewed benchmarks and public evaluation platforms.
-            </p>
-            <div class="trs-components">
-                <div class="component">
-                    <span class="weight">21%</span>
-                    <h3>Safety</h3>
-                    <p>Reliability and responsible behavior</p>
-                </div>
-                <div class="component">
-                    <span class="weight">20%</span>
-                    <h3>Reasoning</h3>
-                    <p>Complex problem-solving and logical deduction</p>
-                </div>
-                <div class="component">
-                    <span class="weight">20%</span>
-                    <h3>Coding</h3>
-                    <p>Real-world programming ability</p>
-                </div>
-                <div class="component">
-                    <span class="weight">18%</span>
-                    <h3>Human Preference</h3>
-                    <p>What users actually prefer in blind tests</p>
-                </div>
-                <div class="component">
-                    <span class="weight">8%</span>
-                    <h3>Knowledge</h3>
-                    <p>Breadth and accuracy across domains</p>
-                </div>
-                <div class="component">
-                    <span class="weight">7%</span>
-                    <h3>Efficiency</h3>
-                    <p>Performance relative to cost</p>
-                </div>
-                <div class="component">
-                    <span class="weight">6%</span>
-                    <h3>Usage Adoption</h3>
-                    <p>Real-world developer adoption via OpenRouter</p>
-                </div>
-            </div>
-            <a href="/trsmethodology" class="learn-more">Learn More About Our Methodology →</a>
-        </div>
-    </section>
-
-    <section class="trust-section">
-        <div class="container">
-            <h2>Built on Trusted Sources</h2>
-            <p class="section-intro">
-                Every score we publish is derived from publicly verifiable data. No black boxes.
-            </p>
-            <div class="sources-grid">
-                <div class="source-card">
-                    <h3>LMSYS Chatbot Arena</h3>
-                    <p>1M+ human preference votes via blind comparisons</p>
-                    <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener">huggingface.co/spaces/lmarena-ai/chatbot-arena</a>
-                </div>
-                <div class="source-card">
-                    <h3>ARC-AGI-2</h3>
-                    <p>Novel reasoning tasks that test genuine understanding</p>
-                    <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>
-                </div>
-                <div class="source-card">
-                    <h3>SWE-Bench</h3>
-                    <p>Real GitHub issues to measure coding ability</p>
-                    <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a>
-                </div>
-                <div class="source-card">
-                    <h3>MMLU / GPQA</h3>
-                    <p>Graduate-level knowledge evaluation</p>
-                    <a href="https://paperswithcode.com/dataset/mmlu" target="_blank" rel="noopener">paperswithcode.com</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Show Segments Section -->
-    <section class="segments-section">
-        <div class="container">
-            <h2>Show <span class="cyan">Segments</span></h2>
-            <p class="section-intro">
-                Every week, Training Run covers 9 data-driven segments. Each has its own transparent methodology—click to learn how we calculate every number.
-            </p>
-            <div class="segments-grid">
-                <a href="/trsmethodology" class="segment-card">
-                    <div class="segment-icon">&#x1F4CA;</div>
-                    <h3><span style="color:#00d4ff">TRS</span> Benchmark</h3>
-                    <p>Weighted composite AI ranking</p>
-                </a>
-                <a href="/truscore" class="segment-card">
-                    <div class="segment-icon">&#x1F680;</div>
-                    <h3><span style="color:#00d4ff">TRU</span>score</h3>
-                    <p>AI truth & neutrality index</p>
-                </a>
-                <a href="/trfcast" class="segment-card">
-                <div class="segment-icon">&#x1F4C8;</div>
-                <h3><span style="color:#00d4ff">TRF</span>cast</h3>
-                <p>AI forecasting & trading scores</p>
-            </a>
-                <a href="/trscode" class="segment-card">
-                    <div class="segment-icon">&#x1F4BB;</div>
-                    <h3><span style="color:#00d4ff">TRS</span>code</h3>
-                    <p>Who writes the best code?</p>
-                </a>
-            <a href="/news" class="segment-card">
-                    <div class="segment-icon">&#x1F4F0;</div>
-                    <h3>Weekly News Download</h3>
-                    <p>Truth Filter verified headlines</p>
-                </a>
-                <a href="/frontier" class="segment-card">
-                    <div class="segment-icon">&#x1F3AF;</div>
-                    <h3>Frontier</h3>
-                    <p>The road to AGI</p>
-                </a>
-                <a href="/churn" class="segment-card">
-                    <div class="segment-icon">&#x1F4BC;</div>
-                    <h3>The Churn</h3>
-                    <p>Jobs leaving. Jobs arriving.</p>
-                </a>
-                <a href="/global-race" class="segment-card">
-                    <div class="segment-icon">&#x1F30D;</div>
-                    <h3>Global AI Race</h3>
-                    <p>Who’s winning AI supremacy?</p>
-                </a>
-                <a href="/gigaburn" class="segment-card">
-                    <div class="segment-icon">&#x26A1;</div>
-                    <h3>GIGABURN</h3>
-                    <p>The AI power burn in gigawatts</p>
-                </a>
-                </div>
-            <a href="/sources" class="learn-more">Verify All Sources & Methodology →</a>
-        </div>
-    </section>
-
-    <section class="disclaimer-section">
-        <div class="container">
-            <div class="disclaimer-box">
-                <h3>What This Isn’t</h3>
-                <p>
-                    <strong>These aren’t predictions about AGI timelines.</strong> That’s not our department. These are measurements of specific capabilities, not prophecies about AI’s future. The trend line is up. What that means? Above our pay grade.
-                </p>
-                <p>
-                    We measure what AI can do <em>today</em>. We cite our sources. We show our math. That’s it.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta-section">
-        <div class="container">
-            <h2>Watch the Show</h2>
-            <p>New episodes every week breaking down the latest in AI performance.</p>
-            <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Now</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="/" class="logo">Training Run</a>
-                    <p>Your weekly AI conditioning.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Resources</h4>
-                    <a href="/trsmethodology">TRS Methodology</a>
-                    <a href="/sources">Verify Our Data</a>
-                    <a href="/scores">Current Scores</a>
-                    <a href="/about">About Us</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Segment Methodologies</h4>
-                    <a href="/truscore">TRUscore</a>
-                    <a href="/trscode">TRScode</a>
-                    <a href="/frontier">Frontier</a>
-                    <a href="/churn">The Churn</a>
-                    <a href="/global-race">Global AI Race</a>
-                </div>
-                <div class="footer-links">
-                    <h4>More Segments</h4>
-                    <a href="/gigaburn">GIGABURN</a>
-                    <a href="/trfcast">TRFcast</a>
-                    <a href="/news">Weekly News</a>
-                    <a href="/sources">All Sources</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 Training Run. All rights reserved.</p>
-                <p class="footer-disclaimer">Training Run is an independent publication and is not affiliated with any AI company.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const now = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
-        document.getElementById('current-week').textContent = dateStr;
-    </script>
-
-
-    <script>
-        // Fetch and render live TRSbench scores
-        (function() {
-            fetch('trs-data.json?v=' + Date.now())
-                .then(r => r.json())
-                .then(data => {
-                    const grid = document.getElementById('live-scores-grid');
-                    if (!grid || !data.models) return;
-                    
-                    const dates = data.dates || [];
-                    const lastIdx = dates.length - 1;
-                    const prevIdx = Math.max(0, lastIdx - 7);
-                    
-                    // Sort by rank, take top 5
-                    const sorted = data.models
-                        .filter(m => m.scores && m.scores[lastIdx] != null)
-                        .sort((a, b) => (a.rank || 999) - (b.rank || 999))
-                        .slice(0, 5);
-                    
-                    if (sorted.length === 0) {
-                        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
-                        return;
-                    }
-                    
-                    grid.innerHTML = sorted.map((model, i) => {
-                        const score = model.scores[lastIdx];
-                        const prevScore = model.scores[prevIdx];
-                        const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
-                        const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
-                        const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                        const rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
-                        
-                        return '<div class="score-card' + rankClass + '">' +
-                            '<div class="score-rank">' + (i + 1) + '</div>' +
-                            '<div class="score-model-name">' + model.name + '</div>' +
-                            '<div class="score-company">' + model.company + '</div>' +
-                            '<div class="score-value">' + score.toFixed(1) + '</div>' +
-                            '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                            '<div class="score-label">TRSbench</div>' +
-                        '</div>';
-                    }).join('');
-                })
-                .catch(err => {
-                    console.error('Failed to load TRS data:', err);
-                });
-        })();
-    </script>
+<!-- Date badge -->
 <script>
-// Fetch and render live TRUscore scores
-(function() {
-    fetch('truscore-data.json?v=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
-            const grid = document.getElementById('truscore-scores-grid');
-            if (!grid || !data.models) return;
-
-            const dates = data.dates || [];
-            const lastIdx = dates.length - 1;
-            const prevIdx = Math.max(0, lastIdx - 7);
-
-            const sorted = data.models
-                .filter(m => m.scores && m.scores[lastIdx] != null)
-                .sort((a, b) => (a.rank || 999) - (b.rank || 999))
-                .slice(0, 5);
-
-            if (sorted.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
-                return;
-            }
-
-            grid.innerHTML = sorted.map((model, i) => {
-                const score = model.scores[lastIdx];
-                const prevScore = model.scores[prevIdx];
-                const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
-                const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
-                const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                const rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
-
-                return '<div class="score-card' + rankClass + '">' +
-                    '<div class="score-rank">' + (i + 1) + '</div>' +
-                    '<div class="score-model-name">' + model.name + '</div>' +
-                    '<div class="score-company">' + model.company + '</div>' +
-                    '<div class="score-value">' + score.toFixed(1) + '</div>' +
-                    '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                    '<div class="score-label">TRUscore</div>' +
-                    '</div>';
-            }).join('');
-        })
-        .catch(err => {
-            console.error('Failed to load TRUscore data:', err);
-        });
-})();
+  var now = new Date();
+  document.getElementById('current-week').textContent =
+    now.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}).toUpperCase();
 </script>
 
+<!-- Live score card loader -->
 <script>
-// Fetch and render live TRFcast scores
-(function() {
-    fetch('trf-data.json?v=' + Date.now())
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            var grid = document.getElementById('trfcast-scores-grid');
-            if (!grid || !data.models) return;
+function makeCard(m, i) {
+  var cls = i === 0 ? ' gold' : i === 1 ? ' silver' : i === 2 ? ' bronze' : '';
+  var rankLbl = '#' + (i + 1);
+  var dCls = m.d === null ? 'flat' : m.d > 0 ? 'up' : m.d < 0 ? 'down' : 'flat';
+  var dTxt = m.d === null ? '&mdash;' :
+             m.d > 0 ? '&uarr; ' + m.d.toFixed(2) :
+             '&darr; ' + Math.abs(m.d).toFixed(2);
+  return '<div class="score-card' + cls + '">' +
+    '<div class="card-rank">' + rankLbl + '</div>' +
+    '<div class="card-score">' + m.score.toFixed(2) + '</div>' +
+    '<div class="card-model">' + m.name + '</div>' +
+    '<div class="card-company">' + m.company + '</div>' +
+    '<div class="card-delta ' + dCls + '">' + dTxt + '</div>' +
+    '</div>';
+}
 
-            var dates = data.dates || [];
-            var lastIdx = dates.length - 1;
-            var prevIdx = Math.max(0, lastIdx - 7);
-
-            var sorted = data.models
-                .filter(function(m) { return m.scores && m.scores[lastIdx] != null; })
-                .sort(function(a, b) { return (a.rank || 999) - (b.rank || 999); })
-                .slice(0, 5);
-
-            if (sorted.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
-                return;
-            }
-
-            grid.innerHTML = sorted.map(function(model, i) {
-                var score = model.scores[lastIdx];
-                var prevScore = model.scores[prevIdx];
-                var delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
-                var deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
-                var deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                var rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
-
-                return '<div class="score-card' + rankClass + '">' +
-                    '<div class="score-rank">' + (i + 1) + '</div>' +
-                    '<div class="score-model-name">' + model.name + '</div>' +
-                    '<div class="score-company">' + model.company + '</div>' +
-                    '<div class="score-value">' + score.toFixed(1) + '</div>' +
-                    '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                    '<div class="score-label">TRFcast</div>' +
-                    '</div>';
-            }).join('');
-        })
-        .catch(function(err) {
-            console.error('Failed to load TRFcast data:', err);
+function loadBoard(url, elId, count) {
+  fetch(url + '?v=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var el = document.getElementById(elId);
+      if (!el) return;
+      var dates   = data.dates || [];
+      var lastIdx = dates.length - 1;
+      var prevIdx = Math.max(0, lastIdx - 7);
+      var models = (data.models || [])
+        .filter(function(m){ return m.scores && m.scores[lastIdx] != null; })
+        .sort(function(a,b){ return (a.rank||999)-(b.rank||999); })
+        .slice(0, count)
+        .map(function(m){
+          var s = m.scores[lastIdx];
+          var p = m.scores[prevIdx];
+          return { name: m.name, company: m.company, score: s,
+                   d: (p != null) ? parseFloat((s-p).toFixed(2)) : null };
         });
-})();
-</script>
+      el.innerHTML = models.length
+        ? models.map(makeCard).join('')
+        : '<div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">No data</div>';
+    })
+    .catch(function(){
+      var el = document.getElementById(elId);
+      if (el) el.innerHTML = '<div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Failed to load</div>';
+    });
+}
 
+loadBoard('trs-data.json',      'trsbench-row',  10);
+loadBoard('truscore-data.json', 'truscore-row',   5);
+loadBoard('trscode-data.json',  'trscode-row',    5);
+loadBoard('trf-data.json',      'trfcast-row',    5);
+loadBoard('tragent-data.json',  'tragents-row',   5);
+</script>
 </body>
 </html>
-<!-- Grok 4.20 force redeploy -->
-<!-- Grok 4.20 final redeploy -->
-<!-- Grok 4.20 redeploy -->
