@@ -1,14 +1,6 @@
-from trs_orchestrator import update_trs_data
-
-print("Running real scrapers...")
-combined = scrape_all()
-print("Scraping complete, qualifying models...")
-
-data_path = "/Users/davidsolomon/trainingrun-site/trs-data.json"  # adjust if needed
-success = update_trs_data(data_path, date.today())
-if success:
-    print("TRS updated successfully")
-else:
+#!/usr/bin/env python3
+"""
+Grok 4.20 Production Daily Benchmark Runner - Beta
 Uses your real benchmark_update_feb15.py + all Bibles (discovery-first, 5-of-7 qualification, checksums)
 """
 
