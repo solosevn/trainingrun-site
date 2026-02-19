@@ -486,22 +486,25 @@
 <!-- Live score card loader -->
 <script>
 function makeCard(m, i) {
-  var cls = i === 0 ? ' gold' : i === 1 ? ' silver' : i === 2 ? ' bronze' : '';
-  var rankLbl = '#' + (i + 1);
-  var dCls = m.d === null ? 'flat' : m.d > 0 ? 'up' : m.d < 0 ? 'down' : 'flat';
-  var dTxt = m.d === null ? '&mdash;' :
-             m.d > 0 ? '&uarr; ' + m.d.toFixed(2) :
-             '&darr; ' + Math.abs(m.d).toFixed(2);
-  return '<div class="score-card' + cls + '">' +
-    '<div class="card-rank">' + rankLbl + '</div>' +
-    '<div class="card-score">' + m.score.toFixed(2) + '</div>' +
-    '<div class="card-model">' + m.name + '</div>' +
-    '<div class="card-company">' + m.company + '</div>' +
-    '<div class="card-delta ' + dCls + '">' + dTxt + '</div>' +
-    '</div>';
-}
-
-function loadBoard(url, elId, count) {
+          var cls = i === 0 ? ' gold' : i === 1 ? ' silver' : i === 2 ? ' bronze' : '';
+          var rankLbl = '#' + (i + 1);
+          var dCls = m.d === null ? 'flat' : m.d > 0 ? 'up' : m.d < 0 ? 'down' : 'flat';
+          var dTxt = m.d === null ? '&mdash;' : m.d > 0 ? '&uarr;&thinsp;' + m.d.toFixed(2) : '&darr;&thinsp;' + Math.abs(m.d).toFixed(2);
+          var lu = (typeof tickerLogoUrl === 'function') ? tickerLogoUrl(m.company) : null;
+          var logoHtml = lu
+            ? '<img src="' + lu + '" style="height:14px;width:14px;border-radius:3px;object-fit:contain;background:rgba(255,255,255,0.06);padding:1px;" onerror="this.style.display=\'none\'">'
+            : '<span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);">' + (m.company||'?').charAt(0).toUpperCase() + '</span>';
+          return '<div class="score-card' + cls + '">' +
+            '<div class="card-rank">' + rankLbl + '</div>' +
+            '<div class="card-score">' + m.score.toFixed(2) + '</div>' +
+            '<div class="card-model">' + m.name + '</div>' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:3px;">' +
+              logoHtml +
+              '<span class="card-delta ' + dCls + '">' + dTxt + '</span>' +
+            '</div>' +
+            '</div>';
+        }
+        function loadBoard(url, elId, count) {
   fetch(url + '?v=' + Date.now())
     .then(function(r){ return r.json(); })
     .then(function(data) {
