@@ -51,11 +51,11 @@
             <div class="summary-box">
                 <p>
                     AI models are increasingly used to inform decisions, shape opinions, and deliver information to billions of people.
-                    The people behind the keys Ã¢ÂÂ the engineers, the companies, the institutions Ã¢ÂÂ should not be using AI to further their own ideological views.
+                    The people behind the keys &mdash; the engineers, the companies, the institutions &mdash; should not be using AI to further their own ideological views.
                     TRUscore exists to hold AI models accountable to one standard: verifiable truth.
                 </p>
                 <p class="formula-note">
-                    Truth has no ideology. Truth has no party. Truth is verifiable or it isnÃ¢ÂÂt truth.
+                    Truth has no ideology. Truth has no party. Truth is verifiable or it isn&rsquo;t truth.
                 </p>
             </div>
         </section>
@@ -88,12 +88,12 @@
                         <tr>
                             <td>Hallucination</td>
                             <td>20%</td>
-                            <td>Invention is a distinct failure mode Ã¢ÂÂ the model isnÃ¢ÂÂt biased, itÃ¢ÂÂs just making things up. Less common in frontier models, but catastrophic when it happens.</td>
+                            <td>Invention is a distinct failure mode &mdash; the model isn&rsquo;t biased, it&rsquo;s just making things up. Less common in frontier models, but catastrophic when it happens.</td>
                         </tr>
                         <tr>
                             <td>Calibration</td>
                             <td>10%</td>
-                            <td>The honesty check. A model that says Ã¢ÂÂI donÃ¢ÂÂt knowÃ¢ÂÂ is more trustworthy than one that confidently lies.</td>
+                            <td>The honesty check. A model that says &ldquo;I don&rsquo;t know&rdquo; is more trustworthy than one that confidently lies.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,7 +105,7 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>SimpleQA Ã¢ÂÂ 20%</h4>
+                        <h4>SimpleQA &mdash; 20%</h4>
                         <p>
                             4,326 fact-seeking questions graded as Correct / Incorrect / Not Attempted. Created by OpenAI as an independent benchmark.
                             42+ models scored. Tests hard factual accuracy on short-form questions.
@@ -113,7 +113,7 @@
                         <a href="https://kaggle.com/benchmarks/openai/simpleqa" target="_blank" class="source-link">kaggle.com/benchmarks/openai/simpleqa</a>
                     </div>
                     <div class="source-item">
-                        <h4>NewsGuard AI False Claims Monitor Ã¢ÂÂ 20%</h4>
+                        <h4>NewsGuard AI False Claims Monitor &mdash; 20%</h4>
                         <p>
                             Monthly test of 11 leading chatbots against 10 real-world false claims currently circulating in the news.
                             Each model tested 30 times with neutral, leading, and malicious prompts.
@@ -130,18 +130,18 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>TrackingAI.org Political Compass Ã¢ÂÂ 25%</h4>
+                        <h4>TrackingAI.org Political Compass &mdash; 25%</h4>
                         <p>
                             27 AI models scored daily on the 62-question Political Compass Test. Each model plotted on Economic Left/Right (X) and Social Authoritarian/Libertarian (Y) axes.
                             Scale: -10 to +10. Perfectly neutral = (0,0). The only source on the internet that scores AI political bias every single day.
                         </p>
                         <div class="formula-display">
-                            <code>Neutrality = 100 - (Ã¢ÂÂ(xÃÂ² + yÃÂ²) / Ã¢ÂÂ200) ÃÂ 100</code>
+                            <code>Neutrality = 100 - (&radic;(x&sup2; + y&sup2;) / &radic;200) &times; 100</code>
                         </div>
                         <a href="https://trackingai.org/political-test" target="_blank" class="source-link">trackingai.org/political-test</a>
                     </div>
                     <div class="source-item">
-                        <h4>Anthropic Paired Prompts Evaluation Ã¢ÂÂ 5%</h4>
+                        <h4>Anthropic Paired Prompts Evaluation &mdash; 5%</h4>
                         <p>
                             1,350 prompt pairs across 150 political topics, each tested from two opposing ideological perspectives.
                             Measures even-handedness percentage. Methodology open-sourced on GitHub. Cross-validates TrackingAI with a different approach.
@@ -157,7 +157,7 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>Vectara Hallucination Leaderboard Ã¢ÂÂ 15%</h4>
+                        <h4>Vectara Hallucination Leaderboard &mdash; 15%</h4>
                         <p>
                             Hallucination percentage rates for 30+ models tested across 7,700+ articles in 7 domains
                             (news, science, medicine, legal, sports, business, education). Uses HHEM-2.3 hallucination evaluation model.
@@ -166,7 +166,7 @@
                         <a href="https://huggingface.co/spaces/vectara/leaderboard" target="_blank" class="source-link">huggingface.co/spaces/vectara/leaderboard</a>
                     </div>
                     <div class="source-item">
-                        <h4>Artificial Analysis Omniscience Ã¢ÂÂ 5%</h4>
+                        <h4>Artificial Analysis Omniscience &mdash; 5%</h4>
                         <p>
                             Factual recall and hallucination rates across economically relevant domains. Independent test runs on dedicated hardware.
                             Cross-validates Vectara with different methodology.
@@ -182,11 +182,11 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>SimpleQA Ã¢ÂÂNot AttemptedÃ¢ÂÂ Rate Ã¢ÂÂ 10%</h4>
+                        <h4>SimpleQA &ldquo;Not Attempted&rdquo; Rate &mdash; 10%</h4>
                         <p>
                             The percentage of questions each model declines to answer rather than guessing.
                             Built into the same SimpleQA benchmark used for Pillar 1, measuring a different dimension.
-                            A model that says Ã¢ÂÂI donÃ¢ÂÂt knowÃ¢ÂÂ when unsure is more truthful than one that confidently fabricates.
+                            A model that says &ldquo;I don&rsquo;t know&rdquo; when unsure is more truthful than one that confidently fabricates.
                         </p>
                         <a href="https://kaggle.com/benchmarks/openai/simpleqa" target="_blank" class="source-link">kaggle.com/benchmarks/openai/simpleqa (Not Attempted column)</a>
                     </div>
@@ -198,10 +198,10 @@
             <h2>Complete TRUscore Formula</h2>
             <div class="method-content">
                 <div class="formula-display">
-                    <code>TRUscore = (SimpleQA_Correct ÃÂ 0.20) + (NewsGuard_TruthRate ÃÂ 0.20) + (TrackingAI_Neutrality ÃÂ 0.25) + (Anthropic_EvenHanded ÃÂ 0.05) + (Vectara_NonHallucination ÃÂ 0.15) + (ArtificialAnalysis_Accuracy ÃÂ 0.05) + (SimpleQA_Calibration ÃÂ 0.10)</code>
+                    <code>TRUscore = (SimpleQA_Correct &times; 0.20) + (NewsGuard_TruthRate &times; 0.20) + (TrackingAI_Neutrality &times; 0.25) + (Anthropic_EvenHanded &times; 0.05) + (Vectara_NonHallucination &times; 0.15) + (ArtificialAnalysis_Accuracy &times; 0.05) + (SimpleQA_Calibration &times; 0.10)</code>
                 </div>
                 <p class="formula-note">
-                    All scores normalized 0Ã¢ÂÂ100 (matching TRS convention). Top-performing model on each sub-metric = 100, others proportional.
+                    All scores normalized 0&ndash;100 (matching TRS convention). Top-performing model on each sub-metric = 100, others proportional.
                 </p>
             </div>
         </section>
