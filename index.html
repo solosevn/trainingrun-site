@@ -229,6 +229,46 @@
       white-space: nowrap;
     }
 
+    /* ── Model expand modal ── */
+    #model-modal-backdrop {
+      display:none;position:fixed;inset:0;z-index:9999;
+      background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);
+      align-items:center;justify-content:center;
+    }
+    #model-modal-backdrop.open { display:flex; }
+    #model-modal {
+      position:relative;width:340px;max-width:92vw;
+      border-radius:16px;overflow:hidden;
+      padding:24px 20px 22px;
+      background:linear-gradient(160deg,rgba(18,18,40,0.97),rgba(10,10,28,0.99));
+      transform:scale(0.85);opacity:0;
+      transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.18s ease;
+    }
+    #model-modal-backdrop.open #model-modal { transform:scale(1);opacity:1; }
+    #model-modal-close {
+      position:absolute;top:12px;right:14px;
+      background:rgba(255,255,255,0.08);border:none;cursor:pointer;
+      color:rgba(255,255,255,0.5);font-size:16px;line-height:1;
+      border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+      transition:background 0.15s,color 0.15s;
+    }
+    #model-modal-close:hover { background:rgba(255,255,255,0.15);color:#fff; }
+    #model-modal-bg {
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:cover;opacity:0.12;pointer-events:none;
+    }
+    .mm-inner { position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:4px; }
+    .mm-rank  { font-size:13px;font-weight:700; }
+    .mm-score { font-size:42px;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums; }
+    .mm-name  { font-size:15px;font-weight:700;color:#e8e8ff;text-align:center; }
+    .mm-company { font-size:11px;font-weight:600;color:#8888b8;letter-spacing:0.5px; }
+    .mm-delta { font-size:14px;font-weight:700;margin-top:2px; }
+    .mm-divider { width:100%;height:1px;background:rgba(255,255,255,0.08);margin:12px 0; }
+    .mm-bio { font-size:12px;line-height:1.65;color:rgba(255,255,255,0.72);text-align:center; }
+    .mm-meta { display:flex;gap:16px;justify-content:center;margin-top:10px; }
+    .mm-meta-item { display:flex;flex-direction:column;align-items:center;gap:2px; }
+    .mm-meta-label { font-size:8px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase; }
+    .mm-meta-value { font-size:11px;font-weight:600;color:rgba(255,255,255,0.75); }
     /* ── Freshness line ── */
     .freshness-line {
       font-size: 11px;
@@ -518,7 +558,8 @@ function makeCard(m, i) {
           if(i === 0) { glowStyle = 'border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 16px rgba(255,215,0,0.6),0 0 6px rgba(255,215,0,0.35);'; rankColor = '#ffd700'; }
           else if(i === 1) { glowStyle = 'border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 14px rgba(200,205,220,0.55),0 0 5px rgba(200,205,220,0.3);'; rankColor = '#c8c8dc'; }
           else if(i === 2) { glowStyle = 'border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 16px rgba(205,127,50,0.6),0 0 6px rgba(205,127,50,0.35);'; rankColor = '#cd7f32'; }
-          return '<div class="score-card' + cls + '" style="position:relative;overflow:hidden;padding:8px 5px 7px;' + glowStyle + '">' +
+          var dataAttrs = ' data-name="'+m.name+'" data-company="'+(m.company||'')+'" data-score="'+m.score.toFixed(2)+'" data-rank="'+rankLbl+'" data-delta="'+dTxt+'" data-dcolor="'+dColor+'" data-logo="'+(lu||'')+'" data-rankcolor="'+rankColor+'"';
+            return '<div class="score-card' + cls + '" style="position:relative;overflow:hidden;padding:8px 5px 7px;cursor:pointer;' + glowStyle + '" onclick="showCardModal(this)"' + dataAttrs + '>' +
             bgImg +
             '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0px;">' +
               '<div style="font-size:14px;font-weight:700;color:' + rankColor + ';line-height:1.1;">' + rankLbl + '</div>' +
@@ -661,11 +702,77 @@ function makeCard(m, i) {
     fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
   ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
 
-  loadBoard('trs-data.json',      'trsbench-row',   5, makeCardFeatured);
+  // ── Model bios + metadata ──
+    var MODEL_BIOS = {
+      'Claude Opus 4.6': {
+        bio: "Anthropic's most capable model, Claude Opus 4.6 leads the TRSbench with top-tier performance across safety, reasoning, and coding. Built on Constitutional AI principles with a 200K context window—engineered for complex tasks demanding nuanced judgment and reliable outputs.",
+        released: 'May 2025',
+        context: '200K tokens',
+        by: 'Anthropic'
+      }
+    };
+  
+    function showCardModal(el) {
+      var name    = el.dataset.name;
+      var company = el.dataset.company;
+      var score   = el.dataset.score;
+      var rank    = el.dataset.rank;
+      var delta   = el.dataset.delta;
+      var dcolor  = el.dataset.dcolor;
+      var logo    = el.dataset.logo || '';
+      var rankColor = el.dataset.rankcolor || '#5a5a80';
+      document.getElementById('mm-rank').textContent    = rank;
+      document.getElementById('mm-rank').style.color    = rankColor;
+      document.getElementById('mm-score').textContent   = score;
+      document.getElementById('mm-name').textContent    = name;
+      document.getElementById('mm-company').textContent = company;
+      var dEl = document.getElementById('mm-delta');
+      dEl.textContent = delta; dEl.style.color = dcolor;
+      var m = MODEL_BIOS[name] || {};
+      document.getElementById('mm-bio').textContent = m.bio || 'Detailed model profile coming soon.';
+      var metaEl = document.getElementById('mm-meta');
+      var metaItems = [];
+      if(m.released) metaItems.push('<div class="mm-meta-item"><span class="mm-meta-label">Released</span><span class="mm-meta-value">' + m.released + '</span></div>');
+      if(m.context)  metaItems.push('<div class="mm-meta-item"><span class="mm-meta-label">Context</span><span class="mm-meta-value">' + m.context + '</span></div>');
+      metaEl.innerHTML = metaItems.join('');
+      var bg = document.getElementById('model-modal-bg');
+      bg.src = logo; bg.style.display = logo ? '' : 'none';
+      document.getElementById('model-modal-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCardModal() {
+      document.getElementById('model-modal-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('click', function(e) {
+      if(e.target === document.getElementById('model-modal-backdrop')) closeCardModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if(e.key === 'Escape') closeCardModal();
+    });
+  
+    loadBoard('trs-data.json',      'trsbench-row',   5, makeCardFeatured);
 loadBoard('truscore-data.json', 'truscore-row',   5, makeCardFeatured);
 loadBoard('trscode-data.json',  'trscode-row',    5, makeCardFeatured);
 loadBoard('trf-data.json',      'trfcast-row',    5, makeCardFeatured);
 loadBoard('tragent-data.json',  'tragents-row',   5, makeCardFeatured);
 </script>
+  <!-- Model expand modal -->
+  <div id="model-modal-backdrop">
+    <div id="model-modal">
+      <img id="model-modal-bg" src="" alt="">
+      <button id="model-modal-close" onclick="closeCardModal()">&times;</button>
+      <div class="mm-inner">
+        <div class="mm-rank" id="mm-rank"></div>
+        <div class="mm-score" id="mm-score"></div>
+        <div class="mm-name" id="mm-name"></div>
+        <div class="mm-company" id="mm-company"></div>
+        <div class="mm-delta" id="mm-delta"></div>
+        <div class="mm-divider"></div>
+        <div class="mm-bio" id="mm-bio"></div>
+        <div class="mm-meta" id="mm-meta"></div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
