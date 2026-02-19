@@ -142,6 +142,72 @@
     @media (max-width: 600px) {
       .leaderboards { padding: 0 12px 30px; }
     }
+
+    /* ── News Ticker ── */
+    .news-ticker {
+      width: 100%;
+      height: 46px;
+      background: rgba(0,0,0,0.55);
+      border-bottom: 1px solid rgba(0,212,255,0.18);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 99;
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      white-space: nowrap;
+      animation: tickerScroll 56s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 30px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.82);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .ticker-item:hover { color: #00d4ff; }
+    .ticker-logo {
+      height: 30px;
+      width: 30px;
+      object-fit: contain;
+      border-radius: 5px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.06);
+      padding: 2px;
+    }
+    .ticker-logo-fb {
+      height: 30px;
+      width: 30px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.45);
+      flex-shrink: 0;
+    }
+    .ticker-badge { display: inline-flex; flex-direction: column; gap: 1px; line-height: 1.25; }
+    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(0,212,255,0.65); letter-spacing: 0.6px; text-transform: uppercase; }
+    .ticker-name { font-size: 12px; font-weight: 600; color: #ffffff; }
+    .ticker-val  { font-size: 11px; font-weight: 700; margin-left: 2px; }
+    .ticker-val.up      { color: #00e676; }
+    .ticker-val.down    { color: #ff5252; }
+    .ticker-val.neutral { color: rgba(0,212,255,0.85); }
   </style>
 </head>
 <body>
@@ -154,7 +220,11 @@
     <li><a href="/about">About</a></li>
   </ul>
 </nav>
-
+<div class="news-ticker">
+  <div class="ticker-track" id="ticker-track">
+    <span style="color:rgba(255,255,255,0.25);padding:0 24px;font-size:11px;font-style:italic;">Loading live data&hellip;</span>
+  </div>
+</div>
 <section class="hero">
   <div class="hero-badge"><span id="current-week"></span></div>
   <h1>Training Run</h1>
@@ -424,7 +494,97 @@ function loadBoard(url, elId, count) {
     });
 }
 
-loadBoard('trs-data.json',      'trsbench-row',  10);
+// ── Ticker ──
+  var LOGOS = {
+    anthropic: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
+    openai:    'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+    google:    'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+    deepmind:  'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+    meta:      'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
+    xai:       'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
+    mistral:   'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+    alibaba:   'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+    qwen:      'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+    deepseek:  'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
+    cohere:    'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
+    amazon:    'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
+    nvidia:    'https://www.google.com/s2/favicons?domain=nvidia.com&sz=64',
+    microsoft: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
+    zhipu:     'https://www.google.com/s2/favicons?domain=zhipuai.cn&sz=64'
+  };
+  function tickerLogoUrl(company) {
+    var k = (company||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+    for (var key in LOGOS) { if (k.indexOf(key) !== -1) return LOGOS[key]; }
+    return null;
+  }
+  function makeTickerItem(logoUrl, company, cat, name, valHtml, href) {
+    var logo = logoUrl
+      ? '<img class="ticker-logo" src="'+logoUrl+'" alt="" onerror="this.style.display=\'none\'">'
+      : '<span class="ticker-logo-fb">'+(company||'?').charAt(0).toUpperCase()+'</span>';
+    return '<a class="ticker-item" href="'+href+'">'
+      +logo
+      +'<span class="ticker-badge">'
+      +'<span class="ticker-cat">'+cat+'</span>'
+      +'<span class="ticker-name">'+name+'</span>'
+      +'</span>'
+      +valHtml+'</a>';
+  }
+  function buildTicker(datasets) {
+    var benches = [
+      {label:'TRSbench', url:'/scores',          data:datasets[0]},
+      {label:'TRUscore', url:'/truscore-scores',  data:datasets[1]},
+      {label:'TRScode',  url:'/trscode-scores',   data:datasets[2]},
+      {label:'TRFcast',  url:'/trfcast-scores',   data:datasets[3]},
+      {label:'TRAgents', url:'/tragents',          data:datasets[4]}
+    ];
+    var items = [];
+    var bigGain = {delta:-Infinity, name:null};
+    var bigDrop = {delta:Infinity,  name:null};
+    benches.forEach(function(b) {
+      var data = b.data; if (!data) return;
+      var dates = data.dates||[]; var li = dates.length-1; var pi = Math.max(0,li-7);
+      var models = (data.models||[])
+        .filter(function(m){ return m.scores && m.scores[li] != null; })
+        .sort(function(a,b){ return (a.rank||999)-(b.rank||999); });
+      if (models.length) {
+        var top = models[0];
+        var lu = tickerLogoUrl(top.company);
+        var sv = '<span class="ticker-val neutral">'+top.scores[li].toFixed(2)+'</span>';
+        items.push(makeTickerItem(lu, top.company, '#1 '+b.label, top.name, sv, b.url));
+      }
+      models.forEach(function(m) {
+        var s = m.scores[li], p = m.scores[pi];
+        if (s==null||p==null) return;
+        var d = parseFloat((s-p).toFixed(2));
+        if (d > bigGain.delta) bigGain = {delta:d, name:m.name, company:m.company, url:b.url};
+        if (d < bigDrop.delta) bigDrop = {delta:d, name:m.name, company:m.company, url:b.url};
+      });
+    });
+    if (bigGain.delta > 0 && bigGain.name) {
+      var lu = tickerLogoUrl(bigGain.company);
+      items.push(makeTickerItem(lu, bigGain.company, 'Biggest Gainer', bigGain.name,
+        '<span class="ticker-val up">&#8679;&#8201;+'+bigGain.delta.toFixed(2)+'</span>', bigGain.url));
+    }
+    if (bigDrop.delta < 0 && bigDrop.name) {
+      var lu = tickerLogoUrl(bigDrop.company);
+      items.push(makeTickerItem(lu, bigDrop.company, 'Biggest Drop', bigDrop.name,
+        '<span class="ticker-val down">&#8681;&#8201;'+bigDrop.delta.toFixed(2)+'</span>', bigDrop.url));
+    }
+    if (!items.length) return;
+    var track = document.getElementById('ticker-track');
+    if (!track) return;
+    track.innerHTML = items.join('') + items.join('');
+    track.style.animationDuration = Math.max(24, items.length * 7) + 's';
+  }
+  Promise.all([
+    fetch('trs-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('truscore-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('trscode-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('trf-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
+  ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
+
+  loadBoard('trs-data.json',      'trsbench-row',  10);
 loadBoard('truscore-data.json', 'truscore-row',   5);
 loadBoard('trscode-data.json',  'trscode-row',    5);
 loadBoard('trf-data.json',      'trfcast-row',    5);
