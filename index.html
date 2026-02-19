@@ -504,7 +504,27 @@ function makeCard(m, i) {
             '</div>' +
             '</div>';
         }
-        function loadBoard(url, elId, count) {
+        function makeCardFeatured(m, i) {
+          var cls = i === 0 ? ' gold' : i === 1 ? ' silver' : i === 2 ? ' bronze' : '';
+          var rankLbl = '#' + (i + 1);
+          var dCls = m.d === null ? 'flat' : m.d > 0 ? 'up' : m.d < 0 ? 'down' : 'flat';
+          var dColor = m.d === null ? '#4a4a70' : m.d > 0 ? '#00e676' : '#ff5252';
+          var dTxt = m.d === null ? '—' : m.d > 0 ? '↑ ' + m.d.toFixed(2) : '↓ ' + Math.abs(m.d).toFixed(2);
+          var lu = (typeof tickerLogoUrl === 'function') ? tickerLogoUrl(m.company) : null;
+          var bgImg = lu ? '<img src="' + lu + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.10;pointer-events:none;" onerror="this.style.display=\'none\'">' : '';
+          return '<div class="score-card' + cls + '" style="position:relative;overflow:hidden;padding:8px 6px 6px;">' +
+            bgImg +
+            '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:1px;">' +
+              '<div class="card-rank">' + rankLbl + '</div>' +
+              '<div style="font-size:20px;font-weight:800;color:#ffffff;font-variant-numeric:tabular-nums;line-height:1.1;">' + m.score.toFixed(2) + '</div>' +
+              '<div style="font-size:9.5px;font-weight:600;color:#c8c8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90%;text-align:center;">' + m.name + '</div>' +
+              '<div style="font-size:8px;font-weight:500;color:#7070a0;letter-spacing:0.3px;">' + (m.company||'') + '</div>' +
+              '<div style="font-size:10px;font-weight:700;color:' + dColor + ';margin-top:3px;">' + dTxt + '</div>' +
+            '</div>' +
+          '</div>';
+        }
+        function loadBoard(url, elId, count, cardFn) {
+      cardFn = cardFn || makeCard;
   fetch(url + '?v=' + Date.now())
     .then(function(r){ return r.json(); })
     .then(function(data) {
@@ -524,7 +544,7 @@ function makeCard(m, i) {
                    d: (p != null) ? parseFloat((s-p).toFixed(2)) : null };
         });
       el.innerHTML = models.length
-        ? models.map(makeCard).join('')
+        ? models.map(cardFn).join('')
         : '<div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">No data</div>';
     })
     .catch(function(){
@@ -635,7 +655,7 @@ function makeCard(m, i) {
     fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
   ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
 
-  loadBoard('trs-data.json',      'trsbench-row',   5);
+  loadBoard('trs-data.json',      'trsbench-row',   5, makeCardFeatured);
 loadBoard('truscore-data.json', 'truscore-row',   5);
 loadBoard('trscode-data.json',  'trscode-row',    5);
 loadBoard('trf-data.json',      'trfcast-row',    5);
