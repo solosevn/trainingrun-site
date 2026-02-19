@@ -593,11 +593,21 @@ function makeCard(m, i) {
     fetch(url)
       .then(function(r){ return r.json(); })
       .then(function(data) {
-        var models = (data.models || data).slice().sort(function(a,b){ return b.score - a.score; }).slice(0, count||5);
+        var raw = (data.models || data);
+        var models = raw.map(function(m) {
+          var sc = m.scores || [];
+          var vals = sc.filter(function(v){ return v !== null && v !== undefined; });
+          var score = vals.length ? vals[vals.length-1] : 0;
+          var prev = vals.length > 1 ? vals[vals.length-2] : null;
+          var d = (prev !== null) ? Math.round((score - prev)*100)/100 : null;
+          return { name: m.name, company: m.company, score: score, d: d };
+        }).filter(function(m){ return m.score > 0; })
+          .sort(function(a,b){ return b.score - a.score; })
+          .slice(0, count||5);
         if(typeof BOARD_RANKINGS !== 'undefined') {
           BOARD_RANKINGS[elId] = models.map(function(m){ return m.name; });
         }
-        el.innerHTML = models.length ? models.map(function(m,i){ return cardFn(m,i,elId); }).join('') : '<p style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;">Loading…</p>';
+        el.innerHTML = models.length ? models.map(function(m,i){ return cardFn(m,i,elId); }).join('') : '';
       })
       .catch(function(){ el.innerHTML = ''; });
   }
