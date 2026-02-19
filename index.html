@@ -661,10 +661,10 @@ function makeCard(m, i) {
   ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
 
   loadBoard('trs-data.json',      'trsbench-row',   5, makeCardFeatured);
-loadBoard('truscore-data.json', 'truscore-row',   5);
-loadBoard('trscode-data.json',  'trscode-row',    5);
-loadBoard('trf-data.json',      'trfcast-row',    5);
-loadBoard('tragent-data.json',  'tragents-row',   5);
+loadBoard('truscore-data.json', 'truscore-row',   5, makeCardFeatured);
+loadBoard('trscode-data.json',  'trscode-row',    5, makeCardFeatured);
+loadBoard('trf-data.json',      'trfcast-row',    5, makeCardFeatured);
+loadBoard('tragent-data.json',  'tragents-row',   5, makeCardFeatured);
 </script>
 </body>
 </html>
