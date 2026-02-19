@@ -204,9 +204,10 @@
       flex-shrink: 0;
     }
     .ticker-badge { display: inline-flex; flex-direction: column; gap: 1px; line-height: 1.25; }
-    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.6px; text-transform: uppercase; }
+    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.6px; }
     .ticker-name { font-size: 12px; font-weight: 600; color: #ffffff; }
     .ticker-val  { font-size: 11px; font-weight: 700; margin-left: 2px; }
+    .ticker-val.up, .ticker-val.down { font-size: 28px; line-height: 1; margin-left: 6px; }
     .ticker-val.up      { color: #00e676; }
     .ticker-val.down    { color: #ff5252; }
     .ticker-val.neutral { color: rgba(0,212,255,0.85); }
@@ -582,8 +583,12 @@ function loadBoard(url, elId, count) {
     });
     if (bigGain.delta > 0 && bigGain.name) {
       var lu = tickerLogoUrl(bigGain.company);
-      items.push(makeTickerItem(lu, bigGain.company, 'Biggest Gainer', bigGain.name,
-        '<span class="ticker-val up">&#8679;&#8201;+'+bigGain.delta.toFixed(2)+'</span>', bigGain.url));
+      var gainIcon = bigGain.delta >= 5
+        ? '<span style="font-size:28px;line-height:1;margin-left:6px;" title="On Fire!">&#128293;</span>'
+        : '<span class="ticker-val up">&#8679;&#8201;+'+bigGain.delta.toFixed(2)+'</span>';
+      var gainLabel = bigGain.delta >= 5 ? 'On Fire &#128293;' : 'Biggest Gainer';
+      items.push(makeTickerItem(lu, bigGain.company, gainLabel, bigGain.name,
+        gainIcon + '<span style="font-size:10px;color:#00e676;margin-left:4px;font-weight:700;">+'+bigGain.delta.toFixed(2)+'</span>', bigGain.url));
     }
     if (bigDrop.delta < 0 && bigDrop.name) {
       var lu = tickerLogoUrl(bigDrop.company);
