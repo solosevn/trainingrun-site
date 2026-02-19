@@ -40,7 +40,7 @@
 
     /* ââ TRSbench wrapper: narrower, centered ââ */
     .trsbench-wrapper {
-      max-width: 880px;
+      max-width: 540px;
       margin: 0 auto 14px;
     }
 
@@ -229,6 +229,15 @@
       white-space: nowrap;
       pointer-events: none;
     }
+
+    /* ── Freshness line ── */
+    .freshness-line {
+      font-size: 9px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.3px;
+      margin-bottom: 5px;
+      margin-top: -3px;
+    }
   </style>
 </head>
 <body>
@@ -265,9 +274,10 @@
   <!-- TRSbench Top 10 -->
   <div class="trsbench-wrapper">
     <div class="section-header">
-      <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>bench &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Overall)</span></span>
+      <span class="section-title"><span class="cyan">TRS</span>bench &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Overall)</span></span>
       <a href="/scores" class="section-link">View Full Rankings &rarr;</a>
     </div>
+    <div class="freshness-line" id="fl-trsbench"></div>
     <div id="trsbench-row" class="cards-row">
       <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:20px 0;">Loading&hellip;</div>
     </div>
@@ -278,9 +288,10 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TRU</span>score &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Truth)</span></span>
+        <span class="section-title"><span class="cyan">TRU</span>score &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Truth)</span></span>
         <a href="/truscore-scores" class="section-link">Full Rankings &rarr;</a>
       </div>
+      <div class="freshness-line" id="fl-truscore"></div>
       <div id="truscore-row" class="cards-row">
         <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
       </div>
@@ -288,9 +299,10 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>code &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Coding)</span></span>
+        <span class="section-title"><span class="cyan">TRS</span>code &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Coding)</span></span>
         <a href="/trscode" class="section-link">Full Rankings &rarr;</a>
       </div>
+      <div class="freshness-line" id="fl-trscode"></div>
       <div id="trscode-row" class="cards-row">
         <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
       </div>
@@ -298,9 +310,10 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TRF</span>cast &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Prediction)</span></span>
+        <span class="section-title"><span class="cyan">TRF</span>cast &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Prediction)</span></span>
         <a href="/trfcast" class="section-link">Full Rankings &rarr;</a>
       </div>
+      <div class="freshness-line" id="fl-trfcast"></div>
       <div id="trfcast-row" class="cards-row">
         <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
       </div>
@@ -308,9 +321,10 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Best Agent)</span></span>
+        <span class="section-title"><span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Best Agent)</span></span>
         <a href="/tragents-scores" class="section-link">Full Rankings &rarr;</a>
       </div>
+      <div class="freshness-line" id="fl-tragents"></div>
       <div id="tragents-row" class="cards-row">
         <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
       </div>
@@ -515,7 +529,24 @@ function loadBoard(url, elId, count) {
     });
 }
 
-// ── Ticker ──
+// ── Freshness line ──
+  fetch('trs-data.json', {method:'HEAD', cache:'no-cache'})
+    .then(function(r){
+      var lm = r.headers.get('Last-Modified');
+      if (!lm) return;
+      var d = new Date(lm);
+      var timeStr = d.toLocaleTimeString('en-US', {
+        timeZone: 'America/Chicago',
+        hour: 'numeric', minute: '2-digit', hour12: true
+      }) + ' CST';
+      var text = 'Fresh Daily Rankings · Updated today at ' + timeStr;
+      ['fl-trsbench','fl-truscore','fl-trscode','fl-trfcast','fl-tragents'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.textContent = text;
+      });
+    }).catch(function(){});
+
+  // ── Ticker ──
   var LOGOS = {
     anthropic: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
     openai:    'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
