@@ -264,8 +264,8 @@
 
   <!-- TRSbench Top 10 -->
   <div class="trsbench-wrapper">
-    <div class="section-header centered">
-      <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>bench &mdash; Top 10</span>
+    <div class="section-header">
+      <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>bench &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Overall)</span></span>
       <a href="/scores" class="section-link">View Full Rankings &rarr;</a>
     </div>
     <div id="trsbench-row" class="cards-row">
@@ -278,7 +278,7 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TRU</span>score &mdash; Top 5</span>
+        <span class="section-title">Today&rsquo;s <span class="cyan">TRU</span>score &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Truth)</span></span>
         <a href="/truscore-scores" class="section-link">Full Rankings &rarr;</a>
       </div>
       <div id="truscore-row" class="cards-row">
@@ -288,7 +288,7 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>code &mdash; Top 5</span>
+        <span class="section-title">Today&rsquo;s <span class="cyan">TRS</span>code &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Coding)</span></span>
         <a href="/trscode" class="section-link">Full Rankings &rarr;</a>
       </div>
       <div id="trscode-row" class="cards-row">
@@ -298,7 +298,7 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TRF</span>cast &mdash; Top 5</span>
+        <span class="section-title">Today&rsquo;s <span class="cyan">TRF</span>cast &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Prediction)</span></span>
         <a href="/trfcast" class="section-link">Full Rankings &rarr;</a>
       </div>
       <div id="trfcast-row" class="cards-row">
@@ -308,7 +308,7 @@
 
     <div class="benchmark-block">
       <div class="section-header">
-        <span class="section-title">Today&rsquo;s <span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5</span>
+        <span class="section-title">Today&rsquo;s <span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Best Agent)</span></span>
         <a href="/tragents-scores" class="section-link">Full Rankings &rarr;</a>
       </div>
       <div id="tragents-row" class="cards-row">
@@ -609,7 +609,7 @@ function loadBoard(url, elId, count) {
     fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
   ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
 
-  loadBoard('trs-data.json',      'trsbench-row',  10);
+  loadBoard('trs-data.json',      'trsbench-row',   5);
 loadBoard('truscore-data.json', 'truscore-row',   5);
 loadBoard('trscode-data.json',  'trscode-row',    5);
 loadBoard('trf-data.json',      'trfcast-row',    5);
