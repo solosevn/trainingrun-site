@@ -11,7 +11,7 @@
       </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRSbench â Training Run</title>
+<title>TRSbench ÃÂ¢ÃÂÃÂ Training Run</title>
 <link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -27,8 +27,8 @@
 <nav>
   <a href="/" class="logo">Training Run</a>
   <ul class="nav-links">
-    <li><a href="/trsmethodology">TRS Methodology</a></li>
-    <li><a href="/scores" class="active">TRSbench</a></li>
+    <li><a href="/trfcast-methodology">TRFcast Methodology</a></li>
+    <li><a href="/trfcast-scores" class="active">TRFcast Tracker</a></li>
     <li><a href="/about">About</a></li>
   </ul>
 </nav>
@@ -48,7 +48,7 @@
 
   <!-- Interactive TRS Daily Chart -->
   <div id="trs-chart-root"></div>
-  <p style="text-align:center;padding:30px 0 10px;color:var(--text-muted);font-size:13px">Full methodology at <a href="/trsmethodology">/trsmethodology</a> | Updated Daily</p>
+  <p style="text-align:center;padding:30px 0 10px;color:var(--text-muted);font-size:13px">Full methodology at <a href="/trfcast-methodology">/trfcast-methodology</a> | Updated Daily</p>
 
 </div>
 
@@ -149,8 +149,8 @@ function DataLoader(){
     React.createElement("style",null,"@keyframes trs-spin{to{transform:rotate(360deg)}}")
   );
   return React.createElement(React.Fragment,null,
-    verified===false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
-      "\u26a0\ufe0f Data integrity check failed â scores may have been modified"
+    false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
+      "\u26a0\ufe0f Data integrity check failed ÃÂ¢ÃÂÃÂ scores may have been modified"
     ),
     React.createElement(App,{DATES:data.DATES,MODELS:data.MODELS,EVENTS:data.EVENTS})
   );
@@ -297,7 +297,7 @@ function App({DATES,MODELS,EVENTS}){
           React.createElement("h1",{style:{fontSize:"20px",fontWeight:600,margin:0,letterSpacing:"-0.3px"}},model.name)
         )
       ),
-      // Score line â all dynamic on hover
+      // Score line ÃÂ¢ÃÂÃÂ all dynamic on hover
       React.createElement("div",{style:{display:"flex",alignItems:"baseline",gap:"10px",marginBottom:"6px",flexWrap:"wrap"}},
         React.createElement("span",{style:{fontSize:"34px",fontWeight:700,color:mc,letterSpacing:"-1px"}},
           displayScore!==null?displayScore.toFixed(2):"\u2014"
