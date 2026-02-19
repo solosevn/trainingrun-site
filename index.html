@@ -530,21 +530,12 @@ function loadBoard(url, elId, count) {
 }
 
 // ── Freshness line ──
-  fetch('trs-data.json', {method:'HEAD', cache:'no-cache'})
-    .then(function(r){
-      var lm = r.headers.get('Last-Modified');
-      if (!lm) return;
-      var d = new Date(lm);
-      var timeStr = d.toLocaleTimeString('en-US', {
-        timeZone: 'America/Chicago',
-        hour: 'numeric', minute: '2-digit', hour12: true
-      }) + ' CST';
-      var text = 'Fresh Daily Rankings · Updated today at ' + timeStr;
-      ['fl-trsbench','fl-truscore','fl-trscode','fl-trfcast','fl-tragents'].forEach(function(id){
-        var el = document.getElementById(id);
-        if (el) el.textContent = text;
-      });
-    }).catch(function(){});
+  // ── Freshness lines — UPDATE this time each morning when scores are pushed ──
+  var LAST_PUSH_TIME = '6:48 AM CST';
+  ['fl-trsbench','fl-truscore','fl-trscode','fl-trfcast','fl-tragents'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.textContent = 'Fresh Daily Rankings · Updated today at ' + LAST_PUSH_TIME;
+  });
 
   // ── Ticker ──
   var LOGOS = {
