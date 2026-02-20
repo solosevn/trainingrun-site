@@ -772,8 +772,17 @@ function makeCard(m, i) {
   var BOARD_ORDER = ['trsbench-row','truscore-row','trscode-row','trfcast-row','tragents-row'];
   var BOARD_RANKINGS = {};
   var MODEL_BIOS = {
-    'Claude Opus 4.6': { tier:'Flagship', tierDesc:'Top-tier reasoning & creativity', bio:'"Claude Opus 4.6 is our most capable model to date." — Anthropic', released:'February 5, 2026', by:'Anthropic' }
-  };
+      'Claude Opus 4.6':  { tier:'Flagship',    bio:'"Claude Opus 4.6 is our most capable model to date." — Anthropic',                            released:'February 5, 2026',   by:'Anthropic' },
+      'Claude Opus 4.5':  { tier:'Flagship',    bio:'"Claude Opus 4.5 is our strongest model for coding and agents." — Anthropic',               released:'November 24, 2025',  by:'Anthropic' },
+      'Claude Sonnet 4.6':{ tier:'Pro',         bio:'"Claude Sonnet 4.6 is our most capable Sonnet model yet." — Anthropic',                   released:'February 17, 2026',  by:'Anthropic' },
+      'Claude Sonnet 4.5':{ tier:'Pro',         bio:'"Claude Sonnet 4.5 is best for real-world agents and coding." — Anthropic',                 released:'September 29, 2025', by:'Anthropic' },
+      'GPT 5.2':          { tier:'Flagship',    bio:'"GPT 5.2 is most advanced frontier model for professional work and agents." — OpenAI',      released:'December 11, 2025',  by:'OpenAI'    },
+      'GPT 5.1':          { tier:'Pro',         bio:'"GPT 5.1 is a smarter, more conversational ChatGPT." — OpenAI',                            released:'November 12, 2025',  by:'OpenAI'    },
+      'Gemini 3 Pro':     { tier:'Flagship',    bio:'"Gemini 3 Pro is Google\'s most intelligent model yet." — Google',                          released:'November 18, 2025',  by:'Google'    },
+      'Gemini Flash 3':   { tier:'Efficient',   bio:'"Gemini Flash 3 is frontier intelligence built for speed." — Google',                       released:'December 17, 2025',  by:'Google'    },
+      'Grok 4.20':        { tier:'Flagship',    bio:'"Grok 4.20 is xAI\'s breakthrough multi-agent collaborative AI model." — xAI',              released:'February 17, 2026',  by:'xAI'       },
+      'Grok 4.1':         { tier:'Specialized', bio:'"Grok 4.1 is exceptionally capable in creative and emotional interactions." — xAI',          released:'November 17, 2025',  by:'xAI'       }
+    };
   function showCardModal(el) {
   var nm = el.getAttribute('data-name')||'';
   var co = el.getAttribute('data-company')||'';
