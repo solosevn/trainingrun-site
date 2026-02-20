@@ -292,7 +292,7 @@
     .mm-board-row.rank-gold { background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.35); }
     .mm-board-row.rank-silver { background:rgba(200,205,220,0.1);border:1px solid rgba(200,205,220,0.3); }
     .mm-board-row.rank-bronze { background:rgba(205,127,50,0.12);border:1px solid rgba(205,127,50,0.35); }
-    .mm-board-label { font-size:18px;font-weight:700; }
+    .mm-board-label { font-size:18px;font-weight:400; }
     .mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
     .mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right; }
     .mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
@@ -300,6 +300,19 @@
     .mm-tier-badge { font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:12px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);white-space:nowrap; }
     .mm-tier-desc { font-size:14px;color:rgba(255,255,255,0.6);line-height:1.4; }
     .mm-bio { font-size:13px;line-height:1.7;color:rgba(255,255,255,0.6);min-height:0; }
+    .mm-divider-cyan { border:none;border-top:1px solid rgba(0,212,255,0.35);margin:4px 0; }
+    .mm-tiers { display:flex;flex-direction:row;gap:6px;flex-wrap:wrap; }
+    .mm-tier-pill {
+      font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+      padding:4px 10px;border-radius:10px;
+      background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);
+      border:1px solid rgba(255,255,255,0.1);white-space:nowrap;
+    }
+    .mm-tier-pill.active {
+      background:rgba(255,255,255,0.1);color:#ffffff;
+      border:1px solid rgba(255,255,255,0.35);
+      text-shadow:0 0 6px rgba(255,255,255,0.4);
+    }
     .mm-released {
       text-align:center;font-size:15px;font-weight:700;
       color:rgba(255,255,255,0.75);letter-spacing:0.5px;
@@ -692,7 +705,7 @@ function makeCard(m, i) {
       .then(function(r){ return r.json(); })
       .then(function(data) {
         var raw = (data.models || data);
-        var models = raw.map(function(m) {
+        var allModels = raw.map(function(m) {
           var sc = m.scores || [];
           var vals = sc.filter(function(v){ return v !== null && v !== undefined; });
           var score = vals.length ? vals[vals.length-1] : 0;
@@ -700,12 +713,12 @@ function makeCard(m, i) {
           var d = (prev !== null) ? Math.round((score - prev)*100)/100 : null;
           return { name: m.name, company: m.company, score: score, d: d };
         }).filter(function(m){ return m.score > 0; })
-          .sort(function(a,b){ return b.score - a.score; })
-          .slice(0, count||5);
+          .sort(function(a,b){ return b.score - a.score; });
         if(typeof BOARD_RANKINGS !== 'undefined') {
-          BOARD_RANKINGS[elId] = models.map(function(m){ return {name:m.name, d:m.d}; });
+          BOARD_RANKINGS[elId] = allModels.map(function(m){ return {name:m.name, d:m.d}; });
         }
-        el.innerHTML = models.length ? models.map(function(m,i){ return cardFn(m,i,elId); }).join('') : '';
+        var display = allModels.slice(0, count||5);
+        el.innerHTML = display.length ? display.map(function(m,i){ return cardFn(m,i,elId); }).join('') : '';
       })
       .catch(function(){ el.innerHTML = ''; });
   }
@@ -826,59 +839,86 @@ function makeCard(m, i) {
     'Claude Opus 4.6': { tier:'Flagship', tierDesc:'Top-tier reasoning & creativity', bio:'', released:'May 2025', by:'Anthropic' }
   };
   function showCardModal(el) {
-    var nm = el.getAttribute('data-name')||'';
-    var co = el.getAttribute('data-company')||'';
-    var lg = el.getAttribute('data-logo')||'';
-    var rk = el.getAttribute('data-rank')||'';
-    var bio = MODEL_BIOS[nm]||{};
-    var modal = document.getElementById('model-modal');
-    var backdrop = document.getElementById('model-modal-backdrop');
-    modal.classList.remove('glow-gold','glow-silver','glow-bronze');
-    if(rk==='#1') modal.classList.add('glow-gold');
-    else if(rk==='#2') modal.classList.add('glow-silver');
-    else if(rk==='#3') modal.classList.add('glow-bronze');
-    var bg = document.getElementById('model-modal-bg');
-    if(lg){ bg.src=lg; bg.style.display=''; } else { bg.style.display='none'; }
-    var loEl = document.getElementById('mm-logo');
-    if(lg){ loEl.src=lg; loEl.style.display=''; } else { loEl.style.display='none'; }
-    document.getElementById('mm-name').textContent=nm;
-    document.getElementById('mm-company').textContent=co;
-    var bEl = document.getElementById('mm-boards');
-    var bHtml='';
-    BOARD_ORDER.forEach(function(bid){
-      var info=BOARD_INFO[bid]||{};
-      var bRank='—', bDelta='—', bDeltaColor='#555580', bRankColor='#555580', rankCls='';
-      if(BOARD_RANKINGS[bid]){
-        var found=-1;
-        for(var x=0;x<BOARD_RANKINGS[bid].length;x++){
-          if(BOARD_RANKINGS[bid][x].name===nm){found=x;break;}
-        }
-        if(found>=0){
-          bRank='#'+(found+1);
-          var rd=BOARD_RANKINGS[bid][found].d;
-          bDelta=rd===null?'—':rd>0?'↑ '+rd.toFixed(2):'↓ '+Math.abs(rd).toFixed(2);
-          bDeltaColor=rd===null?'#555580':rd>0?'#00e676':'#ff5252';
-          if(found===0){ bRankColor='#ffd700'; rankCls=' rank-gold'; }
-          else if(found===1){ bRankColor='#c8c8dc'; rankCls=' rank-silver'; }
-          else if(found===2){ bRankColor='#cd7f32'; rankCls=' rank-bronze'; }
-          else { bRankColor='#8888b8'; rankCls=''; }
+  var nm = el.getAttribute('data-name')||'';
+  var co = el.getAttribute('data-company')||'';
+  var logo = el.getAttribute('data-logo')||'';
+  var bd = el.getAttribute('data-board')||'';
+  var m = document.getElementById('model-modal');
+  var bk = document.getElementById('model-modal-backdrop');
+  if(!m||!bk) return;
+  m.classList.remove('glow-gold','glow-silver','glow-bronze');
+  var rnkInBoard = 99;
+  if(typeof BOARD_RANKINGS!=='undefined' && BOARD_RANKINGS[bd]) {
+    var arr = BOARD_RANKINGS[bd];
+    for(var i=0;i<arr.length;i++){ if(arr[i].name===nm){rnkInBoard=i+1;break;} }
+  }
+  if(rnkInBoard===1) m.classList.add('glow-gold');
+  else if(rnkInBoard===2) m.classList.add('glow-silver');
+  else if(rnkInBoard===3) m.classList.add('glow-bronze');
+  var logoEl = document.getElementById('mm-logo');
+  if(logoEl){ logoEl.src=logo; logoEl.style.display=logo?'':'none'; }
+  var nameEl = document.getElementById('mm-name');
+  if(nameEl) nameEl.textContent=nm;
+  var coEl = document.getElementById('mm-company');
+  if(coEl) coEl.textContent=co;
+  var boardsEl = document.getElementById('mm-boards');
+  if(boardsEl) {
+    var rows = '';
+    var BORDER = typeof BOARD_ORDER!=='undefined'?BOARD_ORDER:[];
+    var BINFO = typeof BOARD_INFO!=='undefined'?BOARD_INFO:{};
+    for(var b=0;b<BORDER.length;b++) {
+      var bid = BORDER[b];
+      var info = BINFO[bid]||{};
+      var labelHtml = info.html||bid;
+      var cat = info.cat||'';
+      var rank = 0; var dv = null;
+      if(typeof BOARD_RANKINGS!=='undefined' && BOARD_RANKINGS[bid]) {
+        var arr2 = BOARD_RANKINGS[bid];
+        for(var j=0;j<arr2.length;j++){
+          if(arr2[j].name===nm){rank=j+1;dv=arr2[j].d;break;}
         }
       }
-      bHtml+='<div class="mm-board-row'+rankCls+'">'+
-        '<span class="mm-board-label">'+(info.html||bid)+'</span>'+
-        '<span class="mm-board-cat">'+(info.cat||'')+'</span>'+
-        '<span class="mm-board-rank" style="color:'+bRankColor+'">'+bRank+'</span>'+
-        '<span class="mm-board-delta" style="color:'+bDeltaColor+'">'+bDelta+'</span>'+
-        '</div>';
-    });
-    bEl.innerHTML=bHtml;
-    document.getElementById('mm-tier').textContent=bio.tier||'';
-    document.getElementById('mm-tier-desc').textContent=bio.tierDesc||'';
-    document.getElementById('mm-bio').textContent=bio.bio||'';
-    document.getElementById('mm-released').textContent=bio.released?'Released · '+bio.released:'';
-    backdrop.classList.add('open');
+      var rankLbl = rank ? '#'+rank : 'Not Ranked';
+      var rankCls = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
+      var rankColor = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':'#8888b8';
+      var deltaHtml = '';
+      if(rank && dv!==null && dv!==undefined) {
+        var dc = dv>0?'#4cff91':dv<0?'#ff5c5c':'rgba(255,255,255,0.4)';
+        var da = dv>0?'+'+dv:String(dv);
+        deltaHtml = '<span style="font-size:13px;font-weight:600;color:'+dc+'">'+da+'</span>';
+      }
+      rows += '<div class="mm-board-row '+rankCls+'">'
+        + '<span class="mm-board-label">'+labelHtml+'</span>'
+        + '<span class="mm-board-cat">('+cat+')</span>'
+        + '<span class="mm-board-rank" style="color:'+rankColor+'">'+rankLbl+'</span>'
+        + '<span class="mm-board-delta">'+deltaHtml+'</span>'
+        + '</div>';
+    }
+    boardsEl.innerHTML = rows;
   }
-  function closeCardModal() {
+  var tiersEl = document.getElementById('mm-tiers');
+  if(tiersEl) {
+    var bio = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
+    var activeTier = bio.tier||'';
+    var TIERS = ['Flagship','Pro','Efficient','Specialized'];
+    tiersEl.innerHTML = TIERS.map(function(t){
+      var cls = 'mm-tier-pill'+(t===activeTier?' active':'');
+      return '<span class="'+cls+'">'+t+'</span>';
+    }).join('');
+  }
+  var bioEl = document.getElementById('mm-bio');
+  if(bioEl) {
+    var bio2 = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
+    bioEl.textContent = bio2.bio||'';
+  }
+  var relEl = document.getElementById('mm-released');
+  if(relEl) {
+    var bio3 = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
+    relEl.textContent = bio3.released ? 'Released · '+bio3.released : '';
+  }
+  bk.classList.add('open');
+}
+function closeCardModal() {
     document.getElementById('model-modal-backdrop').classList.remove('open');
   }
   document.addEventListener('click',function(e){ if(e.target===document.getElementById('model-modal-backdrop')) closeCardModal(); });
@@ -897,10 +937,9 @@ function makeCard(m, i) {
         </div>
       </div>
       <div class="mm-boards" id="mm-boards"></div>
-      <div class="mm-tier-section">
-        <div class="mm-tier-badge" id="mm-tier"></div>
-        <div class="mm-tier-desc" id="mm-tier-desc"></div>
-      </div>
+      <hr class="mm-divider-cyan">
+      <div class="mm-tiers" id="mm-tiers"></div>
+      <hr class="mm-divider-cyan">
       <div class="mm-bio" id="mm-bio"></div>
       <div class="mm-released" id="mm-released"></div>
     </div>
