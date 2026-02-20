@@ -299,7 +299,7 @@
     .mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
     .mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right;white-space:nowrap; }
     .mm-board-rank.not-ranked { font-size:13px;font-weight:600;margin-left:auto;text-align:right; }
-    .mm-board-row .mm-board-delta:empty { display:none; }
+    .mm-board-row .mm-board-delta:empty::after { content: "NEW"; color: #00d4ff; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
     .mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
     .mm-tier-section { display:flex;flex-direction:row;align-items:center;gap:10px; }
     .mm-tier-badge { font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:12px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);white-space:nowrap; }
