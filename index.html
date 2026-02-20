@@ -238,6 +238,83 @@
     #model-modal-backdrop.open { display:flex; }
     #model-modal {
       position:relative;width:360px;max-width:94vw;
+      height:60vh;max-height:60vh;
+      border-radius:20px;overflow:hidden;
+      background:linear-gradient(180deg,rgba(14,14,36,0.99),rgba(8,8,22,0.99));
+      transform:scale(0.85);opacity:0;
+      transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.18s ease;
+      border:1px solid rgba(255,255,255,0.1);
+      display:flex;flex-direction:column;
+    }
+    #model-modal-backdrop.open #model-modal { transform:scale(1);opacity:1; }
+    #model-modal.glow-gold { border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 28px rgba(255,215,0,0.45),0 0 8px rgba(255,215,0,0.25); }
+    #model-modal.glow-silver { border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 22px rgba(200,205,220,0.4),0 0 6px rgba(200,205,220,0.2); }
+    #model-modal.glow-bronze { border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 28px rgba(205,127,50,0.45),0 0 8px rgba(205,127,50,0.25); }
+    #model-modal-close {
+      position:absolute;top:12px;right:14px;z-index:10;
+      background:rgba(255,255,255,0.08);border:none;cursor:pointer;
+      color:rgba(255,255,255,0.5);font-size:16px;line-height:1;
+      border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+      transition:background 0.15s;
+    }
+    #model-modal-close:hover { background:rgba(255,255,255,0.16);color:#fff; }
+    #model-modal-bg {
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:cover;opacity:0.06;pointer-events:none;z-index:0;
+    }
+    .mm-scroll {
+      position:relative;z-index:1;flex:1;overflow-y:auto;
+      padding:18px 16px 16px;
+      display:flex;flex-direction:column;gap:14px;
+    }
+    .mm-header { display:flex;flex-direction:row;align-items:center;gap:14px; }
+    .mm-logo-big {
+      width:94px;height:94px;border-radius:16px;
+      object-fit:contain;background:rgba(255,255,255,0.06);
+      padding:4px;flex-shrink:0;
+    }
+    .mm-header-text { display:flex;flex-direction:column;gap:5px; }
+    .mm-name {
+      font-size:24px;font-weight:800;line-height:1.15;
+      color:#E8622A;
+      text-shadow:0 0 12px rgba(232,98,42,0.6),0 0 24px rgba(232,98,42,0.3);
+    }
+    .mm-company {
+      font-size:16px;font-weight:600;color:#ffffff;letter-spacing:0.2px;
+      text-shadow:0 0 8px rgba(255,255,255,0.5);
+    }
+    .mm-boards { display:flex;flex-direction:column;gap:5px; }
+    .mm-board-row {
+      display:flex;flex-direction:row;align-items:center;
+      padding:10px 13px;border-radius:10px;
+      background:rgba(255,255,255,0.04);border:1px solid transparent;
+    }
+    .mm-board-row.rank-gold { background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.35); }
+    .mm-board-row.rank-silver { background:rgba(200,205,220,0.1);border:1px solid rgba(200,205,220,0.3); }
+    .mm-board-row.rank-bronze { background:rgba(205,127,50,0.12);border:1px solid rgba(205,127,50,0.35); }
+    .mm-board-label { font-size:13px;font-weight:700; }
+    .mm-board-cat { font-size:10px;color:rgba(255,255,255,0.32);margin-left:6px;flex:1; }
+    .mm-board-rank { font-size:17px;font-weight:800;min-width:38px;text-align:right; }
+    .mm-board-delta { font-size:13px;font-weight:600;min-width:60px;text-align:right; }
+    .mm-tier-section { display:flex;flex-direction:row;align-items:center;gap:10px; }
+    .mm-tier-badge { font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:4px 11px;border-radius:12px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);white-space:nowrap; }
+    .mm-tier-desc { font-size:12px;color:rgba(255,255,255,0.45);line-height:1.4; }
+    .mm-bio { font-size:13px;line-height:1.7;color:rgba(255,255,255,0.6);min-height:0; }
+    .mm-released {
+      text-align:center;font-size:15px;font-weight:700;
+      color:rgba(255,255,255,0.75);letter-spacing:0.5px;
+      margin-top:auto;padding-top:2px;
+      text-shadow:0 0 8px rgba(255,255,255,0.3);
+    }
+        /* ── Model expand modal ── */
+    #model-modal-backdrop {
+      display:none;position:fixed;inset:0;z-index:9999;
+      background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
+      align-items:center;justify-content:center;
+    }
+    #model-modal-backdrop.open { display:flex; }
+    #model-modal {
+      position:relative;width:360px;max-width:94vw;
       height:85vh;max-height:85vh;
       border-radius:20px;overflow:hidden;
       background:linear-gradient(180deg,rgba(14,14,36,0.99),rgba(8,8,22,0.99));
@@ -736,30 +813,23 @@ function makeCard(m, i) {
   ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
 
   // ── Model bios + metadata ──
-        var BOARD_INFO = {
-    'trsbench-row':  {label:'TRSbench',  cat:'Overall'},
-    'truscore-row':  {label:'TRUscore',  cat:'Truth'},
-    'trscode-row':   {label:'TRScode',   cat:'Coding'},
-    'trfcast-row':   {label:'TRFcast',   cat:'Prediction'},
-    'tragents-row':  {label:'TRAgents',  cat:'Best Agent'}
+          var BOARD_INFO = {
+    'trsbench-row':  {html:'<span style="color:#00d4ff">TRS</span><span style="color:#fff">bench</span>',  cat:'Overall'},
+    'truscore-row':  {html:'<span style="color:#00d4ff">TRU</span><span style="color:#fff">score</span>',  cat:'Truth'},
+    'trscode-row':   {html:'<span style="color:#00d4ff">TRS</span><span style="color:#fff">code</span>',   cat:'Coding'},
+    'trfcast-row':   {html:'<span style="color:#00d4ff">TRF</span><span style="color:#fff">cast</span>',   cat:'Prediction'},
+    'tragents-row':  {html:'<span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>', cat:'Best Agent'}
   };
   var BOARD_ORDER = ['trsbench-row','truscore-row','trscode-row','trfcast-row','tragents-row'];
   var BOARD_RANKINGS = {};
   var MODEL_BIOS = {
-    'Claude Opus 4.6': {
-      tier:'Flagship',
-      tierDesc:'Top-tier reasoning & creativity',
-      bio:'',
-      released:'May 2025',
-      by:'Anthropic'
-    }
+    'Claude Opus 4.6': { tier:'Flagship', tierDesc:'Top-tier reasoning & creativity', bio:'', released:'May 2025', by:'Anthropic' }
   };
   function showCardModal(el) {
     var nm = el.getAttribute('data-name')||'';
     var co = el.getAttribute('data-company')||'';
     var lg = el.getAttribute('data-logo')||'';
     var rk = el.getAttribute('data-rank')||'';
-    var bd = el.getAttribute('data-board')||'';
     var bio = MODEL_BIOS[nm]||{};
     var modal = document.getElementById('model-modal');
     var backdrop = document.getElementById('model-modal-backdrop');
@@ -777,7 +847,7 @@ function makeCard(m, i) {
     var bHtml='';
     BOARD_ORDER.forEach(function(bid){
       var info=BOARD_INFO[bid]||{};
-      var bRank='—', bDelta='—', bDeltaColor='#4a4a70', bRankColor='#4a4a70';
+      var bRank='—', bDelta='—', bDeltaColor='#555580', bRankColor='#555580', rankCls='';
       if(BOARD_RANKINGS[bid]){
         var found=-1;
         for(var x=0;x<BOARD_RANKINGS[bid].length;x++){
@@ -787,16 +857,15 @@ function makeCard(m, i) {
           bRank='#'+(found+1);
           var rd=BOARD_RANKINGS[bid][found].d;
           bDelta=rd===null?'—':rd>0?'↑ '+rd.toFixed(2):'↓ '+Math.abs(rd).toFixed(2);
-          bDeltaColor=rd===null?'#4a4a70':rd>0?'#00e676':'#ff5252';
-          if(found===0) bRankColor='#ffd700';
-          else if(found===1) bRankColor='#c8c8dc';
-          else if(found===2) bRankColor='#cd7f32';
-          else bRankColor='#8888b8';
+          bDeltaColor=rd===null?'#555580':rd>0?'#00e676':'#ff5252';
+          if(found===0){ bRankColor='#ffd700'; rankCls=' rank-gold'; }
+          else if(found===1){ bRankColor='#c8c8dc'; rankCls=' rank-silver'; }
+          else if(found===2){ bRankColor='#cd7f32'; rankCls=' rank-bronze'; }
+          else { bRankColor='#8888b8'; rankCls=''; }
         }
       }
-      var act=(bid===bd)?' active':'';
-      bHtml+='<div class="mm-board-row'+act+'">'+
-        '<span class="mm-board-label">'+(info.label||bid)+'</span>'+
+      bHtml+='<div class="mm-board-row'+rankCls+'">'+
+        '<span class="mm-board-label">'+(info.html||bid)+'</span>'+
         '<span class="mm-board-cat">'+(info.cat||'')+'</span>'+
         '<span class="mm-board-rank" style="color:'+bRankColor+'">'+bRank+'</span>'+
         '<span class="mm-board-delta" style="color:'+bDeltaColor+'">'+bDelta+'</span>'+
