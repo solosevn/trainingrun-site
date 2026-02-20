@@ -294,7 +294,8 @@
     .mm-board-row.rank-bronze { background:rgba(205,127,50,0.12);border:1px solid rgba(205,127,50,0.35); }
     .mm-board-label { font-size:18px;font-weight:400; }
     .mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
-    .mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right; }
+    .mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right;white-space:nowrap; }
+    .mm-board-rank.not-ranked { font-size:13px;font-weight:600; }
     .mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
     .mm-tier-section { display:flex;flex-direction:row;align-items:center;gap:10px; }
     .mm-tier-badge { font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:12px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);white-space:nowrap; }
@@ -766,7 +767,7 @@ function makeCard(m, i) {
   var BOARD_ORDER = ['trsbench-row','truscore-row','trscode-row','trfcast-row','tragents-row'];
   var BOARD_RANKINGS = {};
   var MODEL_BIOS = {
-    'Claude Opus 4.6': { tier:'Flagship', tierDesc:'Top-tier reasoning & creativity', bio:'', released:'May 2025', by:'Anthropic' }
+    'Claude Opus 4.6': { tier:'Flagship', tierDesc:'Top-tier reasoning & creativity', bio:'"Claude Opus 4.6 is our most capable model to date." — Anthropic', released:'February 5, 2026', by:'Anthropic' }
   };
   function showCardModal(el) {
   var nm = el.getAttribute('data-name')||'';
@@ -820,7 +821,7 @@ function makeCard(m, i) {
       rows += '<div class="mm-board-row '+rankCls+'">'
         + '<span class="mm-board-label">'+labelHtml+'</span>'
         + '<span class="mm-board-cat">('+cat+')</span>'
-        + '<span class="mm-board-rank" style="color:'+rankColor+'">'+rankLbl+'</span>'
+        + '<span class="mm-board-rank'+(rank?'':' not-ranked')+'" style="color:'+rankColor+'">'+rankLbl+'</span>'
         + '<span class="mm-board-delta">'+deltaHtml+'</span>'
         + '</div>';
     }
