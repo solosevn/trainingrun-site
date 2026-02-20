@@ -759,13 +759,13 @@ function makeCard(m, i) {
     fetch('trscode-data.json?v='+Date.now()).then(function(r){return r.json();}),
     fetch('trf-data.json?v='+Date.now()).then(function(r){return r.json();}),
     fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
-  ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e);
+  ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
 // ── Load leaderboard boards ──
-loadBoard('trs-data.json?v='+Date.now(), 'trsbench-row', 5, makeCardFeatured);
-loadBoard('truscore-data.json?v='+Date.now(), 'truscore-row', 5, makeCardFeatured);
-loadBoard('trscode-data.json?v='+Date.now(), 'trscode-row', 5, makeCardFeatured);
-loadBoard('trf-data.json?v='+Date.now(), 'trfcast-row', 5, makeCardFeatured);
-loadBoard('tragent-data.json?v='+Date.now(), 'tragents-row', 5, makeCardFeatured); });
+loadBoard('trs-data.json'+('?v='+Date.now()), 'trsbench-row', 5, makeCardFeatured);
+loadBoard('truscore-data.json'+('?v='+Date.now()), 'truscore-row', 5, makeCardFeatured);
+loadBoard('trscode-data.json'+('?v='+Date.now()), 'trscode-row', 5, makeCardFeatured);
+loadBoard('trf-data.json'+('?v='+Date.now()), 'trfcast-row', 5, makeCardFeatured);
+loadBoard('tragent-data.json'+('?v='+Date.now()), 'tragents-row', 5, makeCardFeatured);
 
   // ── Model bios + metadata ──
           var BOARD_INFO = {
