@@ -545,7 +545,7 @@ def write_status(status: str, ranked: list, source_summary: list,
 
         sdata["last_updated"] = now_iso
         sdata["agents"]["trscode"] = {
-            "name":             "TRScode",
+            "name":             "TRScode DDP",
             "label":            "Coding Leaderboard",
             "emoji":            "💻",
             "enabled":          True,
@@ -634,13 +634,13 @@ def main():
     main._start_time = _time.time()
 
     if TEST_TELEGRAM:
-        notify("✅ <b>TRScode Agent online</b>\nTelegram works! Ready to run.")
+        notify("✅ <b>TRScode DDP online</b>\nTelegram works! Ready to run.")
         print("Telegram test sent. Check your phone.")
         return
 
     mode = "DRY RUN 🔍" if DRY_RUN else "LIVE 🚀"
-    log.info(f"Agent TRScode | {TODAY} | {mode}")
-    notify(f"🤖 <b>Agent TRScode starting</b>\n📅 {TODAY}\n⚙️ {mode}\n8 sources → trscode-data.json")
+    log.info(f"TRScode DDP | {TODAY} | {mode}")
+    notify(f"🤖 <b>TRScode DDP starting</b>\n📅 {TODAY}\n⚙️ {mode}\n8 sources → trscode-data.json")
 
     # ── Load data ──
     if not DATA_FILE.exists():
@@ -765,7 +765,7 @@ def main():
 
     ok = git_push(f"TRScode daily update {TODAY} ({len(qualified)} models)")
     if ok:
-        notify(f"✅ <b>TRScode done!</b>\n📅 {TODAY}\n📊 {len(qualified)} models\n🌐 → trainingrun.ai/trscode")
+        notify(f"✅ <b>TRScode DDP done!</b>\n📅 {TODAY}\n📊 {len(qualified)} models\n🌐 → trainingrun.ai/trscode")
     else:
         notify(f"⚠️ JSON updated but push failed. cd {REPO_PATH} && git push")
 
