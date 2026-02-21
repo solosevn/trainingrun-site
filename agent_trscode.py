@@ -476,9 +476,48 @@ def match_name(scraped: str, existing: list) -> str:
     return None
 
 
+
+def write_status(status: str, ranked: list, source_summary: list,
+                 duration_sec: int, error=None) -> None:
+    """Update status.json with this agent's latest run info."""
+    status_file = REPO_PATH / "status.json"
+    try:
+        if status_file.exists():
+            with open(status_file) as fj: sdata = __import__("json").load(fj)
+        else:
+            sdata = {"last_updated": TODAY, "agents": {}}
+        from datetime import datetime
+        now_iso = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        top5 = []
+        for m in ranked[:5]:
+            sc = m["scores"][-1] if m["scores"] else None
+            if sc is not None: top5.append({"rank": m["rank"], "name": m["name"], "score": sc})
+        sources_hit = sum(1 for s in source_summary if ": 0 matched" not in s and "0 scraped" not in s)
+        sdata["last_updated"] = now_iso
+        sdata["agents"]["trscode"] = {
+            "name": "TRScode", "label": "Coding Leaderboard", "emoji": "\U0001f4bb",
+            "enabled": True, "last_run": now_iso, "last_run_date": TODAY,
+            "status": status, "duration_seconds": duration_sec,
+            "sources_total": 8, "sources_hit": sources_hit,
+            "models_qualified": len(ranked),
+            "top_model": ranked[0]["name"] if ranked else None,
+            "top_score": (ranked[0]["scores"][-1] if ranked and ranked[0]["scores"] else None),
+            "top5": top5, "leaderboard_url": "/trscode.html",
+            "next_run": _next_day() + "T05:00:00", "error": error,
+        }
+        with open(status_file, "w") as fj: __import__("json").dump(sdata, fj, indent=2)
+        log.info("status.json updated")
+    except Exception as e: log.warning(f"Could not write status.json: {e}")
+
+
+def _next_day() -> str:
+    from datetime import datetime, timedelta
+    return (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+
+
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "trscode-data.json"],
+        subprocess.run(["git", "add", "trscode-data.json", "status.json"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)
@@ -499,6 +538,7 @@ def git_push(commit_msg: str) -> bool:
 # == MAIN
 
 def main():
+    import time as _t; main._s = _t.time()
     if TEST_TELEGRAM:
         notify("Agent TRScode online. Telegram works!")
         print("Telegram test sent. Check your phone.")
@@ -606,7 +646,10 @@ def main():
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
-    ok = git_push(f"TRScode daily update {TODAY} ({len(qualified)} models)")
+    import time as _t; duration = int(_t.time() - getattr(main, "_s", _t.time()))
+    write_status("success", ranked, source_summary, duration)
+
+        ok = git_push(f"TRScode daily update {TODAY} ({len(qualified)} models)")
     if ok:
         notify(f"TRScode done! {TODAY} | {len(qualified)} models | trainingrun.ai/trscode")
     else:
