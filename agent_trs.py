@@ -336,33 +336,59 @@ def scrape_mmlu_pro() -> dict[str, float]:
 
 
 def scrape_artificial_analysis() -> dict[str, float]:
-    """artificialanalysis.ai/leaderboard — efficiency scores."""
+    """artificialanalysis.ai/leaderboards/models -- efficiency (Median Tokens/s)."""
     scores: dict[str, float] = {}
     try:
         log.info("Scraping Artificial Analysis (efficiency)...")
-        url = "https://artificialanalysis.ai/leaderboard"
-        html = playwright_get(url, wait_ms=10000)
-        rows = parse_first_table(html)
+        # NOTE: /leaderboard and /models have no scores; use /leaderboards/models
+        # Table is JS-rendered (row0=group headers, row1=col headers, row2+=data)
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+            page = ctx.new_page()
+            try:
+                page.goto("https://artificialanalysis.ai/leaderboards/models",
+                          wait_until="networkidle", timeout=90_000)
+            except Exception:
+                pass
+            try:
+                page.wait_for_selector("table tr:nth-child(3)", timeout=30_000)
+            except Exception:
+                pass
+            page.wait_for_timeout(3000)
+            rows = page.evaluate("""() => {
+                const table = document.querySelector('table');
+                if (!table) return [];
+                const allRows = Array.from(table.querySelectorAll('tr'));
+                // row0=group headers, row1=col headers, row2+=data
+                // col indices: 0=Model, 5=Median Tokens/s
+                return allRows.slice(2).map(row => {
+                    const cells = Array.from(row.querySelectorAll('td'))
+                        .map(td => td.textContent.trim());
+                    return {model: cells[0] || '', speed: cells[5] || ''};
+                }).filter(r => r.model && r.speed);
+            }""")
+            browser.close()
+
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            name = row.get("model", "")
+            # Strip quality suffix: "Claude Opus 4.6 (max)" -> "Claude Opus 4.6"
+            name = re.sub(r'\s*\([^)]+\)\s*$', '', name).strip()
+            if not name:
                 continue
-            name = vals[0]
-            for v in vals[1:]:
-                clean = v.replace("%", "").replace(",", "").strip()
-                try:
-                    score = float(clean)
-                    if score > 0:
-                        scores[name] = score
-                        break
-                except ValueError:
-                    pass
+            speed_raw = row.get("speed", "")
+            try:
+                val = float(speed_raw.replace(",", "").strip())
+                if val > 0:
+                    scores[name] = val
+            except ValueError:
+                pass
         log.info(f"  ✅ Artificial Analysis: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ Artificial Analysis: {e}")
     return scores
-
-
 def scrape_openrouter_usage() -> dict[str, float]:
     """openrouter.ai/rankings — usage adoption scores (innerText parse, no <table>)."""
     scores: dict[str, float] = {}
