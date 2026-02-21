@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "f862b317ffd5525717287ec443587e8ec8346b059149e4776ee51ddac2ecf916",
+  "checksum": "22abef70649d1120810832d8721123389369b004654c4c5af8576c86f5e443d2",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -67,7 +67,8 @@
     "2026-02-15",
     "2026-02-15",
     "2026-02-19",
-    "2026-02-20"
+    "2026-02-20",
+    "2026-02-21"
   ],
   "models": [
     {
@@ -130,7 +131,8 @@
         48.86,
         48.81,
         64.92,
-        71.38
+        71.38,
+        76.58
       ],
       "pillar_scores": {
         "issue_resolution": 96.1,
@@ -139,14 +141,14 @@
         "scientific": null,
         "human_preference": 100
       },
-      "source_count": 6,
+      "source_count": 7,
       "raw_data": {
         "swebench_verified_pct": 67.6,
         "swe_rebench_pass1": 47.1,
         "livecodebench_pct": 71.8,
         "bigcodebench_pct": 34.8,
-        "terminalbench_hard_pct": 69.9,
-        "swebench_pro_pct": null,
+        "terminalbench_hard_pct": 38.0,
+        "swebench_pro_pct": 45.89,
         "scicode_pct": null,
         "arena_code_elo": 1567
       }
@@ -211,7 +213,8 @@
         60.89,
         61.09,
         62.77,
-        62.77
+        62.77,
+        62.82
       ],
       "pillar_scores": {
         "issue_resolution": 89.3,
@@ -226,8 +229,8 @@
         "swe_rebench_pass1": 48.5,
         "livecodebench_pct": 73.1,
         "bigcodebench_pct": null,
-        "terminalbench_hard_pct": 46.5,
-        "swebench_pro_pct": 43.6,
+        "terminalbench_hard_pct": 35.5,
+        "swebench_pro_pct": 42.7,
         "scicode_pct": null,
         "arena_code_elo": 1390
       }
@@ -292,7 +295,8 @@
         54.23,
         54.16,
         55.92,
-        67.4
+        67.4,
+        65.6
       ],
       "pillar_scores": {
         "issue_resolution": 93.3,
@@ -301,16 +305,16 @@
         "scientific": null,
         "human_preference": 92.5
       },
-      "source_count": 6,
+      "source_count": 7,
       "raw_data": {
         "swebench_verified_pct": 53.6,
         "swe_rebench_pass1": 51.7,
         "livecodebench_pct": 74.2,
         "bigcodebench_pct": null,
-        "terminalbench_hard_pct": 64.7,
-        "swebench_pro_pct": 43.3,
-        "scicode_pct": null,
-        "arena_code_elo": 1449
+        "terminalbench_hard_pct": 32.6,
+        "swebench_pro_pct": 34.63,
+        "scicode_pct": 1.5,
+        "arena_code_elo": 1205.0
       }
     },
     {
@@ -373,7 +377,8 @@
         53.02,
         53.16,
         54.88,
-        77.8
+        77.8,
+        77.51
       ],
       "pillar_scores": {
         "issue_resolution": 94.4,
@@ -388,16 +393,16 @@
         "swe_rebench_pass1": 51.7,
         "livecodebench_pct": 75.8,
         "bigcodebench_pct": 35.5,
-        "terminalbench_hard_pct": 64.9,
+        "terminalbench_hard_pct": 49.6,
         "swebench_pro_pct": 29.94,
         "scicode_pct": null,
-        "arena_code_elo": 1473
+        "arena_code_elo": 1336.0
       }
     },
     {
       "name": "DeepSeek V3.2",
       "company": "DeepSeek",
-      "rank": 6,
+      "rank": 7,
       "scores": [
         39.7,
         40.2,
@@ -454,7 +459,8 @@
         40.02,
         40.08,
         54.11,
-        41.65
+        41.65,
+        43.73
       ],
       "pillar_scores": {
         "issue_resolution": 73.5,
@@ -472,13 +478,13 @@
         "terminalbench_hard_pct": 39.6,
         "swebench_pro_pct": 15.56,
         "scicode_pct": null,
-        "arena_code_elo": 1375
+        "arena_code_elo": 1286.0
       }
     },
     {
       "name": "Qwen3-Coder",
       "company": "Alibaba",
-      "rank": 6,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -535,12 +541,15 @@
         null,
         null,
         53.47,
-        12.94
+        12.94,
+        27.86
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 3,
       "raw_data": {
-        "swebench_verified_pct": 55.4
+        "swebench_verified_pct": 55.4,
+        "swebench_pro_pct": 38.7,
+        "arena_code_elo": 1282.0
       }
     },
     {
@@ -603,14 +612,16 @@
         null,
         null,
         52.83,
-        27.52
+        27.52,
+        34.1
       ],
       "pillar_scores": {},
-      "source_count": 3,
+      "source_count": 4,
       "raw_data": {
         "swe_rebench_pass1": 37.5,
         "livecodebench_pct": 55.9,
-        "bigcodebench_pct": 31.8
+        "bigcodebench_pct": 31.8,
+        "terminalbench_hard_pct": 27.2
       }
     },
     {
@@ -673,7 +684,8 @@
         30,
         30,
         51.19,
-        36.59
+        36.59,
+        36.64
       ],
       "pillar_scores": {
         "issue_resolution": 79.6,
@@ -691,7 +703,7 @@
         "terminalbench_hard_pct": null,
         "swebench_pro_pct": null,
         "scicode_pct": null,
-        "arena_code_elo": 1449
+        "arena_code_elo": 1456.0
       }
     },
     {
@@ -754,6 +766,7 @@
         null,
         null,
         50.66,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -820,16 +833,19 @@
         null,
         null,
         49.92,
-        0.0
+        0.0,
+        7.8
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "arena_code_elo": 1223.0
+      }
     },
     {
       "name": "MiniMax M2",
       "company": "MiniMax",
-      "rank": 11,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -886,12 +902,15 @@
         null,
         null,
         49.38,
-        14.24
+        14.24,
+        29.88
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 3,
       "raw_data": {
-        "swebench_verified_pct": 61.0
+        "swebench_verified_pct": 61.0,
+        "terminalbench_hard_pct": 30.0,
+        "arena_code_elo": 1312.0
       }
     },
     {
@@ -954,6 +973,7 @@
         null,
         null,
         48.84,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -963,7 +983,7 @@
     {
       "name": "Grok 4.1",
       "company": "xAI",
-      "rank": 7,
+      "rank": 5,
       "scores": [
         null,
         null,
@@ -1020,20 +1040,22 @@
         null,
         null,
         48.29,
-        36.84
+        36.84,
+        44.52
       ],
       "pillar_scores": {},
-      "source_count": 3,
+      "source_count": 4,
       "raw_data": {
         "swe_rebench_pass1": 52.9,
         "livecodebench_pct": 80.2,
-        "bigcodebench_pct": 35.8
+        "bigcodebench_pct": 35.8,
+        "arena_code_elo": 1204.0
       }
     },
     {
       "name": "DeepSeek R1",
       "company": "DeepSeek",
-      "rank": 5,
+      "rank": 6,
       "scores": [
         35.5,
         35.4,
@@ -1090,6 +1112,7 @@
         34.95,
         34.91,
         47.75,
+        44.0,
         44.0
       ],
       "pillar_scores": {
@@ -1114,7 +1137,7 @@
     {
       "name": "Llama 4.08B",
       "company": "Meta",
-      "rank": 10,
+      "rank": 12,
       "scores": [
         null,
         null,
@@ -1171,6 +1194,7 @@
         null,
         null,
         47.21,
+        24.53,
         24.53
       ],
       "pillar_scores": {},
@@ -1183,7 +1207,7 @@
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 16,
+      "rank": 14,
       "scores": [
         null,
         null,
@@ -1240,12 +1264,14 @@
         null,
         null,
         46.67,
-        3.16
+        3.16,
+        7.29
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 2,
       "raw_data": {
-        "swebench_verified_pct": 13.52
+        "swebench_verified_pct": 13.52,
+        "terminalbench_hard_pct": 17.1
       }
     },
     {
@@ -1308,11 +1334,14 @@
         null,
         null,
         46.13,
-        0.0
+        0.0,
+        3.73
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "swebench_pro_pct": 21.41
+      }
     },
     {
       "name": "Mistral Voxtral",
@@ -1374,6 +1403,7 @@
         null,
         null,
         45.59,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -1383,7 +1413,7 @@
     {
       "name": "GLM-4",
       "company": "Zhipu AI",
-      "rank": 19,
+      "rank": 13,
       "scores": [
         null,
         null,
@@ -1440,12 +1470,15 @@
         null,
         null,
         45.05,
-        12.66
+        12.66,
+        23.0
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 3,
       "raw_data": {
-        "swebench_verified_pct": 54.2
+        "swebench_verified_pct": 54.2,
+        "swebench_pro_pct": 9.67,
+        "arena_code_elo": 1356.0
       }
     },
     {
@@ -1508,6 +1541,7 @@
         null,
         null,
         44.51,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -1574,6 +1608,7 @@
         null,
         null,
         43.97,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -1640,6 +1675,7 @@
         null,
         null,
         43.43,
+        0.0,
         0.0
       ],
       "pillar_scores": {},

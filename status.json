@@ -1,35 +1,55 @@
 {
-  "last_updated": "2026-02-20T20:08:00",
+  "last_updated": "2026-02-21T03:53:41",
   "agents": {
     "trscode": {
       "name": "TRScode",
       "label": "Coding Leaderboard",
-      "emoji": "💻",
+      "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-02-20T20:08:00",
-      "last_run_date": "2026-02-20",
+      "last_run": "2026-02-21T03:53:41",
+      "last_run_date": "2026-02-21",
       "status": "success",
-      "duration_seconds": 272,
+      "duration_seconds": 163,
       "sources_total": 8,
-      "sources_hit": 4,
-      "models_qualified": 18,
+      "sources_hit": 6,
+      "models_qualified": 14,
       "top_model": "GPT-5.2",
-      "top_score": 77.8,
+      "top_score": 77.51,
       "top5": [
-        {"rank": 1, "name": "GPT-5.2", "score": 77.8},
-        {"rank": 2, "name": "Claude Opus 4.6", "score": 71.4},
-        {"rank": 3, "name": "Gemini 3 Pro", "score": 67.4},
-        {"rank": 4, "name": "Claude Sonnet 4.5", "score": 62.8},
-        {"rank": 5, "name": "DeepSeek R1", "score": 44.0}
+        {
+          "rank": 1,
+          "name": "GPT-5.2",
+          "score": 77.51
+        },
+        {
+          "rank": 2,
+          "name": "Claude Opus 4.6",
+          "score": 76.58
+        },
+        {
+          "rank": 3,
+          "name": "Gemini 3 Pro",
+          "score": 65.6
+        },
+        {
+          "rank": 4,
+          "name": "Claude Sonnet 4.5",
+          "score": 62.82
+        },
+        {
+          "rank": 5,
+          "name": "Grok 4.1",
+          "score": 44.52
+        }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-02-21T05:00:00",
+      "next_run": "2026-02-22T05:00:00",
       "error": null
     },
     "trs": {
       "name": "TRSbench",
       "label": "Overall Leaderboard",
-      "emoji": "🏆",
+      "emoji": "\ud83c\udfc6",
       "enabled": false,
       "last_run": null,
       "last_run_date": null,
@@ -48,7 +68,7 @@
     "trfcast": {
       "name": "TRFcast",
       "label": "Forecasting Leaderboard",
-      "emoji": "🔮",
+      "emoji": "\ud83d\udd2e",
       "enabled": false,
       "last_run": null,
       "last_run_date": null,
@@ -67,7 +87,7 @@
     "truscore": {
       "name": "TRUscore",
       "label": "Truth & Neutrality",
-      "emoji": "⚖️",
+      "emoji": "\u2696\ufe0f",
       "enabled": false,
       "last_run": null,
       "last_run_date": null,
@@ -86,7 +106,7 @@
     "tragents": {
       "name": "TRAgents",
       "label": "Autonomous Agents",
-      "emoji": "🤖",
+      "emoji": "\ud83e\udd16",
       "enabled": false,
       "last_run": null,
       "last_run_date": null,
