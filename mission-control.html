@@ -29,6 +29,7 @@
       padding: 0 0 40px 0;
     }
 
+    /* ── HEADER ── */
     .header {
       background: linear-gradient(135deg, #0d0d1a 0%, #12122a 100%);
       border-bottom: 1px solid var(--border);
@@ -43,176 +44,609 @@
       justify-content: space-between;
       margin-bottom: 8px;
     }
-    .site-name { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--subtext); }
-    .refresh-btn { background: none; border: 1px solid var(--border); color: var(--subtext); font-size: 12px; padding: 4px 10px; border-radius: 20px; cursor: pointer; }
-    h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: var(--text); }
-    h1 span { color: var(--blue); }
-    .last-updated { font-size: 11px; color: var(--subtext); margin-top: 4px; }
-    .pulse-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 5px; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .site-name {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--subtext);
+    }
+    .refresh-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--subtext);
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .refresh-btn:active { background: var(--border); }
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    h1 span {
+      color: var(--blue);
+    }
+    .last-updated {
+      font-size: 11px;
+      color: var(--subtext);
+      margin-top: 4px;
+    }
+    .pulse-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 5px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
 
-    .summary-bar { display: flex; padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--surface); }
-    .summary-item { flex: 1; text-align: center; }
-    .summary-item + .summary-item { border-left: 1px solid var(--border); }
-    .summary-num { font-size: 22px; font-weight: 700; line-height: 1; }
-    .summary-label { font-size: 10px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+    /* ── SUMMARY BAR ── */
+    .summary-bar {
+      display: flex;
+      gap: 0;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .summary-item {
+      flex: 1;
+      text-align: center;
+    }
+    .summary-item + .summary-item {
+      border-left: 1px solid var(--border);
+    }
+    .summary-num {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .summary-label {
+      font-size: 10px;
+      color: var(--subtext);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
 
-    .section-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--subtext); padding: 20px 20px 10px; }
-    .cards { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.1s; -webkit-tap-highlight-color: transparent; }
+    /* ── AGENT CARDS ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--subtext);
+      padding: 20px 20px 10px;
+    }
+
+    .cards {
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
     .card:active { transform: scale(0.98); }
     .card.expanded { border-color: var(--blue); }
-    .card-header { display: flex; align-items: center; padding: 14px 16px; gap: 12px; }
-    .agent-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; background: var(--border); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      gap: 12px;
+    }
+
+    .agent-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      background: var(--border);
+    }
     .agent-icon.success { background: rgba(0,230,118,0.12); }
     .agent-icon.failed  { background: rgba(255,23,68,0.12); }
     .agent-icon.disabled{ background: rgba(68,68,102,0.3); }
+
     .card-info { flex: 1; min-width: 0; }
-    .card-name { font-size: 16px; font-weight: 600; }
-    .card-label { font-size: 12px; color: var(--subtext); margin-top: 2px; }
-    .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
-    .status-badge { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
+    .card-name {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+    .card-label {
+      font-size: 12px;
+      color: var(--subtext);
+      margin-top: 2px;
+    }
+
+    .card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
     .status-badge.success  { background: rgba(0,230,118,0.15); color: var(--green); }
-    .status-badge.failed   { background: rgba(255,23,68,0.15); color: var(--red); }
-    .status-badge.disabled { background: rgba(68,68,102,0.3);  color: var(--gray); }
-    .status-badge.running  { background: rgba(255,145,0,0.15); color: var(--orange); }
-    .card-score { font-size: 20px; font-weight: 700; color: var(--green); line-height: 1; }
+    .status-badge.failed   { background: rgba(255,23,68,0.15);  color: var(--red); }
+    .status-badge.disabled { background: rgba(68,68,102,0.3);   color: var(--gray); }
+    .status-badge.running  { background: rgba(255,145,0,0.15);  color: var(--orange); }
+
+    .card-score {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+    }
     .card-score.dim { color: var(--gray); font-size: 14px; }
-    .chevron { font-size: 10px; color: var(--subtext); transition: transform 0.25s; margin-top: 2px; }
+
+    .chevron {
+      font-size: 10px;
+      color: var(--subtext);
+      transition: transform 0.25s;
+      margin-top: 2px;
+    }
     .card.expanded .chevron { transform: rotate(180deg); }
-    .card-detail { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+
+    /* ── EXPANDED DETAIL ── */
+    .card-detail {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+    }
     .card.expanded .card-detail { display: block; }
-    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-    .detail-item { background: var(--surface); border-radius: 10px; padding: 10px 12px; }
-    .detail-val { font-size: 18px; font-weight: 700; line-height: 1.1; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .detail-item {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .detail-item.full { grid-column: 1 / -1; }
+    .detail-val {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
     .detail-val.green { color: var(--green); }
     .detail-val.orange { color: var(--orange); }
-    .detail-val.dim { color: var(--subtext); }
-    .detail-key { font-size: 10px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
-    .sources-bar { margin-top: 10px; background: var(--surface); border-radius: 10px; padding: 10px 12px; }
-    .sources-bar-label { font-size: 10px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); border-radius: 3px; }
+    .detail-val.dim   { color: var(--subtext); }
+    .detail-key {
+      font-size: 10px;
+      color: var(--subtext);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
+
+    .sources-bar {
+      margin-top: 10px;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .sources-bar-label {
+      font-size: 10px;
+      color: var(--subtext);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .bar-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
     .bar-fill.dim { background: var(--gray); }
-    .sources-text { font-size: 12px; color: var(--subtext); margin-top: 5px; }
-    .top5-section { margin-top: 10px; background: var(--surface); border-radius: 10px; padding: 10px 12px; }
-    .top5-title { font-size: 10px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .top5-row { display: flex; align-items: center; padding: 5px 0; gap: 10px; }
-    .top5-row + .top5-row { border-top: 1px solid var(--border); }
-    .top5-rank { width: 18px; font-size: 11px; font-weight: 700; color: var(--subtext); }
-    .top5-name { flex: 1; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .top5-score { font-size: 13px; font-weight: 700; color: var(--green); }
-    .next-run-row { margin-top: 10px; background: var(--surface); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
+    .sources-text {
+      font-size: 12px;
+      color: var(--subtext);
+      margin-top: 5px;
+    }
+
+    .top5-section {
+      margin-top: 10px;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .top5-title {
+      font-size: 10px;
+      color: var(--subtext);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .top5-row {
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+      gap: 10px;
+    }
+    .top5-row + .top5-row {
+      border-top: 1px solid var(--border);
+    }
+    .top5-rank {
+      width: 18px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--subtext);
+      flex-shrink: 0;
+    }
+    .top5-name {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top5-score {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .next-run-row {
+      margin-top: 10px;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .next-run-icon { font-size: 16px; }
     .next-run-text { font-size: 13px; color: var(--subtext); }
     .next-run-time { font-size: 13px; font-weight: 600; color: var(--text); }
-    .view-leaderboard { display: block; margin-top: 10px; text-align: center; background: rgba(68,138,255,0.1); border: 1px solid rgba(68,138,255,0.3); color: var(--blue); text-decoration: none; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; }
-    .error-msg { background: rgba(255,23,68,0.08); border: 1px solid rgba(255,23,68,0.2); border-radius: 8px; padding: 8px 12px; margin-top: 10px; font-size: 12px; color: var(--red); }
-    .footer { text-align: center; padding: 30px 20px 0; font-size: 11px; color: var(--subtext); }
+
+    .view-leaderboard {
+      display: block;
+      margin-top: 10px;
+      text-align: center;
+      background: rgba(68, 138, 255, 0.1);
+      border: 1px solid rgba(68, 138, 255, 0.3);
+      color: var(--blue);
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .view-leaderboard:active { background: rgba(68,138,255,0.2); }
+
+    /* ── ERROR STATE ── */
+    .error-msg {
+      background: rgba(255,23,68,0.08);
+      border: 1px solid rgba(255,23,68,0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--red);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 30px 20px 0;
+      font-size: 11px;
+      color: var(--subtext);
+    }
     .footer a { color: var(--blue); text-decoration: none; }
-    .loading { text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; }
-    .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+
+    /* ── LOADING ── */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--subtext);
+      font-size: 14px;
+    }
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+
 <div class="header">
   <div class="header-top">
     <span class="site-name">trainingrun.ai</span>
-    <button class="refresh-btn" onclick="loadStatus()">&#8635; Refresh</button>
+    <button class="refresh-btn" onclick="loadStatus()">↻ Refresh</button>
   </div>
   <h1>Mission <span>Control</span></h1>
-  <div class="last-updated" id="last-updated"><span class="pulse-dot"></span>Loading&hellip;</div>
+  <div class="last-updated" id="last-updated">
+    <span class="pulse-dot"></span>Loading…
+  </div>
 </div>
-<div class="summary-bar" id="summary-bar" style="display:none">
-  <div class="summary-item"><div class="summary-num" id="sum-live" style="color:var(--green)">-</div><div class="summary-label">Live</div></div>
-  <div class="summary-item"><div class="summary-num" id="sum-off" style="color:var(--gray)">-</div><div class="summary-label">Off</div></div>
-  <div class="summary-item"><div class="summary-num" id="sum-today" style="color:var(--blue)">-</div><div class="summary-label">Ran Today</div></div>
-  <div class="summary-item"><div class="summary-num" id="sum-errors" style="color:var(--red)">-</div><div class="summary-label">Errors</div></div>
-</div>
-<div id="main-content"><div class="loading"><div class="spinner"></div>Loading agent status&hellip;</div></div>
-<div class="footer"><a href="/">&larr; trainingrun.ai</a> &nbsp;&middot;&nbsp; Auto-refreshes every 60s</div>
-<script>
-const AGENT_ORDER = ["trscode","trs","trfcast","truscore","tragents"];
 
-function formatTime(iso){
-  if(!iso) return "Never";
-  const d=new Date(iso), now=new Date(), h=(now-d)/3600000;
-  if(h<1) return Math.round((now-d)/60000)+"m ago";
-  if(h<24) return Math.round(h)+"h ago";
-  if(h<48) return "Yesterday";
-  return d.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+<div class="summary-bar" id="summary-bar" style="display:none">
+  <div class="summary-item">
+    <div class="summary-num" id="sum-live" style="color:var(--green)">—</div>
+    <div class="summary-label">Live</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-num" id="sum-off" style="color:var(--gray)">—</div>
+    <div class="summary-label">Off</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-num" id="sum-today" style="color:var(--blue)">—</div>
+    <div class="summary-label">Ran Today</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-num" id="sum-errors" style="color:var(--red)">—</div>
+    <div class="summary-label">Errors</div>
+  </div>
+</div>
+
+<div id="main-content">
+  <div class="loading">
+    <div class="spinner"></div>
+    Loading agent status…
+  </div>
+</div>
+
+<div class="footer">
+  <a href="/">← trainingrun.ai</a> &nbsp;·&nbsp; Auto-refreshes every 60s
+</div>
+
+<script>
+const AGENT_ORDER = ["trscode", "trs", "trfcast", "truscore", "tragents"];
+
+function formatTime(isoStr) {
+  if (!isoStr) return "Never";
+  const d = new Date(isoStr);
+  const now = new Date();
+  const diffMs = now - d;
+  const diffH = diffMs / 3600000;
+  if (diffH < 1)   return `${Math.round(diffMs/60000)}m ago`;
+  if (diffH < 24)  return `${Math.round(diffH)}h ago`;
+  if (diffH < 48)  return "Yesterday";
+  return d.toLocaleDateString("en-US", {month:"short", day:"numeric"});
 }
-function formatNextRun(iso){
-  if(!iso) return "Not scheduled";
-  const d=new Date(iso), now=new Date(), ms=d-now;
-  if(ms<0) return "Overdue";
-  const h=ms/3600000;
-  if(h<1) return "In "+Math.round(ms/60000)+"m";
-  if(h<24) return "In "+Math.round(h)+"h ("+d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})+")";
+
+function formatNextRun(isoStr) {
+  if (!isoStr) return "Not scheduled";
+  const d = new Date(isoStr);
+  const now = new Date();
+  const diffMs = d - now;
+  if (diffMs < 0) return "Overdue";
+  const diffH = diffMs / 3600000;
+  if (diffH < 1)  return `In ${Math.round(diffMs/60000)}m`;
+  if (diffH < 24) return `In ${Math.round(diffH)}h (${d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})})`;
   return d.toLocaleDateString("en-US",{weekday:"short",hour:"numeric",minute:"2-digit"});
 }
-function formatDuration(s){ if(!s) return "--"; return s<60?s+"s":Math.floor(s/60)+"m "+s%60+"s"; }
-function isToday(d){ if(!d) return false; return d===new Date().toISOString().slice(0,10); }
 
-function renderCard(id,a){
-  const sc=a.status||"disabled";
-  const srcPct=a.sources_total&&a.sources_hit!=null?Math.round(a.sources_hit/a.sources_total*100):0;
-  const scoreHTML=a.status==="success"&&a.top_score!=null
-    ?"<div class=\"card-score\">"+a.top_score.toFixed(1)+"</div>"
-    :a.status==="disabled"
-    ?"<div class=\"card-score dim\">OFF</div>"
-    :"<div class=\"card-score dim\">--</div>";
-  const label=a.status==="success"?"LIVE":a.status==="failed"?"ERROR":a.status==="running"?"RUNNING":"OFF";
-  const top5HTML=a.top5&&a.top5.length>0
-    ?"<div class=\"top5-section\"><div class=\"top5-title\">Top Models &mdash; "+(a.last_run_date||"Last Run")+"</div>"
-      +a.top5.map(m=>"<div class=\"top5-row\"><span class=\"top5-rank\">"+m.rank+"</span><span class=\"top5-name\">"+m.name+"</span><span class=\"top5-score\">"+m.score.toFixed(1)+"</span></div>").join("")
-      +"</div>"
-    :"";
-  const nextHTML=a.enabled&&a.next_run
-    ?"<div class=\"next-run-row\"><span style=\"font-size:16px\">&#9200;</span><span class=\"next-run-text\">Next run:</span><span class=\"next-run-time\">"+formatNextRun(a.next_run)+"</span></div>"
-    :"";
-  const errHTML=a.error?"<div class=\"error-msg\">&#9888;&#65039; "+a.error+"</div>":"";
-  const ranToday=isToday(a.last_run_date);
-  return "<div class=\"card\" id=\"card-"+id+"\" onclick=\"toggleCard('"+id+"')\">\n"
-    +"<div class=\"card-header\"><div class=\"agent-icon "+sc+"\">"+a.emoji+"</div>"
-    +"<div class=\"card-info\"><div class=\"card-name\">"+a.name+"</div><div class=\"card-label\">"+a.label+"</div></div>"
-    +"<div class=\"card-right\"><span class=\"status-badge "+sc+"\">"+label+"</span>"+scoreHTML+"<span class=\"chevron\">&#9660;</span></div></div>\n"
-    +"<div class=\"card-detail\">"
-    +"<div class=\"detail-grid\">"
-    +"<div class=\"detail-item\"><div class=\"detail-val "+(a.last_run?"green":"dim")+'">' +formatTime(a.last_run)+"</div><div class=\"detail-key\">Last Heartbeat</div></div>"
-    +"<div class=\"detail-item\"><div class=\"detail-val "+(ranToday?"green":"dim")+'">'+(ranToday?"&#10003; Today":(a.last_run_date||"Never"))+"</div><div class=\"detail-key\">Last Run Date</div></div>"
-    +"<div class=\"detail-item\"><div class=\"detail-val\">"+( a.models_qualified!=null?a.models_qualified:"--")+"</div><div class=\"detail-key\">Models Scored</div></div>"
-    +"<div class=\"detail-item\"><div class=\"detail-val "+(a.duration_seconds?"orange":"dim")+'">' +formatDuration(a.duration_seconds)+"</div><div class=\"detail-key\">Run Duration</div></div>"
-    +"</div>"
-    +(a.sources_total?"<div class=\"sources-bar\"><div class=\"sources-bar-label\">Sources Hit</div><div class=\"bar-track\"><div class=\"bar-fill "+(a.sources_hit==null?"dim":"")+"\" style=\"width:"+srcPct+"%\"></div></div><div class=\"sources-text\">"+( a.sources_hit!=null?a.sources_hit:0)+" of "+a.sources_total+" sources returned data</div></div>":"")
-    +top5HTML+nextHTML+errHTML
-    +"<a class=\"view-leaderboard\" href=\""+a.leaderboard_url+"\">View "+a.name+" Leaderboard &rarr;</a>"
-    +"</div></div>";
+function formatDuration(sec) {
+  if (!sec) return "—";
+  if (sec < 60) return `${sec}s`;
+  return `${Math.floor(sec/60)}m ${sec%60}s`;
 }
 
-function toggleCard(id){
-  document.getElementById("card-"+id).classList.toggle("expanded");
+function isToday(dateStr) {
+  if (!dateStr) return false;
+  const today = new Date().toISOString().slice(0,10);
+  return dateStr === today;
 }
 
-async function loadStatus(){
-  try{
-    const data=await (await fetch("/status.json?t="+Date.now())).json();
-    document.getElementById("last-updated").innerHTML="<span class=\"pulse-dot\"></span>Updated "+formatTime(data.last_updated);
-    const vals=Object.values(data.agents);
-    document.getElementById("sum-live").textContent=vals.filter(a=>a.status==="success").length;
-    document.getElementById("sum-off").textContent=vals.filter(a=>a.status==="disabled").length;
-    document.getElementById("sum-today").textContent=vals.filter(a=>isToday(a.last_run_date)).length;
-    document.getElementById("sum-errors").textContent=vals.filter(a=>a.status==="failed").length;
-    document.getElementById("summary-bar").style.display="";
-    const expanded=new Set([...document.querySelectorAll(".card.expanded")].map(c=>c.id.replace("card-","")));
-    document.getElementById("main-content").innerHTML="<div class=\"section-label\">Agents</div><div class=\"cards\">"+AGENT_ORDER.map(id=>data.agents[id]?renderCard(id,data.agents[id]):"").join("")+"</div>";
-    expanded.forEach(id=>{ const c=document.getElementById("card-"+id); if(c) c.classList.add("expanded"); });
-  } catch(e){
-    document.getElementById("main-content").innerHTML="<div class=\"loading\" style=\"color:var(--red)\">&#9888; Could not load status.json<br><small style=\"color:var(--subtext);margin-top:8px;display:block\">"+e.message+"</small></div>";
+function renderCard(id, agent) {
+  const statusClass = agent.status || "disabled";
+  const iconClass   = statusClass;
+  const ranToday    = isToday(agent.last_run_date);
+  const srcPct      = agent.sources_total && agent.sources_hit != null
+                        ? Math.round((agent.sources_hit / agent.sources_total) * 100)
+                        : 0;
+
+  let scoreHTML = "";
+  if (agent.status === "success" && agent.top_score != null) {
+    scoreHTML = `<div class="card-score">${agent.top_score.toFixed(1)}</div>`;
+  } else if (agent.status === "disabled") {
+    scoreHTML = `<div class="card-score dim">OFF</div>`;
+  } else {
+    scoreHTML = `<div class="card-score dim">—</div>`;
+  }
+
+  let statusLabel = agent.status === "success"  ? "LIVE"
+                  : agent.status === "failed"   ? "ERROR"
+                  : agent.status === "running"  ? "RUNNING"
+                  : "OFF";
+
+  let top5HTML = "";
+  if (agent.top5 && agent.top5.length > 0) {
+    top5HTML = `
+      <div class="top5-section">
+        <div class="top5-title">Top Models — ${agent.last_run_date || "Last Run"}</div>
+        ${agent.top5.map(m => `
+          <div class="top5-row">
+            <span class="top5-rank">${m.rank}</span>
+            <span class="top5-name">${m.name}</span>
+            <span class="top5-score">${m.score.toFixed(1)}</span>
+          </div>
+        `).join("")}
+      </div>`;
+  }
+
+  let errorHTML = "";
+  if (agent.error) {
+    errorHTML = `<div class="error-msg">⚠️ ${agent.error}</div>`;
+  }
+
+  let nextRunHTML = "";
+  if (agent.enabled && agent.next_run) {
+    nextRunHTML = `
+      <div class="next-run-row">
+        <span class="next-run-icon">⏰</span>
+        <span class="next-run-text">Next run:</span>
+        <span class="next-run-time">${formatNextRun(agent.next_run)}</span>
+      </div>`;
+  }
+
+  return `
+    <div class="card" id="card-${id}" onclick="toggleCard('${id}')">
+      <div class="card-header">
+        <div class="agent-icon ${iconClass}">${agent.emoji}</div>
+        <div class="card-info">
+          <div class="card-name">${agent.name}</div>
+          <div class="card-label">${agent.label}</div>
+        </div>
+        <div class="card-right">
+          <span class="status-badge ${statusClass}">${statusLabel}</span>
+          ${scoreHTML}
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="card-detail">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-val ${agent.last_run ? 'green' : 'dim'}">${formatTime(agent.last_run)}</div>
+            <div class="detail-key">Last Heartbeat</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-val ${ranToday ? 'green' : 'dim'}">${ranToday ? "✓ Today" : (agent.last_run_date || "Never")}</div>
+            <div class="detail-key">Last Run Date</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-val">${agent.models_qualified != null ? agent.models_qualified : "—"}</div>
+            <div class="detail-key">Models Scored</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-val ${agent.duration_seconds ? 'orange' : 'dim'}">${formatDuration(agent.duration_seconds)}</div>
+            <div class="detail-key">Run Duration</div>
+          </div>
+        </div>
+
+        ${agent.sources_total ? `
+        <div class="sources-bar">
+          <div class="sources-bar-label">Sources Hit</div>
+          <div class="bar-track">
+            <div class="bar-fill ${agent.sources_hit == null ? 'dim' : ''}"
+                 style="width:${srcPct}%"></div>
+          </div>
+          <div class="sources-text">${agent.sources_hit != null ? agent.sources_hit : 0} of ${agent.sources_total} sources returned data</div>
+        </div>` : ""}
+
+        ${top5HTML}
+        ${nextRunHTML}
+        ${errorHTML}
+
+        <a class="view-leaderboard" href="${agent.leaderboard_url}">
+          View ${agent.name} Leaderboard →
+        </a>
+      </div>
+    </div>`;
+}
+
+function toggleCard(id) {
+  const card = document.getElementById("card-" + id);
+  card.classList.toggle("expanded");
+}
+
+async function loadStatus() {
+  try {
+    const res  = await fetch("/status.json?t=" + Date.now());
+    const data = await res.json();
+
+    // Update header
+    document.getElementById("last-updated").innerHTML =
+      `<span class="pulse-dot"></span>Updated ${formatTime(data.last_updated)}`;
+
+    // Summary counts
+    const agents = data.agents;
+    const vals   = Object.values(agents);
+    const live   = vals.filter(a => a.status === "success").length;
+    const off    = vals.filter(a => a.status === "disabled").length;
+    const today  = vals.filter(a => isToday(a.last_run_date)).length;
+    const errors = vals.filter(a => a.status === "failed").length;
+
+    document.getElementById("sum-live").textContent   = live;
+    document.getElementById("sum-off").textContent    = off;
+    document.getElementById("sum-today").textContent  = today;
+    document.getElementById("sum-errors").textContent = errors;
+    document.getElementById("summary-bar").style.display = "";
+
+    // Render cards (preserve expanded state)
+    const expanded = new Set(
+      [...document.querySelectorAll(".card.expanded")]
+        .map(c => c.id.replace("card-", ""))
+    );
+
+    const html = AGENT_ORDER.map(id => {
+      const agent = agents[id];
+      return agent ? renderCard(id, agent) : "";
+    }).join("");
+
+    document.getElementById("main-content").innerHTML =
+      `<div class="section-label">Agents</div><div class="cards">${html}</div>`;
+
+    // Restore expanded state
+    expanded.forEach(id => {
+      const card = document.getElementById("card-" + id);
+      if (card) card.classList.add("expanded");
+    });
+
+  } catch (e) {
+    document.getElementById("main-content").innerHTML =
+      `<div class="loading" style="color:var(--red)">
+        ⚠️ Could not load status.json<br>
+        <small style="color:var(--subtext);margin-top:8px;display:block">${e.message}</small>
+      </div>`;
   }
 }
+
+// Load on start, then auto-refresh every 60s
 loadStatus();
-setInterval(loadStatus,60000);
-<\/script>
+setInterval(loadStatus, 60000);
+</script>
 </body>
 </html>
