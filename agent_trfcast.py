@@ -86,7 +86,7 @@ WEIGHTS = {
     "financial_reasoning_qa":     0.08,  # FinanceArena QA %
     "financial_reasoning_compare":0.07,  # FinanceArena ELO
     "market_intel_sharpe":        0.05,  # Alpha Arena Sharpe ratio
-  2 "market_intel_winrate":       0.05,  # Rallies.ai win rate
+    "market_intel_winrate":       0.05,  # Rallies.ai win rate
 }
 
 # Maps weight keys to raw_data field names
