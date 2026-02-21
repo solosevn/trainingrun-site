@@ -169,84 +169,90 @@ def parse_first_table(html: str) -> list[dict]:
 
 def scrape_simpleqa() -> tuple[dict[str, float], dict[str, float]]:
     """
-    SimpleQA leaderboard â returns two dicts:
-    1. factuality_simpleqa: {model: correct_pct}
-    2. calibration_simpleqa: {model: not_attempted_pct}
+    llm-stats.com SimpleQA leaderboard (43 models).
+    Scores are 0.0-1.0 decimals, multiplied by 100 to get %.
+    Returns two dicts (same source):
+      1. factuality_simpleqa: {model: correct_pct}
+      2. calibration_simpleqa: {model: correct_pct}
     """
     factuality: dict[str, float] = {}
     calibration: dict[str, float] = {}
     try:
         log.info("Scraping SimpleQA (factuality + calibration)...")
-        # Try HuggingFace dataset page
-        url = "https://huggingface.co/datasets/openai/SimpleQA"
-        html = playwright_get(url, wait_ms=10000)
-        rows = parse_first_table(html)
-        
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+            page = ctx.new_page()
+            try:
+                page.goto("https://llm-stats.com/benchmarks/simpleqa",
+                          wait_until="networkidle", timeout=90_000)
+            except Exception:
+                pass
+            try:
+                page.wait_for_selector("table tr", timeout=20_000)
+            except Exception:
+                pass
+            page.wait_for_timeout(3000)
+            rows = page.evaluate("""() => {
+                const trs = Array.from(document.querySelectorAll('tr')).slice(1);
+                return trs.map(r => {
+                    const cells = r.querySelectorAll('td');
+                    if (cells.length < 3) return null;
+                    const nameEl = cells[1].querySelector('a') || cells[1];
+                    const name = nameEl.textContent.trim().split('\\n')[0].trim();
+                    const score = parseFloat(cells[2].textContent.trim());
+                    if (!name || isNaN(score)) return null;
+                    return {name, score};
+                }).filter(Boolean);
+            }""")
+            browser.close()
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
-                continue
-            name = vals[0]
-            
-            # Look for "Correct %" column
-            for v in vals[1:]:
-                clean = v.replace("%", "").strip()
-                try:
-                    pct = float(clean)
-                    if 0 <= pct <= 100 and name not in factuality:
-                        factuality[name] = pct
-                        break
-                except ValueError:
-                    pass
-            
-            # Look for "Not Attempted %" column
-            for i, v in enumerate(vals[1:], 1):
-                if "not attempted" in row.get(list(row.keys())[i], "").lower() if i < len(row) else False:
-                    clean = v.replace("%", "").strip()
-                    try:
-                        pct = float(clean)
-                        if 0 <= pct <= 100:
-                            calibration[name] = pct
-                    except ValueError:
-                        pass
-        
-        log.info(f"  â SimpleQA: {len(factuality)} factuality, {len(calibration)} calibration")
+            name = row.get("name", "")
+            score = row.get("score")
+            if name and score is not None:
+                pct = round(score * 100, 2)
+                if 0 < pct <= 100:
+                    factuality[name] = pct
+                    calibration[name] = pct
+        log.info(f"  \u2705 SimpleQA: {len(factuality)} factuality, {len(calibration)} calibration")
     except Exception as e:
-        log.warning(f"  â ï¸ SimpleQA: {e}")
-    
+        log.warning(f"  \u26a0\ufe0f SimpleQA: {e}")
     return factuality, calibration
-
-
 def scrape_newsguard() -> dict[str, float]:
-    """newsguardtech.com â AI misinformation accuracy scores."""
+    """Scale SEAL PropensityBench -- latent safety risk (lower propensity = safer).
+    Scores are INVERTED: returned as (100 - propensity) so higher = safer.
+    source: scale.com/leaderboard/propensitybench"""
     scores: dict[str, float] = {}
     try:
-        log.info("Scraping NewsGuard (factuality)...")
-        url = "https://www.newsguardtech.com/ai-tracking-center/"
-        html = playwright_get(url, wait_ms=8000)
-        rows = parse_first_table(html)
-        
-        for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
-                continue
-            name = vals[0]
-            for v in vals[1:]:
-                clean = v.replace("%", "").strip()
-                try:
-                    pct = float(clean)
-                    if 0 <= pct <= 100:
-                        scores[name] = pct
-                        break
-                except ValueError:
-                    pass
-        
-        log.info(f"  â NewsGuard: {len(scores)} models")
+        log.info("Scraping NewsGuard (safety propensity)...")
+        url = "https://scale.com/leaderboard/propensitybench"
+        text = playwright_get_innertext(url, wait_ms=10000)
+        lines = [l.strip() for l in text.split('\n') if l.strip()]
+        i = 0
+        while i < len(lines) - 2:
+            if re.match(r'^\d+$', lines[i]):
+                name = lines[i + 1]
+                score_raw = lines[i + 2]
+                m = re.match(r'^(\d+(?:\.\d+)?)', score_raw)
+                if (m and 3 <= len(name) <= 80
+                        and not re.match(r'^[\d\u00b1\.\+\-\s]+$', name)):
+                    try:
+                        propensity = float(m.group(1))
+                        if 0 <= propensity <= 100:
+                            safety = round(100.0 - propensity, 2)
+                            if name not in scores or safety > scores[name]:
+                                scores[name] = safety
+                            i += 3
+                            continue
+                    except ValueError:
+                        pass
+            i += 1
+        log.info(f"  \u2705 PropensityBench: {len(scores)} models")
     except Exception as e:
-        log.warning(f"  â ï¸ NewsGuard: {e}")
+        log.warning(f"  \u26a0\ufe0f PropensityBench: {e}")
     return scores
-
-
 def scrape_trackingai() -> dict[str, float]:
     """trackingai.org â political neutrality scores."""
     scores: dict[str, float] = {}
