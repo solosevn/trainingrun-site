@@ -118,6 +118,34 @@ def playwright_get(url: str, wait_ms: int = 5000) -> str:
     return html
 
 
+def playwright_get_hfspace(url: str, wait_ms: int = 15000) -> str:
+    """Load HuggingFace Space URL; returns inner .hf.space iframe HTML if present."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(user_agent=(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+        page = ctx.new_page()
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
+        page.wait_for_timeout(wait_ms)
+        for frame in page.frames:
+            if "hf.space" in frame.url:
+                try:
+                    frame.wait_for_load_state("networkidle", timeout=30_000)
+                except Exception:
+                    pass
+                page.wait_for_timeout(5000)
+                html = frame.content()
+                browser.close()
+                return html
+        html = page.content()
+        browser.close()
+    return html
+
+
 def parse_first_table(html: str) -> list[dict]:
     """Return rows as list of {col0, col1, col2...} dicts from the largest table."""
     soup = BeautifulSoup(html, "html.parser")
@@ -272,7 +300,7 @@ def scrape_vectara_hallucination() -> dict[str, float]:
     try:
         log.info("Scraping Vectara Hallucination (inverted)...")
         url = "https://huggingface.co/spaces/vectara/leaderboard"
-        html = playwright_get(url, wait_ms=10000)
+        html = playwright_get_hfspace(url, wait_ms=15000)
         rows = parse_first_table(html)
         
         for row in rows:
