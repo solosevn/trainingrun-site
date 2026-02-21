@@ -600,7 +600,7 @@ def main():
     notify("📊 <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
     # ── Normalize + score ──
-   2normalized = {}
+    normalized = {}
     for mkey, raw_field in RAW_KEYS.items():
         inverted = mkey in INVERTED_KEYS
         normalized[mkey] = normalize_across_models(models, raw_field, inverted=inverted)
