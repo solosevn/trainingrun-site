@@ -162,11 +162,9 @@ def scrape_arena_overall() -> dict[str, float]:
                 cells = row.find_all(["td", "th"])
                 if len(cells) <= max(model_col, score_col):
                     continue
-                name = cells[model_col].get_text(separator='
-', strip=True).split('
-')[0].strip()
+                name = cells[model_col].get_text(separator='\n', strip=True).split('\n')[0].strip()
                 raw_val = cells[score_col].get_text(strip=True).replace(',', '')
-                m = re.match(r'^(d{3,4}(?:.d+)?)', raw_val)
+                m = re.match(r'^(\d{3,4}(?:\.\d+)?)', raw_val)
                 if m:
                     try:
                         val = float(m.group(1))
@@ -485,7 +483,7 @@ def update_index_timestamp() -> None:
 
         content = index_file.read_text()
         new_content = re.sub(
-            r"var LAST_PUSH_TIMEs*=s*'[^']*';",
+            r"var LAST_PUSH_TIME\s*=\s*'[^']*';",
             f"var LAST_PUSH_TIME = '{push_time}';",
             content,
         )
@@ -508,8 +506,7 @@ def git_push(commit_msg: str) -> bool:
             if "nothing to commit" in r.stdout + r.stderr:
                 log.info("Nothing to commit — data unchanged.")
                 return True
-            log.error(f"Commit failed:
-{r.stderr}")
+            log.error(f"Commit failed:\n{r.stderr}")
             return False
         subprocess.run(["git", "push"],
                        cwd=REPO_PATH, check=True, capture_output=True)
@@ -527,17 +524,13 @@ def main():
     main._start_time = _time.time()
 
     if TEST_TELEGRAM:
-        notify("✅ <b>TRSbench DDP online</b>
-Telegram works! Ready to run.")
+        notify("✅ <b>TRSbench DDP online</b>\nTelegram works! Ready to run.")
         print("Telegram test sent. Check your phone.")
         return
 
     mode = "DRY RUN 🔍" if DRY_RUN else "LIVE 🚀"
     log.info(f"TRSbench DDP | {TODAY} | {mode}")
-    notify(f"🤖 <b>TRSbench DDP starting</b>
-📅 {TODAY}
-⚙️ {mode}
-7 sources → trs-data.json")
+    notify(f"🤖 <b>TRSbench DDP starting</b>\n📅 {TODAY}\n⚙️ {mode}\n7 sources → trs-data.json")
 
     # ── Load data ──
     if not DATA_FILE.exists():
@@ -592,9 +585,7 @@ Telegram works! Ready to run.")
         source_summary.append(f"{category}: {len(results)} scraped, {matched} matched")
         log.info(f"  {category}: {matched}/{len(results)} matched")
 
-    notify("📊 <b>Scraping complete</b>
-" + "
-".join(source_summary))
+    notify("📊 <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
     # ── Normalize + score ──
     normalized = {}
@@ -631,22 +622,18 @@ Telegram works! Ready to run.")
     for rank, m in enumerate(ranked, 1):
         m["rank"] = rank
 
-    top5_lines = "
-".join(
+    top5_lines = "\n".join(
         f"  {m['rank']}. {m['name']}  {today_score(m):.1f}"
         for m in ranked[:5]
     )
-    notify(f"🏆 <b>TRSbench Top 5 — {TODAY}</b>
-{top5_lines}")
+    notify(f"🏆 <b>TRSbench Top 5 — {TODAY}</b>\n{top5_lines}")
 
     # ── Checksum ──
     data["checksum"] = generate_checksum(data)
     log.info(f"Checksum: {data['checksum'][:20]}...")
 
     if DRY_RUN:
-        notify(f"🔍 <b>DRY RUN complete</b>
-Would score {len(qualified)} models.
-Nothing written.")
+        notify(f"🔍 <b>DRY RUN complete</b>\nWould score {len(qualified)} models.\nNothing written.")
         log.info("Dry run complete. Nothing written.")
         return
 
@@ -664,10 +651,7 @@ Nothing written.")
 
     ok = git_push(f"TRSbench daily update {TODAY} ({len(qualified)} models)")
     if ok:
-        notify(f"✅ <b>TRSbench DDP done!</b>
-📅 {TODAY}
-📊 {len(qualified)} models
-🌐 → trainingrun.ai/scores")
+        notify(f"✅ <b>TRSbench DDP done!</b>\n📅 {TODAY}\n📊 {len(qualified)} models\n🌐 → trainingrun.ai/scores")
     else:
         notify(f"⚠️ JSON updated but push failed. cd {REPO_PATH} && git push")
 
