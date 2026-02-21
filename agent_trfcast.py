@@ -196,7 +196,7 @@ def scrape_forecastbench() -> tuple[dict[str, float], dict[str, float]]:
                 try:
                     val = float(vals[1].replace("%", "").strip())
                     if 0 <= val <= 1:
-                  2     baseline_scores[name] = val
+                        baseline_scores[name] = val
                 except (ValueError, IndexError):
                     pass
             if len(vals) > 2:
