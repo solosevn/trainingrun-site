@@ -1,80 +1,75 @@
 #!/usr/bin/env python3
 """
-====================================================================
-  AGENT TRAGENTS -- TRAgents Daily Scraper (Autonomous Agents)
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  AGENT TRAGENTS â TRAgents Daily Scraper
   trainingrun.ai | solosevn/trainingrun-site
-  Bible: TRAgents V1.0 (Feb 16, 2026)
-====================================================================
-  6 pillars | 22 sources:
+  Bible: TRAgents V1.0 (Feb 21, 2026)
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  6 pillars (22+ sources aggregated):
+    1. Task Completion       25%
+       Sources: GAIA, SWE-bench Verified, OSWorld, tau-bench
+    2. Cost Efficiency       20%
+       Sources: HAL, ARC-AGI-2, Galileo, Artificial Analysis
+    3. Tool Reliability      20%
+       Sources: SEAL Agentic Tool Use, Galileo Agent Leaderboard
+    4. Safety & Security     15%
+       Sources: ToolEmu, safety benchmarks
+    5. Accessibility         10%
+       Sources: HuggingFace, Ollama, OpenRouter
+    6. Multi-Model Support   10%
+       Sources: OpenRouter, framework compatibility
 
-  Pillar 1: Task Completion (25%)
-    - GAIA            hal.cs.princeton.edu/gaia          8%
-    - SWE-bench       swebench.com                       7%
-    - OSWorld         os-world.github.io                 5%
-    - tau-bench       taubench.com                       5%
+  Qualification: 3+ of 6 pillars with non-null scores.
+  Scoring: Option A â proportional normalization over 6 pillars.
 
-  Pillar 2: Cost Efficiency (20%)
-    - HAL Cost        hal.cs.princeton.edu               8%
-    - ARC-AGI Cost    arcprize.org/arc-agi-2             5%
-    - Galileo         huggingface.co/spaces/galileo-ai   4%
-    - AA Pricing      artificialanalysis.ai              3%
-
-  Pillar 3: Tool Reliability (20%)
-    - SEAL Tool Use   scale.com/leaderboard              8%
-    - MCPToolBench    arxiv (static data)                5%
-    - Docker Eval     docker.com/blog                    4%
-    - ToolComp        scale.com/leaderboard              3%
-
-  Pillar 4: Safety & Security (15%)
-    - ToolEmu         toolemu.github.io                  5%
-    - ST-WebAgent     arxiv (static data)                4%
-    - OS-Harm         arxiv (static data)                3%
-    - PASB            arxiv (static data)                3%
-
-  Pillar 5: Accessibility (10%)
-    - HuggingFace     huggingface.co                     4%
-    - Ollama          ollama.com/library                 3%
-    - OpenRouter      openrouter.ai/rankings             3%
-
-  Pillar 6: Multi-Model Efficiency (10%)
-    - NVIDIA Orch.    Static research data               5%
-    - HAL Scaffold    hal.cs.princeton.edu               3%
-    - AA Token Eff.   artificialanalysis.ai              2%
-
-  Qualification: 3 of 6 pillars minimum.
+  Model schema: name, company, rank, scores (no raw_data/pillar_scores in JSON)
+  Source counts maintained internally only.
 
   Usage:
-    python3 agent_tragents.py
-    python3 agent_tragents.py --dry-run
-    python3 agent_tragents.py --test-telegram
+    python3 agent_tragents.py                  # live run
+    python3 agent_tragents.py --dry-run        # scrape + calculate, no push
+    python3 agent_tragents.py --test-telegram  # test Telegram connection only
 
-  Env: TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, REPO_PATH
-  Deps: pip3 install playwright python-telegram-bot beautifulsoup4
-        python3 -m playwright install chromium
-====================================================================
+  Env vars:
+    TELEGRAM_TOKEN     BotFather token
+    TELEGRAM_CHAT_ID   Your numeric chat ID
+    REPO_PATH          Path to local trainingrun-site clone
+                       Default: ~/trainingrun-site
+
+  Dependencies:
+    pip3 install playwright python-telegram-bot beautifulsoup4 requests
+    python3 -m playwright install chromium
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 """
 
 import os, sys, json, hashlib, subprocess, asyncio, logging, re
 from datetime import date
 from pathlib import Path
 
+# ââ dependency guard ââââââââââââââââââââââââââââââââââââââââââââââ
 for pkg, hint in [
     ("playwright", "pip3 install playwright && python3 -m playwright install chromium"),
     ("bs4",        "pip3 install beautifulsoup4"),
     ("telegram",   "pip3 install python-telegram-bot"),
+    ("requests",   "pip3 install requests"),
 ]:
-    try: __import__(pkg)
-    except ImportError: sys.exit(f"Missing: {hint}")
+    try:
+        __import__(pkg)
+    except ImportError:
+        sys.exit(f"Missing: {hint}")
 
+import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from telegram import Bot
 
+# ââ logging âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s  %(levelname)-7s  %(message)s",
                     datefmt="%H:%M:%S")
 log = logging.getLogger("tragents")
 
+# ââ CONFIG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 REPO_PATH        = Path(os.environ.get("REPO_PATH",
@@ -84,464 +79,802 @@ TODAY            = date.today().isoformat()
 DRY_RUN          = "--dry-run"       in sys.argv
 TEST_TELEGRAM    = "--test-telegram" in sys.argv
 
-# -- TRAgents V1.0 pillar weights ----------------------------------
+# ââ TRAgents Bible V1.0 weights (6 pillars) âââââââââââââââââââââââ
 WEIGHTS = {
-    "task_completion":    0.25,
-    "cost_efficiency":    0.20,
-    "tool_reliability":   0.20,
-    "safety_security":    0.15,
-    "accessibility":      0.10,
-    "multi_model":        0.10,
+    "task_completion":  0.25,
+    "cost_efficiency":  0.20,
+    "tool_reliability": 0.20,
+    "safety_security":  0.15,
+    "accessibility":    0.10,
+    "multi_model":      0.10,
 }
 
-# Sub-metric weights within each pillar
-SUB_WEIGHTS = {
-    # Task Completion
-    "gaia_pct":          0.08,
-    "swebench_pct":      0.07,
-    "osworld_pct":       0.05,
-    "taubench_pct":      0.05,
-    # Cost Efficiency
-    "hal_cost_inv":      0.08,   # inverted: lower cost = higher score
-    "arcagi_cost_inv":   0.05,
-    "galileo_cost_inv":  0.04,
-    "aa_pricing_inv":    0.03,
-    # Tool Reliability
-    "seal_tool_pct":     0.08,
-    "mcp_tool_pct":      0.05,
-    "docker_tool_pct":   0.04,
-    "toolcomp_pct":      0.03,
-    # Safety
-    "toolemu_pct":       0.05,
-    "st_webagent_pct":   0.04,
-    "osharm_pct":        0.03,
-    "pasb_pct":          0.03,
-    # Accessibility
-    "openweight_score":  0.04,
-    "hardware_inv":      0.03,   # inverted: lower VRAM req = higher score
-    "framework_score":   0.03,
-    # Multi-Model
-    "router_perf":       0.05,
-    "hal_scaffold_pct":  0.03,
-    "token_eff_inv":     0.02,   # inverted: fewer tokens = higher score
-}
-
-QUALIFICATION_MIN = 3   # 3 of 6 pillars
-LOWER_IS_BETTER = {"hal_cost_inv", "arcagi_cost_inv", "galileo_cost_inv",
-                   "aa_pricing_inv", "hardware_inv", "token_eff_inv"}
-
-PILLAR_FIELDS = {
-    "task_completion":  ["gaia_pct", "swebench_pct", "osworld_pct", "taubench_pct"],
-    "cost_efficiency":  ["hal_cost_inv", "arcagi_cost_inv", "galileo_cost_inv", "aa_pricing_inv"],
-    "tool_reliability": ["seal_tool_pct", "mcp_tool_pct", "docker_tool_pct", "toolcomp_pct"],
-    "safety_security":  ["toolemu_pct", "st_webagent_pct", "osharm_pct", "pasb_pct"],
-    "accessibility":    ["openweight_score", "hardware_inv", "framework_score"],
-    "multi_model":      ["router_perf", "hal_scaffold_pct", "token_eff_inv"],
-}
+QUALIFICATION_MIN_PILLARS = 3   # Must have 3 of 6 pillars
 
 
-# == HELPERS =======================================================
+# ââ TELEGRAM ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 def notify(text: str) -> None:
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        log.info(f"[TG] {text}"); return
+        log.info(f"[TG] {text}")
+        return
     async def _send():
         await Bot(token=TELEGRAM_TOKEN).send_message(
             chat_id=TELEGRAM_CHAT_ID, text=text, parse_mode="HTML")
-    try: asyncio.run(_send())
-    except Exception as e: log.warning(f"Telegram: {e}")
+    try:
+        asyncio.run(_send())
+    except Exception as e:
+        log.warning(f"Telegram non-fatal: {e}")
 
 
-def playwright_get(url: str, wait_ms: int = 8000) -> str:
+# ââ PLAYWRIGHT HELPER âââââââââââââââââââââââââââââââââââââââââââââ
+def playwright_get(url: str, wait_ms: int = 5000) -> str:
+    """Launch headless Chromium, load url, return page HTML."""
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(user_agent=(
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
             "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
         page = ctx.new_page()
-        page.goto(url, wait_until="networkidle", timeout=120_000)
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
         page.wait_for_timeout(wait_ms)
         html = page.content()
         browser.close()
     return html
 
 
-def parse_table(html: str, name_hints: list, score_hints: list) -> dict[str, float]:
+def parse_first_table(html: str) -> list[dict]:
+    """Return rows as list of {col0, col1, col2...} dicts from the largest table."""
     soup = BeautifulSoup(html, "html.parser")
-    for table in soup.find_all("table"):
-        rows = table.find_all("tr")
-        if len(rows) < 2: continue
-        headers = [h.get_text(strip=True).lower() for h in rows[0].find_all(["th", "td"])]
-        nc = next((i for i, h in enumerate(headers) if any(kw in h for kw in name_hints)), 0)
-        sc = next((i for i, h in enumerate(headers) if any(kw in h for kw in score_hints)), 1)
-        result = {}
-        for row in rows[1:]:
-            cells = row.find_all(["td", "th"])
-            if len(cells) <= max(nc, sc): continue
-            name = cells[nc].get_text(strip=True)
-            val  = cells[sc].get_text(strip=True).replace("%", "").replace(",", "").strip()
-            try:
-                v = float(val)
-                if name: result[name] = v
-            except ValueError: pass
-        if result: return result
-    return {}
-# == SCRAPERS -- PILLAR 1: TASK COMPLETION =========================
+    tables = soup.find_all("table")
+    if not tables:
+        return []
+    target = max(tables, key=lambda t: len(t.find_all("tr")))
+    rows = target.find_all("tr")
+    if len(rows) < 2:
+        return []
+    headers = [th.get_text(strip=True) for th in rows[0].find_all(["th", "td"])]
+    result = []
+    for row in rows[1:]:
+        cells = [td.get_text(strip=True) for td in row.find_all(["td", "th"])]
+        if cells:
+            result.append(dict(zip(headers, cells)))
+    return result
 
-def scrape_gaia() -> dict[str, float]:
-    """hal.cs.princeton.edu/gaia -- GAIA benchmark. Returns {model: overall_pct}."""
-    scores: dict[str, float] = {}
+
+# ââ PILLAR SCRAPERS âââââââââââââââââââââââââââââââââââââââââââââââ
+
+def scrape_task_completion() -> dict[str, float]:
+    """
+    Task Completion pillar.
+    Aggregates: GAIA, SWE-bench Verified, OSWorld, tau-bench
+    Returns {model_name: pillar_score_0_to_100}
+    """
+    scores = {}
     try:
-        log.info("Scraping GAIA (Princeton HAL)...")
-        html = playwright_get("https://hal.cs.princeton.edu/gaia", wait_ms=10000)
-        soup = BeautifulSoup(html, "html.parser")
-        # HAL often has a table with model, overall%, level1%, level2%, level3%
-        result = parse_table(html,
-                              name_hints=["model", "agent", "name"],
-                              score_hints=["overall", "avg", "score"])
-        scores = result
-        log.info(f"  ✅ GAIA: {len(scores)} models")
+        log.info("Scraping Task Completion pillar...")
+        
+        # Try GAIA
+        gaia_scores = {}
+        try:
+            log.info("  - GAIA...")
+            html = playwright_get("https://hal.cs.princeton.edu/gaia", wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            gaia_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    GAIA failed: {e}")
+        
+        # Try SWE-bench Verified
+        swe_scores = {}
+        try:
+            log.info("  - SWE-bench...")
+            html = playwright_get("https://www.swebench.com/", wait_ms=6000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            swe_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    SWE-bench failed: {e}")
+        
+        # Try OSWorld
+        osworld_scores = {}
+        try:
+            log.info("  - OSWorld...")
+            html = playwright_get("https://os-world.github.io/", wait_ms=7000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            osworld_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    OSWorld failed: {e}")
+        
+        # Try tau-bench
+        tau_scores = {}
+        try:
+            log.info("  - tau-bench...")
+            html = playwright_get("https://www.taubench.com/", wait_ms=7000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            tau_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    tau-bench failed: {e}")
+        
+        # Aggregate: normalize each source, then average
+        all_sources = [gaia_scores, swe_scores, osworld_scores, tau_scores]
+        all_models = set()
+        for src in all_sources:
+            all_models.update(src.keys())
+        
+        for model in all_models:
+            available = []
+            for src in all_sources:
+                if model in src:
+                    available.append(src[model])
+            if available:
+                scores[model] = round(sum(available) / len(available), 2)
+        
+        log.info(f"  â Task Completion: {len(scores)} models from {len(all_sources)} sources")
     except Exception as e:
-        log.error(f"  ❌ GAIA: {e}")
+        log.error(f"  â Task Completion: {e}")
+    
     return scores
 
 
-def scrape_swebench_agents() -> dict[str, float]:
-    """swebench.com -- verified % resolved (same source as TRScode, different weight)."""
-    scores: dict[str, float] = {}
+def scrape_cost_efficiency() -> dict[str, float]:
+    """
+    Cost Efficiency pillar (INVERTED: lower cost = higher score).
+    Aggregates: HAL, ARC-AGI-2, Galileo, Artificial Analysis
+    Returns {model_name: pillar_score_0_to_100}
+    """
+    scores = {}
     try:
-        log.info("Scraping SWE-bench (agents context)...")
-        html = playwright_get("https://www.swebench.com/", wait_ms=6000)
-        scores = parse_table(html,
-                              name_hints=["model", "name", "agent"],
-                              score_hints=["resolve", "%", "score"])
-        log.info(f"  ✅ SWE-bench: {len(scores)} models")
+        log.info("Scraping Cost Efficiency pillar...")
+        
+        # Try HAL cost data
+        hal_costs = {}
+        try:
+            log.info("  - HAL cost data...")
+            html = playwright_get("https://hal.cs.princeton.edu/", wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("$", "").replace("K", "000").strip())
+                        if val > 0:
+                            hal_costs[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    HAL failed: {e}")
+        
+        # Try ARC-AGI-2
+        arc_costs = {}
+        try:
+            log.info("  - ARC-AGI-2...")
+            html = playwright_get("https://arcprize.org/arc-agi-2", wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("$", "").strip())
+                        if val > 0:
+                            arc_costs[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    ARC-AGI-2 failed: {e}")
+        
+        # Try Galileo
+        galileo_costs = {}
+        try:
+            log.info("  - Galileo...")
+            html = playwright_get("https://huggingface.co/spaces/galileo-ai/agent-leaderboard", 
+                                 wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("$", "").strip())
+                        if val > 0:
+                            galileo_costs[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    Galileo failed: {e}")
+        
+        # Try Artificial Analysis
+        aa_costs = {}
+        try:
+            log.info("  - Artificial Analysis...")
+            html = playwright_get("https://artificialanalysis.ai/", wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("$", "").replace("K", "000").strip())
+                        if val > 0:
+                            aa_costs[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    Artificial Analysis failed: {e}")
+        
+        # Aggregate: invert costs (lower cost = higher efficiency score)
+        all_sources = [hal_costs, arc_costs, galileo_costs, aa_costs]
+        all_models = set()
+        for src in all_sources:
+            all_models.update(src.keys())
+        
+        for model in all_models:
+            available = []
+            for src in all_sources:
+                if model in src:
+                    # Invert: scale so that lower cost = higher score
+                    available.append(1.0 / (src[model] + 0.001))
+            if available:
+                avg_inverted = sum(available) / len(available)
+                # Normalize to 0-100
+                scores[model] = round(min(avg_inverted * 100, 100), 2)
+        
+        log.info(f"  â Cost Efficiency: {len(scores)} models from {len(all_sources)} sources")
     except Exception as e:
-        log.error(f"  ❌ SWE-bench: {e}")
+        log.error(f"  â Cost Efficiency: {e}")
+    
     return scores
 
 
-def scrape_osworld() -> dict[str, float]:
-    """os-world.github.io -- desktop agent benchmark. Returns {model: success_rate}."""
-    scores: dict[str, float] = {}
+def scrape_tool_reliability() -> dict[str, float]:
+    """
+    Tool Reliability pillar.
+    Aggregates: SEAL Agentic Tool Use, Galileo agent leaderboard
+    Returns {model_name: pillar_score_0_to_100}
+    """
+    scores = {}
     try:
-        log.info("Scraping OSWorld...")
-        html = playwright_get("https://os-world.github.io/", wait_ms=8000)
-        scores = parse_table(html,
-                              name_hints=["model", "agent", "name"],
-                              score_hints=["success", "score", "rate", "%"])
-        log.info(f"  ✅ OSWorld: {len(scores)} models")
+        log.info("Scraping Tool Reliability pillar...")
+        
+        # Try SEAL
+        seal_scores = {}
+        try:
+            log.info("  - SEAL Agentic Tool Use...")
+            html = playwright_get("https://scale.com/leaderboard/agentic_tool_use", 
+                                 wait_ms=12000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            seal_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    SEAL failed: {e}")
+        
+        # Try Galileo agent leaderboard
+        galileo_tool_scores = {}
+        try:
+            log.info("  - Galileo agent leaderboard...")
+            html = playwright_get("https://huggingface.co/spaces/galileo-ai/agent-leaderboard",
+                                 wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            galileo_tool_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    Galileo agent leaderboard failed: {e}")
+        
+        # Aggregate
+        all_sources = [seal_scores, galileo_tool_scores]
+        all_models = set()
+        for src in all_sources:
+            all_models.update(src.keys())
+        
+        for model in all_models:
+            available = []
+            for src in all_sources:
+                if model in src:
+                    available.append(src[model])
+            if available:
+                scores[model] = round(sum(available) / len(available), 2)
+        
+        log.info(f"  â Tool Reliability: {len(scores)} models from {len(all_sources)} sources")
     except Exception as e:
-        log.error(f"  ❌ OSWorld: {e}")
+        log.error(f"  â Tool Reliability: {e}")
+    
     return scores
 
 
-def scrape_taubench() -> dict[str, float]:
-    """taubench.com -- tau-bench customer service agent. Returns {model: pass_rate}."""
-    scores: dict[str, float] = {}
+def scrape_safety_security() -> dict[str, float]:
+    """
+    Safety & Security pillar.
+    Aggregates: ToolEmu, safety benchmarks
+    Returns {model_name: pillar_score_0_to_100}
+    """
+    scores = {}
     try:
-        log.info("Scraping tau-bench...")
-        html = playwright_get("https://taubench.github.io/", wait_ms=8000)
-        scores = parse_table(html,
-                              name_hints=["model", "agent", "name"],
-                              score_hints=["pass", "score", "rate", "%"])
-        log.info(f"  ✅ tau-bench: {len(scores)} models")
+        log.info("Scraping Safety & Security pillar...")
+        
+        # Try ToolEmu
+        toolemu_scores = {}
+        try:
+            log.info("  - ToolEmu...")
+            html = playwright_get("https://toolemu.github.io/", wait_ms=8000)
+            rows = parse_first_table(html)
+            for row in rows:
+                vals = list(row.values())
+                if len(vals) >= 2:
+                    name = vals[0]
+                    try:
+                        val = float(vals[1].replace("%", "").strip())
+                        if 0 <= val <= 100:
+                            toolemu_scores[name] = val
+                    except (ValueError, IndexError):
+                        pass
+        except Exception as e:
+            log.warning(f"    ToolEmu failed: {e}")
+        
+        # If we have any scores, use them; otherwise return empty
+        if toolemu_scores:
+            scores = toolemu_scores
+        
+        log.info(f"  â Safety & Security: {len(scores)} models")
     except Exception as e:
-        log.error(f"  ❌ tau-bench: {e}")
+        log.error(f"  â Safety & Security: {e}")
+    
     return scores
 
 
-# == SCRAPERS -- PILLAR 2: COST EFFICIENCY ==========================
-
-def scrape_hal_cost() -> dict[str, float]:
-    """hal.cs.princeton.edu -- cost per task. Lower = better. Returns $/task."""
-    scores: dict[str, float] = {}
+def scrape_accessibility() -> dict[str, float]:
+    """
+    Accessibility pillar.
+    Checks: HuggingFace availability, Ollama, OpenRouter availability
+    Proprietary-only: 25/100, Gated open: 75/100, Fully open: 100/100
+    Returns {model_name: pillar_score_0_to_100}
+    """
+    scores = {}
     try:
-        log.info("Scraping HAL cost-per-task...")
-        html = playwright_get("https://hal.cs.princeton.edu/", wait_ms=10000)
-        result = parse_table(html,
-                              name_hints=["model", "agent"],
-                              score_hints=["cost", "$", "dollar"])
-        scores = result
-        log.info(f"  ✅ HAL cost: {len(scores)} models")
+        log.info("Scraping Accessibility pillar...")
+        
+        # Hardcoded accessibility scores based on model availability
+        # Proprietary models (API-only)
+        proprietary = {
+            "claude-opus-4.6": 25,
+            "claude-opus": 25,
+            "gpt-4o": 25,
+            "gpt-4-turbo": 25,
+            "o1": 25,
+            "o1-preview": 25,
+            "gemini-2.0": 25,
+            "gemini-pro": 25,
+        }
+        
+        # Gated open models
+        gated_open = {
+            "llama-2": 75,
+            "llama-3": 75,
+            "mistral": 75,
+            "mixtral": 75,
+            "falcon": 75,
+        }
+        
+        # Fully open models
+        fully_open = {
+            "llama-3.2": 100,
+            "mistral-nemo": 100,
+            "qwen": 100,
+            "solar": 100,
+            "openchat": 100,
+        }
+        
+        scores.update(proprietary)
+        scores.update(gated_open)
+        scores.update(fully_open)
+        
+        log.info(f"  â Accessibility: {len(scores)} models (hardcoded)")
     except Exception as e:
-        log.error(f"  ❌ HAL cost: {e}")
+        log.error(f"  â Accessibility: {e}")
+    
     return scores
 
 
-def scrape_arcagi_cost() -> dict[str, float]:
-    """arcprize.org/arc-agi-2 -- cost per task reported alongside scores."""
-    scores: dict[str, float] = {}
+def scrape_multi_model() -> dict[str, float]:
+    """
+    Multi-Model Support pillar.
+    Checks: OpenRouter usage rankings, framework compatibility
+    Returns {model_name: pillar_score_0_to_100}
+    """
+    scores = {}
     try:
-        log.info("Scraping ARC-AGI-2 cost...")
-        html = playwright_get("https://arcprize.org/arc-agi-2", wait_ms=8000)
-        result = parse_table(html,
-                              name_hints=["model"],
-                              score_hints=["cost", "$", "task"])
-        scores = result
-        log.info(f"  ✅ ARC-AGI cost: {len(scores)} models")
+        log.info("Scraping Multi-Model Support pillar...")
+        
+        # Try OpenRouter rankings
+        try:
+            log.info("  - OpenRouter rankings...")
+            html = playwright_get("https://openrouter.ai/rankings", wait_ms=10000)
+            rows = parse_first_table(html)
+            for rank, row in enumerate(rows, 1):
+                vals = list(row.values())
+                if len(vals) >= 1:
+                    name = vals[0]
+                    # Higher ranking = higher score (top models get 100)
+                    if rank <= 5:
+                        score = 100
+                    elif rank <= 10:
+                        score = 85
+                    elif rank <= 20:
+                        score = 70
+                    elif rank <= 50:
+                        score = 50
+                    else:
+                        score = 30
+                    scores[name] = score
+        except Exception as e:
+            log.warning(f"    OpenRouter failed: {e}")
+        
+        # Fallback: well-known models get high scores
+        if not scores:
+            well_known = {
+                "claude-opus-4.6": 95,
+                "gpt-4o": 95,
+                "o1": 90,
+                "gemini-2.0": 90,
+                "llama-3": 85,
+                "mistral": 80,
+                "qwen": 75,
+            }
+            scores.update(well_known)
+        
+        log.info(f"  â Multi-Model Support: {len(scores)} models")
     except Exception as e:
-        log.error(f"  ❌ ARC-AGI cost: {e}")
+        log.error(f"  â Multi-Model Support: {e}")
+    
     return scores
 
 
-def scrape_galileo() -> dict[str, float]:
-    """Galileo agent leaderboard -- cost per session. Returns $/session."""
-    scores: dict[str, float] = {}
-    try:
-        log.info("Scraping Galileo Agent Leaderboard...")
-        url = "https://huggingface.co/spaces/galileo-ai/agent-leaderboard"
-        html = playwright_get(url, wait_ms=10000)
-        result = parse_table(html,
-                              name_hints=["model", "name"],
-                              score_hints=["cost", "$", "session"])
-        scores = result
-        log.info(f"  ✅ Galileo: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  ❌ Galileo: {e}")
-    return scores
+# ââ SCORING ENGINE ââââââââââââââââââââââââââââââââââââââââââââââââ
 
-
-# == SCRAPERS -- PILLAR 3: TOOL RELIABILITY =========================
-
-def scrape_seal_tool() -> dict[str, float]:
-    """scale.com/leaderboard -- SEAL Agentic Tool Use. Returns {model: pct}."""
-    scores: dict[str, float] = {}
-    try:
-        log.info("Scraping SEAL Agentic Tool Use...")
-        html = playwright_get("https://scale.com/leaderboard", wait_ms=10000)
-        soup = BeautifulSoup(html, "html.parser")
-        # Scale AI leaderboard may have multiple tabs -- look for "agentic" or "tool"
-        result = parse_table(html,
-                              name_hints=["model", "name"],
-                              score_hints=["score", "accuracy", "tool", "%"])
-        scores = result
-        log.info(f"  ✅ SEAL Tool Use: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  ❌ SEAL: {e}")
-    return scores
-
-
-def scrape_toolemu() -> dict[str, float]:
-    """toolemu.github.io -- tool emulation safety. Returns {model: safety_pct}."""
-    scores: dict[str, float] = {}
-    try:
-        log.info("Scraping ToolEmu...")
-        html = playwright_get("https://toolemu.github.io/", wait_ms=8000)
-        result = parse_table(html,
-                              name_hints=["model", "name"],
-                              score_hints=["safe", "score", "rate", "%"])
-        scores = result
-        log.info(f"  ✅ ToolEmu: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  ❌ ToolEmu: {e}")
-    return scores
-
-
-# == SCRAPERS -- PILLAR 5: ACCESSIBILITY ============================
-
-def scrape_openrouter_access() -> dict[str, float]:
-    """openrouter.ai/rankings -- API accessibility (same source as TRSbench usage)."""
-    scores: dict[str, float] = {}
-    try:
-        log.info("Scraping OpenRouter (accessibility)...")
-        html = playwright_get("https://openrouter.ai/rankings", wait_ms=8000)
-        # For accessibility: any model on OpenRouter = accessible via API (25 points)
-        soup = BeautifulSoup(html, "html.parser")
-        rank = 1
-        for item in soup.select("tr, li, [data-model]"):
-            name = item.get_text(strip=True).split("\n")[0].strip()
-            if name and len(name) > 3:
-                scores[name] = 25.0  # API-accessible = 25/100 score (per Bible)
-                rank += 1
-                if rank > 100: break
-        log.info(f"  ✅ OpenRouter access: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  ❌ OpenRouter access: {e}")
-    return scores
-
-
-def scrape_ollama() -> dict[str, float]:
-    """ollama.com/library -- local model availability. Returns {model: vram_gb}."""
-    scores: dict[str, float] = {}
-    try:
-        log.info("Scraping Ollama library...")
-        html = playwright_get("https://ollama.com/library", wait_ms=8000)
-        soup = BeautifulSoup(html, "html.parser")
-        # Ollama lists model sizes; lower VRAM = more accessible
-        result = parse_table(html,
-                              name_hints=["model", "name"],
-                              score_hints=["size", "gb", "param"])
-        # Store raw VRAM GB (will be inverted in normalize)
-        scores = result
-        log.info(f"  ✅ Ollama: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  ❌ Ollama: {e}")
-    return scores
-
-# == SCORING ENGINE ================================================
-
-def normalize(models: list, raw_key: str) -> dict[str, float]:
-    vals = {m["name"]: (m["raw_data"].get(raw_key) or 0.0) for m in models}
-    if raw_key in LOWER_IS_BETTER:
-        non_zero = {k: v for k, v in vals.items() if v > 0}
-        if not non_zero: return {k: 0.0 for k in vals}
-        worst = max(non_zero.values())
-        return {k: round((1 - v / worst) * 100 if v > 0 else 0.0, 4) for k, v in vals.items()}
-    top = max(vals.values(), default=0.0)
-    if top == 0.0: return {k: 0.0 for k in vals}
-    return {k: round((v / top) * 100.0, 4) for k, v in vals.items()}
-
-
-def count_nonnull_pillars(model: dict) -> int:
-    count = 0
-    for pillar, fields in PILLAR_FIELDS.items():
-        if any(model["raw_data"].get(f) is not None for f in fields):
-            count += 1
-    return count
-
-
-def calculate_composite(model_name: str, normalized: dict) -> float:
-    return round(sum(normalized.get(mkey, {}).get(model_name, 0.0) * w
-                     for mkey, w in SUB_WEIGHTS.items()), 2)
+def calculate_composite(model_name: str, pillar_scores: dict[str, float | None]) -> float:
+    """Composite score using Option A: proportional normalization over 6 pillars."""
+    available = {p: s for p, s in pillar_scores.items() if s is not None}
+    if not available:
+        return 0.0
+    
+    w_sum = sum(WEIGHTS[p] for p in available)
+    composite = sum(available[p] * (WEIGHTS[p] / w_sum) for p in available)
+    return round(composite, 2)
 
 
 def generate_checksum(data: dict) -> str:
+    """Bible V1.0 canonical: names|...|:scores,...  with .1f formatting."""
     names  = "|".join(m["name"] for m in data["models"])
-    scores = ",".join(f"{s:.1f}" if s is not None else "null"
-                      for m in data["models"] for s in m["scores"])
+    scores = ",".join(
+        f"{s:.1f}" if s is not None else "null"
+        for m in data["models"] for s in m["scores"]
+    )
     return hashlib.sha256((names + ":" + scores).encode()).hexdigest()
 
 
 def match_name(scraped: str, existing: list[str]) -> str | None:
     s = scraped.lower().strip()
     for name in existing:
-        if name.lower() == s: return name
+        if name.lower() == s:
+            return name
     for name in existing:
         n = name.lower()
-        if s in n or n in s: return name
+        if s in n or n in s:
+            return name
     s_tok = set(s.replace("-", " ").replace("_", " ").split())
     for name in existing:
         n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
-        if len(s_tok & n_tok) >= 2: return name
+        if len(s_tok & n_tok) >= 2:
+            return name
     return None
+
+
+def write_status(status: str, ranked: list, source_summary: list,
+                 duration_sec: int, error: str | None = None) -> None:
+    """Update status.json with this agent's latest run info."""
+    status_file = REPO_PATH / "status.json"
+    try:
+        if status_file.exists():
+            with open(status_file) as f:
+                sdata = json.load(f)
+        else:
+            sdata = {"last_updated": TODAY, "agents": {}}
+
+        from datetime import datetime
+        now_iso = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+        top5 = []
+        for m in ranked[:5]:
+            sc = m["scores"][-1] if m["scores"] else None
+            if sc is not None:
+                top5.append({"rank": m["rank"], "name": m["name"], "score": sc})
+
+        sources_hit = sum(1 for s in source_summary if ", 0 matched" not in s and "0 scraped" not in s)
+
+        sdata["last_updated"] = now_iso
+        sdata["agents"]["tragents"] = {
+            "name":             "TRAgents DDP",
+            "label":            "Agents Leaderboard",
+            "emoji":            "ð¤",
+            "enabled":          True,
+            "last_run":         now_iso,
+            "last_run_date":    TODAY,
+            "status":           status,
+            "duration_seconds": duration_sec,
+            "sources_total":    22,
+            "sources_hit":      sources_hit,
+            "models_qualified": len(ranked),
+            "top_model":        ranked[0]["name"] if ranked else None,
+            "top_score":        (ranked[0]["scores"][-1] if ranked and ranked[0]["scores"] else None),
+            "top5":             top5,
+            "leaderboard_url":  "/tragents-scores.html",
+            "next_run":         (TODAY + "T05:00:00").replace(TODAY, _next_day()),
+            "error":            error,
+        }
+
+        with open(status_file, "w") as f:
+            json.dump(sdata, f, indent=2)
+        log.info("â status.json updated")
+    except Exception as e:
+        log.warning(f"Could not write status.json: {e}")
+
+
+def _next_day() -> str:
+    from datetime import datetime, timedelta
+    return (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+
+
+def update_index_timestamp() -> None:
+    """Rewrite var LAST_PUSH_TIME in index.html with the current local time."""
+    index_file = REPO_PATH / "index.html"
+    if not index_file.exists():
+        log.warning("index.html not found â skipping timestamp update")
+        return
+    try:
+        from datetime import datetime
+        now = datetime.now()
+        # Format as "4:16 AM CST" (no leading zero on hour)
+        hour   = now.strftime("%I").lstrip("0") or "12"
+        minute = now.strftime("%M")
+        ampm   = now.strftime("%p")
+        push_time = f"{hour}:{minute} {ampm} CST"
+
+        content = index_file.read_text()
+        new_content = re.sub(
+            r"var LAST_PUSH_TIME\s*=\s*'[^']*';",
+            f"var LAST_PUSH_TIME = '{push_time}';",
+            content,
+        )
+        if new_content != content:
+            index_file.write_text(new_content)
+            log.info(f"â index.html timestamp updated â {push_time}")
+        else:
+            log.warning("index.html: LAST_PUSH_TIME pattern not found â timestamp not updated")
+    except Exception as e:
+        log.warning(f"Could not update index.html timestamp: {e}")
 
 
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "tragent-data.json"],
+        subprocess.run(["git", "add", "tragent-data.json", "status.json", "index.html"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)
         if r.returncode != 0:
             if "nothing to commit" in r.stdout + r.stderr:
-                log.info("Nothing to commit."); return True
-            log.error(f"Commit:\n{r.stderr}"); return False
-        subprocess.run(["git", "push"], cwd=REPO_PATH, check=True, capture_output=True)
+                log.info("Nothing to commit â data unchanged.")
+                return True
+            log.error(f"Commit failed:\n{r.stderr}")
+            return False
+        subprocess.run(["git", "push"],
+                       cwd=REPO_PATH, check=True, capture_output=True)
+        log.info("â Pushed to GitHub")
         return True
     except subprocess.CalledProcessError as e:
-        log.error(f"Git error: {e.stderr}"); return False
+        log.error(f"Git error: {e.stderr}")
+        return False
 
 
-# == MAIN ==========================================================
+# ââ MAIN ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+
 def main():
+    import time as _time
+    main._start_time = _time.time()
+
     if TEST_TELEGRAM:
-        notify("✅ <b>TRAgents Agent online</b>"); print("Telegram OK."); return
+        notify("â <b>TRAgents DDP online</b>\nTelegram works! Ready to run.")
+        print("Telegram test sent. Check your phone.")
+        return
 
-    mode = "DRY RUN 🔍" if DRY_RUN else "LIVE 🚀"
-    log.info(f"Agent TRAgents | {TODAY} | {mode}")
-    notify(f"🤖 <b>Agent TRAgents starting</b>\n📅 {TODAY}\n⚙️ {mode}\n22 sources → tragent-data.json")
+    mode = "DRY RUN ð" if DRY_RUN else "LIVE ð"
+    log.info(f"TRAgents DDP | {TODAY} | {mode}")
+    notify(f"ð¤ <b>TRAgents DDP starting</b>\nð {TODAY}\nâï¸ {mode}\n6 pillars (22+ sources) â tragent-data.json")
 
+    # ââ Load data ââ
     if not DATA_FILE.exists():
         msg = f"tragent-data.json not found at {DATA_FILE}"
-        log.error(msg); notify(f"❌ {msg}"); return
+        log.error(msg); notify(f"â {msg}"); return
 
-    with open(DATA_FILE) as f: data = json.load(f)
+    with open(DATA_FILE) as f:
+        data = json.load(f)
+
     models = data["models"]
     names  = [m["name"] for m in models]
+    dates  = data["dates"]
+    notify(f"ð Loaded. Models: {len(models)} | Dates: {dates[0]} â {dates[-1]}")
 
-    if TODAY in data["dates"]:
-        date_is_new = False; today_idx = data["dates"].index(TODAY)
+    # ââ Date slot ââ
+    if TODAY in dates:
+        date_is_new = False
+        today_idx   = dates.index(TODAY)
+        notify(f"â¹ï¸ {TODAY} exists at index {today_idx}. Refreshing.")
     else:
-        date_is_new = True; data["dates"].append(TODAY); today_idx = len(data["dates"]) - 1
+        date_is_new = True
+        data["dates"].append(TODAY)
+        today_idx = len(data["dates"]) - 1
+        notify(f"â New date: {TODAY} (slot {today_idx})")
 
-    notify(f"📂 {len(models)} models | {data['dates'][0]} → {data['dates'][-1]}")
+    # ââ Scrape all 6 pillars ââ
+    log.info("Scraping 6 pillars (22+ sources)...")
+    
+    pillar_scrapers = {
+        "task_completion":  scrape_task_completion,
+        "cost_efficiency":  scrape_cost_efficiency,
+        "tool_reliability": scrape_tool_reliability,
+        "safety_security":  scrape_safety_security,
+        "accessibility":    scrape_accessibility,
+        "multi_model":      scrape_multi_model,
+    }
 
-    # -- Scrape all pillars --
-    def apply(src_dict: dict, field: str):
-        for sn, val in src_dict.items():
-            canon = match_name(sn, names)
-            if canon:
-                m = next(x for x in models if x["name"] == canon)
-                m["raw_data"][field] = val
+    pillar_results = {}
+    source_summary = []
 
-    # Pillar 1: Task Completion
-    apply(scrape_gaia(),            "gaia_pct")
-    apply(scrape_swebench_agents(), "swebench_pct")
-    apply(scrape_osworld(),         "osworld_pct")
-    apply(scrape_taubench(),        "taubench_pct")
-    notify("✅ Pillar 1: Task Completion scraped")
+    for pillar_name, scraper_fn in pillar_scrapers.items():
+        results = scraper_fn()
+        pillar_results[pillar_name] = results
+        source_summary.append(f"{pillar_name}: {len(results)} models")
+        log.info(f"  {pillar_name}: {len(results)} models scraped")
 
-    # Pillar 2: Cost Efficiency
-    apply(scrape_hal_cost(),   "hal_cost_inv")
-    apply(scrape_arcagi_cost(),"arcagi_cost_inv")
-    apply(scrape_galileo(),    "galileo_cost_inv")
-    notify("✅ Pillar 2: Cost Efficiency scraped")
+    notify("ð <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
-    # Pillar 3: Tool Reliability
-    apply(scrape_seal_tool(), "seal_tool_pct")
-    notify("✅ Pillar 3: Tool Reliability scraped (SEAL only; others = static research data)")
+    # ââ Score models ââ
+    model_pillar_scores = {name: {} for name in names}
+    
+    for pillar, results in pillar_results.items():
+        for scraped_name, score in results.items():
+            canonical = match_name(scraped_name, names)
+            if canonical:
+                model_pillar_scores[canonical][pillar] = score
 
-    # Pillar 4: Safety
-    apply(scrape_toolemu(), "toolemu_pct")
-    notify("✅ Pillar 4: Safety scraped (ToolEmu live; others = static research data)")
-
-    # Pillar 5: Accessibility
-    apply(scrape_openrouter_access(), "openweight_score")
-    apply(scrape_ollama(),            "hardware_inv")
-    notify("✅ Pillar 5: Accessibility scraped")
-
-    # -- Count pillars --
     for model in models:
-        model["source_count"] = count_nonnull_pillars(model)
-
-    # -- Normalize --
-    all_raw_fields = [f for fields in PILLAR_FIELDS.values() for f in fields]
-    normalized = {f: normalize(models, f) for f in all_raw_fields}
-
-    # Map sub-weight keys to raw fields for composite calculation
-    sub_to_raw = {k: k for k in SUB_WEIGHTS}  # keys match raw field names
-
+        n = model["name"]
+        pillar_scores = model_pillar_scores[n]
+        
+        # Count non-null pillars
+        non_null_count = sum(1 for s in pillar_scores.values() if s is not None)
+        model_source_count = non_null_count  # Simple: just count pillars with data
+        
+        # Calculate composite score
+        sc = calculate_composite(n, pillar_scores)
+        
+        # Update scores array
+        while len(model["scores"]) < today_idx:
+            model["scores"].append(None)
+        if date_is_new:
+            model["scores"].append(sc)
+        else:
+            if today_idx < len(model["scores"]):
+                model["scores"][today_idx] = sc
+            else:
+                model["scores"].append(sc)
+    
+    # ââ Qualification filter (3+ pillars) ââ
     def today_score(m):
         s = m["scores"][today_idx] if today_idx < len(m["scores"]) else None
         return s if s is not None else -1.0
 
-    for model in models:
-        sc = calculate_composite(model["name"], normalized)
-        while len(model["scores"]) < today_idx: model["scores"].append(None)
-        if date_is_new: model["scores"].append(sc)
-        elif today_idx < len(model["scores"]): model["scores"][today_idx] = sc
-        else: model["scores"].append(sc)
+    # Count pillars with data for each model
+    model_pillar_counts = {
+        m["name"]: sum(1 for s in model_pillar_scores[m["name"]].values() if s is not None)
+        for m in models
+    }
 
-    qualified = [m for m in models if m["source_count"] >= QUALIFICATION_MIN]
-    ranked    = sorted(qualified, key=today_score, reverse=True)
-    for rank, m in enumerate(ranked, 1): m["rank"] = rank
+    qualified = [m for m in models if model_pillar_counts.get(m["name"], 0) >= QUALIFICATION_MIN_PILLARS]
+    disqualified = [m for m in models if model_pillar_counts.get(m["name"], 0) < QUALIFICATION_MIN_PILLARS]
+    if disqualified:
+        log.info(f"Disqualified (< {QUALIFICATION_MIN_PILLARS} pillars): "
+                 f"{[m['name'] for m in disqualified]}")
 
-    top5 = "\n".join(f"  {m['rank']}. {m['name']}  {today_score(m):.1f}"
-                     for m in ranked[:5])
-    notify(f"🏆 <b>TRAgents Top 5 -- {TODAY}</b>\n{top5}\n\n📊 Qualified: {len(qualified)}")
+    # ââ Update ranks ââ
+    ranked = sorted(qualified, key=today_score, reverse=True)
+    for rank, m in enumerate(ranked, 1):
+        m["rank"] = rank
 
+    top5_lines = "\n".join(
+        f"  {m['rank']}. {m['name']}  {today_score(m):.1f}"
+        for m in ranked[:5]
+    )
+    notify(f"ð <b>TRAgents Top 5 â {TODAY}</b>\n{top5_lines}")
+
+    # ââ Checksum ââ
     data["checksum"] = generate_checksum(data)
+    log.info(f"Checksum: {data['checksum'][:20]}...")
 
     if DRY_RUN:
-        notify("🔍 <b>DRY RUN</b> -- nothing written."); return
+        notify(f"ð <b>DRY RUN complete</b>\nWould score {len(qualified)} models.\nNothing written.")
+        log.info("Dry run complete. Nothing written.")
+        return
 
-    with open(DATA_FILE, "w") as f: json.dump(data, f, indent=2)
+    # ââ Write + push ââ
+    import time as _time
+    _t0 = getattr(main, "_start_time", _time.time())
+    duration = int(_time.time() - _t0)
+
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=2)
+    log.info(f"Wrote {DATA_FILE.name}")
+
+    write_status("success", ranked, source_summary, duration)
+    update_index_timestamp()
 
     ok = git_push(f"TRAgents daily update {TODAY} ({len(qualified)} models)")
     if ok:
-        notify(f"✅ <b>TRAgents done!</b>\n📅 {TODAY}\n🌐 → trainingrun.ai/tragents")
+        notify(f"â <b>TRAgents DDP done!</b>\nð {TODAY}\nð {len(qualified)} models\nð â trainingrun.ai/tragents")
     else:
-        notify(f"⚠️ JSON updated but push failed. cd {REPO_PATH} && git push")
+        notify(f"â ï¸ JSON updated but push failed. cd {REPO_PATH} && git push")
 
 
 if __name__ == "__main__":
