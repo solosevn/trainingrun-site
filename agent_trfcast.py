@@ -200,23 +200,52 @@ def scrape_forecastbench() -> tuple[dict[str, float], dict[str, float]]:
     tournament_scores = {}
     try:
         log.info("Scraping ForecastBench...")
-        # NOTE: /leaderboard now 404s -- baseline leaderboard is at /baseline/
-        html = playwright_get("https://forecastbench.org/baseline/", wait_ms=10000)
-        rows = parse_first_table(html)
+        # Table is JS-rendered -- use page.evaluate() to extract from live DOM
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+            page = ctx.new_page()
+            try:
+                page.goto("https://forecastbench.org/baseline/",
+                          wait_until="networkidle", timeout=90_000)
+            except Exception:
+                pass
+            try:
+                page.wait_for_selector("table", timeout=30_000)
+            except Exception:
+                pass
+            page.wait_for_timeout(3000)
+            rows = page.evaluate("""() => {
+                const table = document.querySelector('table');
+                if (!table) return [];
+                const allRows = Array.from(table.querySelectorAll('tr'));
+                const headers = Array.from(allRows[0].querySelectorAll('th,td'))
+                    .map(el => el.textContent.trim());
+                const modelIdx = headers.indexOf('Model');
+                const overallIdx = headers.indexOf('Overall (N)');
+                if (modelIdx === -1) return [];
+                return allRows.slice(1).map(row => {
+                    const cells = Array.from(row.querySelectorAll('td'))
+                        .map(td => td.textContent.trim());
+                    return {
+                        model: cells[modelIdx] || '',
+                        overall: overallIdx >= 0 ? cells[overallIdx] || '' : ''
+                    };
+                }).filter(r => r.model);
+            }""")
+            browser.close()
 
         SKIP = {"Superforecaster median forecast", "Public median forecast"}
         for row in rows:
-            name = row.get("Model", "")
-            if not name:
-                vals = list(row.values())
-                name = vals[0] if vals else ""
+            name = row.get("model", "")
             if not name or name in SKIP:
                 continue
-            # "Overall (N)" column: format "0.086 (577)" -- extract first float
-            overall_raw = row.get("Overall (N)", row.get("Overall", ""))
+            overall_raw = row.get("overall", "")
             if not overall_raw:
                 continue
-            clean = overall_raw.split(" ")[0].strip()
+            clean = overall_raw.split(" ")[0].replace(",", "").strip()
             try:
                 val = float(clean)
                 if 0 < val <= 1:
@@ -225,11 +254,13 @@ def scrape_forecastbench() -> tuple[dict[str, float], dict[str, float]]:
             except ValueError:
                 pass
 
-        log.info(f"  ForecastBench: {len(baseline_scores)} baseline, {len(tournament_scores)} tournament")
+        log.info(f"  ✅ ForecastBench: {len(baseline_scores)} baseline, {len(tournament_scores)} tournament")
     except Exception as e:
-        log.error(f"  ForecastBench: {e}")
+        log.error(f"  ❌ ForecastBench: {e}")
 
     return baseline_scores, tournament_scores
+
+
 def scrape_rallies() -> tuple[dict[str, float], dict[str, float]]:
     """
     Rallies.ai Arena leaderboard (rallies.ai/arena). Returns two dicts:
