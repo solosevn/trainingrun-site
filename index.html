@@ -1,603 +1,936 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
-        <script>
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', 'G-20ZZ8BG99X');
-        </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training Run | The AI Benchmark</title>
-    <meta name="description" content="Training Run - The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype—just clarity.">
-    <meta property="og:title" content="Training Run | The AI Benchmark">
-    <meta property="og:description" content="The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype—just clarity.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://trainingrun.ai">
-    <link rel="canonical" href="https://trainingrun.ai">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-20ZZ8BG99X');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Training Run | The AI Benchmark</title>
+  <meta name="description" content="Training Run - The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.">
+  <meta property="og:title" content="Training Run | The AI Benchmark">
+  <meta property="og:description" content="The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://trainingrun.ai">
+  <link rel="canonical" href="https://trainingrun.ai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ââ Hero: compact, 42vh ââ */
+    .hero { min-height: 34vh; padding-top: 186px; padding-bottom: 36px; }
+    .hero-badge { font-size: 10px; padding: 6px 16px; margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(48px, 9.6vw, 112px); margin-bottom: 12px; }
+    .hero .tagline { font-size: clamp(13px, 2.4vw, 19px); margin-bottom: 24px; }
+    .hero-description { font-size: 14px; margin-bottom: 24px; }
+    .cta-button.primary { padding: 11px 25px; font-size: 14px; }
 
-    <style>
-        .todays-scores-section {
-            padding: 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .todays-scores-section .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .todays-scores-section h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-        }
-        .todays-scores-section .view-all-link {
-            font-size: 0.9rem;
-            color: #00e5ff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-        .todays-scores-section .view-all-link:hover {
-            opacity: 0.8;
-        }
-        .todays-scores-section .section-subtitle {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.9rem;
-            margin-bottom: 32px;
-        }
-        .live-scores-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-        }
-        .score-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-        .score-card:hover {
-            border-color: rgba(0,229,255,0.3);
-            transform: translateY(-2px);
-        }
-        .score-card.rank-1 {
-            border-color: rgba(255,215,0,0.5);
-            background: rgba(255,215,0,0.06);
-            box-shadow: 0 0 20px rgba(255,215,0,0.15);
-        }
-        .score-card.rank-2 {
-            border-color: rgba(192,192,192,0.5);
-            background: rgba(192,192,192,0.05);
-            box-shadow: 0 0 16px rgba(192,192,192,0.12);
-        }
-        .score-card.rank-3 {
-            border-color: rgba(205,127,50,0.5);
-            background: rgba(205,127,50,0.05);
-            box-shadow: 0 0 14px rgba(205,127,50,0.12);
-        }
-        .score-rank {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.6);
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .score-card.rank-1 .score-rank {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #000;
-            font-weight: 800;
-        }
-        .score-card.rank-2 .score-rank {
-            background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
-            color: #000;
-            font-weight: 800;
-        }
-        .score-card.rank-3 .score-rank {
-            background: linear-gradient(135deg, #cd7f32, #a0622e);
-            color: #fff;
-            font-weight: 800;
-        }
-        .score-model-name {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #ffffff;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .score-company {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.4);
-            margin-bottom: 16px;
-        }
-        .score-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00e5ff, #7c4dff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-        .score-delta {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .score-delta.positive { color: #00e676; }
-        .score-delta.negative { color: #ff5252; }
-        .score-delta.neutral { color: rgba(255,255,255,0.4); }
-        .score-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 4px;
-        }
-        @media (max-width: 900px) {
-            .live-scores-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 600px) {
-            .live-scores-grid { grid-template-columns: repeat(2, 1fr); }
-            .todays-scores-section { padding: 40px 20px; }
-        }
-    </style>
+    /* ââ Leaderboard section ââ */
+    .leaderboards {
+      max-width: 1260px;
+      margin: -6px auto 0;
+      padding: 0 24px 40px;
+    }
+
+    /* ââ TRSbench wrapper: narrower, centered ââ */
+    .trsbench-wrapper {
+      max-width: 540px;
+      margin: 0 auto 14px;
+    }
+
+    /* ââ Section headers ââ */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .section-header.centered {
+      justify-content: center;
+      position: relative;
+    }
+    .section-header.centered .section-link { position: absolute; right: 0; }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+    .section-title .cyan { color: #00d4ff; }
+    .section-title .red  { color: #ff5252; text-shadow: 0 0 8px rgba(255,82,82,0.5); }
+
+    .section-link {
+      font-size: 10px;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s, text-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .section-link:hover { color: #00d4ff; text-shadow: 0 0 8px rgba(0,212,255,0.6); }
+
+    /* ââ Score card rows ââ */
+    .cards-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+    .score-card {
+      flex: 1;
+      min-width: 0;
+      background: linear-gradient(135deg, rgba(40,40,70,0.6), rgba(25,25,50,0.8));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 6px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .score-card:hover {
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-1px);
+    }
+    .score-card.gold   { background: linear-gradient(135deg,rgba(255,215,0,0.12),rgba(255,180,0,0.05));  border-color: rgba(255,215,0,0.25); }
+    .score-card.silver { background: linear-gradient(135deg,rgba(192,192,192,0.10),rgba(160,160,180,0.05)); border-color: rgba(192,192,192,0.2); }
+    .score-card.bronze { background: linear-gradient(135deg,rgba(205,127,50,0.10),rgba(180,100,40,0.05)); border-color: rgba(205,127,50,0.2); }
+
+    .card-rank   { font-size: 8px;   font-weight: 700; color: #5a5a80; margin-bottom: 1px; }
+    .score-card.gold   .card-rank { color: #ffd700; }
+    .score-card.silver .card-rank { color: #c0c0c0; }
+    .score-card.bronze .card-rank { color: #cd7f32; }
+
+    .card-score   { font-size: 14px; font-weight: 800; color: #ffffff; margin-bottom: 1px; font-variant-numeric: tabular-nums; }
+    .card-model   { font-size: 7.5px; font-weight: 600; color: #b0b0d4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; }
+    .card-company { font-size: 7px; font-weight: 500; color: #5a5a80; }
+    .card-delta   { font-size: 7px; font-weight: 700; margin-top: 1px; }
+    .card-delta.up   { color: #00e676; }
+    .card-delta.down { color: #ff5252; }
+    .card-delta.flat { color: #4a4a70; }
+
+    /* ââ 2Ã2 grid ââ */
+    .benchmarks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .benchmark-block {
+      background: rgba(255,255,255,0.015);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 8px 6px;
+    }
+    .benchmark-block .cards-row { margin-bottom: 0; }
+
+    /* ââ Responsive ââ */
+    @media (max-width: 900px) {
+      .hero { min-height: 35vh; }
+      .trsbench-wrapper { max-width: 100%; }
+      .benchmarks-grid { grid-template-columns: 1fr; gap: 12px 0; }
+      .card-score { font-size: 12px; }
+      .score-card { padding: 5px 3px; }
+    }
+    @media (max-width: 600px) {
+      body { overflow-x: hidden; }
+      .benchmark-block { max-width: 100%; }
+      .leaderboards { padding: 0 12px 30px; max-width: 100%; overflow-x: hidden; }
+      #model-modal { max-height: 100vh; }
+    }
+
+    /* ── News Ticker ── */
+    .news-ticker {
+      position: fixed;
+      top: 86px;
+      left: 0;
+      right: 0;
+      height: 46px;
+      background: #000000;
+      border-bottom: 1px solid rgba(0,212,255,0.18);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      z-index: 999;
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      white-space: nowrap;
+      animation: tickerScroll 56s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 30px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.82);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .ticker-item:hover { color: #00d4ff; }
+    .ticker-logo {
+      height: 30px;
+      width: 30px;
+      object-fit: contain;
+      border-radius: 5px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.06);
+      padding: 2px;
+    }
+    .ticker-logo-fb {
+      height: 30px;
+      width: 30px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.45);
+      flex-shrink: 0;
+    }
+    .ticker-badge { display: inline-flex; flex-direction: column; gap: 1px; line-height: 1.25; }
+    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.6px; }
+    .ticker-name { font-size: 12px; font-weight: 600; color: #ffffff; }
+    .ticker-val  { font-size: 11px; font-weight: 700; margin-left: 2px; }
+    .ticker-val.up, .ticker-val.down { font-size: 22px; line-height: 1; margin-left: 6px; }
+    .ticker-val.up      { color: #00e676; }
+    .ticker-val.down    { color: #ff5252; }
+    .ticker-val.neutral { color: rgba(0,212,255,0.85); }
+
+    /* ── Nav date inline ── */
+    .nav-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-date-inline {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.42);
+      letter-spacing: 1.5px;
+      position: relative;
+      top: 2px;
+      white-space: nowrap;
+    }
+
+    /* ── Model expand modal ── */
+    #model-modal-backdrop {
+      display:none;position:fixed;inset:0;z-index:9999;
+      background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
+      align-items:center;justify-content:center;
+    }
+    #model-modal-backdrop.open { display:flex; }
+    #model-modal {
+      position:relative;width:360px;max-width:94vw;
+      max-height:90vh;
+      border-radius:20px;overflow:hidden;
+      background:linear-gradient(180deg,rgba(14,14,36,0.99),rgba(8,8,22,0.99));
+      transform:scale(0.85);opacity:0;
+      transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.18s ease;
+      border:1px solid rgba(255,255,255,0.1);
+      display:flex;flex-direction:column;
+    }
+    #model-modal-backdrop.open #model-modal { transform:scale(1);opacity:1; }
+    #model-modal.glow-gold { border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 28px rgba(255,215,0,0.45),0 0 8px rgba(255,215,0,0.25); }
+    #model-modal.glow-silver { border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 22px rgba(200,205,220,0.4),0 0 6px rgba(200,205,220,0.2); }
+    #model-modal.glow-bronze { border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 28px rgba(205,127,50,0.45),0 0 8px rgba(205,127,50,0.25); }
+    #model-modal-close {
+      position:absolute;top:12px;right:14px;z-index:10;
+      background:rgba(255,255,255,0.08);border:none;cursor:pointer;
+      color:rgba(255,255,255,0.5);font-size:16px;line-height:1;
+      border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+      transition:background 0.15s;
+    }
+    #model-modal-close:hover { background:rgba(255,255,255,0.16);color:#fff; }
+    #model-modal-bg {
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:cover;opacity:0.06;pointer-events:none;z-index:0;
+    }
+    .mm-scroll {
+      position:relative;z-index:1;flex:1;overflow-y:auto;
+      padding:18px 16px 16px;
+      display:flex;flex-direction:column;gap:14px;
+    }
+    .mm-watermark { position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:95%;opacity:0.12;pointer-events:none;z-index:0;filter:grayscale(100%) brightness(2);-webkit-mask-image:radial-gradient(ellipse 70% 75% at 50% 65%, black 20%, transparent 75%);mask-image:radial-gradient(ellipse 70% 75% at 50% 65%, black 20%, transparent 75%); }
+    .mm-header { display:flex;flex-direction:row;align-items:center;gap:14px; }
+    .mm-logo-big {
+      width:94px;height:94px;border-radius:16px;
+      object-fit:contain;background:rgba(255,255,255,0.06);
+      padding:4px;flex-shrink:0;
+    }
+    .mm-header-text { display:flex;flex-direction:column;gap:5px; }
+    .mm-name {
+      font-size:24px;font-weight:800;line-height:1.15;
+      color:#E8622A;
+      text-shadow:0 0 12px rgba(232,98,42,0.6),0 0 24px rgba(232,98,42,0.3);
+    }
+    .mm-company {
+      font-size:16px;font-weight:600;color:#ffffff;letter-spacing:0.2px;
+      text-shadow:0 0 8px rgba(255,255,255,0.5);
+    }
+    .mm-boards { display:flex;flex-direction:column;gap:5px; }
+    .mm-board-row {
+      display:flex;flex-direction:row;align-items:center;
+      padding:10px 13px;border-radius:10px;
+      background:rgba(255,255,255,0.04);border:1px solid transparent;
+    }
+    .mm-board-row.rank-gold { background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.35); }
+    .mm-board-row.rank-silver { background:rgba(200,205,220,0.1);border:1px solid rgba(200,205,220,0.3); }
+    .mm-board-row.rank-bronze { background:rgba(205,127,50,0.12);border:1px solid rgba(205,127,50,0.35); }
+    .mm-board-label { font-size:18px;font-weight:400; }
+    .mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
+    .mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right;white-space:nowrap; }
+    .mm-board-rank.not-ranked { font-size:13px;font-weight:600;margin-left:auto;text-align:right; }
+    .mm-board-row .mm-board-delta:empty::after { content: "NEW"; color: #00d4ff; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+    .mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
+    .mm-tier-section { display:flex;flex-direction:row;align-items:center;gap:10px; }
+    .mm-tier-badge { font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:12px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);white-space:nowrap; }
+    .mm-tier-desc { font-size:14px;color:rgba(255,255,255,0.6);line-height:1.4; }
+    .mm-bio { font-size:15px;line-height:1.6;color:rgba(255,255,255,0.6);min-height:0; }
+    .mm-divider-cyan { border:none;border-top:1px solid rgba(0,212,255,0.35);margin:4px 0; }
+    .mm-tiers { display:flex;flex-direction:column;gap:6px; }
+    .mm-tier-row { display:flex;flex-direction:row;align-items:center;gap:10px; }
+    .mm-tier-desc-text { font-size:11px;color:rgba(255,255,255,0.45);line-height:1.3; }
+    .mm-tier-pill {
+      font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+      padding:4px 10px;border-radius:10px;
+      background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);
+      border:1px solid rgba(255,255,255,0.1);white-space:nowrap;
+      min-width:90px;text-align:center;
+    }
+    .mm-tier-pill.active {
+      background:rgba(255,255,255,0.1);color:#ffffff;
+      border:1px solid rgba(255,255,255,0.35);
+      text-shadow:0 0 6px rgba(255,255,255,0.4);
+    }
+    .mm-released {
+      text-align:center;font-size:15px;font-weight:700;
+      color:rgba(255,255,255,0.75);letter-spacing:0.5px;
+      margin-top:auto;padding-top:2px;
+      text-shadow:0 0 8px rgba(255,255,255,0.3);
+    }
+        /* ── Model expand modal ── */
+    #model-modal-backdrop {
+      display:none;position:fixed;inset:0;z-index:9999;
+      background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
+      align-items:center;justify-content:center;
+    }
+    #model-modal-backdrop.open { display:flex; }
+    
+        /* ── Freshness line ── */
+    .freshness-line {
+      font-size: 11px;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.5);
+      letter-spacing: 0.3px;
+      margin-bottom: 5px;
+      margin-top: -3px;
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+<div class="bg-animation"></div>
 
-    <nav>
+<nav>
+  <div class="nav-logo-group">
+    <a href="/" class="logo">Training Run</a>
+    <span class="nav-date-inline" id="current-week"></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/sources">Verify Our Data</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+<div class="news-ticker">
+  <div class="ticker-track" id="ticker-track">
+    <span style="color:rgba(255,255,255,0.25);padding:0 24px;font-size:11px;font-style:italic;">Loading live data&hellip;</span>
+  </div>
+</div>
+<section class="hero">
+  <h1>Training Run</h1>
+  <p class="tagline">Your Weekly AI Conditioning</p>
+  <p class="hero-description">
+    The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.
+  </p>
+  <div class="hero-cta" style="flex-direction:column;align-items:center;">
+    <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Latest Episode</a>
+  </div>
+  
+</section>
+
+<!-- ââââââââââââââ LIVE LEADERBOARDS ââââââââââââââ -->
+<div class="leaderboards">
+
+  <!-- TRSbench Top 10 -->
+  <div class="trsbench-wrapper">
+    <div class="section-header">
+      <span class="section-title"><span class="cyan">TRS</span>bench &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Overall)</span></span>
+      <a href="/scores" class="section-link">View Full Rankings &rarr;</a>
+    </div>
+    <div class="freshness-line" id="fl-trsbench"></div>
+    <div id="trsbench-row" class="cards-row">
+      <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:20px 0;">Loading&hellip;</div>
+    </div>
+  </div>
+
+  <!-- 2Ã2 grid -->
+  <div class="benchmarks-grid">
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title"><span class="cyan">TRU</span>score &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Truth)</span></span>
+        <a href="/truscore-scores" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div class="freshness-line" id="fl-truscore"></div>
+      <div id="truscore-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title"><span class="cyan">TRS</span>code &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Coding)</span></span>
+        <a href="/trscode" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div class="freshness-line" id="fl-trscode"></div>
+      <div id="trscode-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title"><span class="cyan">TRF</span>cast &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Prediction)</span></span>
+        <a href="/trfcast" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div class="freshness-line" id="fl-trfcast"></div>
+      <div id="trfcast-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <div class="benchmark-block">
+      <div class="section-header">
+        <span class="section-title"><span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Best Agent)</span></span>
+        <a href="/tragents-scores" class="section-link">Full Rankings &rarr;</a>
+      </div>
+      <div class="freshness-line" id="fl-tragents"></div>
+      <div id="tragents-row" class="cards-row">
+        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ââââââââââââââ REST OF PAGE ââââââââââââââ -->
+<section class="intro-section">
+  <div class="container">
+    <h2>Why Training Run Exists</h2>
+    <p class="intro-text">
+      AI is moving fast. Too fast for most people to keep up. Every week brings new models, new benchmarks, new claims. How do you know what&rsquo;s real?
+    </p>
+    <p class="intro-text">
+      <strong>Training Run</strong> cuts through the noise. We aggregate data from the most respected evaluation platforms, apply a transparent scoring methodology, and deliver a clear picture of where AI models actually stand&mdash;updated weekly.
+    </p>
+    <p class="intro-text">
+      Whether you&rsquo;re an investor evaluating AI companies, a policymaker shaping regulation, a developer choosing which API to use, or just someone who wants to understand this technology&mdash;we&rsquo;re building the resource you need.
+    </p>
+  </div>
+</section>
+
+<section class="trs-preview">
+  <div class="container">
+    <h2>The <span class="cyan">TRSbench</span></h2>
+    <p class="section-intro">
+      Our Training Run Score (TRS) is a weighted composite of seven performance dimensions, aggregated from peer-reviewed benchmarks and public evaluation platforms.
+    </p>
+    <div class="trs-components">
+      <div class="component"><span class="weight">21%</span><h3>Safety</h3><p>Reliability and responsible behavior</p></div>
+      <div class="component"><span class="weight">20%</span><h3>Reasoning</h3><p>Complex problem-solving and logical deduction</p></div>
+      <div class="component"><span class="weight">20%</span><h3>Coding</h3><p>Real-world programming ability</p></div>
+      <div class="component"><span class="weight">18%</span><h3>Human Preference</h3><p>What users actually prefer in blind tests</p></div>
+      <div class="component"><span class="weight">8%</span><h3>Knowledge</h3><p>Breadth and accuracy across domains</p></div>
+      <div class="component"><span class="weight">7%</span><h3>Efficiency</h3><p>Performance relative to cost</p></div>
+      <div class="component"><span class="weight">6%</span><h3>Usage Adoption</h3><p>Real-world developer adoption via OpenRouter</p></div>
+    </div>
+    <a href="/trsmethodology" class="learn-more">Learn More About Our Methodology &rarr;</a>
+  </div>
+</section>
+
+<section class="trust-section">
+  <div class="container">
+    <h2>Built on Trusted Sources</h2>
+    <p class="section-intro">Every score we publish is derived from publicly verifiable data. No black boxes.</p>
+    <div class="sources-grid">
+      <div class="source-card">
+        <h3>LMSYS Chatbot Arena</h3>
+        <p>1M+ human preference votes via blind comparisons</p>
+        <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener">huggingface.co/spaces/lmarena-ai/chatbot-arena</a>
+      </div>
+      <div class="source-card">
+        <h3>ARC-AGI-2</h3>
+        <p>Novel reasoning tasks that test genuine understanding</p>
+        <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>
+      </div>
+      <div class="source-card">
+        <h3>SWE-Bench</h3>
+        <p>Real GitHub issues to measure coding ability</p>
+        <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a>
+      </div>
+      <div class="source-card">
+        <h3>MMLU / GPQA</h3>
+        <p>Graduate-level knowledge evaluation</p>
+        <a href="https://paperswithcode.com/dataset/mmlu" target="_blank" rel="noopener">paperswithcode.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="segments-section">
+  <div class="container">
+    <h2>Show <span class="cyan">Segments</span></h2>
+    <p class="section-intro">
+      Every week, Training Run covers 9 data-driven segments. Each has its own transparent methodology&mdash;click to learn how we calculate every number.
+    </p>
+    <div class="segments-grid">
+      <a href="/trsmethodology" class="segment-card"><div class="segment-icon">&#x1F4CA;</div><h3><span style="color:#00d4ff">TRS</span> Benchmark</h3><p>Weighted composite AI ranking</p></a>
+      <a href="/truscore" class="segment-card"><div class="segment-icon">&#x1F680;</div><h3><span style="color:#00d4ff">TRU</span>score</h3><p>AI truth &amp; neutrality index</p></a>
+      <a href="/trfcast" class="segment-card"><div class="segment-icon">&#x1F4C8;</div><h3><span style="color:#00d4ff">TRF</span>cast</h3><p>AI forecasting &amp; trading scores</p></a>
+      <a href="/trscode" class="segment-card"><div class="segment-icon">&#x1F4BB;</div><h3><span style="color:#00d4ff">TRS</span>code</h3><p>Who writes the best code?</p></a>
+      <a href="/news" class="segment-card"><div class="segment-icon">&#x1F4F0;</div><h3>Weekly News Download</h3><p>Truth Filter verified headlines</p></a>
+      <a href="/frontier" class="segment-card"><div class="segment-icon">&#x1F3AF;</div><h3>Frontier</h3><p>The road to AGI</p></a>
+      <a href="/churn" class="segment-card"><div class="segment-icon">&#x1F4BC;</div><h3>The Churn</h3><p>Jobs leaving. Jobs arriving.</p></a>
+      <a href="/global-race" class="segment-card"><div class="segment-icon">&#x1F30D;</div><h3>Global AI Race</h3><p>Who&rsquo;s winning AI supremacy?</p></a>
+      <a href="/gigaburn" class="segment-card"><div class="segment-icon">&#x26A1;</div><h3>GIGABURN</h3><p>The AI power burn in gigawatts</p></a>
+    </div>
+    <a href="/sources" class="learn-more">Verify All Sources &amp; Methodology &rarr;</a>
+  </div>
+</section>
+
+<section class="disclaimer-section">
+  <div class="container">
+    <div class="disclaimer-box">
+      <h3>What This Isn&rsquo;t</h3>
+      <p>
+        <strong>These aren&rsquo;t predictions about AGI timelines.</strong> That&rsquo;s not our department. These are measurements of specific capabilities, not prophecies about AI&rsquo;s future. The trend line is up. What that means? Above our pay grade.
+      </p>
+      <p>We measure what AI can do <em>today</em>. We cite our sources. We show our math. That&rsquo;s it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Watch the Show</h2>
+    <p>New episodes every week breaking down the latest in AI performance.</p>
+    <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
         <a href="/" class="logo">Training Run</a>
-        <ul class="nav-links">
-            <li><a href="/trsmethodology">TRS Methodology</a></li>
-        <li><a href="/trfcast">TRFcast</a></li>
-            <li><a href="/sources">Verify Our Data</a></li>
-            <li><a href="/scores">Current Scores</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-    </nav>
+        <p>Your weekly AI conditioning.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Resources</h4>
+        <a href="/trsmethodology">TRS Methodology</a>
+        <a href="/sources">Verify Our Data</a>
+        <a href="/scores">Current Scores</a>
+        <a href="/about">About Us</a>
+      </div>
+      <div class="footer-links">
+        <h4>Segment Methodologies</h4>
+        <a href="/truscore">TRUscore</a>
+        <a href="/trscode">TRScode</a>
+        <a href="/frontier">Frontier</a>
+        <a href="/churn">The Churn</a>
+        <a href="/global-race">Global AI Race</a>
+      </div>
+      <div class="footer-links">
+        <h4>More Segments</h4>
+        <a href="/gigaburn">GIGABURN</a>
+        <a href="/trfcast">TRFcast</a>
+        <a href="/news">Weekly News</a>
+        <a href="/sources">All Sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Training Run. All rights reserved.</p>
+      <p class="footer-disclaimer">Training Run is an independent publication and is not affiliated with any AI company.</p>
+    </div>
+  </div>
+</footer>
 
-    <section class="hero">
-        <div class="hero-badge"><span id="current-week"></span></div>
-        <h1>Training Run</h1>
-        <p class="tagline">Your Weekly AI Conditioning</p>
-        <p class="hero-description">
-            The independent AI benchmark and intelligence hub.
-            Transparent methodology. Cited sources. No hype—just clarity.
-        </p>
-        <div class="hero-cta" style="flex-direction:column;align-items:center;">
-            <div style="display:flex;gap:16px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;">
-                <a href="/scores" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TRS</span><span style="color:#fff">bench</span></a>
-                <a href="/truscore-scores" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TRU</span><span style="color:#fff">score</span></a>
-
-                <a href="/trfcast" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TRF</span><span style="color:#fff">cast</span></a>
-                <a href="/tragents-scores" class="cta-button secondary"><span style="color:#fff">View </span><span style="color:#00d4ff">TR</span><span style="color:#ff3333;text-shadow:0 0 10px rgba(255,51,51,0.5)">Agents</span></a></div>
-            <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Latest Episode</a>
-        </div>
-        <p class="scores-date">Week 6 • 2026</p>
-    </section>
-
-    <!-- Today's TRSbench - Live Data -->
-    <section class="todays-scores-section">
-        <div class="section-header">
-            <h2>Today's <span style="color:#00d4ff">TRS</span>bench</h2>
-            <a href="/scores" class="view-all-link">View Full Rankings →</a>
-        </div>
-        <p class="section-subtitle">Live composite scores updated weekly — powered by 7 independent data sources</p>
-        <div id="live-scores-grid" class="live-scores-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
-        </div>
-    </section>
-
-    <!-- Today's TRUscore - Live Data -->
-    <section class="todays-scores-section">
-        <div class="section-header">
-            <h2>Today's <span style="color:#00d4ff">TRU</span>score</h2>
-            <a href="/truscore-scores" class="view-all-link">View Full Rankings →</a>
-        </div>
-        <p class="section-subtitle">AI truth & reliability — factuality, neutrality, hallucination & calibration</p>
-        <div id="truscore-scores-grid" class="live-scores-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
-        </div>
-    </section>
-
-    <!-- Today's TRFcast - Live Data -->
-    <section class="todays-scores-section">
-        <div class="section-header">
-            <h2>Today's <span style="color:#00d4ff">TRF</span>cast</h2>
-            <a href="/trfcast" class="view-all-link">View Full Rankings →</a>
-        </div>
-        <p class="section-subtitle">AI forecasting & trading performance — scored across 5 independent pillars</p>
-        <div id="trfcast-scores-grid" class="live-scores-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:rgba(255,255,255,0.3); padding:40px;">Loading scores...</div>
-        </div>
-    </section>
-
-
-
-    <section class="intro-section">
-        <div class="container">
-            <h2>Why Training Run Exists</h2>
-            <p class="intro-text">
-                AI is moving fast. Too fast for most people to keep up. Every week brings new models, new benchmarks, new claims. How do you know what’s real?
-            </p>
-            <p class="intro-text">
-                <strong>Training Run</strong> cuts through the noise. We aggregate data from the most respected evaluation platforms, apply a transparent scoring methodology, and deliver a clear picture of where AI models actually stand—updated weekly.
-            </p>
-            <p class="intro-text">
-                Whether you’re an investor evaluating AI companies, a policymaker shaping regulation, a developer choosing which API to use, or just someone who wants to understand this technology—we’re building the resource you need.
-            </p>
-        </div>
-    </section>
-
-    <section class="trs-preview">
-        <div class="container">
-            <h2>The <span class="cyan">TRSbench</span></h2>
-            <p class="section-intro">
-                Our Training Run Score (TRS) is a weighted composite of seven performance dimensions, aggregated from peer-reviewed benchmarks and public evaluation platforms.
-            </p>
-            <div class="trs-components">
-                <div class="component">
-                    <span class="weight">21%</span>
-                    <h3>Safety</h3>
-                    <p>Reliability and responsible behavior</p>
-                </div>
-                <div class="component">
-                    <span class="weight">20%</span>
-                    <h3>Reasoning</h3>
-                    <p>Complex problem-solving and logical deduction</p>
-                </div>
-                <div class="component">
-                    <span class="weight">20%</span>
-                    <h3>Coding</h3>
-                    <p>Real-world programming ability</p>
-                </div>
-                <div class="component">
-                    <span class="weight">18%</span>
-                    <h3>Human Preference</h3>
-                    <p>What users actually prefer in blind tests</p>
-                </div>
-                <div class="component">
-                    <span class="weight">8%</span>
-                    <h3>Knowledge</h3>
-                    <p>Breadth and accuracy across domains</p>
-                </div>
-                <div class="component">
-                    <span class="weight">7%</span>
-                    <h3>Efficiency</h3>
-                    <p>Performance relative to cost</p>
-                </div>
-                <div class="component">
-                    <span class="weight">6%</span>
-                    <h3>Usage Adoption</h3>
-                    <p>Real-world developer adoption via OpenRouter</p>
-                </div>
-            </div>
-            <a href="/trsmethodology" class="learn-more">Learn More About Our Methodology →</a>
-        </div>
-    </section>
-
-    <section class="trust-section">
-        <div class="container">
-            <h2>Built on Trusted Sources</h2>
-            <p class="section-intro">
-                Every score we publish is derived from publicly verifiable data. No black boxes.
-            </p>
-            <div class="sources-grid">
-                <div class="source-card">
-                    <h3>LMSYS Chatbot Arena</h3>
-                    <p>1M+ human preference votes via blind comparisons</p>
-                    <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener">huggingface.co/spaces/lmarena-ai/chatbot-arena</a>
-                </div>
-                <div class="source-card">
-                    <h3>ARC-AGI-2</h3>
-                    <p>Novel reasoning tasks that test genuine understanding</p>
-                    <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>
-                </div>
-                <div class="source-card">
-                    <h3>SWE-Bench</h3>
-                    <p>Real GitHub issues to measure coding ability</p>
-                    <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a>
-                </div>
-                <div class="source-card">
-                    <h3>MMLU / GPQA</h3>
-                    <p>Graduate-level knowledge evaluation</p>
-                    <a href="https://paperswithcode.com/dataset/mmlu" target="_blank" rel="noopener">paperswithcode.com</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Show Segments Section -->
-    <section class="segments-section">
-        <div class="container">
-            <h2>Show <span class="cyan">Segments</span></h2>
-            <p class="section-intro">
-                Every week, Training Run covers 9 data-driven segments. Each has its own transparent methodology—click to learn how we calculate every number.
-            </p>
-            <div class="segments-grid">
-                <a href="/trsmethodology" class="segment-card">
-                    <div class="segment-icon">&#x1F4CA;</div>
-                    <h3><span style="color:#00d4ff">TRS</span> Benchmark</h3>
-                    <p>Weighted composite AI ranking</p>
-                </a>
-                <a href="/truscore" class="segment-card">
-                    <div class="segment-icon">&#x1F680;</div>
-                    <h3><span style="color:#00d4ff">TRU</span>score</h3>
-                    <p>AI truth & neutrality index</p>
-                </a>
-                <a href="/trfcast" class="segment-card">
-                <div class="segment-icon">&#x1F4C8;</div>
-                <h3><span style="color:#00d4ff">TRF</span>cast</h3>
-                <p>AI forecasting & trading scores</p>
-            </a>
-                <a href="/trscode" class="segment-card">
-                    <div class="segment-icon">&#x1F4BB;</div>
-                    <h3><span style="color:#00d4ff">TRS</span>code</h3>
-                    <p>Who writes the best code?</p>
-                </a>
-            <a href="/news" class="segment-card">
-                    <div class="segment-icon">&#x1F4F0;</div>
-                    <h3>Weekly News Download</h3>
-                    <p>Truth Filter verified headlines</p>
-                </a>
-                <a href="/frontier" class="segment-card">
-                    <div class="segment-icon">&#x1F3AF;</div>
-                    <h3>Frontier</h3>
-                    <p>The road to AGI</p>
-                </a>
-                <a href="/churn" class="segment-card">
-                    <div class="segment-icon">&#x1F4BC;</div>
-                    <h3>The Churn</h3>
-                    <p>Jobs leaving. Jobs arriving.</p>
-                </a>
-                <a href="/global-race" class="segment-card">
-                    <div class="segment-icon">&#x1F30D;</div>
-                    <h3>Global AI Race</h3>
-                    <p>Who’s winning AI supremacy?</p>
-                </a>
-                <a href="/gigaburn" class="segment-card">
-                    <div class="segment-icon">&#x26A1;</div>
-                    <h3>GIGABURN</h3>
-                    <p>The AI power burn in gigawatts</p>
-                </a>
-                </div>
-            <a href="/sources" class="learn-more">Verify All Sources & Methodology →</a>
-        </div>
-    </section>
-
-    <section class="disclaimer-section">
-        <div class="container">
-            <div class="disclaimer-box">
-                <h3>What This Isn’t</h3>
-                <p>
-                    <strong>These aren’t predictions about AGI timelines.</strong> That’s not our department. These are measurements of specific capabilities, not prophecies about AI’s future. The trend line is up. What that means? Above our pay grade.
-                </p>
-                <p>
-                    We measure what AI can do <em>today</em>. We cite our sources. We show our math. That’s it.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta-section">
-        <div class="container">
-            <h2>Watch the Show</h2>
-            <p>New episodes every week breaking down the latest in AI performance.</p>
-            <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Now</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="/" class="logo">Training Run</a>
-                    <p>Your weekly AI conditioning.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Resources</h4>
-                    <a href="/trsmethodology">TRS Methodology</a>
-                    <a href="/sources">Verify Our Data</a>
-                    <a href="/scores">Current Scores</a>
-                    <a href="/about">About Us</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Segment Methodologies</h4>
-                    <a href="/truscore">TRUscore</a>
-                    <a href="/trscode">TRScode</a>
-                    <a href="/frontier">Frontier</a>
-                    <a href="/churn">The Churn</a>
-                    <a href="/global-race">Global AI Race</a>
-                </div>
-                <div class="footer-links">
-                    <h4>More Segments</h4>
-                    <a href="/gigaburn">GIGABURN</a>
-                    <a href="/trfcast">TRFcast</a>
-                    <a href="/news">Weekly News</a>
-                    <a href="/sources">All Sources</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 Training Run. All rights reserved.</p>
-                <p class="footer-disclaimer">Training Run is an independent publication and is not affiliated with any AI company.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const now = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
-        document.getElementById('current-week').textContent = dateStr;
-    </script>
-
-
-    <script>
-        // Fetch and render live TRSbench scores
-        (function() {
-            fetch('trs-data.json?v=' + Date.now())
-                .then(r => r.json())
-                .then(data => {
-                    const grid = document.getElementById('live-scores-grid');
-                    if (!grid || !data.models) return;
-                    
-                    const dates = data.dates || [];
-                    const lastIdx = dates.length - 1;
-                    const prevIdx = Math.max(0, lastIdx - 7);
-                    
-                    // Sort by rank, take top 5
-                    const sorted = data.models
-                        .filter(m => m.scores && m.scores[lastIdx] != null)
-                        .sort((a, b) => (a.rank || 999) - (b.rank || 999))
-                        .slice(0, 5);
-                    
-                    if (sorted.length === 0) {
-                        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
-                        return;
-                    }
-                    
-                    grid.innerHTML = sorted.map((model, i) => {
-                        const score = model.scores[lastIdx];
-                        const prevScore = model.scores[prevIdx];
-                        const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
-                        const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
-                        const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                        const rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
-                        
-                        return '<div class="score-card' + rankClass + '">' +
-                            '<div class="score-rank">' + (i + 1) + '</div>' +
-                            '<div class="score-model-name">' + model.name + '</div>' +
-                            '<div class="score-company">' + model.company + '</div>' +
-                            '<div class="score-value">' + score.toFixed(1) + '</div>' +
-                            '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                            '<div class="score-label">TRSbench</div>' +
-                        '</div>';
-                    }).join('');
-                })
-                .catch(err => {
-                    console.error('Failed to load TRS data:', err);
-                });
-        })();
-    </script>
+<!-- Date badge -->
 <script>
-// Fetch and render live TRUscore scores
-(function() {
-    fetch('truscore-data.json?v=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
-            const grid = document.getElementById('truscore-scores-grid');
-            if (!grid || !data.models) return;
-
-            const dates = data.dates || [];
-            const lastIdx = dates.length - 1;
-            const prevIdx = Math.max(0, lastIdx - 7);
-
-            const sorted = data.models
-                .filter(m => m.scores && m.scores[lastIdx] != null)
-                .sort((a, b) => (a.rank || 999) - (b.rank || 999))
-                .slice(0, 5);
-
-            if (sorted.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
-                return;
-            }
-
-            grid.innerHTML = sorted.map((model, i) => {
-                const score = model.scores[lastIdx];
-                const prevScore = model.scores[prevIdx];
-                const delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
-                const deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
-                const deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                const rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
-
-                return '<div class="score-card' + rankClass + '">' +
-                    '<div class="score-rank">' + (i + 1) + '</div>' +
-                    '<div class="score-model-name">' + model.name + '</div>' +
-                    '<div class="score-company">' + model.company + '</div>' +
-                    '<div class="score-value">' + score.toFixed(1) + '</div>' +
-                    '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                    '<div class="score-label">TRUscore</div>' +
-                    '</div>';
-            }).join('');
-        })
-        .catch(err => {
-            console.error('Failed to load TRUscore data:', err);
-        });
-})();
+  var now = new Date();
+  document.getElementById('current-week').textContent =
+    now.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}).toUpperCase();
 </script>
 
+<!-- Live score card loader -->
 <script>
-// Fetch and render live TRFcast scores
-(function() {
-    fetch('trf-data.json?v=' + Date.now())
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            var grid = document.getElementById('trfcast-scores-grid');
-            if (!grid || !data.models) return;
+function makeCard(m, i) {
+          var cls = i === 0 ? ' gold' : i === 1 ? ' silver' : i === 2 ? ' bronze' : '';
+          var rankLbl = '#' + (i + 1);
+          var dCls = m.d === null ? 'flat' : m.d > 0 ? 'up' : m.d < 0 ? 'down' : 'flat';
+          var dTxt = m.d === null ? '&mdash;' : m.d > 0 ? '&uarr;&thinsp;' + m.d.toFixed(2) : '&darr;&thinsp;' + Math.abs(m.d).toFixed(2);
+          var lu = (typeof tickerLogoUrl === 'function') ? tickerLogoUrl(m.company) : null;
+          var logoHtml = lu
+            ? '<img src="' + lu + '" style="height:14px;width:14px;border-radius:3px;object-fit:contain;background:rgba(255,255,255,0.06);padding:1px;" onerror="this.style.display=\'none\'">'
+            : '<span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);">' + (m.company||'?').charAt(0).toUpperCase() + '</span>';
+          return '<div class="score-card' + cls + '">' +
+            '<div class="card-rank">' + rankLbl + '</div>' +
+            '<div class="card-score">' + m.score.toFixed(2) + '</div>' +
+            '<div class="card-model">' + m.name + '</div>' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:3px;">' +
+              logoHtml +
+              '<span class="card-delta ' + dCls + '">' + dTxt + '</span>' +
+            '</div>' +
+            '</div>';
+        }
+        function makeCardFeatured(m, i, boardId) {
+  var cls = i===0?' gold':i===1?' silver':i===2?' bronze':'';
+  var rankLbl = '#'+(i+1);
+  var dColor = m.d===null?'#4a4a70':m.d>0?'#00e676':'#ff5252';
+  var dTxt = m.d===null?'—':m.d>0?'↑ '+m.d.toFixed(2):'↓ '+Math.abs(m.d).toFixed(2);
+  var lu = (typeof tickerLogoUrl==='function')?tickerLogoUrl(m.company):null;
+  var bgImg = lu?'<img src="'+lu+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.10;pointer-events:none;" onerror="this.style.display=\'none\'">':'';
+  var glowStyle='', rankColor='#5a5a80';
+  if(i===0){ glowStyle='border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 16px rgba(255,215,0,0.6),0 0 6px rgba(255,215,0,0.35);'; rankColor='#ffd700'; }
+  else if(i===1){ glowStyle='border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 14px rgba(200,205,220,0.55),0 0 5px rgba(200,205,220,0.3);'; rankColor='#c8c8dc'; }
+  else if(i===2){ glowStyle='border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 16px rgba(205,127,50,0.6),0 0 6px rgba(205,127,50,0.35);'; rankColor='#cd7f32'; }
+  var bd = boardId||'';
+  var da=' data-name="'+m.name+'" data-company="'+(m.company||'')+'" data-score="'+m.score.toFixed(2)+'" data-rank="'+rankLbl+'" data-delta="'+dTxt+'" data-dcolor="'+dColor+'" data-logo="'+(lu||'')+'" data-rankcolor="'+rankColor+'" data-board="'+bd+'"';
+  return '<div class="score-card'+cls+'" style="position:relative;overflow:hidden;padding:8px 5px 7px;cursor:pointer;'+glowStyle+'" onclick="showCardModal(this)"'+da+'>' +
+    bgImg +
+    '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0px;">' +
+      '<div style="font-size:14px;font-weight:700;color:'+rankColor+';line-height:1.1;">'+rankLbl+'</div>' +
+      '<div style="font-size:20px;font-weight:800;color:#ffffff;font-variant-numeric:tabular-nums;line-height:1.1;">'+m.score.toFixed(2)+'</div>' +
+      '<div style="font-size:9.5px;font-weight:600;color:#c8c8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:92%;text-align:center;line-height:1.2;">'+m.name+'</div>' +
+      '<div style="font-size:10px;font-weight:600;color:#8888b8;letter-spacing:0.3px;line-height:1.2;">'+(m.company||'')+'</div>' +
+      '<div style="font-size:13px;font-weight:700;color:'+dColor+';margin-top:5px;line-height:1.1;">'+dTxt+'</div>' +
+    '</div>' +
+  '</div>';
+}
+        function loadBoard(url, elId, count, cardFn) {
+    cardFn = cardFn || makeCard;
+    var el = document.getElementById(elId);
+    if (!el) return;
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        var raw = (data.models || data);
+        var allModels = raw.map(function(m) {
+          var sc = m.scores || [];
+          var vals = sc.filter(function(v){ return v !== null && v !== undefined; });
+          var score = vals.length ? vals[vals.length-1] : 0;
+          var prev = vals.length > 1 ? vals[vals.length-2] : null;
+          var d = (prev !== null) ? Math.round((score - prev)*100)/100 : null;
+          return { name: m.name, company: m.company, score: score, d: d };
+        }).filter(function(m){ return m.score > 0; })
+          .sort(function(a,b){ return b.score - a.score; });
+        if(typeof BOARD_RANKINGS !== 'undefined') {
+          BOARD_RANKINGS[elId] = allModels.map(function(m){ return {name:m.name, d:m.d}; });
+        }
+        var display = allModels.slice(0, count||5);
+        el.innerHTML = display.length ? display.map(function(m,i){ return cardFn(m,i,elId); }).join('') : '';
+      })
+      .catch(function(){ el.innerHTML = ''; });
+  }
 
-            var dates = data.dates || [];
-            var lastIdx = dates.length - 1;
-            var prevIdx = Math.max(0, lastIdx - 7);
+// ── Freshness line ──
+  // ── Freshness lines — UPDATE this time each morning when scores are pushed ──
+  var LAST_PUSH_TIME = '4:16 AM CST';
+  ['fl-trsbench','fl-truscore','fl-trscode','fl-trfcast','fl-tragents'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.textContent = 'Fresh Daily Rankings · Updated today at ' + LAST_PUSH_TIME;
+  });
 
-            var sorted = data.models
-                .filter(function(m) { return m.scores && m.scores[lastIdx] != null; })
-                .sort(function(a, b) { return (a.rank || 999) - (b.rank || 999); })
-                .slice(0, 5);
+  // ── Ticker ──
+  var LOGOS = {
+    anthropic: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
+    openai:    'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+    google:    'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+    deepmind:  'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+    meta:      'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
+    xai:       'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
+    mistral:   'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+    alibaba:   'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+    qwen:      'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+    deepseek:  'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
+    cohere:    'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
+    amazon:    'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
+    nvidia:    'https://www.google.com/s2/favicons?domain=nvidia.com&sz=64',
+    microsoft: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
+    zhipu:     'https://www.google.com/s2/favicons?domain=zhipuai.cn&sz=64'
+  };
+  function tickerLogoUrl(company) {
+    var k = (company||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+    for (var key in LOGOS) { if (k.indexOf(key) !== -1) return LOGOS[key]; }
+    return null;
+  }
+  function makeTickerItem(logoUrl, company, cat, name, valHtml, href) {
+    var logo = logoUrl
+      ? '<img class="ticker-logo" src="'+logoUrl+'" alt="" onerror="this.style.display=\'none\'">'
+      : '<span class="ticker-logo-fb">'+(company||'?').charAt(0).toUpperCase()+'</span>';
+    return '<a class="ticker-item" href="'+href+'">'
+      +logo
+      +'<span class="ticker-badge">'
+      +'<span class="ticker-cat">'+cat+'</span>'
+      +'<span class="ticker-name">'+name+'</span>'
+      +'</span>'
+      +valHtml+'</a>';
+  }
+  function buildTicker(datasets) {
+    var benches = [
+      {label:'TRSbench', url:'/scores',          catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">bench</span>', data:datasets[0]},
+      {label:'TRUscore', url:'/truscore-scores',  catHtml:'#1 <span style="color:#00d4ff">TRU</span><span style="color:rgba(255,255,255,0.75)">score</span>', data:datasets[1]},
+      {label:'TRScode',  url:'/trscode-scores',   catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">code</span>',  data:datasets[2]},
+      {label:'TRFcast',  url:'/trfcast-scores',   catHtml:'#1 <span style="color:#00d4ff">TRF</span><span style="color:rgba(255,255,255,0.75)">cast</span>',  data:datasets[3]},
+      {label:'TRAgents', url:'/tragents',          catHtml:'#1 <span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>', data:datasets[4]}
+    ];
+    var items = [];
+    var bigGain = {delta:-Infinity, name:null};
+    var bigDrop = {delta:Infinity,  name:null};
+    benches.forEach(function(b) {
+      var data = b.data; if (!data) return;
+      var dates = data.dates||[]; var li = dates.length-1; var pi = Math.max(0,li-7);
+      var models = (data.models||[])
+        .filter(function(m){ return m.scores && m.scores[li] != null; })
+        .sort(function(a,b){ return (a.rank||999)-(b.rank||999); });
+      if (models.length) {
+        var top = models[0];
+        var lu = tickerLogoUrl(top.company);
+        var sv = '<span class="ticker-val neutral">'+top.scores[li].toFixed(2)+'</span>';
+        items.push(makeTickerItem(lu, top.company, b.catHtml, top.name, sv, b.url));
+      }
+      models.forEach(function(m) {
+        var s = m.scores[li], p = m.scores[pi];
+        if (s==null||p==null) return;
+        var d = parseFloat((s-p).toFixed(2));
+        if (d > bigGain.delta) bigGain = {delta:d, name:m.name, company:m.company, url:b.url};
+        if (d < bigDrop.delta) bigDrop = {delta:d, name:m.name, company:m.company, url:b.url};
+      });
+    });
+    if (bigGain.delta > 0 && bigGain.name) {
+      var lu = tickerLogoUrl(bigGain.company);
+      var gainIcon = bigGain.delta >= 5
+        ? '<span style="font-size:28px;line-height:1;margin-left:6px;" title="On Fire!">&#128293;</span>'
+        : '<span class="ticker-val up">&#8679;&#8201;+'+bigGain.delta.toFixed(2)+'</span>';
+      var gainLabel = bigGain.delta >= 5 ? 'On Fire &#128293;' : 'Biggest Gainer';
+      items.push(makeTickerItem(lu, bigGain.company, gainLabel, bigGain.name,
+        gainIcon + '<span style="font-size:22px;color:#00e676;margin-left:4px;font-weight:700;">+'+bigGain.delta.toFixed(2)+'</span>', bigGain.url));
+    }
+    if (bigDrop.delta < 0 && bigDrop.name) {
+      var lu = tickerLogoUrl(bigDrop.company);
+      items.push(makeTickerItem(lu, bigDrop.company, 'Biggest Drop', bigDrop.name,
+        '<span class="ticker-val down">&#8681;&#8201;'+bigDrop.delta.toFixed(2)+'</span>', bigDrop.url));
+    }
+    if (!items.length) return;
+    var track = document.getElementById('ticker-track');
+    if (!track) return;
+    track.innerHTML = items.join('') + items.join('');
+    track.style.animationDuration = Math.max(24, items.length * 7) + 's';
+  }
+  Promise.all([
+    fetch('trs-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('truscore-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('trscode-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('trf-data.json?v='+Date.now()).then(function(r){return r.json();}),
+    fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
+  ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
+// ── Load leaderboard boards ──
+loadBoard('trs-data.json'+('?v='+Date.now()), 'trsbench-row', 5, makeCardFeatured);
+loadBoard('truscore-data.json'+('?v='+Date.now()), 'truscore-row', 5, makeCardFeatured);
+loadBoard('trscode-data.json'+('?v='+Date.now()), 'trscode-row', 5, makeCardFeatured);
+loadBoard('trf-data.json'+('?v='+Date.now()), 'trfcast-row', 5, makeCardFeatured);
+loadBoard('tragent-data.json'+('?v='+Date.now()), 'tragents-row', 5, makeCardFeatured);
 
-            if (sorted.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No scores available</div>';
-                return;
-            }
-
-            grid.innerHTML = sorted.map(function(model, i) {
-                var score = model.scores[lastIdx];
-                var prevScore = model.scores[prevIdx];
-                var delta = (prevScore != null) ? (score - prevScore).toFixed(1) : null;
-                var deltaClass = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
-                var deltaText = delta !== null ? (delta > 0 ? '+' + delta : delta) : '--';
-                var rankClass = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
-
-                return '<div class="score-card' + rankClass + '">' +
-                    '<div class="score-rank">' + (i + 1) + '</div>' +
-                    '<div class="score-model-name">' + model.name + '</div>' +
-                    '<div class="score-company">' + model.company + '</div>' +
-                    '<div class="score-value">' + score.toFixed(1) + '</div>' +
-                    '<div class="score-delta ' + deltaClass + '">' + deltaText + ' vs last week</div>' +
-                    '<div class="score-label">TRFcast</div>' +
-                    '</div>';
-            }).join('');
-        })
-        .catch(function(err) {
-            console.error('Failed to load TRFcast data:', err);
-        });
-})();
-</script>
-
+  // ── Model bios + metadata ──
+          var BOARD_INFO = {
+    'trsbench-row':  {html:'<span style="color:#00d4ff">TRS</span><span style="color:#fff">bench</span>',  cat:'Overall'},
+    'truscore-row':  {html:'<span style="color:#00d4ff">TRU</span><span style="color:#fff">score</span>',  cat:'Truth'},
+    'trscode-row':   {html:'<span style="color:#00d4ff">TRS</span><span style="color:#fff">code</span>',   cat:'Coding'},
+    'trfcast-row':   {html:'<span style="color:#00d4ff">TRF</span><span style="color:#fff">cast</span>',   cat:'Prediction'},
+    'tragents-row':  {html:'<span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>', cat:'Best Agent'}
+  };
+  var BOARD_ORDER = ['trsbench-row','truscore-row','trscode-row','trfcast-row','tragents-row'];
+  var BOARD_RANKINGS = {};
+  var MODEL_BIOS = {
+  'Claude Opus 4.6':  { tier:'Flagship',    bio:'"Claude Opus 4.6 is our most capable model to date." — Anthropic',                                                released:'February 5, 2026',    by:'Anthropic'   },
+  'Claude Opus 4.5':  { tier:'Flagship',    bio:'"Claude Opus 4.5 is our strongest model for coding and agents." — Anthropic',                                     released:'November 24, 2025',   by:'Anthropic'   },
+  'Claude Opus 4.1':  { tier:'Flagship',    bio:'As of August 2025, Anthropic described Claude Opus 4.1 as “our most capable model to date.”',               released:'August 5, 2025',      by:'Anthropic'   },
+  'Claude Sonnet 4.6':{ tier:'Pro',         bio:'"Claude Sonnet 4.6 is our most capable Sonnet model yet." — Anthropic',                                           released:'February 17, 2026',   by:'Anthropic'   },
+  'Claude Sonnet 4.5':{ tier:'Pro',         bio:'"Claude Sonnet 4.5 is best for real-world agents and coding." — Anthropic',                                       released:'September 29, 2025',  by:'Anthropic'   },
+  'GPT-5.2':          { tier:'Flagship',    bio:'"GPT-5.2 is our most advanced frontier model for professional work and agents." — OpenAI',                        released:'December 11, 2025',   by:'OpenAI'      },
+  'GPT-5.1':          { tier:'Pro',         bio:'"GPT-5.1 is a smarter, more conversational ChatGPT." — OpenAI',                                                  released:'November 12, 2025',   by:'OpenAI'      },
+  'GPT-5':            { tier:'Flagship',    bio:'As of October 2025, OpenAI called GPT-5 “our breakthrough model with native agents.”',                       released:'October 20, 2025',    by:'OpenAI'      },
+  'O3':               { tier:'Specialized', bio:'"o3 is our advanced step-by-step reasoning model." — OpenAI',                                                     released:'June 25, 2025',       by:'OpenAI'      },
+  'Gemini 3 Pro':     { tier:'Flagship',    bio:'"Gemini 3 Pro is Google’s most intelligent model yet." — Google',                                            released:'November 18, 2025',   by:'Google'      },
+  'Gemini 2.5 Pro':   { tier:'Flagship',    bio:'As of June 2025, Google described Gemini 2.5 Pro as “their most intelligent model yet.”',                   released:'June 10, 2025',       by:'Google'      },
+  'Gemini Flash 3':   { tier:'Efficient',   bio:'"Gemini Flash 3 is frontier intelligence built for speed." — Google',                                             released:'December 17, 2025',   by:'Google'      },
+  'Gemini 3 Flash':   { tier:'Efficient',   bio:'"Gemini 3 Flash is frontier intelligence built for speed." — Google',                                             released:'December 17, 2025',   by:'Google'      },
+  'Grok 4.20':        { tier:'Flagship',    bio:'"Grok 4.20 is xAI’s breakthrough multi-agent collaborative AI model." — xAI',                               released:'February 17, 2026',   by:'xAI'         },
+  'Grok 4.1':         { tier:'Specialized', bio:'"Grok 4.1 is exceptionally capable in creative and emotional interactions." — xAI',                              released:'November 17, 2025',   by:'xAI'         },
+  'DeepSeek V3.2':    { tier:'Flagship',    bio:'"DeepSeek V3.2 is our most advanced open model yet." — DeepSeek',                                                released:'December 15, 2025',   by:'DeepSeek'    },
+  'DeepSeek V3.1':    { tier:'Pro',         bio:'"DeepSeek V3.1 sets new open-source performance records." — DeepSeek',                                           released:'August 28, 2025',     by:'DeepSeek'    },
+  'DeepSeek R1':      { tier:'Specialized', bio:'"DeepSeek R1 is our advanced reasoning model for agents." — DeepSeek',                                           released:'January 20, 2025',    by:'DeepSeek'    },
+  'GLM-5':            { tier:'Flagship',    bio:'"GLM-5 is our strongest and most intelligent model." — Zhipu AI',                                                released:'February 11, 2026',   by:'Zhipu AI'    },
+  'GLM-4':            { tier:'Pro',         bio:'"GLM-4 is our powerful general-purpose frontier model." — Zhipu AI',                                             released:'June 20, 2025',       by:'Zhipu AI'    },
+  'Llama 4.08B':      { tier:'Efficient',   bio:'"Llama 4.08B is our balanced efficient open model." — Meta',                                                     released:'April 5, 2025',       by:'Meta'        },
+  'Llama 4.05B':      { tier:'Efficient',   bio:'"Llama 4.05B is our efficient high-performance variant." — Meta',                                                released:'April 5, 2025',       by:'Meta'        },
+  'Llama 4.0':        { tier:'Flagship',    bio:'As of April 2025, Meta described Llama 4.0 as “their most advanced open foundation model.”',                released:'April 5, 2025',       by:'Meta'        },
+  'Mistral Large 3':  { tier:'Flagship',    bio:'"Mistral Large 3 is our most powerful model." — Mistral AI',                                                     released:'December 2, 2025',    by:'Mistral AI'  },
+  'Mistral Large':    { tier:'Flagship',    bio:'As of July 2025, Mistral described Mistral Large as “our flagship frontier model.”',                        released:'July 10, 2025',       by:'Mistral AI'  },
+  'Mistral Voxtral':  { tier:'Specialized', bio:'"Voxtral is our specialized multimodal voice model." — Mistral AI',                                              released:'July 25, 2025',       by:'Mistral AI'  },
+  'Qwen3-Coder':      { tier:'Specialized', bio:'"Qwen3-Coder is our specialized coding and agent model." — Alibaba',                                             released:'December 10, 2025',   by:'Alibaba'     },
+  'Qwen3':            { tier:'Flagship',    bio:'"Qwen3 is our most capable model family yet." — Alibaba',                                                        released:'November 25, 2025',   by:'Alibaba'     },
+  'Qwen2.5':          { tier:'Pro',         bio:'"Qwen2.5 is our improved open large language model." — Alibaba',                                                 released:'September 19, 2024',  by:'Alibaba'     },
+  'MiniMax M2.5':     { tier:'Pro',         bio:'"M2.5 is our most capable agentic model yet." — MiniMax',                                                        released:'February 12, 2026',   by:'MiniMax'     },
+  'MiniMax M2':       { tier:'Pro',         bio:'"M2 is our enhanced agentic performance model." — MiniMax',                                                      released:'October 10, 2025',    by:'MiniMax'     },
+  'MiniMax M1':       { tier:'Pro',         bio:'"M1 is our high-performance general AI model." — MiniMax',                                                       released:'June 15, 2025',       by:'MiniMax'     },
+  'Kimi K2.5':        { tier:'Specialized', bio:'"Kimi K2.5 is our top long-context multimodal model." — Moonshot AI',                                            released:'January 27, 2026',    by:'Moonshot AI' },
+  'Cohere Command R+':{ tier:'Pro',         bio:'"Command R+ is our most powerful enterprise RAG model." — Cohere',                                               released:'April 2, 2025',       by:'Cohere'      },
+  'Cohere Aya':       { tier:'Specialized', bio:'"Aya is our leading open multilingual model family." — Cohere',                                                  released:'February 17, 2026',   by:'Cohere'      }
+};
+  function showCardModal(el) {
+  var nm = el.getAttribute('data-name')||'';
+  var co = el.getAttribute('data-company')||'';
+  var logo = el.getAttribute('data-logo')||'';
+  var bd = el.getAttribute('data-board')||'';
+  var m = document.getElementById('model-modal');
+  var bk = document.getElementById('model-modal-backdrop');
+  if(!m||!bk) return;
+  m.classList.remove('glow-gold','glow-silver','glow-bronze');
+  var rnkInBoard = 99;
+  if(typeof BOARD_RANKINGS!=='undefined' && BOARD_RANKINGS[bd]) {
+    var arr = BOARD_RANKINGS[bd];
+    for(var i=0;i<arr.length;i++){ if(arr[i].name===nm){rnkInBoard=i+1;break;} }
+  }
+  if(rnkInBoard===1) m.classList.add('glow-gold');
+  else if(rnkInBoard===2) m.classList.add('glow-silver');
+  else if(rnkInBoard===3) m.classList.add('glow-bronze');
+  var logoEl = document.getElementById('mm-logo');
+  if(logoEl){ logoEl.src=logo; logoEl.style.display=logo?'':'none'; }
+  var nameEl = document.getElementById('mm-name');
+  if(nameEl) nameEl.textContent=nm;
+  var coEl = document.getElementById('mm-company');
+  if(coEl) coEl.textContent=co;
+  var boardsEl = document.getElementById('mm-boards');
+  if(boardsEl) {
+    var rows = '';
+    var BORDER = typeof BOARD_ORDER!=='undefined'?BOARD_ORDER:[];
+    var BINFO = typeof BOARD_INFO!=='undefined'?BOARD_INFO:{};
+    for(var b=0;b<BORDER.length;b++) {
+      var bid = BORDER[b];
+      var info = BINFO[bid]||{};
+      var labelHtml = info.html||bid;
+      var cat = info.cat||'';
+      var rank = 0; var dv = null;
+      if(typeof BOARD_RANKINGS!=='undefined' && BOARD_RANKINGS[bid]) {
+        var arr2 = BOARD_RANKINGS[bid];
+        for(var j=0;j<arr2.length;j++){
+          if(arr2[j].name===nm){rank=j+1;dv=arr2[j].d;break;}
+        }
+      }
+      var rankLbl = rank ? '#'+rank : 'Not Ranked';
+      var rankCls = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
+      var rankColor = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':'#8888b8';
+      var deltaHtml = '';
+      if(rank && dv!==null && dv!==undefined) {
+        var dc = dv>0?'#4cff91':dv<0?'#ff5c5c':'rgba(255,255,255,0.4)';
+        var da = dv>0?'+'+dv:String(dv);
+        deltaHtml = '<span style="font-size:13px;font-weight:600;color:'+dc+'">'+da+'</span>';
+      }
+      rows += '<div class="mm-board-row '+rankCls+'">'
+        + '<span class="mm-board-label">'+labelHtml+'</span>'
+        + '<span class="mm-board-cat">('+cat+')</span>'
+        + '<span class="mm-board-rank'+(rank?'':' not-ranked')+'" style="color:'+rankColor+'">'+rankLbl+'</span>'
+        + '<span class="mm-board-delta">'+deltaHtml+'</span>'
+        + '</div>';
+    }
+    boardsEl.innerHTML = rows;
+  }
+  var tiersEl = document.getElementById('mm-tiers');
+  if(tiersEl) {
+    var bio = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
+    var activeTier = bio.tier||'';
+    var TIER_DESCS = {
+      'Flagship':'Most powerful, highest capability',
+      'Pro':'High performance, balanced cost',
+      'Efficient':'Fast, lightweight, cost-effective',
+      'Specialized':'Optimized for specific tasks'
+    };
+    var TIERS = ['Flagship','Pro','Efficient','Specialized'];
+    tiersEl.innerHTML = TIERS.map(function(t){
+      var cls = 'mm-tier-pill'+(t===activeTier?' active':'');
+      return '<div class="mm-tier-row"><span class="'+cls+'">'+t+'</span><span class="mm-tier-desc-text">'+TIER_DESCS[t]+'</span></div>';
+    }).join('');
+  }
+  var bioEl = document.getElementById('mm-bio');
+  if(bioEl) {
+    var bio2 = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
+    bioEl.textContent = bio2.bio||'';
+  }
+  var relEl = document.getElementById('mm-released');
+  if(relEl) {
+    var bio3 = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
+    relEl.textContent = bio3.released ? 'Released · '+bio3.released : '';
+  var wmEl=document.getElementById('mm-watermark');if(wmEl)wmEl.src=logo;
+  }
+  bk.classList.add('open');
+}
+function closeCardModal() {
+    document.getElementById('model-modal-backdrop').classList.remove('open');
+  }
+  document.addEventListener('click',function(e){ if(e.target===document.getElementById('model-modal-backdrop')) closeCardModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeCardModal(); });</script>
+  <!-- Model expand modal -->
+  <div id="model-modal-backdrop">
+  <div id="model-modal">
+    <img id="model-modal-bg" src="" alt="">
+    <button id="model-modal-close" onclick="closeCardModal()">&#215;</button>
+    <div class="mm-scroll">
+      <div class="mm-header">
+        <img class="mm-logo-big" id="mm-logo" src="" alt="" onerror="this.style.display='none'">
+        <div class="mm-header-text">
+          <div class="mm-name" id="mm-name"></div>
+          <div class="mm-company" id="mm-company"></div>
+        </div>
+      </div>
+      <div class="mm-boards" id="mm-boards"></div>
+      <hr class="mm-divider-cyan">
+      <div class="mm-tiers" id="mm-tiers"></div>
+      <hr class="mm-divider-cyan">
+      <div class="mm-bio" id="mm-bio"></div>
+      <div class="mm-released" id="mm-released"></div>
+          <img class="mm-watermark" id="mm-watermark" src="" alt="">
+    </div>
+  </div>
+</div>
 </body>
 </html>
-<!-- Grok 4.20 force redeploy -->
-<!-- Grok 4.20 final redeploy -->
-<!-- Grok 4.20 redeploy -->

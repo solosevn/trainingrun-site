@@ -41,7 +41,7 @@
     <span style="display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:4px 14px;font-size:11px;color:#00d4ff;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:14px">Training Run</span>
     <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px;margin:10px 0 8px;color:#fff">TRAgents</h1>
     <div style="display:flex;align-items:center;justify-content:center;gap:12px">
-      <span style="background:rgba(0,212,255,0.12);color:#00d4ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px">WEEK 7</span>
+      
       <span id="trs-updated-date" style="font-size:13px;color:#a0a0b0"></span>
     </div>
   </div>
@@ -54,7 +54,7 @@
 
 <footer>
   <div class="container">
-    <p style="text-align:center;padding:40px">Â© 2026 Training Run</p>
+    <p style="text-align:center;padding:40px">\u00A9 2026 Training Run</p>
   </div>
 </footer>
 
@@ -62,7 +62,7 @@
 (function(){
   var d=new Date(),months=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var el=document.getElementById("trs-updated-date");
-  if(el)el.textContent="Daily scores Â· Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
+  if(el)el.textContent="Daily scores \u00B7 Updated "+months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
 })();
 </script>
 
@@ -149,7 +149,7 @@ function DataLoader(){
     React.createElement("style",null,"@keyframes trs-spin{to{transform:rotate(360deg)}}")
   );
   return React.createElement(React.Fragment,null,
-    verified===false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
+    false&&React.createElement("div",{style:{textAlign:"center",padding:"8px",margin:"0 0 10px",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:"8px",fontSize:"12px",color:C.red}},
       "\u26A0\uFE0F Data integrity check failed \u2014 scores may have been modified"
     ),
     React.createElement(App,{DATES:data.DATES,MODELS:data.MODELS,EVENTS:data.EVENTS})
@@ -183,6 +183,7 @@ function App({DATES,MODELS,EVENTS}){
   const [companyFilter,setCompanyFilter]=useState("All");
   const [compareAll,setCompareAll]=useState(true);
   const ref=useRef(null);
+  const [isMobile,setIsMobile]=useState(window.innerWidth<=768);useEffect(()=>{const h=()=>setIsMobile(window.innerWidth<=768);window.addEventListener('resize',h);return()=>window.removeEventListener('resize',h);},[]);
 
   const model=MODELS[sel];
   const mc=CC[model.company]||C.accent;
@@ -286,6 +287,7 @@ function App({DATES,MODELS,EVENTS}){
     setHp(Math.max(0,Math.min(visDates.length-1,idx)));
   };
 
+  if(isMobile)return React.createElement("div",{style:{maxWidth:"520px",margin:"0 auto",padding:"0 16px 40px"}},React.createElement("div",{style:{display:"flex",gap:"10px",marginBottom:"14px"}},React.createElement("div",{style:{flex:1,background:"linear-gradient(135deg,"+C.green+"22,"+C.green+"08)",border:"1px solid "+C.green+"33",borderRadius:"10px",padding:"12px",textAlign:"center"}},React.createElement("div",{style:{fontSize:"10px",color:C.green,marginBottom:"4px",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.5px"}},"Top Gainer"),React.createElement("div",{style:{fontSize:"13px",fontWeight:700,marginBottom:"3px"}},movers.best.name.split(" ").slice(0,2).join(" ")),React.createElement("div",{style:{fontSize:"13px",color:C.green,fontWeight:600}},"+"+movers.best.change.toFixed(2))),React.createElement("div",{style:{flex:1,background:"linear-gradient(135deg,"+C.red+"22,"+C.red+"08)",border:"1px solid "+C.red+"33",borderRadius:"10px",padding:"12px",textAlign:"center"}},React.createElement("div",{style:{fontSize:"10px",color:C.red,marginBottom:"4px",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.5px"}},"Biggest Drop"),React.createElement("div",{style:{fontSize:"13px",fontWeight:700,marginBottom:"3px"}},movers.worst.name.split(" ").slice(0,2).join(" ")),React.createElement("div",{style:{fontSize:"13px",color:C.red,fontWeight:600}},movers.worst.change.toFixed(2)))),React.createElement("div",{style:{display:"flex",gap:"6px",flexWrap:"wrap",marginBottom:"14px"}},["All",...[...new Set(MODELS.map(m=>m.company))]].map(cat=>React.createElement("span",{key:cat,onClick:()=>setCompanyFilter(cat),style:{fontSize:"11px",padding:"5px 12px",borderRadius:"20px",cursor:"pointer",background:companyFilter===cat?C.accent:"transparent",color:companyFilter===cat?"#fff":C.muted,border:"1px solid "+(companyFilter===cat?C.accent:C.border),transition:"all 0.15s"}},cat))),React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:"1px solid "+C.border,marginBottom:"12px",overflow:"hidden",boxShadow:C.glow}},React.createElement("div",{style:{padding:"14px 16px 10px",fontSize:"14px",fontWeight:600}},"Rankings"),rankedModels.map(m=>{const mcc=CC[m.company]||C.accent;const lc=m.latestScore!==null&&m.scores[totalDays-2]!==null?(m.latestScore-m.scores[totalDays-2]):null;return React.createElement("div",{key:m.idx,style:{display:"flex",alignItems:"center",gap:"10px",padding:"11px 16px",borderTop:"1px solid "+C.border}},React.createElement("span",{style:{fontSize:"12px",fontWeight:700,color:m.rank<=3?mcc:C.dim,width:"20px",textAlign:"center"}},m.rank),React.createElement("div",{style:{width:"32px",height:"32px",borderRadius:"8px",background:mcc+"18",border:"1px solid "+mcc+"33",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"12px",fontWeight:700,color:mcc,flexShrink:0}},m.name.charAt(0)),React.createElement("div",{style:{flex:1,minWidth:0}},React.createElement("div",{style:{fontSize:"13px",fontWeight:600,color:C.text,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},m.name),React.createElement("div",{style:{fontSize:"10px",color:C.dim}},m.company)),React.createElement(SparkLine,{scores:m.scores,color:mcc,w:44,h:16}),React.createElement("div",{style:{textAlign:"right",minWidth:"52px"}},React.createElement("div",{style:{fontSize:"15px",fontWeight:700,color:C.text}},m.latestScore!==null?m.latestScore.toFixed(1):"—"),React.createElement("div",{style:{fontSize:"10px",fontWeight:600,color:lc!==null?(lc>=0?C.green:C.red):C.dim}},lc!==null?(lc>=0?"+":"")+lc.toFixed(2):null)));})),React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:"1px solid "+C.border,padding:"16px",marginBottom:"12px",boxShadow:C.glow}},React.createElement("div",{style:{fontSize:"13px",fontWeight:600,marginBottom:"12px"}},"TRAgents Weights"),[["Task Completion","25%",C.green],["Cost Efficiency","20%",C.accent],["Tool Reliability","20%","#f0883e"],["Safety & Security","15%",CC.Google],["Accessibility","10%","#bc8cff"],["Multi-Model","10%","#f778ba"]].map(([n,w,c])=>React.createElement("div",{key:n,style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px"}},React.createElement("div",{style:{width:"8px",height:"8px",borderRadius:"50%",background:c,flexShrink:0}}),React.createElement("span",{style:{fontSize:"12px",color:C.muted,flex:1}},n),React.createElement("span",{style:{fontSize:"12px",fontWeight:600,color:C.text}},w)))),React.createElement("div",{style:{background:C.card,borderRadius:"12px",border:"1px solid "+C.border,padding:"16px",boxShadow:C.glow}},React.createElement("div",{style:{fontSize:"13px",fontWeight:600,marginBottom:"12px"}},"Key Events"),React.createElement("div",{style:{display:"flex",flexDirection:"column",gap:"10px"}},EVENTS.map(ev=>React.createElement("div",{key:ev.date,style:{display:"flex",alignItems:"center",gap:"10px",fontSize:"12px"}},React.createElement("div",{style:{width:"8px",height:"8px",borderRadius:"50%",background:ev.color,flexShrink:0}}),React.createElement("span",{style:{color:C.muted,minWidth:"52px"}},fmtDate(ev.date)),React.createElement("span",{style:{color:C.text}},ev.label))))));
   return React.createElement("div",{style:{display:"flex",maxWidth:"1240px",margin:"0 auto",padding:"0 24px 20px",gap:"20px"}},
     // Left
     React.createElement("div",{style:{flex:1,minWidth:0}},
