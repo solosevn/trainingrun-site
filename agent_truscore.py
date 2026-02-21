@@ -146,6 +146,24 @@ def playwright_get_hfspace(url: str, wait_ms: int = 15000) -> str:
     return html
 
 
+def playwright_get_innertext(url: str, wait_ms: int = 8000) -> str:
+    """Load url with Playwright, return body.innerText (for non-table JS pages)."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(user_agent=(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+        page = ctx.new_page()
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
+        page.wait_for_timeout(wait_ms)
+        text = page.evaluate("document.body.innerText") or ""
+        browser.close()
+    return text
+
+
 def parse_first_table(html: str) -> list[dict]:
     """Return rows as list of {col0, col1, col2...} dicts from the largest table."""
     soup = BeautifulSoup(html, "html.parser")
