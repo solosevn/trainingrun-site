@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "3aa421949d075b4f0937999ec0496522c83f8ff5fb768cd57ecf287c8343895e",
+  "checksum": "f862b317ffd5525717287ec443587e8ec8346b059149e4776ee51ddac2ecf916",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -73,7 +73,7 @@
     {
       "name": "Claude Opus 4.6",
       "company": "Anthropic",
-      "rank": 1,
+      "rank": 2,
       "scores": [
         null,
         null,
@@ -130,7 +130,7 @@
         48.86,
         48.81,
         64.92,
-        66.56
+        71.38
       ],
       "pillar_scores": {
         "issue_resolution": 96.1,
@@ -139,12 +139,12 @@
         "scientific": null,
         "human_preference": 100
       },
-      "source_count": 3,
+      "source_count": 6,
       "raw_data": {
-        "swebench_verified_pct": 74.4,
-        "swe_rebench_pass1": 51.7,
-        "livecodebench_pct": null,
-        "bigcodebench_pct": null,
+        "swebench_verified_pct": 67.6,
+        "swe_rebench_pass1": 47.1,
+        "livecodebench_pct": 71.8,
+        "bigcodebench_pct": 34.8,
         "terminalbench_hard_pct": 69.9,
         "swebench_pro_pct": null,
         "scicode_pct": null,
@@ -154,7 +154,7 @@
     {
       "name": "Claude Sonnet 4.5",
       "company": "Anthropic",
-      "rank": 2,
+      "rank": 4,
       "scores": [
         60.4,
         59.7,
@@ -211,7 +211,7 @@
         60.89,
         61.09,
         62.77,
-        65.21
+        62.77
       ],
       "pillar_scores": {
         "issue_resolution": 89.3,
@@ -220,11 +220,11 @@
         "scientific": null,
         "human_preference": 88.7
       },
-      "source_count": 4,
+      "source_count": 6,
       "raw_data": {
-        "swebench_verified_pct": 70.6,
-        "swe_rebench_pass1": 47.1,
-        "livecodebench_pct": 47.1,
+        "swebench_verified_pct": 52.8,
+        "swe_rebench_pass1": 48.5,
+        "livecodebench_pct": 73.1,
         "bigcodebench_pct": null,
         "terminalbench_hard_pct": 46.5,
         "swebench_pro_pct": 43.6,
@@ -292,7 +292,7 @@
         54.23,
         54.16,
         55.92,
-        57.35
+        67.4
       ],
       "pillar_scores": {
         "issue_resolution": 93.3,
@@ -301,11 +301,11 @@
         "scientific": null,
         "human_preference": 92.5
       },
-      "source_count": 3,
+      "source_count": 6,
       "raw_data": {
-        "swebench_verified_pct": 77.4,
-        "swe_rebench_pass1": 46.7,
-        "livecodebench_pct": null,
+        "swebench_verified_pct": 53.6,
+        "swe_rebench_pass1": 51.7,
+        "livecodebench_pct": 74.2,
         "bigcodebench_pct": null,
         "terminalbench_hard_pct": 64.7,
         "swebench_pro_pct": 43.3,
@@ -316,7 +316,7 @@
     {
       "name": "GPT-5.2",
       "company": "OpenAI",
-      "rank": 4,
+      "rank": 1,
       "scores": [
         52.8,
         53.3,
@@ -373,7 +373,7 @@
         53.02,
         53.16,
         54.88,
-        53.46
+        77.8
       ],
       "pillar_scores": {
         "issue_resolution": 94.4,
@@ -382,12 +382,12 @@
         "scientific": null,
         "human_preference": 94
       },
-      "source_count": 3,
+      "source_count": 7,
       "raw_data": {
-        "swebench_verified_pct": 71.8,
+        "swebench_verified_pct": 69.0,
         "swe_rebench_pass1": 51.7,
-        "livecodebench_pct": null,
-        "bigcodebench_pct": null,
+        "livecodebench_pct": 75.8,
+        "bigcodebench_pct": 35.5,
         "terminalbench_hard_pct": 64.9,
         "swebench_pro_pct": 29.94,
         "scicode_pct": null,
@@ -397,7 +397,7 @@
     {
       "name": "DeepSeek V3.2",
       "company": "DeepSeek",
-      "rank": 5,
+      "rank": 6,
       "scores": [
         39.7,
         40.2,
@@ -454,7 +454,7 @@
         40.02,
         40.08,
         54.11,
-        57.5
+        41.65
       ],
       "pillar_scores": {
         "issue_resolution": 73.5,
@@ -463,9 +463,9 @@
         "scientific": null,
         "human_preference": 87.7
       },
-      "source_count": 3,
+      "source_count": 5,
       "raw_data": {
-        "swebench_verified_pct": 60,
+        "swebench_verified_pct": 60.0,
         "swe_rebench_pass1": 37.5,
         "livecodebench_pct": null,
         "bigcodebench_pct": null,
@@ -535,16 +535,18 @@
         null,
         null,
         53.47,
-        56.39
+        12.94
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "swebench_verified_pct": 55.4
+      }
     },
     {
       "name": "Grok 4.20",
       "company": "xAI",
-      "rank": 7,
+      "rank": 9,
       "scores": [
         null,
         null,
@@ -601,11 +603,15 @@
         null,
         null,
         52.83,
-        53.38
+        27.52
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 3,
+      "raw_data": {
+        "swe_rebench_pass1": 37.5,
+        "livecodebench_pct": 55.9,
+        "bigcodebench_pct": 31.8
+      }
     },
     {
       "name": "GLM-5",
@@ -667,7 +673,7 @@
         30,
         30,
         51.19,
-        52.66
+        36.59
       ],
       "pillar_scores": {
         "issue_resolution": 79.6,
@@ -676,9 +682,9 @@
         "scientific": null,
         "human_preference": 92.5
       },
-      "source_count": 2,
+      "source_count": 3,
       "raw_data": {
-        "swebench_verified_pct": null,
+        "swebench_verified_pct": 72.8,
         "swe_rebench_pass1": 42.1,
         "livecodebench_pct": null,
         "bigcodebench_pct": null,
@@ -748,7 +754,7 @@
         null,
         null,
         50.66,
-        49.84
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -814,7 +820,7 @@
         null,
         null,
         49.92,
-        49.23
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -880,11 +886,13 @@
         null,
         null,
         49.38,
-        50.09
+        14.24
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "swebench_verified_pct": 61.0
+      }
     },
     {
       "name": "Cohere Command R+",
@@ -946,7 +954,7 @@
         null,
         null,
         48.84,
-        49.49
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -955,7 +963,7 @@
     {
       "name": "Grok 4.1",
       "company": "xAI",
-      "rank": 13,
+      "rank": 7,
       "scores": [
         null,
         null,
@@ -1012,16 +1020,20 @@
         null,
         null,
         48.29,
-        49.5
+        36.84
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 3,
+      "raw_data": {
+        "swe_rebench_pass1": 52.9,
+        "livecodebench_pct": 80.2,
+        "bigcodebench_pct": 35.8
+      }
     },
     {
       "name": "DeepSeek R1",
       "company": "DeepSeek",
-      "rank": 14,
+      "rank": 5,
       "scores": [
         35.5,
         35.4,
@@ -1078,7 +1090,7 @@
         34.95,
         34.91,
         47.75,
-        47.28
+        44.0
       ],
       "pillar_scores": {
         "issue_resolution": 41,
@@ -1087,7 +1099,7 @@
         "scientific": 42.6,
         "human_preference": null
       },
-      "source_count": 3,
+      "source_count": 4,
       "raw_data": {
         "swebench_verified_pct": null,
         "swe_rebench_pass1": 21.7,
@@ -1102,7 +1114,7 @@
     {
       "name": "Llama 4.08B",
       "company": "Meta",
-      "rank": 15,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -1159,11 +1171,14 @@
         null,
         null,
         47.21,
-        47.64
+        24.53
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 2,
+      "raw_data": {
+        "swe_rebench_pass1": 46.7,
+        "livecodebench_pct": 69.8
+      }
     },
     {
       "name": "Gemini Flash 3",
@@ -1225,11 +1240,13 @@
         null,
         null,
         46.67,
-        47.55
+        3.16
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "swebench_verified_pct": 13.52
+      }
     },
     {
       "name": "Qwen3",
@@ -1291,7 +1308,7 @@
         null,
         null,
         46.13,
-        46.79
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1357,7 +1374,7 @@
         null,
         null,
         45.59,
-        46.51
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1423,11 +1440,13 @@
         null,
         null,
         45.05,
-        45.38
+        12.66
       ],
       "pillar_scores": {},
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "swebench_verified_pct": 54.2
+      }
     },
     {
       "name": "MiniMax M1",
@@ -1489,7 +1508,7 @@
         null,
         null,
         44.51,
-        44.03
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1555,7 +1574,7 @@
         null,
         null,
         43.97,
-        44.38
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1621,7 +1640,7 @@
         null,
         null,
         43.43,
-        42.89
+        0.0
       ],
       "pillar_scores": {},
       "source_count": 0,
