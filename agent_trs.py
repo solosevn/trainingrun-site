@@ -1,52 +1,67 @@
 #!/usr/bin/env python3
 """
-agent_trs.py - TRSbench Daily Scraper (Main Overall Score)
-trainingrun.ai | solosevn/trainingrun-site
-Bible: TRSbench V1.1 (Feb 2026)
+════════════════════════════════════════════════════════════════════
+  AGENT TRSBENCH — TRSbench Daily Scraper
+  trainingrun.ai | solosevn/trainingrun-site
+  Bible: TRSbench V2.4 (Feb 21, 2026)
+════════════════════════════════════════════════════════════════════
+  7 sources scraped:
+    1. Safety Bench        huggingface.co/spaces           0.21
+    2. Reasoning (ARC)     arcprize.org/arc-agi-2          0.20
+    3. Coding              swebench.com                    0.20
+    4. Human Preference    lmarena.ai                      0.18
+    5. Knowledge (MMLU)    huggingface.co/MMLU-Pro         0.08
+    6. Efficiency          artificialanalysis.ai           0.07
+    7. Usage Adoption      openrouter.ai/rankings          0.06
 
-7 sources | 7 TRS categories:
-  1. Chatbot Arena      lmarena.ai                Human Preference
-  2. SWE-bench Verified swebench.com              Coding
-  3. ARC-AGI-2          arcprize.org/arc-agi-2    Reasoning
-  4. MMLU-Pro/GPQA      various                   Knowledge
-  5. Artificial Analysis artificialanalysis.ai    Efficiency
-  6. OpenRouter         openrouter.ai/rankings    Usage
-  7. SafeBench/NIST     safebench.org             Safety
+  Qualification: 5+ categories with non-null scores.
+  Scoring: Option A — null categories excluded, available weights renormalized to 1.0.
 
-Qualification: 5 of 7 categories minimum.
+  Usage:
+    python3 agent_trsbench.py                  # live run
+    python3 agent_trsbench.py --dry-run        # scrape + calculate, no push
+    python3 agent_trsbench.py --test-telegram  # test Telegram connection only
 
-Usage:
-  python3 agent_trs.py
-  python3 agent_trs.py --dry-run
-  python3 agent_trs.py --test-telegram
+  Env vars:
+    TELEGRAM_TOKEN     BotFather token
+    TELEGRAM_CHAT_ID   Your numeric chat ID
+    REPO_PATH          Path to local trainingrun-site clone
+                       Default: ~/trainingrun-site
 
-Env: TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, REPO_PATH
-Deps: pip3 install playwright python-telegram-bot beautifulsoup4
-      python3 -m playwright install chromium
+  Dependencies:
+    pip3 install playwright python-telegram-bot beautifulsoup4 requests
+    python3 -m playwright install chromium
+════════════════════════════════════════════════════════════════════
 """
 
 import os, sys, json, hashlib, subprocess, asyncio, logging, re
 from datetime import date
 from pathlib import Path
 
+# ── dependency guard ──────────────────────────────────────────────
 for pkg, hint in [
     ("playwright", "pip3 install playwright && python3 -m playwright install chromium"),
     ("bs4",        "pip3 install beautifulsoup4"),
     ("telegram",   "pip3 install python-telegram-bot"),
+    ("requests",   "pip3 install requests"),
 ]:
-    try: __import__(pkg)
-    except ImportError: sys.exit(f"Missing: {hint}")
+    try:
+        __import__(pkg)
+    except ImportError:
+        sys.exit(f"Missing: {hint}")
 
+import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from telegram import Bot
 
+# ── logging ───────────────────────────────────────────────────────
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s  %(levelname)-7s  %(message)s",
                     datefmt="%H:%M:%S")
-log = logging.getLogger("trs")
+log = logging.getLogger("trsbench")
 
-# == CONFIG
+# ══ CONFIG ════════════════════════════════════════════════════════
 TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 REPO_PATH        = Path(os.environ.get("REPO_PATH",
@@ -56,397 +71,605 @@ TODAY            = date.today().isoformat()
 DRY_RUN          = "--dry-run"       in sys.argv
 TEST_TELEGRAM    = "--test-telegram" in sys.argv
 
-# -- TRSbench V2.4 weights (7 categories)
+# ── TRSbench Bible V2.4 weights ───────────────────────────────────
 WEIGHTS = {
-    "safety":           0.10,
+    "safety":           0.21,
     "reasoning":        0.20,
     "coding":           0.20,
-    "human_preference": 0.20,
-    "knowledge":        0.15,
-    "efficiency":       0.10,
-    "usage":            0.05,
+    "human_preference": 0.18,
+    "knowledge":        0.08,
+    "efficiency":       0.07,
+    "usage_adoption":   0.06,
 }
 
-RAW_KEYS = {
-    "safety":           "safebench_score",
-    "reasoning":        "arc_agi2_pct",
-    "coding":           "swebench_pct",
-    "human_preference": "arena_elo",
-    "knowledge":        "mmlu_pro_pct",
-    "efficiency":       "aa_efficiency_index",
-    "usage":            "openrouter_rank_inv",
-}
+QUALIFICATION_MIN_CATEGORIES = 5   # Bible: 5-category minimum
 
-QUALIFICATION_MIN = 5
-
-
-# == TELEGRAM
+# ══ TELEGRAM ══════════════════════════════════════════════════════
 def notify(text: str) -> None:
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        log.info(f"[TG] {text}"); return
+        log.info(f"[TG] {text}")
+        return
     async def _send():
         await Bot(token=TELEGRAM_TOKEN).send_message(
             chat_id=TELEGRAM_CHAT_ID, text=text, parse_mode="HTML")
-    try: asyncio.run(_send())
-    except Exception as e: log.warning(f"Telegram non-fatal: {e}")
+    try:
+        asyncio.run(_send())
+    except Exception as e:
+        log.warning(f"Telegram non-fatal: {e}")
 
 
-# == PLAYWRIGHT HELPER
-def playwright_get(url: str, wait_ms: int = 6000) -> str:
+# ══ PLAYWRIGHT HELPER ═════════════════════════════════════════════
+def playwright_get(url: str, wait_ms: int = 5000) -> str:
+    """Launch headless Chromium, load url, return page HTML."""
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(user_agent=(
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
             "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
         page = ctx.new_page()
-        page.goto(url, wait_until="networkidle", timeout=90_000)
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
         page.wait_for_timeout(wait_ms)
         html = page.content()
         browser.close()
     return html
 
 
-def parse_table_by_headers(html: str, name_hints: list, score_hints: list) -> dict:
+def parse_first_table(html: str) -> list[dict]:
+    """Return rows as list of {col0, col1, col2...} dicts from the largest table."""
     soup = BeautifulSoup(html, "html.parser")
-    scores = {}
-    for table in soup.find_all("table"):
-        rows = table.find_all("tr")
-        if len(rows) < 2:
-            continue
-        headers = [th.get_text(strip=True).lower()
-                   for th in rows[0].find_all(["th", "td"])]
-        name_col  = next((i for i, h in enumerate(headers)
-                          if any(kw in h for kw in name_hints)), 0)
-        score_col = next((i for i, h in enumerate(headers)
-                          if any(kw in h for kw in score_hints)), 1)
-        for row in rows[1:]:
-            cells = row.find_all(["td", "th"])
-            if len(cells) <= max(name_col, score_col):
+    tables = soup.find_all("table")
+    if not tables:
+        return []
+    target = max(tables, key=lambda t: len(t.find_all("tr")))
+    rows = target.find_all("tr")
+    if len(rows) < 2:
+        return []
+    headers = [th.get_text(strip=True) for th in rows[0].find_all(["th", "td"])]
+    result = []
+    for row in rows[1:]:
+        cells = [td.get_text(strip=True) for td in row.find_all(["td", "th"])]
+        if cells:
+            result.append(dict(zip(headers, cells)))
+    return result
+
+
+# ══ SCRAPERS ══════════════════════════════════════════════════════
+
+def scrape_arena_overall() -> dict[str, float]:
+    """lmarena.ai overall ELO ratings. Returns {model: elo_float}."""
+    scores: dict[str, float] = {}
+    try:
+        log.info("Scraping Arena Overall (human preference)...")
+        url = "https://lmarena.ai/?leaderboard"
+        html = playwright_get(url, wait_ms=12000)
+        soup = BeautifulSoup(html, "html.parser")
+
+        tables = soup.find_all("table")
+        for table in tables:
+            rows = table.find_all("tr")
+            if len(rows) < 2:
                 continue
-            name = cells[name_col].get_text(strip=True)
-            val  = cells[score_col].get_text(strip=True).replace("%","").replace(",","").strip()
-            try:
-                v = float(val)
-                if name: scores[name] = v
-            except ValueError: pass
-        if scores:
-            break
-    return scores
+            headers = [th.get_text(strip=True).lower()
+                       for th in rows[0].find_all(["th", "td"])]
+            model_col = next((i for i, h in enumerate(headers)
+                              if "model" in h or "name" in h), 2)
+            score_col = next((i for i, h in enumerate(headers)
+                              if "score" in h or "elo" in h or "rating" in h), 3)
+            for row in rows[1:]:
+                cells = row.find_all(["td", "th"])
+                if len(cells) <= max(model_col, score_col):
+                    continue
+                name = cells[model_col].get_text(separator='
+', strip=True).split('
+')[0].strip()
+                raw_val = cells[score_col].get_text(strip=True).replace(',', '')
+                m = re.match(r'^(d{3,4}(?:.d+)?)', raw_val)
+                if m:
+                    try:
+                        val = float(m.group(1))
+                        if name and 900 <= val <= 2200:
+                            scores[name] = val
+                    except ValueError:
+                        pass
+            if scores:
+                break
 
-
-# == SCRAPERS
-
-def scrape_chatbot_arena() -> dict:
-    scores = {}
-    try:
-        log.info("Scraping Chatbot Arena...")
-        html = playwright_get("https://lmarena.ai/", wait_ms=10000)
-        soup = BeautifulSoup(html, "html.parser")
-        for script in soup.find_all("script"):
-            text = script.string or ""
-            if "elo" in text.lower() and "model" in text.lower():
-                try:
-                    m = re.search(r'\[(.+?)\]', text, re.DOTALL)
-                    if m:
-                        entries = json.loads("[" + m.group(1) + "]")
-                        for e in entries:
-                            name = e.get("model") or e.get("name", "")
-                            elo  = e.get("elo") or e.get("rating") or e.get("arena_score")
-                            if name and elo:
-                                scores[name] = float(elo)
-                        if scores: break
-                except Exception: pass
-        if not scores:
-            scores = parse_table_by_headers(html,
-                name_hints=["model","name"],
-                score_hints=["elo","rating","arena","score"])
-        log.info(f"  arena: {len(scores)} models")
+        log.info(f"  ✅ Arena Overall: {len(scores)} models")
     except Exception as e:
-        log.error(f"  Arena error: {e}")
+        log.error(f"  ❌ Arena Overall: {e}")
     return scores
 
 
-def scrape_swebench() -> dict:
-    scores = {}
+def scrape_arc_agi2() -> dict[str, float]:
+    """arcprize.org/arc-agi-2 — ARC-AGI-2 leaderboard. Returns {model: score_pct}."""
+    scores: dict[str, float] = {}
     try:
-        log.info("Scraping SWE-bench...")
+        log.info("Scraping ARC-AGI-2 (reasoning)...")
+        url = "https://arcprize.org/arc-agi-2"
+        html = playwright_get(url, wait_ms=8000)
+        rows = parse_first_table(html)
+        for row in rows:
+            vals = list(row.values())
+            if len(vals) < 2:
+                continue
+            name = vals[0]
+            for v in vals[1:]:
+                clean = v.replace("%", "").strip()
+                try:
+                    pct = float(clean)
+                    if 0 <= pct <= 100:
+                        scores[name] = pct
+                        break
+                except ValueError:
+                    pass
+        log.info(f"  ✅ ARC-AGI-2: {len(scores)} models")
+    except Exception as e:
+        log.error(f"  ❌ ARC-AGI-2: {e}")
+    return scores
+
+
+def scrape_swebench_verified() -> dict[str, float]:
+    """swebench.com — verified split leaderboard. Returns {model: pct_resolved}."""
+    scores: dict[str, float] = {}
+    try:
+        log.info("Scraping SWE-bench Verified (coding)...")
         html = playwright_get("https://www.swebench.com/", wait_ms=6000)
-        scores = parse_table_by_headers(html,
-            name_hints=["model","name","instance"],
-            score_hints=["resolve","%","score"])
-        log.info(f"  swebench: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  SWE-bench error: {e}")
-    return scores
-
-
-def scrape_arc_agi2() -> dict:
-    scores = {}
-    try:
-        log.info("Scraping ARC-AGI-2...")
-        html = playwright_get("https://arcprize.org/arc-agi-2", wait_ms=8000)
         soup = BeautifulSoup(html, "html.parser")
-        for script in soup.find_all("script"):
-            text = script.string or ""
-            if "score" in text.lower() and "model" in text.lower():
+
+        tables = soup.find_all("table")
+        for table in tables:
+            rows = table.find_all("tr")
+            if len(rows) < 2:
+                continue
+            headers = [th.get_text(strip=True).lower()
+                       for th in rows[0].find_all(["th", "td"])]
+            name_col = next((i for i, h in enumerate(headers)
+                             if "model" in h or "instance" in h or "name" in h), 0)
+            pct_col  = next((i for i, h in enumerate(headers)
+                             if "resolve" in h or "%" in h or "score" in h), 1)
+            for row in rows[1:]:
+                cells = row.find_all(["td", "th"])
+                if len(cells) <= max(name_col, pct_col):
+                    continue
+                name = cells[name_col].get_text(strip=True)
+                val  = cells[pct_col].get_text(strip=True).replace("%", "").strip()
                 try:
-                    m = re.search(r'\[(.+?)\]', text, re.DOTALL)
-                    if m:
-                        entries = json.loads("[" + m.group(1) + "]")
-                        for e in entries:
-                            name  = e.get("model") or e.get("name", "")
-                            score = e.get("score") or e.get("pass_rate")
-                            if name and score is not None:
-                                v = float(score)
-                                scores[name] = v * 100 if v <= 1.0 else v
-                        if scores: break
-                except Exception: pass
-        if not scores:
-            scores = parse_table_by_headers(html,
-                name_hints=["model","name"],
-                score_hints=["score","pass","%","accuracy"])
-        log.info(f"  arc_agi2: {len(scores)} models")
+                    pct = float(val)
+                    if name and 0 <= pct <= 100:
+                        scores[name] = pct
+                except ValueError:
+                    pass
+            if scores:
+                break
+
+        log.info(f"  ✅ SWE-bench Verified: {len(scores)} models")
     except Exception as e:
-        log.error(f"  ARC-AGI-2 error: {e}")
+        log.error(f"  ❌ SWE-bench: {e}")
     return scores
 
 
-def scrape_mmlu_pro() -> dict:
-    scores = {}
+def scrape_mmlu_pro() -> dict[str, float]:
+    """huggingface.co/spaces/TIGER-Lab/MMLU-Pro — knowledge leaderboard."""
+    scores: dict[str, float] = {}
     try:
-        log.info("Scraping MMLU-Pro...")
-        urls = [
-            "https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro",
-            "https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu",
-        ]
-        for url in urls:
-            try:
-                html = playwright_get(url, wait_ms=8000)
-                result = parse_table_by_headers(html,
-                    name_hints=["model","name"],
-                    score_hints=["accuracy","score","%"])
-                if result:
-                    scores.update(result)
-                    break
-            except Exception: continue
-        log.info(f"  mmlu_pro: {len(scores)} models")
-    except Exception as e:
-        log.error(f"  MMLU-Pro error: {e}")
-    return scores
-
-
-def scrape_artificial_analysis() -> dict:
-    scores = {}
-    try:
-        log.info("Scraping Artificial Analysis...")
-        html = playwright_get("https://artificialanalysis.ai/", wait_ms=10000)
-        soup = BeautifulSoup(html, "html.parser")
-        for script in soup.find_all("script"):
-            text = script.string or ""
-            if "efficiency" in text.lower() or "index" in text.lower():
+        log.info("Scraping MMLU-Pro (knowledge)...")
+        url = "https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro"
+        html = playwright_get(url, wait_ms=10000)
+        rows = parse_first_table(html)
+        for row in rows:
+            vals = list(row.values())
+            if len(vals) < 2:
+                continue
+            name = vals[0]
+            for v in vals[1:]:
+                clean = v.replace("%", "").strip()
                 try:
-                    m = re.search(r'\[(.+?)\]', text, re.DOTALL)
-                    if m:
-                        entries = json.loads("[" + m.group(1) + "]")
-                        for e in entries:
-                            name = e.get("model") or e.get("name", "")
-                            idx  = (e.get("efficiency_index") or
-                                    e.get("quality_index") or e.get("index"))
-                            if name and idx is not None:
-                                scores[name] = float(idx)
-                        if scores: break
-                except Exception: pass
-        if not scores:
-            scores = parse_table_by_headers(html,
-                name_hints=["model","name"],
-                score_hints=["efficiency","index","quality"])
-        log.info(f"  aa_efficiency: {len(scores)} models")
+                    pct = float(clean)
+                    if 0 <= pct <= 100:
+                        scores[name] = pct
+                        break
+                except ValueError:
+                    pass
+        log.info(f"  ✅ MMLU-Pro: {len(scores)} models")
     except Exception as e:
-        log.error(f"  AA error: {e}")
+        log.error(f"  ❌ MMLU-Pro: {e}")
     return scores
 
 
-def scrape_openrouter() -> dict:
-    scores = {}
-    rank = 1
+def scrape_artificial_analysis() -> dict[str, float]:
+    """artificialanalysis.ai/leaderboard — efficiency scores."""
+    scores: dict[str, float] = {}
     try:
-        log.info("Scraping OpenRouter...")
-        html = playwright_get("https://openrouter.ai/rankings", wait_ms=8000)
-        soup = BeautifulSoup(html, "html.parser")
-        for script in soup.find_all("script"):
-            text = script.string or ""
-            if "rank" in text.lower() and "model" in text.lower():
+        log.info("Scraping Artificial Analysis (efficiency)...")
+        url = "https://artificialanalysis.ai/leaderboard"
+        html = playwright_get(url, wait_ms=10000)
+        rows = parse_first_table(html)
+        for row in rows:
+            vals = list(row.values())
+            if len(vals) < 2:
+                continue
+            name = vals[0]
+            for v in vals[1:]:
+                clean = v.replace("%", "").replace(",", "").strip()
                 try:
-                    m = re.search(r'\[(.+?)\]', text, re.DOTALL)
-                    if m:
-                        entries = json.loads("[" + m.group(1) + "]")
-                        for i, e in enumerate(entries, 1):
-                            name = e.get("model") or e.get("id", "")
-                            if name:
-                                scores[name] = 1000.0 - i
-                        if scores: break
-                except Exception: pass
-        if not scores:
-            for item in soup.select("li, tr, [data-model]"):
-                name = item.get_text(strip=True).split("\n")[0]
-                if name and len(name) > 3:
-                    scores[name] = 1000.0 - rank
-                    rank += 1
-                    if rank > 50: break
-        log.info(f"  openrouter: {len(scores)} models")
+                    score = float(clean)
+                    if score > 0:
+                        scores[name] = score
+                        break
+                except ValueError:
+                    pass
+        log.info(f"  ✅ Artificial Analysis: {len(scores)} models")
     except Exception as e:
-        log.error(f"  OpenRouter error: {e}")
+        log.error(f"  ❌ Artificial Analysis: {e}")
     return scores
 
 
-def scrape_safebench() -> dict:
-    scores = {}
+def scrape_openrouter_usage() -> dict[str, float]:
+    """openrouter.ai/rankings — usage adoption scores."""
+    scores: dict[str, float] = {}
     try:
-        log.info("Scraping SafeBench...")
-        urls = ["https://safebench.org/", "https://safebench.github.io/"]
-        for url in urls:
-            try:
-                html = playwright_get(url, wait_ms=6000)
-                result = parse_table_by_headers(html,
-                    name_hints=["model","name"],
-                    score_hints=["safe","score","pass","%"])
-                if result:
-                    scores.update(result); break
-            except Exception: continue
-        log.info(f"  safebench: {len(scores)} models")
+        log.info("Scraping OpenRouter Rankings (usage adoption)...")
+        url = "https://openrouter.ai/rankings"
+        html = playwright_get(url, wait_ms=8000)
+        rows = parse_first_table(html)
+        for i, row in enumerate(rows):
+            vals = list(row.values())
+            if len(vals) < 1:
+                continue
+            name = vals[0]
+            # Rank 1 = 100, proportional decline for lower ranks
+            rank_score = max(0, 100 - (i * 2))  # decrement by 2 per rank
+            if name and rank_score > 0:
+                scores[name] = rank_score
+        log.info(f"  ✅ OpenRouter Rankings: {len(scores)} models")
     except Exception as e:
-        log.error(f"  SafeBench error: {e}")
+        log.error(f"  ❌ OpenRouter Rankings: {e}")
     return scores
 
 
-# == SCORING
-def normalize(models: list, raw_key: str) -> dict:
-    vals = {m["name"]: (m["raw_data"].get(raw_key) or 0.0) for m in models}
-    top  = max(vals.values(), default=0.0)
-    if top == 0.0: return {k: 0.0 for k in vals}
+def scrape_safebench() -> dict[str, float]:
+    """SafeBench or WalledAI — safety scores. Returns {model: score}."""
+    scores: dict[str, float] = {}
+    try:
+        log.info("Scraping SafeBench (safety)...")
+        # Try WalledAI first
+        url = "https://huggingface.co/spaces/walledai/WalledEval"
+        html = playwright_get(url, wait_ms=8000)
+        rows = parse_first_table(html)
+        for row in rows:
+            vals = list(row.values())
+            if len(vals) < 2:
+                continue
+            name = vals[0]
+            for v in vals[1:]:
+                clean = v.replace("%", "").strip()
+                try:
+                    score = float(clean)
+                    if 0 <= score <= 100:
+                        scores[name] = score
+                        break
+                except ValueError:
+                    pass
+        log.info(f"  ✅ SafeBench: {len(scores)} models")
+    except Exception as e:
+        log.warning(f"  ⚠️ SafeBench not available: {e}")
+    return scores
+
+
+# ══ SCORING ENGINE ════════════════════════════════════════════════
+
+def normalize_across_models(models: list, category: str, raw_values: dict[str, float]) -> dict[str, float]:
+    """
+    Top performer = 100. Others proportional.
+    Only models with non-null/non-zero values are normalized.
+    """
+    vals = {m["name"]: raw_values.get(m["name"]) for m in models}
+    vals = {k: v for k, v in vals.items() if v is not None and v > 0}
+    if not vals:
+        return {}
+    top = max(vals.values())
     return {k: round((v / top) * 100.0, 4) for k, v in vals.items()}
 
 
-def calculate_composite(model_name: str, normalized: dict) -> float:
-    return round(sum(normalized.get(mkey, {}).get(model_name, 0.0) * w
-                     for mkey, w in WEIGHTS.items()), 2)
+def calculate_composite(model_name: str, normalized: dict) -> tuple[float, int]:
+    """Option A: null categories excluded, available weights renormalized to sum 1.0."""
+    available_weights = {k: WEIGHTS[k] for k in WEIGHTS 
+                         if normalized.get(k, {}).get(model_name, None) is not None
+                         and normalized[k].get(model_name, 0.0) > 0}
+    if not available_weights:
+        return 0.0, 0
+    weight_sum = sum(available_weights.values())
+    total = sum(normalized[k].get(model_name, 0.0) * (w / weight_sum) 
+                for k, w in available_weights.items())
+    return round(total, 2), len(available_weights)
 
 
 def generate_checksum(data: dict) -> str:
+    """Bible V2.4 canonical: names|...|:scores,...  with .1f formatting."""
     names  = "|".join(m["name"] for m in data["models"])
-    scores = ",".join(f"{s:.1f}" if s is not None else "null"
-                      for m in data["models"] for s in m["scores"])
+    scores = ",".join(
+        f"{s:.1f}" if s is not None else "null"
+        for m in data["models"] for s in m["scores"]
+    )
     return hashlib.sha256((names + ":" + scores).encode()).hexdigest()
 
 
-def match_name(scraped: str, existing: list) -> str:
+def match_name(scraped: str, existing: list[str]) -> str | None:
     s = scraped.lower().strip()
     for name in existing:
-        if name.lower() == s: return name
+        if name.lower() == s:
+            return name
     for name in existing:
         n = name.lower()
-        if s in n or n in s: return name
-    s_tok = set(s.replace("-"," ").replace("_"," ").split())
+        if s in n or n in s:
+            return name
+    s_tok = set(s.replace("-", " ").replace("_", " ").split())
     for name in existing:
-        n_tok = set(name.lower().replace("-"," ").replace("_"," ").split())
-        if len(s_tok & n_tok) >= 2: return name
+        n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
+        if len(s_tok & n_tok) >= 2:
+            return name
     return None
+
+
+def write_status(status: str, ranked: list, source_summary: list,
+                 duration_sec: int, error: str | None = None) -> None:
+    """Update status.json with this agent's latest run info."""
+    status_file = REPO_PATH / "status.json"
+    try:
+        if status_file.exists():
+            with open(status_file) as f:
+                sdata = json.load(f)
+        else:
+            sdata = {"last_updated": TODAY, "agents": {}}
+
+        from datetime import datetime
+        now_iso = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+        top5 = []
+        for m in ranked[:5]:
+            sc = m["scores"][-1] if m["scores"] else None
+            if sc is not None:
+                top5.append({"rank": m["rank"], "name": m["name"], "score": sc})
+
+        sources_hit = sum(1 for s in source_summary if "0 scraped" not in s and "0 matched" not in s)
+
+        sdata["last_updated"] = now_iso
+        sdata["agents"]["trsbench"] = {
+            "name":             "TRSbench DDP",
+            "label":            "Overall Rankings",
+            "emoji":            "🏆",
+            "enabled":          True,
+            "last_run":         now_iso,
+            "last_run_date":    TODAY,
+            "status":           status,
+            "duration_seconds": duration_sec,
+            "sources_total":    7,
+            "sources_hit":      sources_hit,
+            "models_qualified": len(ranked),
+            "top_model":        ranked[0]["name"] if ranked else None,
+            "top_score":        (ranked[0]["scores"][-1] if ranked and ranked[0]["scores"] else None),
+            "top5":             top5,
+            "leaderboard_url":  "/scores.html",
+            "next_run":         (TODAY + "T05:00:00").replace(TODAY, _next_day()),
+            "error":            error,
+        }
+
+        with open(status_file, "w") as f:
+            json.dump(sdata, f, indent=2)
+        log.info("✅ status.json updated")
+    except Exception as e:
+        log.warning(f"Could not write status.json: {e}")
+
+
+def _next_day() -> str:
+    from datetime import datetime, timedelta
+    return (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+
+
+def update_index_timestamp() -> None:
+    """Rewrite var LAST_PUSH_TIME in index.html with the current local time."""
+    index_file = REPO_PATH / "index.html"
+    if not index_file.exists():
+        log.warning("index.html not found — skipping timestamp update")
+        return
+    try:
+        from datetime import datetime
+        now = datetime.now()
+        hour   = now.strftime("%I").lstrip("0") or "12"
+        minute = now.strftime("%M")
+        ampm   = now.strftime("%p")
+        push_time = f"{hour}:{minute} {ampm} CST"
+
+        content = index_file.read_text()
+        new_content = re.sub(
+            r"var LAST_PUSH_TIMEs*=s*'[^']*';",
+            f"var LAST_PUSH_TIME = '{push_time}';",
+            content,
+        )
+        if new_content != content:
+            index_file.write_text(new_content)
+            log.info(f"✅ index.html timestamp updated → {push_time}")
+        else:
+            log.warning("index.html: LAST_PUSH_TIME pattern not found — timestamp not updated")
+    except Exception as e:
+        log.warning(f"Could not update index.html timestamp: {e}")
 
 
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "trs-data.json"],
+        subprocess.run(["git", "add", "trs-data.json", "status.json", "index.html"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)
         if r.returncode != 0:
             if "nothing to commit" in r.stdout + r.stderr:
-                log.info("Nothing to commit."); return True
-            log.error(f"Commit failed: {r.stderr}"); return False
-        subprocess.run(["git", "push"], cwd=REPO_PATH, check=True, capture_output=True)
+                log.info("Nothing to commit — data unchanged.")
+                return True
+            log.error(f"Commit failed:
+{r.stderr}")
+            return False
+        subprocess.run(["git", "push"],
+                       cwd=REPO_PATH, check=True, capture_output=True)
+        log.info("✅ Pushed to GitHub")
         return True
     except subprocess.CalledProcessError as e:
-        log.error(f"Git error: {e}"); return False
+        log.error(f"Git error: {e.stderr}")
+        return False
 
 
-# == MAIN
+# ══ MAIN ══════════════════════════════════════════════════════════
+
 def main():
+    import time as _time
+    main._start_time = _time.time()
+
     if TEST_TELEGRAM:
-        notify("Agent TRSbench online."); print("Telegram OK."); return
+        notify("✅ <b>TRSbench DDP online</b>
+Telegram works! Ready to run.")
+        print("Telegram test sent. Check your phone.")
+        return
 
-    mode = "DRY RUN" if DRY_RUN else "LIVE"
-    log.info(f"Agent TRSbench | {TODAY} | {mode}")
-    notify(f"Agent TRSbench starting | {TODAY} | {mode} | 7 sources -> trs-data.json")
+    mode = "DRY RUN 🔍" if DRY_RUN else "LIVE 🚀"
+    log.info(f"TRSbench DDP | {TODAY} | {mode}")
+    notify(f"🤖 <b>TRSbench DDP starting</b>
+📅 {TODAY}
+⚙️ {mode}
+7 sources → trs-data.json")
 
+    # ── Load data ──
     if not DATA_FILE.exists():
         msg = f"trs-data.json not found at {DATA_FILE}"
-        log.error(msg); notify(f"ERROR: {msg}"); return
+        log.error(msg); notify(f"❌ {msg}"); return
 
-    with open(DATA_FILE) as f: data = json.load(f)
+    with open(DATA_FILE) as f:
+        data = json.load(f)
+
     models = data["models"]
     names  = [m["name"] for m in models]
+    dates  = data["dates"]
+    notify(f"📂 Loaded. Models: {len(models)} | Dates: {dates[0]} → {dates[-1]}")
 
-    if TODAY in data["dates"]:
-        date_is_new = False; today_idx = data["dates"].index(TODAY)
+    # ── Date slot ──
+    if TODAY in dates:
+        date_is_new = False
+        today_idx   = dates.index(TODAY)
+        notify(f"ℹ️ {TODAY} exists at index {today_idx}. Refreshing.")
     else:
-        date_is_new = True; data["dates"].append(TODAY)
+        date_is_new = True
+        data["dates"].append(TODAY)
         today_idx = len(data["dates"]) - 1
+        notify(f"➕ New date: {TODAY} (slot {today_idx})")
 
-    notify(f"{len(models)} models | {data['dates'][0]} to {data['dates'][-1]}")
-
-    scrape_map = {
-        "arena_elo":           scrape_chatbot_arena,
-        "swebench_pct":        scrape_swebench,
-        "arc_agi2_pct":        scrape_arc_agi2,
-        "mmlu_pro_pct":        scrape_mmlu_pro,
-        "aa_efficiency_index": scrape_artificial_analysis,
-        "openrouter_rank_inv": scrape_openrouter,
-        "safebench_score":     scrape_safebench,
+    # ── Scrape all 7 sources ──
+    scrapers = {
+        "safety":           (scrape_safebench, {}),
+        "reasoning":        (scrape_arc_agi2, {}),
+        "coding":           (scrape_swebench_verified, {}),
+        "human_preference": (scrape_arena_overall, {}),
+        "knowledge":        (scrape_mmlu_pro, {}),
+        "efficiency":       (scrape_artificial_analysis, {}),
+        "usage_adoption":   (scrape_openrouter_usage, {}),
     }
 
-    for raw_field, scraper_fn in scrape_map.items():
+    all_results  = {}
+    total_matched = 0
+    source_summary = []
+
+    for category, (scraper_fn, _) in scrapers.items():
         results = scraper_fn()
+        all_results[category] = results
+        matched = 0
         for scraped_name, val in results.items():
-            canon = match_name(scraped_name, names)
-            if canon:
-                m = next(x for x in models if x["name"] == canon)
-                m["raw_data"][raw_field] = val
+            canonical = match_name(scraped_name, names)
+            if canonical:
+                # Store in normalized dict, not raw_data (simple schema)
+                # We'll normalize after all scraping
+                matched += 1
+        total_matched += matched
+        source_summary.append(f"{category}: {len(results)} scraped, {matched} matched")
+        log.info(f"  {category}: {matched}/{len(results)} matched")
 
-    normalized = {mkey: normalize(models, rf) for mkey, rf in RAW_KEYS.items()}
+    notify("📊 <b>Scraping complete</b>
+" + "
+".join(source_summary))
 
+    # ── Normalize + score ──
+    normalized = {}
+    for category, raw_values in all_results.items():
+        normalized[category] = normalize_across_models(models, category, raw_values)
+
+    for model in models:
+        n  = model["name"]
+        sc, cat_count = calculate_composite(n, normalized)
+        model["category_count"] = cat_count
+        while len(model["scores"]) < today_idx:
+            model["scores"].append(None)
+        if date_is_new:
+            model["scores"].append(sc)
+        else:
+            if today_idx < len(model["scores"]):
+                model["scores"][today_idx] = sc
+            else:
+                model["scores"].append(sc)
+
+    # ── Qualification filter (5+ categories) ──
     def today_score(m):
         s = m["scores"][today_idx] if today_idx < len(m["scores"]) else None
         return s if s is not None else -1.0
 
-    for model in models:
-        sc = calculate_composite(model["name"], normalized)
-        model["source_count"] = sum(1 for rf in RAW_KEYS.values()
-                                    if model["raw_data"].get(rf) is not None)
-        while len(model["scores"]) < today_idx: model["scores"].append(None)
-        if date_is_new: model["scores"].append(sc)
-        elif today_idx < len(model["scores"]): model["scores"][today_idx] = sc
-        else: model["scores"].append(sc)
+    qualified = [m for m in models if m["category_count"] >= QUALIFICATION_MIN_CATEGORIES]
+    disqualified = [m for m in models if m["category_count"] < QUALIFICATION_MIN_CATEGORIES]
+    if disqualified:
+        log.info(f"Disqualified (< {QUALIFICATION_MIN_CATEGORIES} categories): "
+                 f"{[m['name'] for m in disqualified]}")
 
-    qualified = [m for m in models if m["source_count"] >= QUALIFICATION_MIN]
-    ranked    = sorted(qualified, key=today_score, reverse=True)
-    for rank, m in enumerate(ranked, 1): m["rank"] = rank
+    # ── Update ranks ──
+    ranked = sorted(qualified, key=today_score, reverse=True)
+    for rank, m in enumerate(ranked, 1):
+        m["rank"] = rank
 
-    top5 = "\n".join(f"  {m['rank']}. {m['name']}  {today_score(m):.1f}"
-                      for m in ranked[:5])
-    notify(f"TRSbench Top 5 - {TODAY}\n{top5}\n\nQualified: {len(qualified)}")
+    top5_lines = "
+".join(
+        f"  {m['rank']}. {m['name']}  {today_score(m):.1f}"
+        for m in ranked[:5]
+    )
+    notify(f"🏆 <b>TRSbench Top 5 — {TODAY}</b>
+{top5_lines}")
 
+    # ── Checksum ──
     data["checksum"] = generate_checksum(data)
+    log.info(f"Checksum: {data['checksum'][:20]}...")
 
     if DRY_RUN:
-        notify("DRY RUN - nothing written."); return
+        notify(f"🔍 <b>DRY RUN complete</b>
+Would score {len(qualified)} models.
+Nothing written.")
+        log.info("Dry run complete. Nothing written.")
+        return
 
-    with open(DATA_FILE, "w") as f: json.dump(data, f, indent=2)
+    # ── Write + push ──
+    import time as _time
+    _t0 = getattr(main, "_start_time", _time.time())
+    duration = int(_time.time() - _t0)
+
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=2)
+    log.info(f"Wrote {DATA_FILE.name}")
+
+    write_status("success", ranked, source_summary, duration)
+    update_index_timestamp()
 
     ok = git_push(f"TRSbench daily update {TODAY} ({len(qualified)} models)")
     if ok:
-        notify(f"TRSbench done! {TODAY} | {len(qualified)} models | trainingrun.ai/scores")
+        notify(f"✅ <b>TRSbench DDP done!</b>
+📅 {TODAY}
+📊 {len(qualified)} models
+🌐 → trainingrun.ai/scores")
     else:
-        notify(f"JSON updated but push failed. cd {REPO_PATH} && git push")
+        notify(f"⚠️ JSON updated but push failed. cd {REPO_PATH} && git push")
 
 
 if __name__ == "__main__":
