@@ -112,7 +112,7 @@ def notify(text: str) -> None:
         log.warning(f"Telegram non-fatal: {e}")
 
 
-# ══ PLAYWRIGHT HELPER ════════════════════════════════════════════─
+# ══ PLAYWRIGHT HELPER ═════════════════════════════════════════════
 def playwright_get(url: str, wait_ms: int = 5000) -> str:
     """Launch headless Chromium, load url, return page HTML."""
     with sync_playwright() as p:
@@ -576,9 +576,39 @@ def _next_day() -> str:
     return (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
 
 
+def update_index_timestamp() -> None:
+    """Rewrite var LAST_PUSH_TIME in index.html with the current local time."""
+    index_file = REPO_PATH / "index.html"
+    if not index_file.exists():
+        log.warning("index.html not found — skipping timestamp update")
+        return
+    try:
+        from datetime import datetime
+        now = datetime.now()
+        # Format as "4:16 AM CST" (no leading zero on hour)
+        hour   = now.strftime("%I").lstrip("0") or "12"
+        minute = now.strftime("%M")
+        ampm   = now.strftime("%p")
+        push_time = f"{hour}:{minute} {ampm} CST"
+
+        content = index_file.read_text()
+        new_content = re.sub(
+            r"var LAST_PUSH_TIME\s*=\s*'[^']*';",
+            f"var LAST_PUSH_TIME = '{push_time}';",
+            content,
+        )
+        if new_content != content:
+            index_file.write_text(new_content)
+            log.info(f"✅ index.html timestamp updated → {push_time}")
+        else:
+            log.warning("index.html: LAST_PUSH_TIME pattern not found — timestamp not updated")
+    except Exception as e:
+        log.warning(f"Could not update index.html timestamp: {e}")
+
+
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "trscode-data.json", "status.json"],
+        subprocess.run(["git", "add", "trscode-data.json", "status.json", "index.html"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)
@@ -731,6 +761,7 @@ def main():
     log.info(f"Wrote {DATA_FILE.name}")
 
     write_status("success", ranked, source_summary, duration)
+    update_index_timestamp()
 
     ok = git_push(f"TRScode daily update {TODAY} ({len(qualified)} models)")
     if ok:
