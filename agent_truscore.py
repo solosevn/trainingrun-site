@@ -424,21 +424,21 @@ def generate_checksum(data: dict) -> str:
 
 def match_name(scraped: str, existing: list[str]) -> str | None:
     s = scraped.lower().strip()
+    # Strip org prefix (e.g. "anthropic/claude-opus-4-6" -> "claude-opus-4-6")
+    s_stripped = s.split("/")[-1] if "/" in s else s
     for name in existing:
-        if name.lower() == s:
+        if name.lower() == s or name.lower() == s_stripped:
             return name
     for name in existing:
         n = name.lower()
-        if s in n or n in s:
+        if s_stripped in n or n in s_stripped:
             return name
-    s_tok = set(s.replace("-", " ").replace("_", " ").split())
+    s_tok = set(s_stripped.replace("-", " ").replace("_", " ").split())
     for name in existing:
         n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
         if len(s_tok & n_tok) >= 2:
             return name
     return None
-
-
 def write_status(status: str, ranked: list, source_summary: list,
                  duration_sec: int, error: str | None = None) -> None:
     """Update status.json with this agent's latest run info."""
