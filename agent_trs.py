@@ -117,6 +117,51 @@ def playwright_get(url: str, wait_ms: int = 5000) -> str:
     return html
 
 
+
+def playwright_get_innertext(url: str, wait_ms: int = 8000) -> str:
+    """Load url with Playwright, return body.innerText (for non-table JS pages)."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(user_agent=(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+        page = ctx.new_page()
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
+        page.wait_for_timeout(wait_ms)
+        text = page.evaluate("document.body.innerText") or ""
+        browser.close()
+    return text
+
+
+def playwright_get_hfspace(url: str, wait_ms: int = 15000) -> str:
+    """Load HuggingFace Space URL; returns inner .hf.space iframe HTML if present."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(user_agent=(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+        page = ctx.new_page()
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
+        page.wait_for_timeout(wait_ms)
+        for frame in page.frames:
+            if "hf.space" in frame.url:
+                try:
+                    frame.wait_for_load_state("networkidle", timeout=30_000)
+                except Exception:
+                    pass
+                page.wait_for_timeout(5000)
+                html = frame.content()
+                browser.close()
+                return html
+        html = page.content()
+        browser.close()
+    return html
 def parse_first_table(html: str) -> list[dict]:
     """Return rows as list of {col0, col1, col2...} dicts from the largest table."""
     soup = BeautifulSoup(html, "html.parser")
@@ -143,7 +188,7 @@ def scrape_arena_overall() -> dict[str, float]:
     scores: dict[str, float] = {}
     try:
         log.info("Scraping Arena Overall (human preference)...")
-        url = "https://lmarena.ai/?leaderboard"
+        url = "https://arena.ai/leaderboard/text"
         html = playwright_get(url, wait_ms=12000)
         soup = BeautifulSoup(html, "html.parser")
 
@@ -182,27 +227,35 @@ def scrape_arena_overall() -> dict[str, float]:
 
 
 def scrape_arc_agi2() -> dict[str, float]:
-    """arcprize.org/arc-agi-2 — ARC-AGI-2 leaderboard. Returns {model: score_pct}."""
+    """arcprize.org/leaderboard — ARC-AGI-2 column. Returns {model: score_pct}."""
     scores: dict[str, float] = {}
     try:
         log.info("Scraping ARC-AGI-2 (reasoning)...")
-        url = "https://arcprize.org/arc-agi-2"
-        html = playwright_get(url, wait_ms=8000)
+        url = "https://arcprize.org/leaderboard"
+        html = playwright_get(url, wait_ms=10000)
         rows = parse_first_table(html)
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            raw_name = row.get("AI System", "")
+            if not raw_name:
+                vals = list(row.values())
+                raw_name = vals[0] if vals else ""
+            if not raw_name:
                 continue
-            name = vals[0]
-            for v in vals[1:]:
-                clean = v.replace("%", "").strip()
-                try:
-                    pct = float(clean)
-                    if 0 <= pct <= 100:
+            # Strip parenthetical qualifiers: "Claude Opus 4.6 (120K, High)" -> "Claude Opus 4.6"
+            name = re.sub(r'\s*\([^)]*\)', '', raw_name).strip()
+            # Trailing footnote markers
+            name = re.sub(r'[^\x00-\x7F]+$', '', name).strip()
+            arc2_raw = row.get("ARC-AGI-2", "")
+            if not arc2_raw:
+                continue
+            clean = arc2_raw.replace("%", "").strip()
+            try:
+                pct = float(clean)
+                if 0 <= pct <= 100:
+                    if name not in scores or pct > scores[name]:
                         scores[name] = pct
-                        break
-                except ValueError:
-                    pass
+            except ValueError:
+                pass
         log.info(f"  ✅ ARC-AGI-2: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ ARC-AGI-2: {e}")
@@ -250,27 +303,32 @@ def scrape_swebench_verified() -> dict[str, float]:
 
 
 def scrape_mmlu_pro() -> dict[str, float]:
-    """huggingface.co/spaces/TIGER-Lab/MMLU-Pro — knowledge leaderboard."""
+    """huggingface.co/spaces/TIGER-Lab/MMLU-Pro — knowledge leaderboard (via iframe)."""
     scores: dict[str, float] = {}
     try:
         log.info("Scraping MMLU-Pro (knowledge)...")
         url = "https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro"
-        html = playwright_get(url, wait_ms=10000)
+        html = playwright_get_hfspace(url, wait_ms=15000)
         rows = parse_first_table(html)
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            name = row.get("Models", "")
+            if not name:
+                vals = list(row.values())
+                name = vals[0] if vals else ""
+            if not name:
                 continue
-            name = vals[0]
-            for v in vals[1:]:
-                clean = v.replace("%", "").strip()
-                try:
-                    pct = float(clean)
-                    if 0 <= pct <= 100:
-                        scores[name] = pct
-                        break
-                except ValueError:
-                    pass
+            overall_raw = row.get("Overall", "")
+            if not overall_raw or overall_raw == "-":
+                continue
+            clean = overall_raw.replace("%", "").strip()
+            try:
+                val = float(clean)
+                if 0 < val <= 1.0:
+                    scores[name] = round(val * 100, 4)
+                elif 1 < val <= 100:
+                    scores[name] = val
+            except ValueError:
+                pass
         log.info(f"  ✅ MMLU-Pro: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ MMLU-Pro: {e}")
@@ -306,22 +364,23 @@ def scrape_artificial_analysis() -> dict[str, float]:
 
 
 def scrape_openrouter_usage() -> dict[str, float]:
-    """openrouter.ai/rankings — usage adoption scores."""
+    """openrouter.ai/rankings — usage adoption scores (innerText parse, no <table>)."""
     scores: dict[str, float] = {}
     try:
         log.info("Scraping OpenRouter Rankings (usage adoption)...")
         url = "https://openrouter.ai/rankings"
-        html = playwright_get(url, wait_ms=8000)
-        rows = parse_first_table(html)
-        for i, row in enumerate(rows):
-            vals = list(row.values())
-            if len(vals) < 1:
-                continue
-            name = vals[0]
-            # Rank 1 = 100, proportional decline for lower ranks
-            rank_score = max(0, 100 - (i * 2))  # decrement by 2 per rank
-            if name and rank_score > 0:
-                scores[name] = rank_score
+        text = playwright_get_innertext(url, wait_ms=10000)
+        lines = [l.strip() for l in text.split('\n') if l.strip()]
+        rank_num = 0
+        for i, line in enumerate(lines):
+            if re.match(r'^\d+\.$', line):
+                rank_num = int(line[:-1])
+                if i + 1 < len(lines):
+                    name = lines[i + 1]
+                    if name and len(name) > 2 and not name.lower().startswith("by "):
+                        rank_score = max(0, 100 - ((rank_num - 1) * 2))
+                        if rank_score > 0:
+                            scores[name] = rank_score
         log.info(f"  ✅ OpenRouter Rankings: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ OpenRouter Rankings: {e}")
