@@ -414,36 +414,37 @@ def scrape_openrouter_usage() -> dict[str, float]:
 
 
 def scrape_safebench() -> dict[str, float]:
-    """SafeBench or WalledAI — safety scores. Returns {model: score}."""
+    """Scale SEAL MASK leaderboard -- model honesty under pressure (safety proxy).
+    Higher score = safer/more honest. source: scale.com/leaderboard/mask
+    Uses playwright innerText parsing: rank lines followed by name then score."""
     scores: dict[str, float] = {}
     try:
         log.info("Scraping SafeBench (safety)...")
-        # Try WalledAI first
-        url = "https://huggingface.co/spaces/walledai/WalledEval"
-        html = playwright_get(url, wait_ms=8000)
-        rows = parse_first_table(html)
-        for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
-                continue
-            name = vals[0]
-            for v in vals[1:]:
-                clean = v.replace("%", "").strip()
-                try:
-                    score = float(clean)
-                    if 0 <= score <= 100:
-                        scores[name] = score
-                        break
-                except ValueError:
-                    pass
-        log.info(f"  ✅ SafeBench: {len(scores)} models")
+        url = "https://scale.com/leaderboard/mask"
+        text = playwright_get_innertext(url, wait_ms=10000)
+        lines = [l.strip() for l in text.split('\n') if l.strip()]
+        i = 0
+        while i < len(lines) - 2:
+            if re.match(r'^\d+$', lines[i]):
+                name = lines[i + 1]
+                score_raw = lines[i + 2]
+                m = re.match(r'^(\d+(?:\.\d+)?)', score_raw)
+                if (m and 3 <= len(name) <= 80
+                        and not re.match(r'^[\d\u00b1\.\+\-\s]+$', name)):
+                    try:
+                        val = float(m.group(1))
+                        if 0 < val <= 100:
+                            if name not in scores or val > scores[name]:
+                                scores[name] = val
+                            i += 3
+                            continue
+                    except ValueError:
+                        pass
+            i += 1
+        log.info(f"  \u2705 SafeBench (SEAL MASK): {len(scores)} models")
     except Exception as e:
-        log.warning(f"  ⚠️ SafeBench not available: {e}")
+        log.warning(f"  \u26a0\ufe0f SafeBench not available: {e}")
     return scores
-
-
-# ══ SCORING ENGINE ════════════════════════════════════════════════
-
 def normalize_across_models(models: list, category: str, raw_values: dict[str, float]) -> dict[str, float]:
     """
     Top performer = 100. Others proportional.
