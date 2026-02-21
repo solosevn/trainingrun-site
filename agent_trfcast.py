@@ -150,6 +150,24 @@ def playwright_get(url: str, wait_ms: int = 5000) -> str:
     return html
 
 
+def playwright_get_innertext(url: str, wait_ms: int = 8000) -> str:
+    """Load url with Playwright, return body.innerText (for non-table JS pages)."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(user_agent=(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+        page = ctx.new_page()
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            pass
+        page.wait_for_timeout(wait_ms)
+        text = page.evaluate("document.body.innerText") or ""
+        browser.close()
+    return text
+
+
 def parse_first_table(html: str) -> list[dict]:
     """Return rows as list of {col0, col1, col2...} dicts from the largest table."""
     soup = BeautifulSoup(html, "html.parser")
@@ -173,131 +191,136 @@ def parse_first_table(html: str) -> list[dict]:
 
 def scrape_forecastbench() -> tuple[dict[str, float], dict[str, float]]:
     """
-    ForecastBench leaderboard. Returns two dicts:
+    ForecastBench baseline leaderboard (forecastbench.org/baseline/).
+    Returns two dicts (both use the same Overall Brier score):
     - baseline Brier scores (0.0-1.0, lower is better)
-    - tournament Brier scores (0.0-1.0, lower is better)
+    - tournament Brier scores (same source, reused for calibration)
     """
     baseline_scores = {}
     tournament_scores = {}
     try:
         log.info("Scraping ForecastBench...")
-        html = playwright_get("https://forecastbench.org/leaderboard", wait_ms=10000)
+        # NOTE: /leaderboard now 404s -- baseline leaderboard is at /baseline/
+        html = playwright_get("https://forecastbench.org/baseline/", wait_ms=10000)
         rows = parse_first_table(html)
-        
+
+        SKIP = {"Superforecaster median forecast", "Public median forecast"}
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            name = row.get("Model", "")
+            if not name:
+                vals = list(row.values())
+                name = vals[0] if vals else ""
+            if not name or name in SKIP:
                 continue
-            name = vals[0]
-            
-            # Try to extract baseline and tournament Brier scores
-            # Typical columns: Model, Baseline Brier, Tournament Brier, ...
-            if len(vals) > 1:
-                try:
-                    val = float(vals[1].replace("%", "").strip())
-                    if 0 <= val <= 1:
-                        baseline_scores[name] = val
-                except (ValueError, IndexError):
-                    pass
-            if len(vals) > 2:
-                try:
-                    val = float(vals[2].replace("%", "").strip())
-                    if 0 <= val <= 1:
-                        tournament_scores[name] = val
-                except (ValueError, IndexError):
-                    pass
-        
-        log.info(f"  ✅ ForecastBench: {len(baseline_scores)} baseline, {len(tournament_scores)} tournament")
+            # "Overall (N)" column: format "0.086 (577)" -- extract first float
+            overall_raw = row.get("Overall (N)", row.get("Overall", ""))
+            if not overall_raw:
+                continue
+            clean = overall_raw.split(" ")[0].strip()
+            try:
+                val = float(clean)
+                if 0 < val <= 1:
+                    baseline_scores[name] = val
+                    tournament_scores[name] = val  # reuse for calibration pillar
+            except ValueError:
+                pass
+
+        log.info(f"  ForecastBench: {len(baseline_scores)} baseline, {len(tournament_scores)} tournament")
     except Exception as e:
-        log.error(f"  ❌ ForecastBench: {e}")
-    
+        log.error(f"  ForecastBench: {e}")
+
     return baseline_scores, tournament_scores
-
-
 def scrape_rallies() -> tuple[dict[str, float], dict[str, float]]:
     """
-    Rallies.ai portfolio leaderboard. Returns two dicts:
-    - return_pct: portfolio returns (%)
-    - win_rate_pct: win rate (%)
+    Rallies.ai Arena leaderboard (rallies.ai/arena). Returns two dicts:
+    - return_pct: portfolio Return % (column "Return %")
+    - win_rate_pct: Win Rate % (column "Win Rate")
     """
     return_scores = {}
     winrate_scores = {}
     try:
         log.info("Scraping Rallies.ai...")
-        html = playwright_get("https://rallies.ai/", wait_ms=8000)
+        # NOTE: old URL rallies.ai/ has no table -- leaderboard is at rallies.ai/arena
+        html = playwright_get("https://rallies.ai/arena", wait_ms=10000)
         rows = parse_first_table(html)
-        
+
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            name = row.get("Model", "")
+            if not name:
+                vals = list(row.values())
+                name = vals[1] if len(vals) > 1 else ""  # col 0 is rank emoji
+            if not name:
                 continue
-            name = vals[0]
-            
-            # Try to extract returns and win rate
-            if len(vals) > 1:
-                try:
-                    val = float(vals[1].replace("%", "").strip())
-                    if -1000 <= val <= 10000:  # Allow wide range for returns
-                        return_scores[name] = val
-                except (ValueError, IndexError):
-                    pass
-            if len(vals) > 2:
-                try:
-                    val = float(vals[2].replace("%", "").strip())
-                    if 0 <= val <= 100:
-                        winrate_scores[name] = val
-                except (ValueError, IndexError):
-                    pass
-        
-        log.info(f"  ✅ Rallies.ai: {len(return_scores)} returns, {len(winrate_scores)} win rates")
+            # Return % -- may start with "up" or "down" or be plain number
+            ret_raw = row.get("Return %", "")
+            try:
+                val = float(ret_raw.replace("%", "").replace("+", "").strip())
+                if -1000 <= val <= 10000:
+                    return_scores[name] = val
+            except ValueError:
+                pass
+            # Win Rate
+            wr_raw = row.get("Win Rate", "")
+            try:
+                val = float(wr_raw.replace("%", "").strip())
+                if 0 <= val <= 100:
+                    winrate_scores[name] = val
+            except ValueError:
+                pass
+
+        log.info(f"  Rallies.ai: {len(return_scores)} returns, {len(winrate_scores)} win rates")
     except Exception as e:
-        log.error(f"  ❌ Rallies.ai: {e}")
-    
+        log.error(f"  Rallies.ai: {e}")
+
     return return_scores, winrate_scores
-
-
 def scrape_alpha_arena() -> tuple[dict[str, float], dict[str, float]]:
     """
-    Alpha Arena (nof1.ai) leaderboard. Returns two dicts:
-    - return_pct: portfolio returns (%)
-    - sharpe_ratio: Sharpe ratio
+    Alpha Arena (nof1.ai/leaderboard) leaderboard. Returns two dicts:
+    - return_pct: portfolio Return % (best per base model)
+    - sharpe_ratio: Sharpe ratio (best per base model)
+    Model names have strategy suffixes stripped: "GROK-4.20 - 3: SITUATIONAL AWARENESS" -> "GROK-4.20"
     """
     return_scores = {}
     sharpe_scores = {}
     try:
         log.info("Scraping Alpha Arena...")
-        html = playwright_get("https://nof1.ai/", wait_ms=8000)
+        # NOTE: old URL nof1.ai/ has no table -- leaderboard is at nof1.ai/leaderboard
+        html = playwright_get("https://nof1.ai/leaderboard", wait_ms=10000)
         rows = parse_first_table(html)
-        
+
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            raw_name = row.get("MODEL", "")
+            if not raw_name:
+                vals = list(row.values())
+                raw_name = vals[1] if len(vals) > 1 else ""  # col 0 is rank
+            if not raw_name:
                 continue
-            name = vals[0]
-            
-            # Try to extract returns and Sharpe
-            if len(vals) > 1:
-                try:
-                    val = float(vals[1].replace("%", "").strip())
-                    if -1000 <= val <= 10000:
-                        return_scores[name] = val
-                except (ValueError, IndexError):
-                    pass
-            if len(vals) > 2:
-                try:
-                    val = float(vals[2].replace("%", "").strip())
-                    if -100 <= val <= 100:  # Sharpe can be negative
-                        sharpe_scores[name] = val
-                except (ValueError, IndexError):
-                    pass
-        
-        log.info(f"  ✅ Alpha Arena: {len(return_scores)} returns, {len(sharpe_scores)} Sharpe")
+            # Strip strategy suffix: "GROK-4.20 - 3: SITUATIONAL AWARENESS" -> "GROK-4.20"
+            name = re.sub(r'\s*-\s*\d+:\s*.+$', '', raw_name).strip()
+            if not name:
+                continue
+            # Return %: "+34.59%" or "-10.45%"
+            ret_raw = row.get("RETURN %", "")
+            try:
+                val = float(ret_raw.replace("%", "").replace("+", "").strip())
+                if name not in return_scores or val > return_scores[name]:
+                    return_scores[name] = val
+            except ValueError:
+                pass
+            # Sharpe ratio (can be negative)
+            sharpe_raw = row.get("SHARPE", "")
+            try:
+                val = float(sharpe_raw.strip())
+                if name not in sharpe_scores or val > sharpe_scores[name]:
+                    sharpe_scores[name] = val
+            except ValueError:
+                pass
+
+        log.info(f"  Alpha Arena: {len(return_scores)} returns, {len(sharpe_scores)} Sharpe")
     except Exception as e:
-        log.error(f"  ❌ Alpha Arena: {e}")
-    
+        log.error(f"  Alpha Arena: {e}")
+
     return return_scores, sharpe_scores
-
-
 def scrape_financearena() -> tuple[dict[str, float], dict[str, float]]:
     """
     FinanceArena leaderboard. Returns two dicts:
