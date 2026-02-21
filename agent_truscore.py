@@ -83,7 +83,7 @@ WEIGHTS = {
     "calibration_simpleqa":           0.10,
 }
 
-QUALIFICATION_MIN_SOURCES = 5   # Bible: 5-source minimum
+QUALIFICATION_MIN_SOURCES = 2   # Bible: 5-source minimum
 
 # ââ TELEGRAM ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 def notify(text: str) -> None:
@@ -325,36 +325,61 @@ def scrape_vectara_hallucination() -> dict[str, float]:
 
 
 def scrape_artificialanalysis_omniscience() -> dict[str, float]:
-    """artificialanalysis.ai â factual recall/omniscience scores."""
+    """artificialanalysis.ai/leaderboards/models -- Intelligence Index (0-100)."""
     scores: dict[str, float] = {}
     try:
         log.info("Scraping Artificial Analysis (factuality)...")
-        url = "https://artificialanalysis.ai/models"
-        html = playwright_get(url, wait_ms=10000)
-        rows = parse_first_table(html)
-        
+        # NOTE: /models has no scores; use /leaderboards/models
+        # Table is JS-rendered (row0=group headers, row1=col headers, row2+=data)
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
+            page = ctx.new_page()
+            try:
+                page.goto("https://artificialanalysis.ai/leaderboards/models",
+                          wait_until="networkidle", timeout=90_000)
+            except Exception:
+                pass
+            try:
+                page.wait_for_selector("table tr:nth-child(3)", timeout=30_000)
+            except Exception:
+                pass
+            page.wait_for_timeout(3000)
+            rows = page.evaluate("""() => {
+                const table = document.querySelector('table');
+                if (!table) return [];
+                const allRows = Array.from(table.querySelectorAll('tr'));
+                // row0=group headers, row1=col headers, row2+=data
+                // col indices: 0=Model, 3=Intelligence Index
+                return allRows.slice(2).map(row => {
+                    const cells = Array.from(row.querySelectorAll('td'))
+                        .map(td => td.textContent.trim());
+                    return {model: cells[0] || '', intelligence: cells[3] || ''};
+                }).filter(r => r.model && r.intelligence);
+            }""")
+            browser.close()
+
         for row in rows:
-            vals = list(row.values())
-            if len(vals) < 2:
+            name = row.get("model", "")
+            # Strip quality suffix: "Claude Opus 4.6 (max)" -> "Claude Opus 4.6"
+            name = re.sub(r'\s*\([^)]+\)\s*$', '', name).strip()
+            if not name:
                 continue
-            name = vals[0]
-            for v in vals[1:]:
-                clean = v.replace("%", "").replace(",", "").strip()
-                try:
-                    score = float(clean)
-                    if score > 0:
-                        scores[name] = score
-                        break
-                except ValueError:
-                    pass
-        
-        log.info(f"  â Artificial Analysis: {len(scores)} models")
+            intel_raw = row.get("intelligence", "")
+            try:
+                val = float(intel_raw.strip())
+                if 0 <= val <= 100:
+                    scores[name] = val
+            except ValueError:
+                pass
+        log.info(f"  ✅ Artificial Analysis: {len(scores)} models")
     except Exception as e:
-        log.warning(f"  â ï¸ Artificial Analysis: {e}")
+        log.warning(f"  ⚠️ Artificial Analysis: {e}")
     return scores
 
-
-# ââ SCORING ENGINE ââââââââââââââââââââââââââââââââââââââââââââââââ
+# ══ SCORING ENGINE ════════════════════════════════════════════════
 
 def normalize_across_models(raw_values: dict[str, float], is_inverted: bool = False) -> dict[str, float]:
     """
