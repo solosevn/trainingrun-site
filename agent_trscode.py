@@ -121,7 +121,12 @@ def playwright_get(url: str, wait_ms: int = 5000) -> str:
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
             "AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"))
         page = ctx.new_page()
-        page.goto(url, wait_until="networkidle", timeout=90_000)
+        try:
+            page.goto(url, wait_until="networkidle", timeout=90_000)
+        except Exception:
+            # networkidle may time out on pages with persistent polling/websockets;
+            # fall back to whatever content has rendered so far
+            pass
         page.wait_for_timeout(wait_ms)
         html = page.content()
         browser.close()
@@ -349,21 +354,25 @@ def scrape_swebench_pro() -> dict[str, float]:
         soup = BeautifulSoup(html, "html.parser")
 
         # Scale AI renders as React button components — no tables, no __NEXT_DATA__.
-        # After Playwright renders JS, body text looks like:
-        #   "claude-opus-4-5-20251101\n45.89±3.60\n..."
-        # Walk lines: find score pattern, then look back for model name.
+        # Playwright renders JS; body text has lines like "claude-opus...\n45.89±3.60"
+        # or score/± split across two separate lines: "45.89" then "±3.60"
         body_text = soup.get_text(separator='\n', strip=True)
         lines = [l.strip() for l in body_text.split('\n') if l.strip()]
-        score_re = re.compile(r'^(\d{1,3}(?:\.\d+)?)\s*[±]')
+        score_re = re.compile(r'(\d{1,3}(?:\.\d+)?)\s*[±]')
         for i, line in enumerate(lines):
-            m = score_re.match(line)
+            # Check this line, or this line + next line joined (handles split elements)
+            peek = line
+            if i + 1 < len(lines) and lines[i + 1].startswith('±'):
+                peek = line + '±'
+            m = score_re.search(peek)
             if m:
                 score_val = float(m.group(1))
                 if 0 < score_val <= 100:
-                    # Walk backward to find model name; skip bare rank numbers
+                    # Walk backward to find model name; skip bare numbers/symbols
                     for j in range(i - 1, max(-1, i - 6), -1):
                         candidate = lines[j].strip()
-                        if candidate and not re.match(r'^\d{1,3}$', candidate) and len(candidate) > 4:
+                        skip = re.match(r'^[\d\s\.±%+\-/]+$', candidate)
+                        if candidate and not skip and len(candidate) > 4:
                             if candidate not in scores:
                                 scores[candidate] = round(score_val, 2)
                             break
