@@ -13,7 +13,7 @@
     5. Terminal-Bench Hard  tbench.ai                       12%
     6. SWE-bench Pro        scale.com/leaderboard/...        8%
     7. SciCode              scicode-bench.github.io         15%
-    8. Chatbot Arena Code   arena.ai/leaderboard/code       10%
+    8. Chatbot Arena Code   lmarena.ai (code filter)        10%
 
   Qualification: 2+ pillars with non-null scores.
   Scoring: Option B — null sub-metrics contribute 0, not normalized away.
@@ -112,7 +112,7 @@ def notify(text: str) -> None:
         log.warning(f"Telegram non-fatal: {e}")
 
 
-# ══ PLAYWRIGHT HELPER ═════════════════════════════════════════════
+# ══ PLAYWRIGHT HELPER ════════════════════════════════════════════─
 def playwright_get(url: str, wait_ms: int = 5000) -> str:
     """Launch headless Chromium, load url, return page HTML."""
     with sync_playwright() as p:
@@ -156,6 +156,8 @@ def scrape_swebench_verified() -> dict[str, float]:
         log.info("Scraping SWE-bench Verified...")
         html = playwright_get("https://www.swebench.com/", wait_ms=6000)
         soup = BeautifulSoup(html, "html.parser")
+
+        # SWE-bench uses table with columns: Instance/Model, % Resolved, ...
         tables = soup.find_all("table")
         for table in tables:
             rows = table.find_all("tr")
@@ -163,6 +165,7 @@ def scrape_swebench_verified() -> dict[str, float]:
                 continue
             headers = [th.get_text(strip=True).lower()
                        for th in rows[0].find_all(["th", "td"])]
+            # Look for name + resolved columns
             name_col = next((i for i, h in enumerate(headers)
                              if "model" in h or "instance" in h or "name" in h), 0)
             pct_col  = next((i for i, h in enumerate(headers)
@@ -180,7 +183,8 @@ def scrape_swebench_verified() -> dict[str, float]:
                 except ValueError:
                     pass
             if scores:
-                break
+                break   # stop at first productive table
+
         log.info(f"  ✅ SWE-bench Verified: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ SWE-bench: {e}")
@@ -231,6 +235,7 @@ def scrape_livecodebench() -> dict[str, float]:
         if len(rows) < 2:
             return scores
         headers = [th.get_text(strip=True) for th in rows[0].find_all(["th", "td"])]
+        # Prefer "Overall" or "Pass@1" column
         score_col = 1
         for i, h in enumerate(headers):
             if any(kw in h.lower() for kw in ["overall", "pass@1", "score"]):
@@ -267,6 +272,7 @@ def scrape_bigcodebench() -> dict[str, float]:
             if len(vals) < 2:
                 continue
             name = vals[0]
+            # Look for "Complete" or "Instruct" score — prefer Complete
             for v in vals[1:]:
                 clean = v.replace("%", "").strip()
                 try:
@@ -287,8 +293,12 @@ def scrape_terminal_bench() -> dict[str, float]:
     scores: dict[str, float] = {}
     try:
         log.info("Scraping Terminal-Bench Hard...")
+        # FIX: correct URL — root page doesn't show table
         html = playwright_get("https://tbench.ai/leaderboard/terminal-bench/2.0", wait_ms=6000)
         soup = BeautifulSoup(html, "html.parser")
+
+        # Table columns: Rank, Agent, Model, Date, Agent Org, Model Org, Accuracy, CI
+        # We want "Model" column for name and "Accuracy" column for score
         tables = soup.find_all("table")
         for table in tables:
             rows = table.find_all("tr")
@@ -299,6 +309,7 @@ def scrape_terminal_bench() -> dict[str, float]:
             model_col = next((i for i, h in enumerate(headers) if h == "model"), None)
             acc_col   = next((i for i, h in enumerate(headers)
                               if "accuracy" in h or "score" in h), None)
+            # Fallback column positions for typical terminal-bench layout
             if model_col is None:
                 model_col = 2
             if acc_col is None:
@@ -309,16 +320,19 @@ def scrape_terminal_bench() -> dict[str, float]:
                     continue
                 name = cells[model_col].get_text(strip=True)
                 val  = cells[acc_col].get_text(strip=True)
+                # FIX: strip "±" confidence intervals — "75.1% ± 2.4" → "75.1"
                 val = re.split(r'[±%]', val)[0].strip()
                 try:
                     pct = float(val)
                     if name and 0 <= pct <= 100:
+                        # Keep best score if same model appears with multiple agents
                         if name not in scores or pct > scores[name]:
                             scores[name] = pct
                 except ValueError:
                     pass
             if scores:
                 break
+
         log.info(f"  ✅ Terminal-Bench Hard: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ Terminal-Bench: {e}")
@@ -333,51 +347,27 @@ def scrape_swebench_pro() -> dict[str, float]:
         url = "https://scale.com/leaderboard/swe_bench_pro_public"
         html = playwright_get(url, wait_ms=12000)
         soup = BeautifulSoup(html, "html.parser")
-        next_tag = soup.find("script", {"id": "__NEXT_DATA__"})
-        if next_tag and next_tag.string:
-            try:
-                nd  = json.loads(next_tag.string)
-                raw = json.dumps(nd)
-                pairs = re.findall(
-                    r'"(?:model_name|name|model)"\s*:\s*"([^"]{3,80})"'
-                    r'(?:(?!"(?:model_name|name|model)").){0,300}'
-                    r'"(?:score|pass_rate|resolved_pct|accuracy)"\s*:\s*([\d.]+)',
-                    raw, re.DOTALL
-                )
-                for name, score in pairs:
-                    try:
-                        val = float(score)
-                        val = val * 100 if val <= 1.0 else val
-                        if 0 < val <= 100:
-                            scores[name] = round(val, 2)
-                    except ValueError:
-                        pass
-            except Exception:
-                pass
-        if not scores:
-            tables = soup.find_all("table")
-            for table in tables:
-                rows = table.find_all("tr")
-                if len(rows) < 2:
-                    continue
-                for row in rows[1:]:
-                    cells = row.find_all(["td", "th"])
-                    if len(cells) < 2:
-                        continue
-                    name = cells[0].get_text(strip=True)
-                    for cell in cells[1:]:
-                        raw_val = cell.get_text(strip=True)
-                        clean = re.split(r'[±%]', raw_val)[0].strip()
-                        try:
-                            val = float(clean)
-                            val = val * 100 if val <= 1.0 else val
-                            if 0 < val <= 100:
-                                scores[name] = round(val, 2)
-                                break
-                        except ValueError:
-                            pass
-                if scores:
-                    break
+
+        # Scale AI renders as React button components — no tables, no __NEXT_DATA__.
+        # After Playwright renders JS, body text looks like:
+        #   "claude-opus-4-5-20251101\n45.89±3.60\n..."
+        # Walk lines: find score pattern, then look back for model name.
+        body_text = soup.get_text(separator='\n', strip=True)
+        lines = [l.strip() for l in body_text.split('\n') if l.strip()]
+        score_re = re.compile(r'^(\d{1,3}(?:\.\d+)?)\s*[±]')
+        for i, line in enumerate(lines):
+            m = score_re.match(line)
+            if m:
+                score_val = float(m.group(1))
+                if 0 < score_val <= 100:
+                    # Walk backward to find model name; skip bare rank numbers
+                    for j in range(i - 1, max(-1, i - 6), -1):
+                        candidate = lines[j].strip()
+                        if candidate and not re.match(r'^\d{1,3}$', candidate) and len(candidate) > 4:
+                            if candidate not in scores:
+                                scores[candidate] = round(score_val, 2)
+                            break
+
         log.info(f"  ✅ SWE-bench Pro: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ SWE-bench Pro: {e}")
@@ -389,8 +379,10 @@ def scrape_scicode() -> dict[str, float]:
     scores: dict[str, float] = {}
     try:
         log.info("Scraping SciCode...")
+        # FIX: correct URL — root page has no table; leaderboard is at /leaderboard/
         html = playwright_get("https://scicode-bench.github.io/leaderboard/", wait_ms=5000)
         soup = BeautifulSoup(html, "html.parser")
+
         tables = soup.find_all("table")
         for table in tables:
             rows = table.find_all("tr")
@@ -400,9 +392,10 @@ def scrape_scicode() -> dict[str, float]:
                        for th in rows[0].find_all(["th", "td"])]
             name_col = next((i for i, h in enumerate(headers)
                              if "model" in h or "name" in h), 0)
+            # FIX: prefer "main" problem resolve rate over subproblem
             main_col = next((i for i, h in enumerate(headers) if "main" in h), None)
             if main_col is None:
-                main_col = 1
+                main_col = 1  # fallback to first numeric column
             for row in rows[1:]:
                 cells = row.find_all(["td", "th"])
                 if len(cells) <= max(name_col, main_col):
@@ -411,12 +404,14 @@ def scrape_scicode() -> dict[str, float]:
                 val  = cells[main_col].get_text(strip=True).replace("%", "").strip()
                 try:
                     pct = float(val)
+                    # FIX: scores are already 0-100 (e.g. 10.8, 9.2) — do NOT multiply
                     if name and 0 <= pct <= 100:
                         scores[name] = round(pct, 2)
                 except ValueError:
                     pass
             if scores:
                 break
+
         log.info(f"  ✅ SciCode: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ SciCode: {e}")
@@ -431,60 +426,48 @@ def scrape_arena_code() -> dict[str, float]:
         url = "https://arena.ai/leaderboard/code"
         html = playwright_get(url, wait_ms=12000)
         soup = BeautifulSoup(html, "html.parser")
-        next_tag = soup.find("script", {"id": "__NEXT_DATA__"})
-        if next_tag and next_tag.string:
-            try:
-                nd  = json.loads(next_tag.string)
-                raw = json.dumps(nd)
-                pairs = re.findall(
-                    r'"(?:model|name|model_name)"\s*:\s*"([^"]{2,80})"'
-                    r'(?:(?!"(?:model|name|model_name)").){0,200}'
-                    r'"(?:elo|score|rating|elo_rating)"\s*:\s*(\d{3,4}(?:\.\d+)?)',
-                    raw, re.DOTALL
-                )
-                for name, elo in pairs:
-                    try:
-                        val = float(elo)
-                        if 900 <= val <= 2200:
-                            scores[name] = val
-                    except ValueError:
-                        pass
-            except Exception:
-                pass
-        if not scores:
-            tables = soup.find_all("table")
-            for table in tables:
-                rows = table.find_all("tr")
-                if len(rows) < 2:
+
+        # arena.ai: server-side rendered HTML table (no __NEXT_DATA__)
+        # Columns: Rank | Rank Spread | Model | Score | Votes
+        # Model cell: "claude-opus-4-6\nAnthropic · Proprietary" — take first line
+        # Score cell: "1561+14/-14" (no space before ±) — extract leading integer
+        tables = soup.find_all("table")
+        for table in tables:
+            rows = table.find_all("tr")
+            if len(rows) < 2:
+                continue
+            headers = [th.get_text(strip=True).lower()
+                       for th in rows[0].find_all(["th", "td"])]
+            model_col = next((i for i, h in enumerate(headers)
+                              if "model" in h or "name" in h), 2)
+            score_col = next((i for i, h in enumerate(headers)
+                              if "score" in h or "elo" in h or "rating" in h), 3)
+            for row in rows[1:]:
+                cells = row.find_all(["td", "th"])
+                if len(cells) <= max(model_col, score_col):
                     continue
-                headers = [th.get_text(strip=True).lower()
-                           for th in rows[0].find_all(["th", "td"])]
-                model_col = next((i for i, h in enumerate(headers)
-                                  if "model" in h or "name" in h), 0)
-                score_col = next((i for i, h in enumerate(headers)
-                                  if "score" in h or "elo" in h or "rating" in h), 2)
-                for row in rows[1:]:
-                    cells = row.find_all(["td", "th"])
-                    if len(cells) <= max(model_col, score_col):
-                        continue
-                    name = cells[model_col].get_text(strip=True)
-                    raw_val = cells[score_col].get_text(strip=True)
-                    clean = raw_val.split()[0].replace(",", "").strip()
+                # First line of model cell only (skip "Provider · Type" suffix)
+                name = cells[model_col].get_text(separator='\n', strip=True).split('\n')[0].strip()
+                # Extract leading ELO integer — "1561+14/-14" or "1561 +14/-14"
+                raw_val = cells[score_col].get_text(strip=True).replace(',', '')
+                m = re.match(r'^(\d{3,4}(?:\.\d+)?)', raw_val)
+                if m:
                     try:
-                        val = float(clean)
+                        val = float(m.group(1))
                         if name and 900 <= val <= 2200:
                             scores[name] = val
                     except ValueError:
                         pass
-                if scores:
-                    break
+            if scores:
+                break
+
         log.info(f"  ✅ Chatbot Arena Code: {len(scores)} models")
     except Exception as e:
         log.error(f"  ❌ Arena Code: {e}")
     return scores
 
 
-# ══ SCORING ENGINE ══# ══ SCORING ENGINE ════════════════════════════════════════════════
+# ══ SCORING ENGINE ════════════════════════════════════════════════
 
 def normalize_across_models(models: list, raw_key: str) -> dict[str, float]:
     """Top performer = 100. Others proportional. Null/0 → 0 (Option B)."""
@@ -620,6 +603,7 @@ def main():
     log.info(f"Agent TRScode | {TODAY} | {mode}")
     notify(f"🤖 <b>Agent TRScode starting</b>\n📅 {TODAY}\n⚙️ {mode}\n8 sources → trscode-data.json")
 
+    # ── Load data ──
     if not DATA_FILE.exists():
         msg = f"trscode-data.json not found at {DATA_FILE}"
         log.error(msg); notify(f"❌ {msg}"); return
@@ -632,6 +616,7 @@ def main():
     dates  = data["dates"]
     notify(f"📂 Loaded. Models: {len(models)} | Dates: {dates[0]} → {dates[-1]}")
 
+    # ── Date slot ──
     if TODAY in dates:
         date_is_new = False
         today_idx   = dates.index(TODAY)
@@ -642,6 +627,7 @@ def main():
         today_idx = len(data["dates"]) - 1
         notify(f"➕ New date: {TODAY} (slot {today_idx})")
 
+    # ── Scrape all 8 sources ──
     scrapers = {
         "swebench_verified_pct": scrape_swebench_verified,
         "swe_rebench_pass1":     scrape_swe_rebench,
@@ -673,6 +659,7 @@ def main():
 
     notify("📊 <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
+    # ── Normalize + score ──
     normalized = {}
     for mkey, raw_field in RAW_KEYS.items():
         normalized[mkey] = normalize_across_models(models, raw_field)
@@ -694,6 +681,7 @@ def main():
             else:
                 model["scores"].append(sc)
 
+    # ── Qualification filter (2+ pillars) ──
     def today_score(m):
         s = m["scores"][today_idx] if today_idx < len(m["scores"]) else None
         return s if s is not None else -1.0
@@ -704,6 +692,7 @@ def main():
         log.info(f"Disqualified (< {QUALIFICATION_MIN_PILLARS} pillars): "
                  f"{[m['name'] for m in disqualified]}")
 
+    # ── Update ranks ──
     ranked = sorted(qualified, key=today_score, reverse=True)
     for rank, m in enumerate(ranked, 1):
         m["rank"] = rank
@@ -714,6 +703,7 @@ def main():
     )
     notify(f"🏆 <b>TRScode Top 5 — {TODAY}</b>\n{top5_lines}")
 
+    # ── Checksum ──
     data["checksum"] = generate_checksum(data)
     log.info(f"Checksum: {data['checksum'][:20]}...")
 
@@ -722,6 +712,7 @@ def main():
         log.info("Dry run complete. Nothing written.")
         return
 
+    # ── Write + push ──
     import time as _time
     _t0 = getattr(main, "_start_time", _time.time())
     duration = int(_time.time() - _t0)
