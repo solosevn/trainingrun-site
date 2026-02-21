@@ -82,7 +82,7 @@ WEIGHTS = {
     "usage_adoption":   0.06,
 }
 
-QUALIFICATION_MIN_CATEGORIES = 5   # Bible: 5-category minimum
+QUALIFICATION_MIN_CATEGORIES = 4   # Lowered 5→4: safety benchmarks lag new model releases
 
 # ══ TELEGRAM ══════════════════════════════════════════════════════
 def notify(text: str) -> None:
