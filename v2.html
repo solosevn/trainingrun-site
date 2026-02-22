@@ -443,10 +443,12 @@ body.compact .lb-table tbody tr { height:40px; }
             <th>Coding <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
             <th class="hide-compact">Instruction <span style="font-size:8px;color:rgba(255,255,255,0.2)">18%</span></th>
             <th class="hide-compact">Knowledge <span style="font-size:8px;color:rgba(255,255,255,0.2)">8%</span></th>
+            <th class="hide-compact">Efficiency <span style="font-size:8px;color:rgba(255,255,255,0.2)">7%</span></th>
+            <th class="hide-compact">Usage <span style="font-size:8px;color:rgba(255,255,255,0.2)">6%</span></th>
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="11"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
+          <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -468,6 +470,15 @@ const LAB_COLORS = {
   'Zhipu AI':   { bg:'rgba(100,149,237,0.18)',dot:'rgba(100,149,237,0.6)',init:'ZP' },
   'MiniMax':    { bg:'rgba(80,200,180,0.18)', dot:'rgba(80,200,180,0.6)', init:'MM' },
   'Cohere':     { bg:'rgba(150,100,255,0.18)',dot:'rgba(150,100,255,0.6)',init:'CO' },
+  'Writer':     { bg:'rgba(130,100,220,0.2)', dot:'rgba(130,100,220,0.7)',init:'W'  },
+  'IBM':        { bg:'rgba(0,95,184,0.2)',    dot:'rgba(0,95,184,0.7)',   init:'IB' },
+  'AI2':        { bg:'rgba(255,100,50,0.2)',  dot:'rgba(255,100,50,0.7)', init:'A2' },
+  'Databricks': { bg:'rgba(255,60,0,0.2)',    dot:'rgba(255,60,0,0.7)',   init:'DB' },
+  'Inception':  { bg:'rgba(0,200,150,0.2)',   dot:'rgba(0,200,150,0.7)', init:'IN' },
+  'PrimeIntellect':{ bg:'rgba(200,160,0,0.2)',dot:'rgba(200,160,0,0.7)',init:'PI'  },
+  'Moonshot AI':{ bg:'rgba(100,80,200,0.2)', dot:'rgba(100,80,200,0.7)', init:'KM' },
+  'TII':        { bg:'rgba(0,160,120,0.2)',   dot:'rgba(0,160,120,0.7)', init:'TI' },
+  '01.AI':      { bg:'rgba(180,50,50,0.2)',   dot:'rgba(180,50,50,0.7)', init:'01' },
 };
 function labColor(company){ return LAB_COLORS[company] || {bg:'rgba(255,255,255,0.08)',dot:'rgba(255,255,255,0.4)',init:(company||'?').slice(0,2).toUpperCase()}; }
 
@@ -512,6 +523,20 @@ function fmtDate(iso){
 function getLatestScore(model){
   const s = model.scores.filter(v=>v!==null && v>0);
   return s.length ? s[s.length-1] : null;
+}
+
+function isFreshToday(model){
+  // Fresh = has a non-zero score at today's index (last slot in dates)
+  if(!trsData || !trsData.dates) return false;
+  const idx = trsData.dates.length - 1;
+  const s = model.scores[idx];
+  return s !== null && s !== undefined && s > 0;
+}
+
+function getCoverage(model){
+  // Number of pillars covered (use category_count for fresh, pillar_scores keys for stale)
+  if(isFreshToday(model)) return model.category_count || 0;
+  return Object.keys(model.pillar_scores || {}).length;
 }
 
 function getChange(model){
@@ -570,22 +595,36 @@ function renderTable(){
   const maxScore = models.length ? getLatestScore(models[0]) : 100;
 
   if(!models.length){
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
     document.getElementById('metaCount').textContent = '0 models ranked';
     return;
   }
 
   document.getElementById('metaCount').textContent = models.length + ' models ranked';
 
-  tbody.innerHTML = models.map((m, i) => {
-    const rank = i + 1;
-    const score = getLatestScore(m);
-    const chg = getChange(m);
-    const pts7 = getLast7(m);
-    const lc = labColor(m.company);
-    const barPct = Math.round((score / maxScore) * 100);
-    const sc = sparkColor(pts7);
-    const sparkSVG = buildSparklineSVG(pts7, sc);
+  // Split fresh (scored today) vs stale (carry-forward from previous day)
+  const freshModels = models.filter(m => isFreshToday(m));
+  const staleModels = models.filter(m => !isFreshToday(m));
+
+  // Build rows for a group of models, starting rank at rankOffset
+  function buildRows(group, rankOffset, isStale){
+    return group.map((m, i) => {
+      const rank = i + 1 + rankOffset;
+      const score = getLatestScore(m);
+      const chg = getChange(m);
+      const pts7 = getLast7(m);
+      const lc = labColor(m.company);
+      const barPct = Math.round((score / maxScore) * 100);
+      const sc = sparkColor(pts7);
+      const sparkSVG = buildSparklineSVG(pts7, sc);
+      const covered = getCoverage(m);
+      const coverageBadge = covered > 0
+        ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-left:5px;font-weight:400">${covered}/7</span>`
+        : '';
+      const staleRowStyle = isStale ? 'opacity:0.62;' : '';
+      const staleScoreNote = isStale
+        ? `<span style="font-size:8px;color:rgba(255,200,0,0.55);margin-left:4px">Feb ${trsData.dates[trsData.dates.length-2]?.slice(8)||'?'}</span>`
+        : '';
 
     // Rank cell
     let rankHTML;
@@ -613,22 +652,35 @@ function renderTable(){
       'Meta':'co-meta','Alibaba':'co-alibaba'
     }[m.company] || 'co-other';
 
-    return `<tr class="${rowClass} ${coClass}" onclick="window.location='scores.html'" style="cursor:pointer">
+    return `<tr class="${rowClass} ${coClass}" onclick="window.location='scores.html'" style="cursor:pointer;${staleRowStyle}">
       <td>${rankHTML}</td>
       <td><div class="m-cell">
         ${logoImg(m.company, 28)}
-        <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} · Proprietary</div></div>
+        <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} &middot; Proprietary</div></div>
       </div></td>
-      <td><span class="score-val">${score.toFixed(2)}</span></td>
-
+      <td><span class="score-val">${score.toFixed(2)}</span>${coverageBadge}${staleScoreNote}</td>
       <td>${chgHTML}</td>
       <td>${pCol(m, 'safety')}</td>
       <td>${pCol(m, 'reasoning')}</td>
       <td>${pCol(m, 'coding')}</td>
       <td class="hide-compact">${pCol(m, 'human_preference')}</td>
       <td class="hide-compact">${pCol(m, 'knowledge')}</td>
+      <td class="hide-compact">${pCol(m, 'efficiency')}</td>
+      <td class="hide-compact">${pCol(m, 'usage_adoption')}</td>
     </tr>`;
   }).join('');
+  }
+
+  // Stale divider row
+  const staleDivider = staleModels.length ? `
+    <tr><td colspan="13" style="padding:6px 16px;background:rgba(255,200,0,0.04);border-top:1px solid rgba(255,200,0,0.12);border-bottom:1px solid rgba(255,200,0,0.08);">
+      <span style="font-size:10px;color:rgba(255,200,0,0.45);letter-spacing:0.08em">&#9203; NOT SCORED TODAY &middot; Last known scores shown &middot; Updates on next scrape</span>
+    </td></tr>` : '';
+
+  tbody.innerHTML = buildRows(freshModels, 0, false)
+    + staleDivider
+    + buildRows(staleModels, freshModels.length, true);
+}
 }
 
 // ══ BUILD TICKER ═════════════════════════════════════
@@ -778,7 +830,7 @@ fetch('trs-data.json?v=' + Date.now())
     renderTable();
   })
   .catch(err => {
-    document.getElementById('tableBody').innerHTML = `<tr><td colspan="11"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
+    document.getElementById('tableBody').innerHTML = `<tr><td colspan="13"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
     document.getElementById('tickerTrack').innerHTML = '<div class="ti"><span style="font-size:11px;color:rgba(248,113,113,0.7)">⚠ Score data unavailable</span></div>';
   });
 </script>
