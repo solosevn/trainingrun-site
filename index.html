@@ -721,7 +721,7 @@ function makeCard(m, i) {
       var dates = data.dates||[]; var li = dates.length-1; var pi = Math.max(0,li-7);
       var models = (data.models||[])
         .filter(function(m){ return m.scores && m.scores[li] != null; })
-        .sort(function(a,b){ return (a.rank||999)-(b.rank||999); });
+        .sort(function(a,b){ return (b.scores[li]||0)-(a.scores[li]||0); });
       if (models.length) {
         var top = models[0];
         var lu = tickerLogoUrl(top.company);
