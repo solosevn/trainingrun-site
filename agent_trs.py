@@ -539,12 +539,25 @@ def scrape_arena_overall() -> dict[str, float]:
     try:
         log.info("Scraping Arena Overall (human preference)...")
         url = "https://arena.ai/leaderboard"
-        html = playwright_get(url, wait_ms=12000)
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto(url, wait_until="networkidle", timeout=30000)
+            page.wait_for_timeout(5000)
+            try:
+                view_all = page.locator("text=View all").first
+                if view_all.count():
+                    view_all.click()
+                    page.wait_for_timeout(4000)
+            except Exception:
+                pass
+            html = page.content()
+            browser.close()
         soup = BeautifulSoup(html, "html.parser")
         tables = soup.find_all("table")
         for table in tables:
             rows = table.find_all("tr")
-            if len(rows) < 2:
+            if len(rows) < 10:
                 continue
             headers = [th.get_text(strip=True).lower()
                        for th in rows[0].find_all(["th", "td"])]
