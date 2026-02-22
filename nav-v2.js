@@ -19,17 +19,39 @@ const tabs = [
   { label:'TRAgents',   pill:'Agents',    href:'tragents-scores.html', keys:['tragents-scores.html'] },
 ];
 
-// ── Lab colors ───────────────────────────────────────────────────────────────
-const LC = {
-  'Anthropic': {bg:'rgba(204,93,57,0.22)', init:'A'},
-  'Google':    {bg:'rgba(66,133,244,0.2)', init:'G'},
-  'OpenAI':    {bg:'rgba(16,163,127,0.2)', init:'OA'},
-  'xAI':       {bg:'rgba(200,200,200,0.1)',init:'xAI'},
-  'Mistral':   {bg:'rgba(255,140,0,0.18)', init:'M'},
-  'DeepSeek':  {bg:'rgba(100,149,237,0.2)',init:'DS'},
-  'Meta':      {bg:'rgba(24,119,242,0.18)',init:'MT'},
+// ── Lab logos + fallback colors ───────────────────────────────────────────────
+const LOGOS = {
+  'Anthropic':   'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
+  'Google':      'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+  'OpenAI':      'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+  'xAI':         'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
+  'Mistral':     'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  'Mistral AI':  'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  'DeepSeek':    'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
+  'Meta':        'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
+  'Alibaba':     'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+  'Zhipu AI':    'https://www.google.com/s2/favicons?domain=zhipuai.cn&sz=64',
+  'MiniMax':     'https://www.google.com/s2/favicons?domain=minimax.com&sz=64',
+  'Cohere':      'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
+  'Moonshot AI': 'https://www.google.com/s2/favicons?domain=moonshot.cn&sz=64',
+  'Amazon':      'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
+  'Microsoft':   'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
 };
-function lc(co){ return LC[co]||{bg:'rgba(255,255,255,0.08)',init:(co||'?').slice(0,2).toUpperCase()}; }
+const LC = {
+  'Anthropic':{bg:'rgba(204,93,57,0.22)'},  'Google':{bg:'rgba(66,133,244,0.2)'},
+  'OpenAI':{bg:'rgba(16,163,127,0.2)'},     'xAI':{bg:'rgba(200,200,200,0.1)'},
+  'Mistral':{bg:'rgba(255,140,0,0.18)'},    'DeepSeek':{bg:'rgba(100,149,237,0.2)'},
+  'Meta':{bg:'rgba(24,119,242,0.18)'},
+};
+function lc(co){ return LC[co]||{bg:'rgba(255,255,255,0.08)'}; }
+function logoImg(co, size){
+  const url = LOGOS[co];
+  const s = size||18;
+  if(url) return '<img src="'+url+'" width="'+s+'" height="'+s+'" style="border-radius:4px;object-fit:contain;background:rgba(255,255,255,0.06);padding:2px;flex-shrink:0;display:block" alt="" onerror="this.style.display='none'">';
+  const bg = (LC[co]||{bg:'rgba(255,255,255,0.08)'}).bg;
+  const init = (co||'?').slice(0,2).toUpperCase();
+  return '<span style="width:'+s+'px;height:'+s+'px;border-radius:4px;background:'+bg+';display:inline-flex;align-items:center;justify-content:center;font-size:'+(Math.round(s*0.45))+'px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0">'+init+'</span>';
+}
 
 // ── CSS ──────────────────────────────────────────────────────────────────────
 const NAV_HEIGHT = 130; // top-bar(50) + glow(1) + wglow(1) + ticker(33) + wglow(1) + hnav(42) + glow(1) = 129
@@ -173,15 +195,15 @@ fetch('trs-data.json?v='+Date.now())
     let items = top5.map((m,i)=>{
       const score=getLatest(m), c=getChg(m), l=lc(m.company);
       const chgHTML=Math.abs(c)<0.005?'':(c>0?`<span class="trv2-up" style="margin-left:3px">↑${c.toFixed(2)}</span>`:`<span class="trv2-dn" style="margin-left:3px">↓${Math.abs(c).toFixed(2)}</span>`);
-      return `<div class="trv2-ti"><span class="trv2-tl">#${i+1}</span><span class="trv2-tc">TRSbench</span><div class="trv2-ico" style="background:${l.bg}">${l.init}</div><span class="trv2-tn">${m.name}</span><span class="trv2-ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
+      return `<div class="trv2-ti"><span class="trv2-tl">#${i+1}</span><span class="trv2-tc">TRSbench</span>${logoImg(m.company,18)}<span class="trv2-tn">${m.name}</span><span class="trv2-ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
     });
     if(mover.name&&mover.change>0.5){
       const l=lc(mover.company);
-      items.push(`<div class="trv2-ti"><span style="font-size:12px">🔥</span><span style="font-size:9px;color:rgba(255,255,255,0.35)">On Fire</span><div class="trv2-ico" style="background:${l.bg}">${l.init}</div><span class="trv2-tn">${mover.name}</span><span class="trv2-up">+${mover.change.toFixed(2)}</span></div>`);
+      items.push(`<div class="trv2-ti"><span style="font-size:12px">🔥</span><span style="font-size:9px;color:rgba(255,255,255,0.35)">On Fire</span>${logoImg(mover.company,18)}<span class="trv2-tn">${mover.name}</span><span class="trv2-up">+${mover.change.toFixed(2)}</span></div>`);
     }
     if(loser.name&&loser.change<-0.5){
       const l=lc(loser.company);
-      items.push(`<div class="trv2-ti"><span style="font-size:9px;color:rgba(255,255,255,0.35)">Biggest Drop</span><div class="trv2-ico" style="background:${l.bg}">${l.init}</div><span class="trv2-tn">${loser.name}</span><span class="trv2-dn">${loser.change.toFixed(2)}</span></div>`);
+      items.push(`<div class="trv2-ti"><span style="font-size:9px;color:rgba(255,255,255,0.35)">Biggest Drop</span>${logoImg(loser.company,18)}<span class="trv2-tn">${loser.name}</span><span class="trv2-dn">${loser.change.toFixed(2)}</span></div>`);
     }
 
     const track = document.getElementById('trv2-track');

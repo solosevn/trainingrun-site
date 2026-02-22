@@ -61,7 +61,8 @@ body {
 .ti { display:inline-flex; align-items:center; gap:7px; padding:0 20px; height:33px; border-right:1px solid rgba(255,255,255,0.05); white-space:nowrap; }
 .tl { font-size:9px; color:rgba(255,255,255,0.28); letter-spacing:.5px; }
 .tc { font-size:9px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:#00e5ff; }
-.tlogo { width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:rgba(255,255,255,0.65);flex-shrink:0; }
+.tlogo { width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:rgba(255,255,255,0.65);flex-shrink:0; }
+.lab-logo { object-fit:contain; border-radius:4px; background:rgba(255,255,255,0.06); padding:2px; flex-shrink:0; display:block; }
 .tn { font-size:12px; font-weight:700; color:#fff; }
 .ts { font-size:12px; font-weight:800; color:#00e5ff; }
 .tup { color:#22d3a3; font-size:10.5px; font-weight:700; }
@@ -470,6 +471,32 @@ const LAB_COLORS = {
 };
 function labColor(company){ return LAB_COLORS[company] || {bg:'rgba(255,255,255,0.08)',dot:'rgba(255,255,255,0.4)',init:(company||'?').slice(0,2).toUpperCase()}; }
 
+const LOGOS = {
+  'Anthropic':   'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
+  'Google':      'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+  'OpenAI':      'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+  'xAI':         'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
+  'Mistral':     'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  'Mistral AI':  'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  'DeepSeek':    'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
+  'Meta':        'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
+  'Alibaba':     'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+  'Zhipu AI':    'https://www.google.com/s2/favicons?domain=zhipuai.cn&sz=64',
+  'MiniMax':     'https://www.google.com/s2/favicons?domain=minimax.com&sz=64',
+  'Cohere':      'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
+  'Moonshot AI': 'https://www.google.com/s2/favicons?domain=moonshot.cn&sz=64',
+  'Amazon':      'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
+  'Microsoft':   'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
+  'NVIDIA':      'https://www.google.com/s2/favicons?domain=nvidia.com&sz=64',
+};
+function logoImg(company, size) {
+  const url = LOGOS[company];
+  const s = size || 20;
+  if (url) return '<img class="lab-logo" src="' + url + '" width="' + s + '" height="' + s + '" alt="' + (company||'') + '" onerror="this.style.display=\'none\'">';
+  const lc = labColor(company);
+  return '<span style="width:' + s + 'px;height:' + s + 'px;border-radius:4px;background:' + lc.bg + ';display:inline-flex;align-items:center;justify-content:center;font-size:' + Math.round(s*0.45) + 'px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0">' + lc.init + '</span>';
+}
+
 // ══ STATE ════════════════════════════════════════════
 let trsData = null;
 let activeFilter = { lab:'All Labs', license:'all' };
@@ -589,7 +616,7 @@ function renderTable(){
     return `<tr class="${rowClass} ${coClass}" onclick="window.location='scores.html'" style="cursor:pointer">
       <td>${rankHTML}</td>
       <td><div class="m-cell">
-        <div class="m-icon" style="background:${lc.bg}">${lc.init}</div>
+        ${logoImg(m.company, 28)}
         <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} · Proprietary</div></div>
       </div></td>
       <td><span class="score-val">${score.toFixed(2)}</span></td>
@@ -629,16 +656,16 @@ function buildTicker(models){
     const lc = labColor(m.company);
     const chg = getChange(m);
     const chgHTML = Math.abs(chg) < 0.005 ? '' : (chg > 0 ? `<span class="tup" style="margin-left:4px">↑${chg.toFixed(2)}</span>` : `<span class="tdn" style="margin-left:4px">↓${Math.abs(chg).toFixed(2)}</span>`);
-    return `<div class="ti"><span class="tl">#${i+1}</span><span class="tc">TRSbench</span><div class="tlogo" style="background:${lc.bg}">${lc.init}</div><span class="tn">${m.name}</span><span class="ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
+    return `<div class="ti"><span class="tl">#${i+1}</span><span class="tc">TRSbench</span>${logoImg(m.company, 18)}<span class="tn">${m.name}</span><span class="ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
   });
 
   if(mover.name && mover.change > 0.5){
     const lc = labColor(mover.company);
-    items.push(`<div class="ti"><span style="font-size:12px">🔥</span><span style="font-size:9px;color:rgba(255,255,255,0.35)">On Fire</span><div class="tlogo" style="background:${lc.bg}">${lc.init}</div><span class="tn">${mover.name}</span><span class="tup">+${mover.change.toFixed(2)}</span></div>`);
+    items.push(`<div class="ti"><span style="font-size:12px">🔥</span><span style="font-size:9px;color:rgba(255,255,255,0.35)">On Fire</span>${logoImg(mover.company, 18)}<span class="tn">${mover.name}</span><span class="tup">+${mover.change.toFixed(2)}</span></div>`);
   }
   if(loser.name && loser.change < -0.5){
     const lc = labColor(loser.company);
-    items.push(`<div class="ti"><span style="font-size:9px;color:rgba(255,255,255,0.35)">Biggest Drop</span><div class="tlogo" style="background:${lc.bg}">${lc.init}</div><span class="tn">${loser.name}</span><span class="tdn">${loser.change.toFixed(2)}</span></div>`);
+    items.push(`<div class="ti"><span style="font-size:9px;color:rgba(255,255,255,0.35)">Biggest Drop</span>${logoImg(loser.company, 18)}<span class="tn">${loser.name}</span><span class="tdn">${loser.change.toFixed(2)}</span></div>`);
   }
 
   // Duplicate for seamless loop
