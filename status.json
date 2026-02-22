@@ -4,7 +4,7 @@
     "trscode": {
       "name": "TRScode",
       "label": "Coding Leaderboard",
-      "emoji": "\ud83d\udcbb",
+      "emoji": "💻",
       "enabled": true,
       "last_run": "2026-02-21T03:53:41",
       "last_run_date": "2026-02-21",
@@ -46,29 +46,10 @@
       "next_run": "2026-02-22T05:00:00",
       "error": null
     },
-    "trs": {
-      "name": "TRSbench",
-      "label": "Overall Leaderboard",
-      "emoji": "\ud83c\udfc6",
-      "enabled": false,
-      "last_run": null,
-      "last_run_date": null,
-      "status": "disabled",
-      "duration_seconds": null,
-      "sources_total": 7,
-      "sources_hit": null,
-      "models_qualified": null,
-      "top_model": null,
-      "top_score": null,
-      "top5": [],
-      "leaderboard_url": "/trs.html",
-      "next_run": null,
-      "error": null
-    },
     "trfcast": {
       "name": "TRFcast DDP",
       "label": "Forecast Leaderboard",
-      "emoji": "\ud83d\udd2e",
+      "emoji": "🔮",
       "enabled": true,
       "last_run": "2026-02-21T19:29:54",
       "last_run_date": "2026-02-21",
@@ -113,7 +94,7 @@
     "truscore": {
       "name": "TRUscore DDP",
       "label": "Truth & Neutrality",
-      "emoji": "\u00f0\u009f\u008e\u00af",
+      "emoji": "ð¯",
       "enabled": true,
       "last_run": "2026-02-21T19:35:12",
       "last_run_date": "2026-02-21",
@@ -143,7 +124,7 @@
     "tragents": {
       "name": "TRAgents DDP",
       "label": "Agents Leaderboard",
-      "emoji": "\ud83e\udd16",
+      "emoji": "🤖",
       "enabled": true,
       "last_run": "2026-02-21T19:40:38",
       "last_run_date": "2026-02-21",
@@ -153,17 +134,17 @@
       "sources_hit": 6,
       "models_qualified": 11,
       "top_model": "GLM-5",
-      "top_score": 84.0,
+      "top_score": 84,
       "top5": [
         {
           "rank": 1,
           "name": "GLM-5",
-          "score": 84.0
+          "score": 84
         },
         {
           "rank": 2,
           "name": "DeepSeek V3.2",
-          "score": 76.0
+          "score": 76
         },
         {
           "rank": 3,
@@ -188,7 +169,7 @@
     "trsbench": {
       "name": "TRSbench DDP",
       "label": "Overall Rankings",
-      "emoji": "\ud83c\udfc6",
+      "emoji": "🏆",
       "enabled": true,
       "last_run": "2026-02-21T19:25:03",
       "last_run_date": "2026-02-21",
