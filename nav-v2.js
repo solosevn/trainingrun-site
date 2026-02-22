@@ -6,17 +6,17 @@
 (function(){
 'use strict';
 
-// ── Active tab detection ─────────────────────────────────────────────────────
-const path = window.location.pathname + window.location.href;
-function isActive(keys){ return keys.some(k => path.includes(k)); }
+// ── Active tab detection (exact basename match — no false positives) ─────────
+const basename = window.location.pathname.split('/').pop() || 'index.html';
+function isActive(keys){ return keys.some(k => basename === k); }
 const tabs = [
-  { label:'Overview',   pill:'',          href:'v2.html',     keys:['v2.html','index.html','/','overview'] },
-  { label:'TRS Arena',  pill:'Soon',      href:'#',           keys:['__never__'], soon:true },
-  { label:'TRSbench',   pill:'Overall',   href:'scores.html', keys:['scores','trsbench'] },
-  { label:'TRUscore',   pill:'Truth',     href:'truscore-scores.html',keys:['truscore'] },
-  { label:'TRScode',    pill:'Coding',    href:'trscode.html', keys:['trscode'] },
-  { label:'TRFcast',    pill:'Prediction',href:'trfcast.html', keys:['trfcast'] },
-  { label:'TRAgents',   pill:'Agents',    href:'tragents-scores.html',keys:['tragents','tragent'] },
+  { label:'Overview',   pill:'',          href:'v2.html',              keys:['v2.html','index.html'] },
+  { label:'TRS Arena',  pill:'Soon',      href:'#',                    keys:['__never__'], soon:true },
+  { label:'TRSbench',   pill:'Overall',   href:'scores.html',          keys:['scores.html'] },
+  { label:'TRUscore',   pill:'Truth',     href:'truscore-scores.html', keys:['truscore-scores.html'] },
+  { label:'TRScode',    pill:'Coding',    href:'trscode.html',         keys:['trscode.html','trscode-scores.html'] },
+  { label:'TRFcast',    pill:'Prediction',href:'trfcast.html',         keys:['trfcast.html','trfcast-scores.html'] },
+  { label:'TRAgents',   pill:'Agents',    href:'tragents-scores.html', keys:['tragents-scores.html'] },
 ];
 
 // ── Lab colors ───────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ const NAV_HEIGHT = 130; // top-bar(50) + glow(1) + wglow(1) + ticker(33) + wglow
 const css = `
 /* Hide old nav */
 nav { display:none !important; }
-.back-btn { top:${NAV_HEIGHT + 12}px !important; margin-top:0 !important; }
+.back-btn { display:none !important; }
 .container { padding-top:${NAV_HEIGHT + 20}px !important; }
 body { min-width:1100px; }
 
