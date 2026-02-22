@@ -1,6 +1,6 @@
 {
   "formula_version": "2.4",
-  "checksum": "ea8df3fa45c295e3e45b211938d0d4221178a5e19c4627a5fad7425cc7d4d12d",
+  "checksum": "0db564f232ab0139ba14fada52f2edb639d9640d4101ff67126851ca97c0d921",
   "weights": {
     "safety": 0.21,
     "reasoning": 0.2,
@@ -70,7 +70,7 @@
     {
       "name": "Claude Opus 4.6",
       "company": "Anthropic",
-      "rank": 1,
+      "rank": 2,
       "scores": [
         null,
         null,
@@ -125,9 +125,9 @@
         98.44,
         97.39,
         98.92,
-        82.52
+        87.76
       ],
-      "category_count": 3
+      "category_count": 4
     },
     {
       "name": "Gemini 3 Pro",
@@ -187,9 +187,9 @@
         95.87,
         95.8,
         96.71,
-        74.07
+        92.25
       ],
-      "category_count": 1
+      "category_count": 3
     },
     {
       "name": "Grok 4.20",
@@ -311,7 +311,7 @@
         94.92,
         94.88,
         95.03,
-        87.7
+        85.53
       ],
       "category_count": 3
     },
@@ -373,9 +373,9 @@
         90.79,
         93.52,
         94.19,
-        60.26
+        63.65
       ],
-      "category_count": 2
+      "category_count": 3
     },
     {
       "name": "Claude Sonnet 4.5",
@@ -435,9 +435,9 @@
         91.72,
         94.92,
         93.08,
-        35.92
+        69.39
       ],
-      "category_count": 2
+      "category_count": 3
     },
     {
       "name": "Gemini Flash 3",
@@ -621,9 +621,9 @@
         90.92,
         90.11,
         90.97,
-        61.46
+        72.87
       ],
-      "category_count": 2
+      "category_count": 3
     },
     {
       "name": "Llama 4.05B",
@@ -745,9 +745,9 @@
         91.33,
         93.83,
         89.47,
-        0.0
+        84.72
       ],
-      "category_count": 0
+      "category_count": 1
     },
     {
       "name": "MiniMax M2",
@@ -814,7 +814,7 @@
     {
       "name": "Mistral Large",
       "company": "Mistral",
-      "rank": 13,
+      "rank": 1,
       "scores": [
         86.2,
         86.5,
@@ -869,9 +869,9 @@
         85.24,
         90.91,
         88.36,
-        0.0
+        89.83
       ],
-      "category_count": 0
+      "category_count": 4
     },
     {
       "name": "GPT-5.1",
@@ -931,9 +931,9 @@
         91.44,
         93.07,
         87.82,
-        45.49
+        85.31
       ],
-      "category_count": 2
+      "category_count": 3
     },
     {
       "name": "DeepSeek R1",
@@ -993,9 +993,9 @@
         86.59,
         90.38,
         87.29,
-        0.0
+        75.98
       ],
-      "category_count": 0
+      "category_count": 1
     },
     {
       "name": "Llama 4.08B",
@@ -1179,9 +1179,9 @@
         92.6,
         90.68,
         85.68,
-        100.0
+        86.02
       ],
-      "category_count": 1
+      "category_count": 2
     },
     {
       "name": "Cohere Aya",
