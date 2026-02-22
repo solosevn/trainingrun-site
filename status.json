@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-21T19:25:03",
+  "last_updated": "2026-02-21T19:29:54",
   "agents": {
     "trscode": {
       "name": "TRScode",
@@ -66,22 +66,48 @@
       "error": null
     },
     "trfcast": {
-      "name": "TRFcast",
-      "label": "Forecasting Leaderboard",
+      "name": "TRFcast DDP",
+      "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
-      "enabled": false,
-      "last_run": null,
-      "last_run_date": null,
-      "status": "disabled",
-      "duration_seconds": null,
+      "enabled": true,
+      "last_run": "2026-02-21T19:29:54",
+      "last_run_date": "2026-02-21",
+      "status": "success",
+      "duration_seconds": 40,
       "sources_total": 4,
-      "sources_hit": null,
-      "models_qualified": null,
-      "top_model": null,
-      "top_score": null,
-      "top5": [],
+      "sources_hit": 8,
+      "models_qualified": 8,
+      "top_model": "Claude Sonnet 4.5",
+      "top_score": 65.15,
+      "top5": [
+        {
+          "rank": 1,
+          "name": "Claude Sonnet 4.5",
+          "score": 65.15
+        },
+        {
+          "rank": 2,
+          "name": "O3",
+          "score": 61.85
+        },
+        {
+          "rank": 3,
+          "name": "Gemini 3 Pro",
+          "score": 61.58
+        },
+        {
+          "rank": 4,
+          "name": "GPT-5.1",
+          "score": 58.69
+        },
+        {
+          "rank": 5,
+          "name": "DeepSeek V3.1",
+          "score": 56.56
+        }
+      ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": null,
+      "next_run": "2026-02-22T05:00:00",
       "error": null
     },
     "truscore": {

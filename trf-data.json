@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "4e42be294627637718e5e652336c06b8aaf639f08f1c4ba0014fd4a370182862",
+  "checksum": "6d4b7fc2a6c967c27ae5a19bbd88abe32ee10b40cdd8f0023c879914f93599cd",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,
@@ -68,13 +68,14 @@
     "2026-02-15",
     "2026-02-15",
     "2026-02-19",
-    "2026-02-20"
+    "2026-02-20",
+    "2026-02-21"
   ],
   "models": [
     {
       "name": "Grok 4.20",
       "company": "xAI",
-      "rank": 1,
+      "rank": 8,
       "scores": [
         97.55,
         97.58,
@@ -131,23 +132,24 @@
         99.76,
         99.52,
         97.51,
-        97.69
+        97.69,
+        43.89
       ],
       "pillar_scores": {
-        "forecasting": 100,
-        "trading": 100,
+        "forecasting": 100.0,
+        "trading": 100.0,
         "calibration": null,
         "financial_reasoning": null,
-        "market_intelligence": 100
+        "market_intelligence": 88.88
       },
       "source_count": 3,
       "raw_data": {
         "forecastbench_baseline_brier": null,
         "forecastbench_tournament_brier": 0.102,
-        "rallies_return_pct": null,
+        "rallies_return_pct": 7.8,
         "alpha_arena_return_pct": 34.59,
         "alpha_arena_sharpe": 0.019,
-        "rallies_win_rate": null,
+        "rallies_win_rate": 50.0,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -212,19 +214,20 @@
         92.41,
         93.94,
         96.12,
-        95.43
+        95.43,
+        61.85
       ],
       "pillar_scores": {
-        "forecasting": 91.1,
+        "forecasting": 91.54,
         "trading": null,
-        "calibration": 100,
-        "financial_reasoning": 63.6,
+        "calibration": 99.25,
+        "financial_reasoning": 96.94,
         "market_intelligence": null
       },
       "source_count": 3,
       "raw_data": {
-        "forecastbench_baseline_brier": 0.12,
-        "forecastbench_tournament_brier": 0.107,
+        "forecastbench_baseline_brier": 0.134,
+        "forecastbench_tournament_brier": 0.134,
         "rallies_return_pct": null,
         "alpha_arena_return_pct": null,
         "alpha_arena_sharpe": null,
@@ -236,7 +239,7 @@
     {
       "name": "Gemini 2.5 Pro",
       "company": "Google",
-      "rank": 3,
+      "rank": 7,
       "scores": [
         74.13,
         73.95,
@@ -293,31 +296,32 @@
         78.18,
         76.75,
         78.92,
-        79.4
+        79.4,
+        51.62
       ],
       "pillar_scores": {
-        "forecasting": 81.4,
-        "trading": 100,
-        "calibration": 79.8,
-        "financial_reasoning": 34.5,
-        "market_intelligence": 90
+        "forecasting": 90.2,
+        "trading": null,
+        "calibration": 97.79,
+        "financial_reasoning": 33.36,
+        "market_intelligence": null
       },
-      "source_count": 5,
+      "source_count": 3,
       "raw_data": {
-        "forecastbench_baseline_brier": 0.126,
-        "forecastbench_tournament_brier": 0.109,
-        "rallies_return_pct": 7.6,
-        "alpha_arena_return_pct": null,
-        "alpha_arena_sharpe": null,
-        "rallies_win_rate": 60,
-        "financearena_qa_pct": 45.3,
-        "financearena_elo": 940
+        "forecastbench_baseline_brier": 0.136,
+        "forecastbench_tournament_brier": 0.136,
+        "rallies_return_pct": 0.0,
+        "alpha_arena_return_pct": -10.94,
+        "alpha_arena_sharpe": -0.018,
+        "rallies_win_rate": 0.0,
+        "financearena_qa_pct": 32.4,
+        "financearena_elo": 31.6
       }
     },
     {
       "name": "Claude Sonnet 4.5",
       "company": "Anthropic",
-      "rank": 4,
+      "rank": 1,
       "scores": [
         66.74,
         66.98,
@@ -374,23 +378,24 @@
         71.61,
         72.25,
         76.58,
-        77.24
+        77.24,
+        65.15
       ],
       "pillar_scores": {
-        "forecasting": 87.8,
-        "trading": 53.3,
-        "calibration": 83.3,
-        "financial_reasoning": 54.3,
-        "market_intelligence": 45.4
+        "forecasting": 92.23,
+        "trading": 10.26,
+        "calibration": 100.0,
+        "financial_reasoning": 89.05,
+        "market_intelligence": 51.79
       },
       "source_count": 5,
       "raw_data": {
-        "forecastbench_baseline_brier": 0.125,
-        "forecastbench_tournament_brier": 0.106,
-        "rallies_return_pct": -0.7,
+        "forecastbench_baseline_brier": 0.133,
+        "forecastbench_tournament_brier": 0.133,
+        "rallies_return_pct": 0.8,
         "alpha_arena_return_pct": -19.15,
         "alpha_arena_sharpe": -0.037,
-        "rallies_win_rate": 44.4,
+        "rallies_win_rate": 33.3,
         "financearena_qa_pct": 43.9,
         "financearena_elo": 1018
       }
@@ -398,7 +403,7 @@
     {
       "name": "Claude Opus 4.1",
       "company": "Anthropic",
-      "rank": 5,
+      "rank": 6,
       "scores": [
         66.25,
         66.43,
@@ -455,31 +460,32 @@
         70.69,
         71.16,
         75.19,
-        75.72
+        75.72,
+        52.84
       ],
       "pillar_scores": {
-        "forecasting": 76.8,
+        "forecasting": 88.89,
         "trading": null,
-        "calibration": 64.3,
-        "financial_reasoning": 55,
+        "calibration": 96.38,
+        "financial_reasoning": 45.98,
         "market_intelligence": null
       },
       "source_count": 3,
       "raw_data": {
-        "forecastbench_baseline_brier": 0.134,
-        "forecastbench_tournament_brier": 0.107,
+        "forecastbench_baseline_brier": 0.138,
+        "forecastbench_tournament_brier": 0.138,
         "rallies_return_pct": null,
         "alpha_arena_return_pct": null,
         "alpha_arena_sharpe": null,
         "rallies_win_rate": null,
-        "financearena_qa_pct": null,
-        "financearena_elo": 1017
+        "financearena_qa_pct": 44.6,
+        "financearena_elo": 44.7
       }
     },
     {
       "name": "DeepSeek V3.1",
       "company": "DeepSeek",
-      "rank": 6,
+      "rank": 5,
       "scores": [
         21.46,
         21.95,
@@ -536,23 +542,24 @@
         25.74,
         27.28,
         73.84,
-        74.49
+        74.49,
+        56.56
       ],
       "pillar_scores": {
-        "forecasting": 10.2,
-        "trading": 67.1,
-        "calibration": 3.6,
-        "financial_reasoning": 67.5,
-        "market_intelligence": 74.3
+        "forecasting": 80.4,
+        "trading": 17.67,
+        "calibration": 80.12,
+        "financial_reasoning": 100.0,
+        "market_intelligence": 100.0
       },
       "source_count": 5,
       "raw_data": {
         "forecastbench_baseline_brier": 0.166,
         "forecastbench_tournament_brier": 0.126,
-        "rallies_return_pct": null,
+        "rallies_return_pct": 1.2,
         "alpha_arena_return_pct": 7.3,
-        "alpha_arena_sharpe": 0,
-        "rallies_win_rate": null,
+        "alpha_arena_sharpe": 0.0,
+        "rallies_win_rate": 64.3,
         "financearena_qa_pct": null,
         "financearena_elo": 1038
       }
@@ -560,7 +567,7 @@
     {
       "name": "Gemini 3 Pro",
       "company": "Google",
-      "rank": 7,
+      "rank": 3,
       "scores": [
         62.46,
         62.4,
@@ -617,23 +624,24 @@
         65.28,
         66.63,
         73.41,
-        73.88
+        73.88,
+        61.58
       ],
       "pillar_scores": {
-        "forecasting": 80.4,
-        "trading": 57.2,
-        "calibration": 57.1,
+        "forecasting": 98.55,
+        "trading": 48.72,
+        "calibration": 99.25,
         "financial_reasoning": null,
-        "market_intelligence": 57.2
+        "market_intelligence": 97.2
       },
       "source_count": 4,
       "raw_data": {
         "forecastbench_baseline_brier": 0.134,
         "forecastbench_tournament_brier": 0.105,
-        "rallies_return_pct": -0.2,
+        "rallies_return_pct": 3.8,
         "alpha_arena_return_pct": -10.94,
         "alpha_arena_sharpe": -0.018,
-        "rallies_win_rate": 57.1,
+        "rallies_win_rate": 62.5,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -641,7 +649,7 @@
     {
       "name": "GPT-5.1",
       "company": "OpenAI",
-      "rank": 8,
+      "rank": 4,
       "scores": [
         27.69,
         28.24,
@@ -698,23 +706,24 @@
         31.71,
         29.9,
         72.08,
-        72.55
+        72.55,
+        58.69
       ],
       "pillar_scores": {
-        "forecasting": 25,
-        "trading": 59.2,
-        "calibration": 0,
+        "forecasting": 81.78,
+        "trading": 46.42,
+        "calibration": 78.7,
         "financial_reasoning": null,
-        "market_intelligence": 86
+        "market_intelligence": 68.09
       },
       "source_count": 4,
       "raw_data": {
         "forecastbench_baseline_brier": 0.169,
         "forecastbench_tournament_brier": 0.116,
-        "rallies_return_pct": -4.9,
+        "rallies_return_pct": 4.7,
         "alpha_arena_return_pct": 8.88,
         "alpha_arena_sharpe": 0.009,
-        "rallies_win_rate": 42.9,
+        "rallies_win_rate": 57.1,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -779,9 +788,16 @@
         null,
         null,
         71.47,
-        72.02
+        72.02,
+        0.0
       ],
-      "pillar_scores": {},
+      "pillar_scores": {
+        "forecasting": null,
+        "trading": null,
+        "calibration": null,
+        "financial_reasoning": null,
+        "market_intelligence": null
+      },
       "source_count": 0,
       "raw_data": {}
     },
@@ -845,9 +861,16 @@
         null,
         null,
         70.92,
-        71.43
+        71.43,
+        0.0
       ],
-      "pillar_scores": {},
+      "pillar_scores": {
+        "forecasting": null,
+        "trading": null,
+        "calibration": null,
+        "financial_reasoning": null,
+        "market_intelligence": null
+      },
       "source_count": 0,
       "raw_data": {}
     },
@@ -911,9 +934,16 @@
         null,
         null,
         70.39,
-        70.88
+        70.88,
+        0.0
       ],
-      "pillar_scores": {},
+      "pillar_scores": {
+        "forecasting": null,
+        "trading": null,
+        "calibration": null,
+        "financial_reasoning": null,
+        "market_intelligence": null
+      },
       "source_count": 0,
       "raw_data": {}
     },
@@ -977,9 +1007,16 @@
         null,
         null,
         69.88,
-        70.43
+        70.43,
+        0.0
       ],
-      "pillar_scores": {},
+      "pillar_scores": {
+        "forecasting": null,
+        "trading": null,
+        "calibration": null,
+        "financial_reasoning": null,
+        "market_intelligence": null
+      },
       "source_count": 0,
       "raw_data": {}
     },
@@ -1043,9 +1080,16 @@
         null,
         null,
         69.33,
-        69.89
+        69.89,
+        0.0
       ],
-      "pillar_scores": {},
+      "pillar_scores": {
+        "forecasting": null,
+        "trading": null,
+        "calibration": null,
+        "financial_reasoning": null,
+        "market_intelligence": null
+      },
       "source_count": 0,
       "raw_data": {}
     },
@@ -1109,9 +1153,16 @@
         null,
         null,
         68.79,
-        69.39
+        69.39,
+        0.0
       ],
-      "pillar_scores": {},
+      "pillar_scores": {
+        "forecasting": null,
+        "trading": null,
+        "calibration": null,
+        "financial_reasoning": null,
+        "market_intelligence": null
+      },
       "source_count": 0,
       "raw_data": {}
     }
