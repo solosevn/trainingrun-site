@@ -2,7 +2,7 @@
   "last_updated": "2026-02-21T19:40:38",
   "agents": {
     "trscode": {
-      "name": "TRScode",
+      "name": "TRScode DDP",
       "label": "Coding Leaderboard",
       "emoji": "💻",
       "enabled": true,
@@ -94,7 +94,7 @@
     "truscore": {
       "name": "TRUscore DDP",
       "label": "Truth & Neutrality",
-      "emoji": "ð¯",
+      "emoji": "🎯",
       "enabled": true,
       "last_run": "2026-02-21T19:35:12",
       "last_run_date": "2026-02-21",
@@ -178,8 +178,8 @@
       "sources_total": 7,
       "sources_hit": 5,
       "models_qualified": 0,
-      "top_model": null,
-      "top_score": null,
+      "top_model": "Gemini 3 Flash",
+      "top_score": 100,
       "top5": [],
       "leaderboard_url": "/scores.html",
       "next_run": "2026-02-22T05:00:00",
