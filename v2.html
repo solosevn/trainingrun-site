@@ -684,36 +684,38 @@ function renderTable(){
 
 // ══ BUILD TICKER ═════════════════════════════════════
 function buildTicker(models){
+  // Only rank fresh (scored today) models in the ticker
   const ranked = [...models]
-    .filter(m => getLatestScore(m) !== null)
+    .filter(m => isFreshToday(m))
     .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
 
   const top5 = ranked.slice(0,5);
 
-  // Find biggest gainer/loser in last 7 days
+  // Find biggest gainer/loser — fresh models only, cap at ±12 to suppress
+  // scoring-formula-change artifacts (those show as huge one-day swings)
   let mover = {name:'',company:'',change:-999};
   let loser  = {name:'',company:'',change:999};
-  models.forEach(m => {
+  models.filter(m => isFreshToday(m)).forEach(m => {
     const pts = getLast7(m);
     if(pts.length < 2) return;
     const chg = pts[pts.length-1] - pts[0];
-    if(chg > mover.change){ mover={name:m.name,company:m.company,change:chg}; }
-    if(chg < loser.change){ loser={name:m.name,company:m.company,change:chg}; }
+    if(chg > mover.change && chg <= 12){ mover={name:m.name,company:m.company,change:chg}; }
+    if(chg < loser.change && chg >= -12){ loser={name:m.name,company:m.company,change:chg}; }
   });
 
   let items = top5.map((m,i) => {
     const score = getLatestScore(m);
     const lc = labColor(m.company);
     const chg = getChange(m);
-    const chgHTML = Math.abs(chg) < 0.005 ? '' : (chg > 0 ? `<span class="tup" style="margin-left:4px">↑${chg.toFixed(2)}</span>` : `<span class="tdn" style="margin-left:4px">↓${Math.abs(chg).toFixed(2)}</span>`);
+    const chgHTML = Math.abs(chg) < 0.005 || Math.abs(chg) > 12 ? '' : (chg > 0 ? `<span class="tup" style="margin-left:4px">↑${chg.toFixed(2)}</span>` : `<span class="tdn" style="margin-left:4px">↓${Math.abs(chg).toFixed(2)}</span>`);
     return `<div class="ti"><span class="tl">#${i+1}</span><span class="tc">TRSbench</span>${logoImg(m.company, 18)}<span class="tn">${m.name}</span><span class="ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
   });
 
-  if(mover.name && mover.change > 0.5){
+  if(mover.name && mover.change > 0.5 && mover.change <= 12){
     const lc = labColor(mover.company);
     items.push(`<div class="ti"><span style="font-size:12px">🔥</span><span style="font-size:9px;color:rgba(255,255,255,0.35)">On Fire</span>${logoImg(mover.company, 18)}<span class="tn">${mover.name}</span><span class="tup">+${mover.change.toFixed(2)}</span></div>`);
   }
-  if(loser.name && loser.change < -0.5){
+  if(loser.name && loser.change < -0.5 && loser.change >= -12){
     const lc = labColor(loser.company);
     items.push(`<div class="ti"><span style="font-size:9px;color:rgba(255,255,255,0.35)">Biggest Drop</span>${logoImg(loser.company, 18)}<span class="tn">${loser.name}</span><span class="tdn">${loser.change.toFixed(2)}</span></div>`);
   }
