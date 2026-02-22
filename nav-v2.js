@@ -118,7 +118,7 @@ const shell = `
     <div class="trv2-topright">
       <a href="about.html" class="trv2-toplink">About</a>
       <a href="trsmethodology.html" class="trv2-toplink">Methodology</a>
-      <a href="https://www.youtube.com/@trainingrun" target="_blank" class="trv2-watchpill">
+      <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="trv2-watchpill">
         <span style="font-size:9px;color:#a78bfa">▶</span> Watch Latest Episode
       </a>
     </div>
