@@ -454,6 +454,82 @@ def generate_checksum(data: dict) -> str:
     return hashlib.sha256((names + ":" + scores).encode()).hexdigest()
 
 
+def _infer_company(name: str) -> str:
+    """Best-effort company inference from model name keywords."""
+    n = name.lower()
+    if any(x in n for x in ["gpt", "o1", "o3", "o4", "chatgpt", "davinci", "turbo"]):
+        return "OpenAI"
+    if any(x in n for x in ["claude", "opus", "sonnet", "haiku"]):
+        return "Anthropic"
+    if any(x in n for x in ["gemini", "gemma", "palm", "bard"]):
+        return "Google"
+    if any(x in n for x in ["grok"]):
+        return "xAI"
+    if any(x in n for x in ["llama", "meta-"]):
+        return "Meta"
+    if any(x in n for x in ["mistral", "mixtral", "pixtral", "codestral", "voxtral"]):
+        return "Mistral"
+    if any(x in n for x in ["deepseek"]):
+        return "DeepSeek"
+    if any(x in n for x in ["qwen", "qwq"]):
+        return "Alibaba"
+    if any(x in n for x in ["glm", "chatglm", "zhipu"]):
+        return "Zhipu AI"
+    if any(x in n for x in ["minimax"]):
+        return "MiniMax"
+    if any(x in n for x in ["command", "cohere", "aya"]):
+        return "Cohere"
+    if any(x in n for x in ["moonshot", "kimi"]):
+        return "Moonshot AI"
+    if any(x in n for x in ["nova", "titan", "amazon"]):
+        return "Amazon"
+    if any(x in n for x in ["phi-", "copilot", "wizardlm"]):
+        return "Microsoft"
+    if any(x in n for x in ["nemotron", "nvidia"]):
+        return "NVIDIA"
+    if any(x in n for x in ["falcon"]):
+        return "TII"
+    if any(x in n for x in ["yi-", "01.ai"]):
+        return "01.AI"
+    return "Unknown"
+
+
+def auto_discover_models(data: dict, all_results: dict) -> list[str]:
+    """
+    Scan all scraped source results. Any model name that appears in the data
+    but isn't already in the roster gets auto-added with null score history.
+    Uses match_name() to avoid duplicates from name variations.
+    Returns list of newly added model names.
+    """
+    existing_names = [m["name"] for m in data["models"]]
+    newly_added = []
+
+    all_scraped: set[str] = set()
+    for source_results in all_results.values():
+        all_scraped.update(source_results.keys())
+
+    for name in sorted(all_scraped):
+        if not name or len(name) < 3 or name.replace("-", "").replace("_", "").isdigit():
+            continue
+        if match_name(name, existing_names) is not None:
+            continue
+        new_entry = {
+            "name":          name,
+            "company":       _infer_company(name),
+            "rank":          999,
+            "scores":        [None] * len(data["dates"]),
+            "pillar_scores": {},
+            "source_count":  0,
+            "raw_data":      {},
+        }
+        data["models"].append(new_entry)
+        existing_names.append(name)
+        newly_added.append(name)
+        log.info(f"  ★ Auto-discovered: {name} ({new_entry['company']})")
+
+    return newly_added
+
+
 def match_name(scraped: str, existing: list[str]) -> str | None:
     s = scraped.lower().strip()
     for name in existing:
@@ -652,6 +728,15 @@ def main():
         log.info(f"  {raw_field}: {matched}/{len(results)} matched")
 
     notify("📊 <b>Scraping complete</b>\n" + "\n".join(source_summary))
+
+    # -- Auto-discover new models --
+    new_models = auto_discover_models(data, all_results)
+    if new_models:
+        log.info(f"★ Auto-discovered {len(new_models)} new models: {new_models}")
+        notify(f"★ <b>Auto-discovered {len(new_models)} new models</b>\n" +
+               "\n".join(f"  • {n}" for n in new_models))
+        models = data["models"]
+        names  = [m["name"] for m in models]
 
     # ── Normalize + score ──
     normalized = {}

@@ -84,7 +84,7 @@ WEIGHTS = {
     "usage_adoption":   0.06,
 }
 
-QUALIFICATION_MIN_CATEGORIES = 4   # need 4+ pillars with non-null scores
+QUALIFICATION_MIN_CATEGORIES = 1   # need 1+ pillar with non-null score to appear on board
 
 # ââ Total sources count (for status.json) âââââââââââââââââââââââââ
 TOTAL_SOURCES = 18
@@ -948,16 +948,29 @@ def normalize_across_models(models: list, category: str, raw_values: dict[str, f
 
 
 def calculate_composite(model_name: str, normalized: dict) -> tuple[float, int]:
-    """Option A: null categories excluded, available weights renormalized to sum 1.0."""
+    """
+    Coverage-aware composite score.
+    Step 1: Weighted average across available pillars (weights renormalized to sum 1.0).
+    Step 2: Apply mild coverage dampener so new/sparse models rank below fully-covered ones.
+            dampener = 0.70 + 0.30 * (covered_pillars / total_pillars)
+            - 1/7 pillars covered → ×0.74  (shows up, clearly lower)
+            - 4/7 pillars covered → ×0.87  (respectably scored)
+            - 7/7 pillars covered → ×1.00  (no penalty, full score)
+    Models with 0 pillars are excluded (score=0, not ranked).
+    """
+    total_pillars = len(WEIGHTS)
     available_weights = {k: WEIGHTS[k] for k in WEIGHTS
                          if normalized.get(k, {}).get(model_name, None) is not None
                          and normalized[k].get(model_name, 0.0) > 0}
     if not available_weights:
         return 0.0, 0
     weight_sum = sum(available_weights.values())
-    total = sum(normalized[k].get(model_name, 0.0) * (w / weight_sum)
-                for k, w in available_weights.items())
-    return round(total, 2), len(available_weights)
+    raw_composite = sum(normalized[k].get(model_name, 0.0) * (w / weight_sum)
+                        for k, w in available_weights.items())
+    covered = len(available_weights)
+    dampener = 0.70 + 0.30 * (covered / total_pillars)
+    penalized = round(raw_composite * dampener, 2)
+    return penalized, covered
 
 
 def generate_checksum(data: dict) -> str:
@@ -968,6 +981,85 @@ def generate_checksum(data: dict) -> str:
         for m in data["models"] for s in m["scores"]
     )
     return hashlib.sha256((names + ":" + scores).encode()).hexdigest()
+
+
+def _infer_company(name: str) -> str:
+    """Best-effort company inference from model name keywords."""
+    n = name.lower()
+    if any(x in n for x in ["gpt", "o1", "o3", "o4", "chatgpt", "davinci", "turbo"]):
+        return "OpenAI"
+    if any(x in n for x in ["claude", "opus", "sonnet", "haiku"]):
+        return "Anthropic"
+    if any(x in n for x in ["gemini", "gemma", "palm", "bard"]):
+        return "Google"
+    if any(x in n for x in ["grok"]):
+        return "xAI"
+    if any(x in n for x in ["llama", "meta-"]):
+        return "Meta"
+    if any(x in n for x in ["mistral", "mixtral", "pixtral", "codestral", "voxtral"]):
+        return "Mistral"
+    if any(x in n for x in ["deepseek"]):
+        return "DeepSeek"
+    if any(x in n for x in ["qwen", "qwq"]):
+        return "Alibaba"
+    if any(x in n for x in ["glm", "chatglm", "zhipu"]):
+        return "Zhipu AI"
+    if any(x in n for x in ["minimax"]):
+        return "MiniMax"
+    if any(x in n for x in ["command", "cohere", "aya"]):
+        return "Cohere"
+    if any(x in n for x in ["moonshot", "kimi"]):
+        return "Moonshot AI"
+    if any(x in n for x in ["nova", "titan", "amazon"]):
+        return "Amazon"
+    if any(x in n for x in ["phi-", "copilot", "wizardlm"]):
+        return "Microsoft"
+    if any(x in n for x in ["nemotron", "nvidia"]):
+        return "NVIDIA"
+    if any(x in n for x in ["falcon"]):
+        return "TII"
+    if any(x in n for x in ["yi-", "01.ai"]):
+        return "01.AI"
+    return "Unknown"
+
+
+def auto_discover_models(data: dict, all_results: dict) -> list[str]:
+    """
+    Scan all scraped pillar results. Any model name that appears in the data
+    but isn't already in the roster gets auto-added with null score history.
+    Uses match_name() to avoid duplicates from name variations.
+    Returns list of newly added model names.
+    """
+    existing_names = [m["name"] for m in data["models"]]
+    newly_added = []
+
+    # Collect every unique name scraped across all pillars
+    all_scraped: set[str] = set()
+    for pillar_results in all_results.values():
+        all_scraped.update(pillar_results.keys())
+
+    for name in sorted(all_scraped):
+        # Basic sanity filter — skip obvious garbage
+        if not name or len(name) < 3 or name.replace("-", "").replace("_", "").isdigit():
+            continue
+        # Skip if already in roster (exact or fuzzy match)
+        if match_name(name, existing_names) is not None:
+            continue
+        # New model — build entry with null score history for all past dates
+        new_entry = {
+            "name":           name,
+            "company":        _infer_company(name),
+            "rank":           999,
+            "scores":         [None] * len(data["dates"]),
+            "category_count": 0,
+            "pillar_scores":  {},
+        }
+        data["models"].append(new_entry)
+        existing_names.append(name)
+        newly_added.append(name)
+        log.info(f"  ★ Auto-discovered: {name} ({new_entry['company']})")
+
+    return newly_added
 
 
 def match_name(scraped: str, existing: list[str]) -> str | None:
@@ -1192,6 +1284,16 @@ def main():
 
     notify("ð <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
+
+    # ── Auto-discover new models ──
+    new_models = auto_discover_models(data, all_results)
+    if new_models:
+        log.info(f"★ Auto-discovered {len(new_models)} new models: {new_models}")
+        notify(f"★ <b>Auto-discovered {len(new_models)} new models</b>\n" +
+               "\n".join(f"  • {n}" for n in new_models))
+        models = data["models"]   # refresh reference after append
+        names  = [m["name"] for m in models]
+
     # ââ Normalize + score ââ
     normalized = {}
     for category, raw_values in all_results.items():
@@ -1228,7 +1330,7 @@ def main():
     qualified    = [m for m in models if m["category_count"] >= QUALIFICATION_MIN_CATEGORIES]
     disqualified = [m for m in models if m["category_count"] < QUALIFICATION_MIN_CATEGORIES]
     if disqualified:
-        log.info(f"Disqualified (< {QUALIFICATION_MIN_CATEGORIES} categories): "
+        log.info(f"Excluded (0 pillars today — no data): "
                  f"{[m['name'] for m in disqualified]}")
 
     # ââ Update ranks ââ
