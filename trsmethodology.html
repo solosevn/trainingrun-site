@@ -217,7 +217,7 @@
         <header class="page-header">
             <h1>TRS <span class="cyan">Methodology</span></h1>
             <p class="page-intro">The Training Run Score (TRS) is a composite metric designed to provide a clear, comparable measure of AI model capabilities. This page documents our complete methodology with full source citations.</p>
-            <p class="last-updated">Last Updated: February 14, 2026</p>
+            <p class="last-updated">Last Updated: February 22, 2026</p>
         </header>
         <section class="method-section" id="section-exec-summary">
             <h2>Executive Summary</h2>
@@ -245,37 +245,37 @@
                     <tr>
                         <td><a href="#section-safety">Safety &amp; Reliability</a></td>
                         <td class="weight-cell weight-high">21%</td>
-                        <td>HELM Safety, TrustLLM, MLCommons, Enkrypt AI</td>
+                        <td>HELM Safety, AIR-Bench</td>
                         <td>Harm avoidance, fairness, misuse prevention, governance</td>
                     </tr>
                     <tr>
                         <td><a href="#section-reasoning">Reasoning &amp; Logic</a></td>
                         <td class="weight-cell weight-high">20%</td>
-                        <td>ARC-AGI-2, GPQA Diamond, MATH</td>
+                        <td>ARC-AGI-2, LiveBench Reasoning, HELM Capabilities</td>
                         <td>Novel problem-solving, multi-step reasoning</td>
                     </tr>
                     <tr>
                         <td><a href="#section-coding">Coding Proficiency</a></td>
                         <td class="weight-cell weight-high">20%</td>
-                        <td>SWE-Bench, LiveCodeBench, SciCode</td>
+                        <td>SWE-bench Verified, EvalPlus, LiveCodeBench, SWE-rebench</td>
                         <td>Real-world code generation and debugging</td>
                     </tr>
                     <tr>
                         <td><a href="#section-human-pref">Human Preference</a></td>
                         <td class="weight-cell weight-med">18%</td>
-                        <td>LMSYS Chatbot Arena Elo</td>
+                        <td>Arena (arena.ai), AlpacaEval</td>
                         <td>Blind human preference in side-by-side comparisons</td>
                     </tr>
                     <tr>
                         <td><a href="#section-knowledge">Knowledge</a></td>
                         <td class="weight-cell weight-low">8%</td>
-                        <td>MMLU-Pro, TruthfulQA</td>
+                        <td>MMLU-Pro, HELM MMLU, SimpleQA</td>
                         <td>Factual accuracy, comprehension breadth</td>
                     </tr>
                     <tr>
                         <td><a href="#section-efficiency">Efficiency</a></td>
                         <td class="weight-cell weight-low">7%</td>
-                        <td>Artificial Analysis</td>
+                        <td>Artificial Analysis, PricePerToken</td>
                         <td>Tokens/second output speed</td>
                     </tr>
                     <tr>
@@ -307,18 +307,19 @@
                         <a href="https://arcprize.org/" target="_blank" rel="noopener" class="source-link">Source: arcprize.org</a>
                     </div>
                     <div class="source-item">
-                        <h4>GPQA Diamond (NYU, Anthropic, et al.)</h4>
-                        <p>Graduate-level science questions written by PhD experts.</p>
-                        <a href="https://arxiv.org/abs/2311.12022" target="_blank" rel="noopener" class="source-link">Source: arXiv:2311.12022</a>
+                        <h4>LiveBench Reasoning (LiveBench.ai)</h4>
+                        <p>Contamination-free reasoning tasks updated monthly with new questions drawn from recent competitions and papers. Tests math, logic, and multi-step deduction.</p>
+                        <a href="https://livebench.ai/" target="_blank" rel="noopener" class="source-link">Source: livebench.ai</a>
                     </div>
                     <div class="source-item">
-                        <h4>MATH (Hendrycks et al.)</h4>
-                        <p>Competition-level mathematics problems from AMC, AIME, and Olympiad competitions.</p>
-                        <a href="https://arxiv.org/abs/2103.03874" target="_blank" rel="noopener" class="source-link">Source: arXiv:2103.03874</a>
+                        <h4>HELM Capabilities (Stanford CRFM)</h4>
+                        <p>Stanford's holistic evaluation of reasoning, commonsense, and world knowledge across a broad suite of tasks — including math, science, and language understanding.</p>
+                        <a href="https://crfm.stanford.edu/helm/capabilities/latest/" target="_blank" rel="noopener" class="source-link">Source: crfm.stanford.edu/helm/capabilities</a>
                     </div>
                 </div>
                 <h3>Score Calculation</h3>
-                <code class="calc-formula">R = (ARC x 0.40) + (GPQA x 0.35) + (MATH x 0.25)</code>
+                <code class="calc-formula">R = normalize_sources_and_merge(ARC-AGI-2, LiveBench_Reasoning, HELM_Capabilities)</code>
+                <p class="formula-note">Each source normalized 0–100. Composite contributes 20% of TRS.</p>
             </div>
         
             </div></section>
@@ -356,34 +357,14 @@
                   <a href="https://livecodebench.github.io/" target="_blank" rel="noopener" class="source-link">Source: livecodebench.github.io</a>
                 </div>
                 <div class="source-item">
-                  <h4>BigCodeBench (10% of TRScode)</h4>
-                  <p>Complex, multi-step function-level code generation tasks requiring library usage and compositional reasoning.</p>
-                  <a href="https://bigcode-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: bigcode-bench.github.io</a>
-                </div>
-                <div class="source-item">
-                  <h4>Terminal-Bench Hard (12% of TRScode)</h4>
-                  <p>Autonomous terminal navigation and multi-step software engineering tasks. Tests whether models can operate real development environments without human hand-holding.</p>
-                  <a href="https://github.com/NVIDIA/Terminal-Bench" target="_blank" rel="noopener" class="source-link">Source: github.com/NVIDIA/Terminal-Bench</a>
-                </div>
-                <div class="source-item">
-                  <h4>SWE-bench Pro (8% of TRScode)</h4>
-                  <p>Professional-grade software engineering evaluation with more complex, multi-file changes required across larger codebases.</p>
-                  <a href="https://www.swebench.com/" target="_blank" rel="noopener" class="source-link">Source: swebench.com</a>
-                </div>
-                <div class="source-item">
-                  <h4>SciCode (15% of TRScode)</h4>
-                  <p>Research-level coding across mathematics, physics, chemistry, and biology. Tests whether models can write code that solves real scientific problems.</p>
-                  <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: scicode-bench.github.io</a>
-                </div>
-                <div class="source-item">
-                  <h4>Chatbot Arena Code ELO (10% of TRScode)</h4>
-                  <p>Blind head-to-head coding comparisons judged by real developers. The only metric based on human evaluation rather than automated benchmarks.</p>
-                  <a href="https://lmarena.ai/" target="_blank" rel="noopener" class="source-link">Source: lmarena.ai</a>
+                  <h4>EvalPlus (25% of TRScode)</h4>
+                  <p>Rigorous function-level code generation benchmark augmenting HumanEval and MBPP with 80× more test cases to catch edge-case failures missed by standard evaluation.</p>
+                  <a href="https://evalplus.github.io/leaderboard.html" target="_blank" rel="noopener" class="source-link">Source: evalplus.github.io/leaderboard</a>
                 </div>
               </div>
 
               <h3>Score Calculation</h3>
-              <code class="calc-formula">TRScode = SWE-bench_Verified (17%) + SWE-rebench (13%) + LiveCodeBench (15%) + BigCodeBench (10%) + Terminal-Bench_Hard (12%) + SWE-bench_Pro (8%) + SciCode (15%) + Arena_Code_ELO (10%)</code>
+              <code class="calc-formula">TRScode = SWE-bench_Verified (25%) + SWE-rebench (20%) + LiveCodeBench (20%) + EvalPlus (20%) + Arena_Code_ELO (15%)</code>
               <p class="formula-note">Each model is scored 0–100 on each sub-metric (top performer = 100, others proportional). Models must have non-null scores in at least 2 of 5 pillars. Missing pillars contribute zero (Option B). The TRS Coding dimension draws from the TRScode composite.</p>
             </div>
         
@@ -394,8 +375,8 @@
             <div class="method-content">
                 <h3>What We Measure</h3>
                 <p>When real people compare model outputs side-by-side, which model do they actually like more? This captures helpfulness, clarity, tone, and instruction-following.</p>
-                <h3>Why We Use LMSYS Chatbot Arena</h3>
-                <p>We use LMSYS Chatbot Arena as our primary signal because it is the most widely adopted, transparent, and actively maintained open platform for live LLM comparisons.</p>
+                <h3>Why We Use Arena (arena.ai)</h3>
+                <p>We use Arena as our primary signal because it is the most widely adopted, transparent, and actively maintained open platform for live LLM comparisons. Arena (formerly LMSYS Chatbot Arena) is now hosted at arena.ai.</p>
                 <ul class="source-details">
                     <li><strong>Blind, pairwise voting:</strong> Users chat with two anonymous models and vote for the better response.</li>
                     <li><strong>Large-scale:</strong> Hundreds of thousands to over a million human preference votes.</li>
@@ -412,15 +393,24 @@
                 <h3>Primary Data Source</h3>
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>LMSYS Chatbot Arena (UC Berkeley, LMSYS Group)</h4>
-                        <p>Live, web-based evaluation where users interact with two anonymous models and vote for the better response.</p>
-                        <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener" class="source-link">Source: huggingface.co/spaces/lmarena-ai/chatbot-arena</a>
-                        <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener" class="source-link">Methodology: arXiv:2403.04132</a>
+                        <h4>Arena Overall (arena.ai)</h4>
+                        <p>Live, web-based evaluation where users interact with two anonymous models and vote for the better response. Full leaderboard with 200+ models across all task types.</p>
+                        <a href="https://arena.ai/leaderboard" target="_blank" rel="noopener" class="source-link">Source: arena.ai/leaderboard</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>Arena Text ELO (arena.ai)</h4>
+                        <p>Text-specific ELO sub-leaderboard from Arena, isolating human preference on open-ended text and instruction-following tasks.</p>
+                        <a href="https://arena.ai/leaderboard" target="_blank" rel="noopener" class="source-link">Source: arena.ai/leaderboard</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>AlpacaEval 2.0 (Stanford, et al.)</h4>
+                        <p>Automated win-rate benchmark against GPT-4 using 805 instructions. Length-controlled win rate eliminates verbosity bias.</p>
+                        <a href="https://tatsu-lab.github.io/alpaca_eval/" target="_blank" rel="noopener" class="source-link">Source: tatsu-lab.github.io/alpaca_eval</a>
                     </div>
                 </div>
                 <h3>Score Calculation</h3>
-                <code class="calc-formula">H = ((Model_Elo - Min_Elo) / (Max_Elo - Min_Elo)) x 100</code>
-                <p class="formula-note">Maps the lowest-rated model to 0, highest to 100. Human Preference contributes 18% of TRS.</p>
+                <code class="calc-formula">H = normalize_sources_and_merge(Arena_Overall, Arena_Text, AlpacaEval)</code>
+                <p class="formula-note">Each source normalized 0–100. Composite contributes 18% of TRS.</p>
             </div>
         
             </div></section>
@@ -433,18 +423,24 @@
                 <h3>Primary Data Sources</h3>
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>MMLU (Hendrycks et al.)</h4>
-                        <p>57 subjects from STEM to humanities, 14,000+ questions.</p>
-                        <a href="https://arxiv.org/abs/2009.03300" target="_blank" rel="noopener" class="source-link">Source: arXiv:2009.03300</a>
+                        <h4>MMLU-Pro (Carnegie Mellon, et al.)</h4>
+                        <p>A harder, contamination-resistant version of MMLU with 12,000+ expert-level questions across 14 disciplines. Uses 10-choice format to reduce guessing.</p>
+                        <a href="https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro" target="_blank" rel="noopener" class="source-link">Source: TIGER-Lab/MMLU-Pro</a>
                     </div>
                     <div class="source-item">
-                        <h4>TruthfulQA (Lin et al.)</h4>
-                        <p>Tests whether models generate truthful answers.</p>
-                        <a href="https://arxiv.org/abs/2109.07958" target="_blank" rel="noopener" class="source-link">Source: arXiv:2109.07958</a>
+                        <h4>HELM MMLU (Stanford CRFM)</h4>
+                        <p>Stanford's standardized MMLU evaluation within the HELM framework, ensuring consistent prompting and scoring methodology across models.</p>
+                        <a href="https://crfm.stanford.edu/helm/capabilities/latest/" target="_blank" rel="noopener" class="source-link">Source: crfm.stanford.edu/helm/capabilities</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>SimpleQA (OpenAI)</h4>
+                        <p>Short, factual questions with unambiguous ground-truth answers. Tests whether models can reliably state facts without hallucinating.</p>
+                        <a href="https://openai.com/index/introducing-simpleqa/" target="_blank" rel="noopener" class="source-link">Source: openai.com/simpleqa</a>
                     </div>
                 </div>
                 <h3>Score Calculation</h3>
-                <code class="calc-formula">K = (MMLU x 0.70) + (TruthfulQA x 0.30)</code>
+                <code class="calc-formula">K = normalize_sources_and_merge(MMLU-Pro, HELM_MMLU, SimpleQA)</code>
+                <p class="formula-note">Each source normalized 0–100. Composite contributes 8% of TRS.</p>
             </div>
         
             </div></section>
@@ -457,12 +453,19 @@
                 <h3>Data Sources</h3>
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>API Pricing</h4>
-                        <p>Official pricing from OpenAI, Anthropic, Google.</p>
+                        <h4>Artificial Analysis</h4>
+                        <p>Independent benchmarking of model speed (tokens/second), latency, and pricing across API providers. Updated continuously with live measurements.</p>
+                        <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener" class="source-link">Source: artificialanalysis.ai</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>PricePerToken.com</h4>
+                        <p>Crowd-sourced, continuously updated database of LLM API pricing across all major providers — input, output, and context window costs.</p>
+                        <a href="https://pricepertoken.com/" target="_blank" rel="noopener" class="source-link">Source: pricepertoken.com</a>
                     </div>
                 </div>
                 <h3>Score Calculation</h3>
-                <code class="calc-formula">E = (Average_Benchmark_Score / Cost_Per_1M_Tokens) x Normalization_Factor</code>
+                <code class="calc-formula">E = normalize_sources_and_merge(Artificial_Analysis, PricePerToken)</code>
+                <p class="formula-note">Higher score = better performance per dollar. Contributes 7% of TRS.</p>
             </div>
         
             </div></section>
@@ -474,32 +477,22 @@
                 <p>Harm avoidance, fairness, misuse prevention, adversarial robustness, and company-level safety governance. Safety is weighted highest because responsible AI ensures progress does not derail due to unchecked risks, while maintaining strong weights on Reasoning and Coding to drive technological advancement.</p>
                 <h3>Why Safety Is Weighted #1</h3>
                 <p>Multiple independent, quantifiable benchmarks now exist to measure AI safety objectively. By weighting safety highest, TRS incentivizes the development of models that are both capable and responsible, enabling high abundance for all humanity without stifling innovation.</p>
-                <h3>Sub-Component Breakdown</h3>
+                <h3>Primary Data Sources</h3>
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>Harm Avoidance (40% of Safety Score)</h4>
-                        <p>Source: HELM Safety (Stanford CRFM). Unified framework aggregating 5 sub-benchmarks across 24+ models with 0-1 normalized scores.</p>
-                        <a href="https://crfm.stanford.edu/helm/safety/latest/" target="_blank" rel="noopener" class="source-link">crfm.stanford.edu/helm/safety</a>
+                        <h4>HELM Safety (Stanford CRFM)</h4>
+                        <p>Unified framework aggregating multiple safety sub-benchmarks. Tests harm avoidance, fairness, and adversarial robustness across 24+ models with 0–1 normalized scores.</p>
+                        <a href="https://crfm.stanford.edu/helm/safety/latest/" target="_blank" rel="noopener" class="source-link">Source: crfm.stanford.edu/helm/safety</a>
                     </div>
                     <div class="source-item">
-                        <h4>Fairness (30% of Safety Score)</h4>
-                        <p>Source: TrustLLM. Comprehensive trustworthiness evaluation covering fairness, privacy, robustness, and ethical alignment across major LLMs.</p>
-                        <a href="https://trustllmbenchmark.github.io/TrustLLM-Website/" target="_blank" rel="noopener" class="source-link">trustllmbenchmark.github.io</a>
-                    </div>
-                    <div class="source-item">
-                        <h4>Misuse Prevention (20% of Safety Score)</h4>
-                        <p>Source: MLCommons AI Luminate. Industry consortium standard testing 12 hazard categories with 24,000+ prompts per language.</p>
-                        <a href="https://ailuminate.mlcommons.org/benchmarks/" target="_blank" rel="noopener" class="source-link">ailuminate.mlcommons.org/benchmarks</a>
-                    </div>
-                    <div class="source-item">
-                        <h4>Governance (10% of Safety Score)</h4>
-                        <p>Sources: AI Safety Index (expert-reviewed company-level safety practices, 35 indicators, A-F grades) and Enkrypt AI Leaderboard (NIST RMF + OWASP Top 10 aligned, 200+ models, continuously updated).</p>
-                        <a href="https://futureoflife.org/ai-safety-index-winter-2025/" target="_blank" rel="noopener" class="source-link">futureoflife.org/ai-safety-index</a>
-                        <a href="https://leaderboard.enkryptai.com/" target="_blank" rel="noopener" class="source-link">leaderboard.enkryptai.com</a>
+                        <h4>AIR-Bench (Berkeley, Stanford, et al.)</h4>
+                        <p>Automated, iterative red-teaming benchmark covering 8 harm categories aligned with AI regulations (EU AI Act, US EO, China CAC). Continuously updated to avoid contamination.</p>
+                        <a href="https://air-bench.github.io/" target="_blank" rel="noopener" class="source-link">Source: air-bench.github.io</a>
                     </div>
                 </div>
                 <h3>Score Calculation</h3>
-                <p><code class="calc-formula">S = (HELM_Safety x 0.40) + (TrustLLM x 0.30) + (AILuminate x 0.20) + (Governance x 0.10)</code></p>
+                <p><code class="calc-formula">S = normalize_sources_and_merge(HELM_Safety, AIR-Bench)</code></p>
+                <p class="formula-note">Each source normalized 0–100. Composite contributes 21% of TRS.</p>
             </div>
         
             </div></section>
@@ -557,29 +550,43 @@
             <h2>Full Citation List</h2>
             <div class="section-content">
             <div class="citations-list">
-                <h3>Evaluation Platforms</h3>
-                <ul>
-                    <li>LMSYS Chatbot Arena: <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener">huggingface.co/spaces/lmarena-ai/chatbot-arena</a></li>
-                    <li>ARC Prize: <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a></li>
-                    <li>SWE-Bench: <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a></li>
-                    <li>LiveCodeBench: <a href="https://livecodebench.github.io/" target="_blank" rel="noopener">livecodebench.github.io</a></li>
-                    <li>SciCode: <a href="https://scicode-bench.github.io/" target="_blank" rel="noopener">scicode-bench.github.io</a></li>
-                </ul>
-                <h3>Safety Benchmarks</h3>
+                <h3>Safety</h3>
                 <ul>
                     <li>HELM Safety (Stanford CRFM): <a href="https://crfm.stanford.edu/helm/safety/latest/" target="_blank" rel="noopener">crfm.stanford.edu/helm/safety</a></li>
-                    <li>TrustLLM: <a href="https://trustllmbenchmark.github.io/TrustLLM-Website/" target="_blank" rel="noopener">trustllmbenchmark.github.io</a></li>
-                    <li>MLCommons AI Luminate: <a href="https://ailuminate.mlcommons.org/benchmarks/" target="_blank" rel="noopener">ailuminate.mlcommons.org/benchmarks</a></li>
-                    <li>AI Safety Index (FLI): <a href="https://futureoflife.org/ai-safety-index-winter-2025/" target="_blank" rel="noopener">futureoflife.org/ai-safety-index</a></li>
-                    <li>Enkrypt AI Leaderboard: <a href="https://leaderboard.enkryptai.com/" target="_blank" rel="noopener">leaderboard.enkryptai.com</a></li>
+                    <li>AIR-Bench: <a href="https://air-bench.github.io/" target="_blank" rel="noopener">air-bench.github.io</a></li>
                 </ul>
-                <h3>Usage Adoption</h3>
+                <h3>Reasoning</h3>
                 <ul>
-                    <li>OpenRouter Rankings: <a href="https://openrouter.ai/rankings" target="_blank" rel="noopener">openrouter.ai/rankings</a></li>
+                    <li>ARC-AGI-2 (ARC Prize Foundation): <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a></li>
+                    <li>LiveBench Reasoning: <a href="https://livebench.ai/" target="_blank" rel="noopener">livebench.ai</a></li>
+                    <li>HELM Capabilities (Stanford CRFM): <a href="https://crfm.stanford.edu/helm/capabilities/latest/" target="_blank" rel="noopener">crfm.stanford.edu/helm/capabilities</a></li>
                 </ul>
-                <h3>Efficiency and Pricing</h3>
+                <h3>Coding</h3>
+                <ul>
+                    <li>SWE-bench Verified: <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a></li>
+                    <li>SWE-rebench: <a href="https://www.swe-rebench.com/" target="_blank" rel="noopener">swe-rebench.com</a></li>
+                    <li>LiveCodeBench: <a href="https://livecodebench.github.io/" target="_blank" rel="noopener">livecodebench.github.io</a></li>
+                    <li>EvalPlus: <a href="https://evalplus.github.io/leaderboard.html" target="_blank" rel="noopener">evalplus.github.io/leaderboard</a></li>
+                </ul>
+                <h3>Human Preference</h3>
+                <ul>
+                    <li>Arena (arena.ai): <a href="https://arena.ai/leaderboard" target="_blank" rel="noopener">arena.ai/leaderboard</a></li>
+                    <li>AlpacaEval 2.0: <a href="https://tatsu-lab.github.io/alpaca_eval/" target="_blank" rel="noopener">tatsu-lab.github.io/alpaca_eval</a></li>
+                </ul>
+                <h3>Knowledge</h3>
+                <ul>
+                    <li>MMLU-Pro: <a href="https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro" target="_blank" rel="noopener">huggingface.co/datasets/TIGER-Lab/MMLU-Pro</a></li>
+                    <li>HELM MMLU (Stanford CRFM): <a href="https://crfm.stanford.edu/helm/capabilities/latest/" target="_blank" rel="noopener">crfm.stanford.edu/helm/capabilities</a></li>
+                    <li>SimpleQA (OpenAI): <a href="https://openai.com/index/introducing-simpleqa/" target="_blank" rel="noopener">openai.com/simpleqa</a></li>
+                </ul>
+                <h3>Efficiency</h3>
                 <ul>
                     <li>Artificial Analysis: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener">artificialanalysis.ai</a></li>
+                    <li>PricePerToken: <a href="https://pricepertoken.com/" target="_blank" rel="noopener">pricepertoken.com</a></li>
+                </ul>
+                <h3>Usage &amp; Adoption</h3>
+                <ul>
+                    <li>OpenRouter Rankings: <a href="https://openrouter.ai/rankings" target="_blank" rel="noopener">openrouter.ai/rankings</a></li>
                 </ul>
             </div>
         
