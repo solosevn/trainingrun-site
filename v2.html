@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1440">
+<title>Training Run — AI Leaderboard & Daily Benchmark Rankings</title>
+<meta name="description" content="Training Run: Independent daily AI benchmark rankings. Live scores for TRSbench, TRUscore, TRScode, TRFcast, and TRAgents — updated every morning at 7AM CST.">
+<meta name="keywords" content="AI leaderboard, AI benchmark, daily AI rankings, LLM leaderboard, GPT benchmark, Claude benchmark, Gemini benchmark, AI conditioning, TRSbench">
+<meta property="og:title" content="Training Run — Daily AI Benchmark Rankings">
+<meta property="og:description" content="Independent daily AI leaderboard. Live scores updated every morning. TRSbench, TRUscore, TRScode, TRFcast, TRAgents.">
+<meta property="og:url" content="https://trainingrun.ai/v2.html">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #07071a;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-width: 1300px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── CYAN GLOW LINE ─── */
+.glow-line {
+  height: 1px; flex-shrink: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.1) 10%, #00e5ff 40%, #00e5ff 60%, rgba(0,229,255,0.1) 90%, transparent 100%);
+  box-shadow: 0 0 6px rgba(0,229,255,0.45), 0 0 18px rgba(0,229,255,0.1);
+}
+
+/* ─── WHITE GLOW LINE (ticker borders) ─── */
+.glow-line-white {
+  height: 1px; flex-shrink: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 8%, rgba(255,255,255,0.65) 35%, rgba(255,255,255,0.65) 65%, rgba(255,255,255,0.08) 92%, transparent 100%);
+  box-shadow: 0 0 6px rgba(255,255,255,0.35), 0 0 16px rgba(255,255,255,0.08);
+}
+
+/* ─── TOP BAR ─── */
+.top-bar {
+  flex-shrink: 0; background: #0a0a20; height: 50px;
+  display: flex; align-items: center; padding: 0 24px; position: relative;
+}
+.logo-block { display:flex; flex-direction:column; gap:1px; }
+.logo-text { font-size:19px; font-weight:800; color:#00e5ff; letter-spacing:-0.5px; line-height:1; text-shadow:0 0 14px rgba(0,229,255,0.5); }
+.logo-sub  { font-size:8px; font-weight:600; letter-spacing:2.8px; text-transform:uppercase; color:rgba(255,255,255,0.35); }
+.top-center { position:absolute; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:rgba(255,255,255,0.22); }
+.top-right { margin-left:auto; display:flex; align-items:center; gap:18px; }
+.top-link { font-size:11.5px; color:rgba(255,255,255,0.38); cursor:pointer; text-decoration:none; }
+.top-link:hover { color:rgba(255,255,255,0.7); }
+.watch-pill { display:flex; align-items:center; gap:6px; background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.2)); border:1px solid rgba(139,92,246,0.35); border-radius:20px; padding:5px 13px; font-size:11px; font-weight:700; color:rgba(255,255,255,0.82); cursor:pointer; }
+.watch-pill:hover { border-color:rgba(139,92,246,0.6); }
+.play { font-size:9px; color:#a78bfa; }
+
+/* ─── TICKER ─── */
+.ticker { flex-shrink:0; background:#06061a; height:33px; overflow:hidden; display:flex; align-items:center; }
+.ticker-track { display:inline-flex; white-space:nowrap; }
+.ticker-track.animating { animation:tick 32s linear infinite; }
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ti { display:inline-flex; align-items:center; gap:7px; padding:0 20px; height:33px; border-right:1px solid rgba(255,255,255,0.05); white-space:nowrap; }
+.tl { font-size:9px; color:rgba(255,255,255,0.28); letter-spacing:.5px; }
+.tc { font-size:9px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:#00e5ff; }
+.tlogo { width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:rgba(255,255,255,0.65);flex-shrink:0; }
+.tn { font-size:12px; font-weight:700; color:#fff; }
+.ts { font-size:12px; font-weight:800; color:#00e5ff; }
+.tup { color:#22d3a3; font-size:10.5px; font-weight:700; }
+.tdn { color:#f87171; font-size:10.5px; font-weight:700; }
+
+/* ─── HORIZONTAL NAV ─── */
+.h-nav {
+  flex-shrink:0; background:#0a0a20; height:42px;
+  display:flex; align-items:stretch; padding:0 24px; justify-content:space-between;
+}
+.htabs { display:flex; align-items:stretch; }
+.htab {
+  display:flex; align-items:center; gap:6px; padding:0 15px;
+  font-size:12px; font-weight:600; color:rgba(255,255,255,0.38); cursor:pointer;
+  position:relative; border-bottom:2px solid transparent; transition:color .2s; white-space:nowrap;
+  text-decoration:none;
+}
+.htab:hover { color:rgba(255,255,255,0.72); }
+.htab.active { color:#00e5ff; border-bottom-color:#00e5ff; text-shadow:0 0 10px rgba(0,229,255,0.3); }
+.htab.active::after {
+  content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px;
+  box-shadow:0 0 8px #00e5ff,0 0 16px rgba(0,229,255,0.35);
+}
+.tpill { font-size:7px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; background:rgba(255,255,255,0.05); border-radius:3px; padding:1px 5px; color:rgba(255,255,255,0.28); }
+.htab.active .tpill { background:rgba(0,229,255,0.1); color:rgba(0,229,255,0.55); }
+.hnav-right { display:flex; align-items:center; gap:16px; }
+.hnav-right a { font-size:11px; color:rgba(255,255,255,0.3); cursor:pointer; text-decoration:none; }
+.hnav-right a:hover { color:rgba(255,255,255,0.6); }
+.hnav-pipe { color:rgba(255,255,255,0.08); }
+
+/* ─── BODY LAYOUT ─── */
+.body-row { flex:1; display:flex; overflow:hidden; min-height:0; }
+
+/* ─── SIDEBAR WRAPPER ─── */
+.sb-wrap { position:relative; flex-shrink:0; display:flex; }
+
+/* ─── LEFT SIDEBAR ─── */
+.l-sidebar {
+  width:228px; flex-shrink:0; background:#08081c;
+  border-right:1px solid rgba(255,255,255,0.06);
+  display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden;
+  transition:width .22s ease;
+  scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.08) transparent;
+}
+.l-sidebar.collapsed { width:0; border-right:none; }
+.sb-section { padding:14px 14px 11px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.sb-section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:9.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
+  color:rgba(255,255,255,0.3); margin-bottom:9px; cursor:pointer; user-select:none;
+}
+.sb-chevron { font-size:8px; color:rgba(255,255,255,0.2); transition:transform .15s; }
+.rank-toggle { display:flex; background:rgba(255,255,255,0.04); border-radius:6px; padding:2px; }
+.rtab { flex:1; text-align:center; padding:5px 0; font-size:11px; font-weight:600; color:rgba(255,255,255,0.35); border-radius:5px; cursor:pointer; }
+.rtab.active { background:rgba(0,229,255,0.1); color:#00e5ff; }
+.pillar-list { display:flex; flex-direction:column; gap:1px; }
+.pillar-item {
+  display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:6px;
+  font-size:11.5px; color:rgba(255,255,255,0.45); cursor:pointer;
+  transition:background .14s, color .14s; white-space:nowrap;
+}
+.pillar-item:hover { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.75); }
+.pillar-item.active { background:rgba(0,229,255,0.07); color:#00e5ff; }
+.p-check { font-size:9px; margin-left:auto; color:#00e5ff; }
+.p-icon { font-size:12px; width:17px; text-align:center; flex-shrink:0; }
+.lab-list { display:flex; flex-direction:column; gap:1px; }
+.lab-item {
+  display:flex; align-items:center; gap:8px; padding:5px 9px; border-radius:5px;
+  font-size:11px; color:rgba(255,255,255,0.38); cursor:pointer; transition:background .14s, color .14s;
+}
+.lab-item:hover { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.7); }
+.lab-item.active { background:rgba(0,229,255,0.06); color:rgba(255,255,255,0.82); }
+.lab-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.radio { width:12px; height:12px; border-radius:50%; border:1px solid rgba(255,255,255,0.18); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.radio.on { border-color:#00e5ff; }
+.radio.on::after { content:''; width:5px; height:5px; border-radius:50%; background:#00e5ff; }
+.lic-list { display:flex; flex-direction:column; gap:3px; }
+.lic-item { display:flex; align-items:center; gap:8px; padding:5px 9px; font-size:11px; color:rgba(255,255,255,0.38); cursor:pointer; border-radius:5px; }
+.lic-item:hover { color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.03); }
+.range-bar { position:relative; height:2.5px; background:rgba(255,255,255,0.07); border-radius:2px; margin:10px 0 5px; }
+.range-fill { position:absolute; left:0; right:18%; height:100%; background:linear-gradient(90deg,#0099bb,#00e5ff); border-radius:2px; box-shadow:0 0 6px rgba(0,229,255,0.35); }
+.range-nums { display:flex; justify-content:space-between; font-size:9px; color:rgba(255,255,255,0.28); }
+
+/* ─── COLLAPSE TAB ─── */
+.collapse-tab {
+  position:absolute; top:50%; right:-28px; transform:translateY(-50%);
+  width:28px; height:56px; background:#0d0d26;
+  border:1px solid rgba(0,229,255,0.22); border-left:none;
+  border-radius:0 8px 8px 0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; cursor:pointer; z-index:20;
+  box-shadow:3px 0 12px rgba(0,0,0,0.4), inset -1px 0 0 rgba(0,229,255,0.06);
+  transition:background .15s;
+}
+.collapse-tab:hover { background:#121232; box-shadow:3px 0 16px rgba(0,0,0,0.5), 0 0 10px rgba(0,229,255,0.08); }
+.collapse-tab .ct-arrow { font-size:10px; color:rgba(0,229,255,0.55); line-height:1; }
+.collapse-tab .ct-lines { display:flex; flex-direction:column; gap:3px; }
+.collapse-tab .ct-line { width:10px; height:1.5px; background:rgba(0,229,255,0.3); border-radius:1px; }
+.sb-wrap.is-collapsed .ct-arrow { transform:scaleX(-1); display:inline-block; }
+
+/* ─── MAIN CONTENT ─── */
+.main-content { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+.content-head { padding:16px 22px 11px; border-bottom:1px solid rgba(255,255,255,0.055); flex-shrink:0; }
+.content-title { font-size:19px; font-weight:800; letter-spacing:-.4px; margin-bottom:3px; }
+.content-title .hl { color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.28); }
+.content-sub { font-size:11px; color:rgba(255,255,255,0.32); margin-bottom:7px; }
+.content-meta { display:flex; align-items:center; gap:14px; font-size:10.5px; color:rgba(255,255,255,0.25); }
+.meta-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,229,255,0.45); flex-shrink:0; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.meta-link { color:rgba(0,229,255,0.48); cursor:pointer; }
+.meta-link:hover { color:rgba(0,229,255,0.8); }
+
+/* ─── TOOLBAR ─── */
+.toolbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 22px; border-bottom:1px solid rgba(255,255,255,0.045); flex-shrink:0;
+}
+.t-left { display:flex; align-items:center; gap:8px; }
+.t-right { display:flex; align-items:center; gap:8px; }
+.btn-sm {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:6px; padding:5px 10px; font-size:11px; color:rgba(255,255,255,0.42); cursor:pointer;
+}
+.f-pill { background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); border-radius:12px; padding:2px 9px; font-size:9.5px; font-weight:700; color:#00e5ff; }
+.f-pill-plain { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:2px 9px; font-size:9.5px; color:rgba(255,255,255,0.38); }
+.search-box {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+  border-radius:6px; padding:5px 10px; font-size:11px; color:rgba(255,255,255,0.28); min-width:160px;
+}
+.view-toggle {
+  display:flex; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:7px; padding:2px; gap:1px;
+}
+.vt-btn {
+  padding:4px 11px; font-size:10.5px; font-weight:600;
+  color:rgba(255,255,255,0.35); border-radius:5px; cursor:pointer; transition:background .14s, color .14s;
+}
+.vt-btn.active { background:rgba(0,229,255,0.1); color:#00e5ff; box-shadow:0 0 8px rgba(0,229,255,0.12); }
+
+/* ─── TABLE ─── */
+.lb-wrap { flex:1; overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.07) transparent; }
+.lb-table { width:100%; border-collapse:collapse; }
+.lb-table thead tr { background:#09091e; border-bottom:1px solid rgba(255,255,255,0.06); position:sticky; top:0; z-index:2; }
+.lb-table th {
+  padding:8px 14px; font-size:10px; font-weight:700;
+  color:rgba(255,255,255,0.3); letter-spacing:.4px;
+  text-align:left; white-space:nowrap; cursor:pointer; background:#09091e;
+}
+.lb-table th:hover { color:rgba(255,255,255,0.6); }
+.sort-icon { color:#00e5ff; font-size:8px; margin-left:3px; }
+.lb-table td { padding:0 14px; border-bottom:1px solid rgba(255,255,255,0.03); vertical-align:middle; }
+.lb-table tbody tr { height:52px; cursor:pointer; transition:background .13s; }
+.lb-table tbody tr:hover { background:rgba(0,229,255,0.025) !important; }
+
+/* Top 3 highlights */
+.row-1 { background:linear-gradient(90deg, rgba(255,193,7,0.055) 0%, rgba(255,193,7,0.02) 60%, transparent 100%); }
+.row-1:hover { background:linear-gradient(90deg, rgba(255,193,7,0.09) 0%, rgba(255,193,7,0.03) 60%, transparent 100%) !important; }
+.row-2 { background:linear-gradient(90deg, rgba(148,163,184,0.04) 0%, transparent 60%); }
+.row-2:hover { background:linear-gradient(90deg, rgba(148,163,184,0.07) 0%, transparent 60%) !important; }
+.row-3 { background:linear-gradient(90deg, rgba(205,127,50,0.045) 0%, transparent 60%); }
+.row-3:hover { background:linear-gradient(90deg, rgba(205,127,50,0.07) 0%, transparent 60%) !important; }
+
+/* Rank cell */
+.rank-cell { width:52px; text-align:center; font-size:13px; font-weight:800; color:rgba(255,255,255,0.22); }
+.medal { font-size:15px; line-height:1; }
+
+/* Model cell */
+.m-cell { display:flex; align-items:center; gap:10px; }
+.m-icon { width:27px; height:27px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:7.5px; font-weight:800; color:rgba(255,255,255,0.7); flex-shrink:0; border:1px solid rgba(255,255,255,0.07); }
+.m-name { font-size:13px; font-weight:700; color:#fff; }
+.m-lab  { font-size:9.5px; color:rgba(255,255,255,0.28); }
+
+/* Score */
+.score-val { font-size:14px; font-weight:800; color:#fff; }
+/* Bar */
+.bar-wrap { width:72px; }
+.bar { height:3px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,#0086a8,#00e5ff); box-shadow:0 0 5px rgba(0,229,255,0.28); }
+/* Sparkline */
+.spark { width:46px; height:20px; display:block; }
+/* Change */
+.chg { font-size:11px; font-weight:700; }
+.up { color:#22d3a3; } .dn { color:#f87171; } .nc { color:rgba(255,255,255,0.18); }
+/* Company left-border accent on rows */
+.lb-table tbody tr { border-left: 2px solid transparent; }
+.co-anthropic { border-left-color: rgba(204,93,57,0.55) !important; }
+.co-google    { border-left-color: rgba(66,133,244,0.55) !important; }
+.co-openai    { border-left-color: rgba(16,163,127,0.55) !important; }
+.co-xai       { border-left-color: rgba(200,200,200,0.3) !important; }
+.co-mistral   { border-left-color: rgba(255,140,0,0.55) !important; }
+.co-deepseek  { border-left-color: rgba(100,149,237,0.55) !important; }
+.co-meta      { border-left-color: rgba(24,119,242,0.55) !important; }
+.co-alibaba   { border-left-color: rgba(255,102,0,0.55) !important; }
+.co-other     { border-left-color: rgba(150,100,255,0.4) !important; }
+
+/* Compact view */
+body.compact .hide-compact { display:none; }
+body.compact .lb-table tbody tr { height:40px; }
+
+/* Loading state */
+.loading-state { display:flex; align-items:center; justify-content:center; height:200px; color:rgba(255,255,255,0.3); font-size:13px; gap:10px; }
+.spinner { width:18px; height:18px; border:2px solid rgba(0,229,255,0.15); border-top-color:#00e5ff; border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body id="mainbody">
+
+<!-- ══ TOP BAR ══════════════════════════════════ -->
+<div class="top-bar">
+  <div class="logo-block">
+    <span class="logo-text">Training Run</span>
+    <span class="logo-sub">Your Weekly AI Conditioning</span>
+  </div>
+  <div class="top-center" id="todayDate"></div>
+  <div class="top-right">
+    <a href="about.html" class="top-link">About</a>
+    <a href="trsmethodology.html" class="top-link">Methodology</a>
+    <div class="watch-pill" onclick="window.open('https://www.youtube.com/@trainingrun','_blank')">
+      <span class="play">▶</span> Watch Latest Episode
+    </div>
+  </div>
+</div>
+
+<div class="glow-line"></div>
+
+<!-- ══ TICKER ═══════════════════════════════════ -->
+<div class="glow-line-white"></div>
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ti"><div class="spinner"></div><span style="font-size:11px;color:rgba(255,255,255,0.3)">Loading scores…</span></div>
+  </div>
+</div>
+<div class="glow-line-white"></div>
+
+<!-- ══ MAIN NAV TABS ═════════════════════════════ -->
+<div class="h-nav">
+  <div class="htabs">
+    <div class="htab active">Overview</div>
+    <div class="htab" style="color:rgba(255,255,255,0.2);cursor:default">
+      TRS Arena <span class="tpill" style="background:rgba(139,92,246,0.1);color:rgba(139,92,246,0.45);border:1px dashed rgba(139,92,246,0.25)">Soon</span>
+    </div>
+    <a href="scores.html" class="htab">TRSbench <span class="tpill">Overall</span></a>
+    <a href="truscore.html" class="htab">TRUscore <span class="tpill">Truth</span></a>
+    <a href="trscode.html" class="htab">TRScode <span class="tpill">Coding</span></a>
+    <a href="trfcast.html" class="htab">TRFcast <span class="tpill">Prediction</span></a>
+    <a href="tragents.html" class="htab">TRAgents <span class="tpill">Agents</span></a>
+  </div>
+  <div class="hnav-right">
+    <a href="sources.html">Verify Sources</a><span class="hnav-pipe">|</span>
+    <a href="https://www.youtube.com/@trainingrun" target="_blank">The Show</a><span class="hnav-pipe">|</span>
+    <a href="about.html">About</a>
+  </div>
+</div>
+<div class="glow-line"></div>
+
+<!-- ══ BODY ══════════════════════════════════════ -->
+<div class="body-row">
+
+  <!-- SIDEBAR WRAPPER -->
+  <div class="sb-wrap" id="sbWrap">
+    <div class="l-sidebar" id="sidebar">
+
+      <div class="sb-section">
+        <div class="sb-section-header">Rank by <span class="sb-chevron">▾</span></div>
+        <div class="rank-toggle">
+          <div class="rtab active" onclick="setRankBy('models',this)">Models</div>
+          <div class="rtab" onclick="setRankBy('labs',this)">Labs</div>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-section-header">Pillars (7) <span class="sb-chevron">▾</span></div>
+        <div class="pillar-list">
+          <div class="pillar-item active" onclick="setPillar('overall',this)"><span class="p-icon">🏆</span> Overall <span class="p-check">✓</span></div>
+          <div class="pillar-item" onclick="setPillar('safety',this)"><span class="p-icon">🛡️</span> Safety</div>
+          <div class="pillar-item" onclick="setPillar('reasoning',this)"><span class="p-icon">🧠</span> Reasoning</div>
+          <div class="pillar-item" onclick="setPillar('coding',this)"><span class="p-icon">💻</span> Coding</div>
+          <div class="pillar-item" onclick="setPillar('human_preference',this)"><span class="p-icon">📋</span> Instruction Following</div>
+          <div class="pillar-item" onclick="setPillar('knowledge',this)"><span class="p-icon">📚</span> Knowledge</div>
+          <div class="pillar-item" onclick="setPillar('efficiency',this)"><span class="p-icon">⚡</span> Cost Efficiency</div>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-section-header">Filter by Lab <span class="sb-chevron">▾</span></div>
+        <div class="lab-list" id="labList">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-section-header">License <span class="sb-chevron">▾</span></div>
+        <div class="lic-list">
+          <div class="lic-item" onclick="setLicense('all',this)"><div class="radio on"></div> All</div>
+          <div class="lic-item" onclick="setLicense('proprietary',this)"><div class="radio"></div> Proprietary</div>
+          <div class="lic-item" onclick="setLicense('open',this)"><div class="radio"></div> Open Source</div>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-section-header">Score Range <span class="sb-chevron">▾</span></div>
+        <div class="range-bar"><div class="range-fill"></div></div>
+        <div class="range-nums"><span>0</span><span>100</span></div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+    <!-- COLLAPSE TAB -->
+    <div class="collapse-tab" id="collapseBtn" onclick="toggleSidebar()" title="Collapse / expand filters">
+      <div class="ct-arrow">‹</div>
+      <div class="ct-lines">
+        <div class="ct-line"></div>
+        <div class="ct-line"></div>
+        <div class="ct-line"></div>
+      </div>
+    </div>
+  </div><!-- /sb-wrap -->
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <div class="content-head">
+      <div class="content-title"><span class="hl">TRS</span>bench — Overall Rankings</div>
+      <div class="content-sub">Weighted composite · 7 pillars · 18 verified benchmark sources · Independent &amp; transparent</div>
+      <div class="content-meta">
+        <div class="meta-dot"></div>
+        <span id="metaUpdate">Loading…</span>
+        <span style="color:rgba(255,255,255,0.1)">|</span>
+        <span id="metaSources">18/18 sources fired</span>
+        <span style="color:rgba(255,255,255,0.1)">|</span>
+        <span id="metaCount">— models ranked</span>
+        <span style="color:rgba(255,255,255,0.1)">|</span>
+        <a href="trsmethodology.html" class="meta-link">View Methodology →</a>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="t-left">
+        <div class="btn-sm">⚙ Filters</div>
+        <div class="f-pill" id="activePillarPill">Overall ✓</div>
+        <div class="f-pill-plain" id="activeLabPill">All Labs</div>
+        <div class="f-pill-plain">All Licenses</div>
+      </div>
+      <div class="t-right">
+        <div class="search-box">
+          <span>🔍</span>
+          <input id="searchInput" type="text" placeholder="Search models…"
+            style="background:none;border:none;outline:none;color:rgba(255,255,255,0.7);font-size:11px;width:120px;"
+            oninput="renderTable()">
+        </div>
+        <div class="view-toggle">
+          <div class="vt-btn" id="btnCompact" onclick="setView('compact')">Compact</div>
+          <div class="vt-btn active" id="btnExtended" onclick="setView('extended')">Extended</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="lb-wrap">
+      <table class="lb-table" id="mainTable">
+        <thead>
+          <tr>
+            <th style="width:52px;text-align:center">#</th>
+            <th>Model</th>
+            <th>Score <span class="sort-icon">↓</span></th>
+            <th class="hide-compact">Score Bar</th>
+            <th class="hide-compact">7-Day Trend</th>
+            <th>Change</th>
+            <th style="color:rgba(255,255,255,0.15);font-style:italic">Pillars <span style="font-size:8px">coming soon</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="11"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /body-row -->
+
+<script>
+// ══ CONFIG ══════════════════════════════════════════
+const LAB_COLORS = {
+  'Anthropic':  { bg:'rgba(204,93,57,0.22)',  dot:'rgba(204,93,57,0.75)',  init:'A'  },
+  'Google':     { bg:'rgba(66,133,244,0.2)',  dot:'rgba(66,133,244,0.75)', init:'G'  },
+  'OpenAI':     { bg:'rgba(16,163,127,0.2)',  dot:'rgba(16,163,127,0.75)',init:'OA' },
+  'xAI':        { bg:'rgba(200,200,200,0.1)', dot:'rgba(200,200,200,0.5)',init:'xAI'},
+  'Mistral':    { bg:'rgba(255,140,0,0.18)',  dot:'rgba(255,140,0,0.7)',   init:'M'  },
+  'DeepSeek':   { bg:'rgba(100,149,237,0.2)', dot:'rgba(100,149,237,0.7)',init:'DS' },
+  'Meta':       { bg:'rgba(24,119,242,0.18)', dot:'rgba(24,119,242,0.7)', init:'MT' },
+  'Alibaba':    { bg:'rgba(255,102,0,0.18)',  dot:'rgba(255,102,0,0.7)',  init:'QB' },
+  'Zhipu AI':   { bg:'rgba(100,149,237,0.18)',dot:'rgba(100,149,237,0.6)',init:'ZP' },
+  'MiniMax':    { bg:'rgba(80,200,180,0.18)', dot:'rgba(80,200,180,0.6)', init:'MM' },
+  'Cohere':     { bg:'rgba(150,100,255,0.18)',dot:'rgba(150,100,255,0.6)',init:'CO' },
+};
+function labColor(company){ return LAB_COLORS[company] || {bg:'rgba(255,255,255,0.08)',dot:'rgba(255,255,255,0.4)',init:(company||'?').slice(0,2).toUpperCase()}; }
+
+// ══ STATE ════════════════════════════════════════════
+let trsData = null;
+let activeFilter = { lab:'All Labs', license:'all' };
+let searchQuery = '';
+
+// ══ UTILITIES ════════════════════════════════════════
+function fmtDate(iso){
+  const [,m,d] = iso.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[parseInt(m)-1]+' '+parseInt(d);
+}
+
+function getLatestScore(model){
+  const s = model.scores.filter(v=>v!==null && v>0);
+  return s.length ? s[s.length-1] : null;
+}
+
+function getChange(model){
+  const s = model.scores.filter(v=>v!==null && v>0);
+  if(s.length < 2) return 0;
+  return +(s[s.length-1] - s[s.length-2]).toFixed(2);
+}
+
+function getLast7(model){
+  return model.scores.filter(v=>v!==null && v>0).slice(-7);
+}
+
+function buildSparklineSVG(pts, color){
+  if(!pts || pts.length < 2) return '';
+  const mn = Math.min(...pts) - 0.5, mx = Math.max(...pts) + 0.5, rng = mx - mn || 1;
+  const svgPts = pts.map((s,i)=>{
+    const x = (i/(pts.length-1))*46;
+    const y = 20 - ((s-mn)/rng)*18;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  return `<svg class="spark" viewBox="0 0 46 20"><polyline points="${svgPts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+}
+
+function sparkColor(pts){
+  if(!pts || pts.length < 2) return 'rgba(0,229,255,0.25)';
+  const chg = pts[pts.length-1] - pts[0];
+  if(chg > 1) return 'rgba(34,211,163,0.55)';
+  if(chg < -1) return 'rgba(248,113,113,0.55)';
+  return 'rgba(0,229,255,0.35)';
+}
+
+// ══ RENDER TABLE ═════════════════════════════════════
+function renderTable(){
+  if(!trsData) return;
+  const tbody = document.getElementById('tableBody');
+  const query = (document.getElementById('searchInput').value||'').toLowerCase();
+
+  // Filter + sort models
+  let models = trsData.models
+    .filter(m => getLatestScore(m) !== null)
+    .filter(m => activeFilter.lab === 'All Labs' || m.company === activeFilter.lab)
+    .filter(m => !query || m.name.toLowerCase().includes(query) || (m.company||'').toLowerCase().includes(query))
+    .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
+
+  // Max score for bar scaling
+  const maxScore = models.length ? getLatestScore(models[0]) : 100;
+
+  if(!models.length){
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
+    document.getElementById('metaCount').textContent = '0 models ranked';
+    return;
+  }
+
+  document.getElementById('metaCount').textContent = models.length + ' models ranked';
+
+  tbody.innerHTML = models.map((m, i) => {
+    const rank = i + 1;
+    const score = getLatestScore(m);
+    const chg = getChange(m);
+    const pts7 = getLast7(m);
+    const lc = labColor(m.company);
+    const barPct = Math.round((score / maxScore) * 100);
+    const sc = sparkColor(pts7);
+    const sparkSVG = buildSparklineSVG(pts7, sc);
+
+    // Rank cell
+    let rankHTML;
+    if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal">🥇</span></div>`;
+    else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal">🥈</span></div>`;
+    else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal">🥉</span></div>`;
+    else rankHTML = `<div class="rank-cell">${rank}</div>`;
+
+    // Change cell
+    let chgHTML;
+    if(Math.abs(chg) < 0.005) chgHTML = `<span class="chg nc">+0.00</span>`;
+    else if(chg > 0) chgHTML = `<span class="chg up">↑ ${chg.toFixed(2)}</span>`;
+    else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
+
+    // Row class
+    let rowClass = '';
+    if(rank===1) rowClass = 'row-1';
+    else if(rank===2) rowClass = 'row-2';
+    else if(rank===3) rowClass = 'row-3';
+
+    // Company left-border class
+    const coClass = {
+      'Anthropic':'co-anthropic','Google':'co-google','OpenAI':'co-openai',
+      'xAI':'co-xai','Mistral':'co-mistral','DeepSeek':'co-deepseek',
+      'Meta':'co-meta','Alibaba':'co-alibaba'
+    }[m.company] || 'co-other';
+
+    return `<tr class="${rowClass} ${coClass}" onclick="window.location='scores.html'" style="cursor:pointer">
+      <td>${rankHTML}</td>
+      <td><div class="m-cell">
+        <div class="m-icon" style="background:${lc.bg}">${lc.init}</div>
+        <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} · Proprietary</div></div>
+      </div></td>
+      <td><span class="score-val">${score.toFixed(2)}</span></td>
+      <td class="hide-compact"><div class="bar-wrap"><div class="bar"><div class="bar-fill" style="width:${barPct}%"></div></div></div></td>
+      <td class="hide-compact">${sparkSVG}</td>
+      <td>${chgHTML}</td>
+      <td style="font-size:10px;color:rgba(255,255,255,0.18);font-style:italic">per-pillar data<br>coming soon</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══ BUILD TICKER ═════════════════════════════════════
+function buildTicker(models){
+  const ranked = [...models]
+    .filter(m => getLatestScore(m) !== null)
+    .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
+
+  const top5 = ranked.slice(0,5);
+
+  // Find biggest gainer/loser in last 7 days
+  let mover = {name:'',company:'',change:-999};
+  let loser  = {name:'',company:'',change:999};
+  models.forEach(m => {
+    const pts = getLast7(m);
+    if(pts.length < 2) return;
+    const chg = pts[pts.length-1] - pts[0];
+    if(chg > mover.change){ mover={name:m.name,company:m.company,change:chg}; }
+    if(chg < loser.change){ loser={name:m.name,company:m.company,change:chg}; }
+  });
+
+  let items = top5.map((m,i) => {
+    const score = getLatestScore(m);
+    const lc = labColor(m.company);
+    const chg = getChange(m);
+    const chgHTML = Math.abs(chg) < 0.005 ? '' : (chg > 0 ? `<span class="tup" style="margin-left:4px">↑${chg.toFixed(2)}</span>` : `<span class="tdn" style="margin-left:4px">↓${Math.abs(chg).toFixed(2)}</span>`);
+    return `<div class="ti"><span class="tl">#${i+1}</span><span class="tc">TRSbench</span><div class="tlogo" style="background:${lc.bg}">${lc.init}</div><span class="tn">${m.name}</span><span class="ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
+  });
+
+  if(mover.name && mover.change > 0.5){
+    const lc = labColor(mover.company);
+    items.push(`<div class="ti"><span style="font-size:12px">🔥</span><span style="font-size:9px;color:rgba(255,255,255,0.35)">On Fire</span><div class="tlogo" style="background:${lc.bg}">${lc.init}</div><span class="tn">${mover.name}</span><span class="tup">+${mover.change.toFixed(2)}</span></div>`);
+  }
+  if(loser.name && loser.change < -0.5){
+    const lc = labColor(loser.company);
+    items.push(`<div class="ti"><span style="font-size:9px;color:rgba(255,255,255,0.35)">Biggest Drop</span><div class="tlogo" style="background:${lc.bg}">${lc.init}</div><span class="tn">${loser.name}</span><span class="tdn">${loser.change.toFixed(2)}</span></div>`);
+  }
+
+  // Duplicate for seamless loop
+  const html = items.join('') + items.join('');
+  const track = document.getElementById('tickerTrack');
+  track.innerHTML = html;
+  track.classList.add('animating');
+}
+
+// ══ BUILD LAB FILTER ═════════════════════════════════
+function buildLabFilter(models){
+  const labs = [...new Set(models.map(m=>m.company).filter(Boolean))].sort();
+  const list = document.getElementById('labList');
+  list.innerHTML = `<div class="lab-item active" onclick="filterByLab('All Labs',this)">
+    <div class="radio on"></div> All Labs
+  </div>` + labs.map(lab => {
+    const lc = labColor(lab);
+    return `<div class="lab-item" onclick="filterByLab('${lab}',this)">
+      <div class="radio"></div>
+      <div class="lab-dot" style="background:${lc.dot}"></div> ${lab}
+    </div>`;
+  }).join('');
+}
+
+// ══ FILTER HANDLERS ══════════════════════════════════
+function filterByLab(lab, el){
+  activeFilter.lab = lab;
+  document.querySelectorAll('#labList .lab-item').forEach(li=>{
+    li.classList.remove('active');
+    li.querySelector('.radio').classList.remove('on');
+    li.querySelector('.radio').innerHTML = '';
+  });
+  el.classList.add('active');
+  const r = el.querySelector('.radio');
+  r.classList.add('on');
+  r.innerHTML = '';
+  document.getElementById('activeLabPill').textContent = lab;
+  renderTable();
+}
+
+function setRankBy(mode, el){
+  document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setPillar(pillar, el){
+  document.querySelectorAll('.pillar-item').forEach(p=>{ p.classList.remove('active'); p.querySelector('.p-check') && (p.querySelector('.p-check').textContent=''); });
+  el.classList.add('active');
+  const check = el.querySelector('.p-check') || el;
+  if(el.querySelector('.p-check')) el.querySelector('.p-check').textContent = '✓';
+  const label = el.textContent.replace('✓','').trim();
+  document.getElementById('activePillarPill').textContent = label + ' ✓';
+}
+
+function setLicense(mode, el){
+  document.querySelectorAll('.lic-item').forEach(li=>{ li.classList.remove('active'); const r=li.querySelector('.radio');r.classList.remove('on');r.innerHTML=''; });
+  el.classList.add('active');
+  const r = el.querySelector('.radio'); r.classList.add('on'); r.innerHTML='';
+}
+
+// ══ VIEW TOGGLE ═══════════════════════════════════════
+function setView(mode){
+  const body = document.getElementById('mainbody');
+  const btnC = document.getElementById('btnCompact');
+  const btnE = document.getElementById('btnExtended');
+  if(mode==='compact'){ body.classList.add('compact'); btnC.classList.add('active'); btnE.classList.remove('active'); }
+  else { body.classList.remove('compact'); btnE.classList.add('active'); btnC.classList.remove('active'); }
+}
+
+// ══ SIDEBAR COLLAPSE ══════════════════════════════════
+function toggleSidebar(){
+  const wrap = document.getElementById('sbWrap');
+  const sidebar = document.getElementById('sidebar');
+  const btn = document.getElementById('collapseBtn');
+  sidebar.classList.toggle('collapsed');
+  wrap.classList.toggle('is-collapsed');
+  btn.querySelector('.ct-arrow').textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
+}
+
+// ══ DATE HEADER ═══════════════════════════════════════
+(function setDate(){
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const d = new Date();
+  document.getElementById('todayDate').textContent = months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+})();
+
+// ══ LOAD DATA ═════════════════════════════════════════
+fetch('trs-data.json?v=' + Date.now())
+  .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(data => {
+    trsData = data;
+
+    // Dates / update time
+    const dates = data.dates || [];
+    const lastDate = dates.length ? dates[dates.length-1] : null;
+    if(lastDate){
+      document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+    }
+
+    // Ranked model count
+    const rankedCount = data.models.filter(m => getLatestScore(m) !== null).length;
+    document.getElementById('metaCount').textContent = rankedCount + ' models ranked';
+
+    // Build sidebar lab filter
+    buildLabFilter(data.models);
+
+    // Build ticker
+    buildTicker(data.models);
+
+    // Render table
+    renderTable();
+  })
+  .catch(err => {
+    document.getElementById('tableBody').innerHTML = `<tr><td colspan="11"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
+    document.getElementById('tickerTrack').innerHTML = '<div class="ti"><span style="font-size:11px;color:rgba(248,113,113,0.7)">⚠ Score data unavailable</span></div>';
+  });
+</script>
+</body>
+</html>
