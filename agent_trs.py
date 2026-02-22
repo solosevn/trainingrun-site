@@ -1211,6 +1211,15 @@ def main():
             else:
                 model["scores"].append(sc)
 
+        # ── Save latest per-pillar scores (for leaderboard display) ──
+        pillar_scores = {}
+        for cat, cat_scores in normalized.items():
+            val = cat_scores.get(n)
+            if val is not None:
+                pillar_scores[cat] = round(val, 1)
+        if pillar_scores:
+            model["pillar_scores"] = pillar_scores
+
     # ââ Qualification filter ââ
     def today_score(m):
         s = m["scores"][today_idx] if today_idx < len(m["scores"]) else None

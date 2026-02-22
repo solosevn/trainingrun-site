@@ -247,6 +247,10 @@ body {
 /* Change */
 .chg { font-size:11px; font-weight:700; }
 .up { color:#22d3a3; } .dn { color:#f87171; } .nc { color:rgba(255,255,255,0.18); }
+/* Pillar score cols */
+.pcol { font-size:11.5px; color:rgba(255,255,255,0.55); }
+.pcol.hi { color:#00e5ff; font-weight:700; }
+
 /* Company left-border accent on rows */
 .lb-table tbody tr { border-left: 2px solid transparent; }
 .co-anthropic { border-left-color: rgba(204,93,57,0.55) !important; }
@@ -433,7 +437,11 @@ body.compact .lb-table tbody tr { height:40px; }
             <th class="hide-compact">Score Bar</th>
             <th class="hide-compact">7-Day Trend</th>
             <th>Change</th>
-            <th style="color:rgba(255,255,255,0.15);font-style:italic">Pillars <span style="font-size:8px">coming soon</span></th>
+            <th>Safety <span style="font-size:8px;color:rgba(255,255,255,0.2)">21%</span></th>
+            <th>Reasoning <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
+            <th>Coding <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
+            <th class="hide-compact">Instruction <span style="font-size:8px;color:rgba(255,255,255,0.2)">18%</span></th>
+            <th class="hide-compact">Knowledge <span style="font-size:8px;color:rgba(255,255,255,0.2)">8%</span></th>
           </tr>
         </thead>
         <tbody id="tableBody">
@@ -508,6 +516,16 @@ function sparkColor(pts){
   return 'rgba(0,229,255,0.35)';
 }
 
+// Pillar score cell — highlights the top score in each column
+function pCol(model, pillar){
+  const ps = model.pillar_scores;
+  if(!ps || ps[pillar] == null) return '<span style="font-size:10px;color:rgba(255,255,255,0.18)">—</span>';
+  const val = ps[pillar];
+  // Highlight if this pillar score is notably high (>=90)
+  const hi = val >= 90 ? ' hi' : '';
+  return `<span class="pcol${hi}">${val.toFixed(1)}</span>`;
+}
+
 // ══ RENDER TABLE ═════════════════════════════════════
 function renderTable(){
   if(!trsData) return;
@@ -578,7 +596,11 @@ function renderTable(){
       <td class="hide-compact"><div class="bar-wrap"><div class="bar"><div class="bar-fill" style="width:${barPct}%"></div></div></div></td>
       <td class="hide-compact">${sparkSVG}</td>
       <td>${chgHTML}</td>
-      <td style="font-size:10px;color:rgba(255,255,255,0.18);font-style:italic">per-pillar data<br>coming soon</td>
+      <td>${pCol(m, 'safety')}</td>
+      <td>${pCol(m, 'reasoning')}</td>
+      <td>${pCol(m, 'coding')}</td>
+      <td class="hide-compact">${pCol(m, 'human_preference')}</td>
+      <td class="hide-compact">${pCol(m, 'knowledge')}</td>
     </tr>`;
   }).join('');
 }
