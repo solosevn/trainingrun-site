@@ -1023,24 +1023,31 @@ def _infer_company(name: str) -> str:
     return "Unknown"
 
 
+AUTO_DISCOVER_MIN_SOURCES = 2  # model must appear in 2+ pillars to join roster
+
 def auto_discover_models(data: dict, all_results: dict) -> list[str]:
     """
-    Scan all scraped pillar results. Any model name that appears in the data
-    but isn't already in the roster gets auto-added with null score history.
-    Uses match_name() to avoid duplicates from name variations.
+    Scan all scraped pillar results. A model must appear in at least
+    AUTO_DISCOVER_MIN_SOURCES separate pillars before it is added to the roster.
+    This filters out one-off fine-tunes and noise while letting legitimate
+    multi-benchmark models through. Uses match_name() to avoid duplicates.
     Returns list of newly added model names.
     """
     existing_names = [m["name"] for m in data["models"]]
     newly_added = []
 
-    # Collect every unique name scraped across all pillars
-    all_scraped: set[str] = set()
+    # Count how many pillars each scraped name appears in
+    pillar_counts: dict[str, int] = {}
     for pillar_results in all_results.values():
-        all_scraped.update(pillar_results.keys())
+        for name in pillar_results:
+            pillar_counts[name] = pillar_counts.get(name, 0) + 1
 
-    for name in sorted(all_scraped):
+    for name in sorted(pillar_counts):
         # Basic sanity filter — skip obvious garbage
         if not name or len(name) < 3 or name.replace("-", "").replace("_", "").isdigit():
+            continue
+        # Must appear in 2+ separate pillars to qualify
+        if pillar_counts[name] < AUTO_DISCOVER_MIN_SOURCES:
             continue
         # Skip if already in roster (exact or fuzzy match)
         if match_name(name, existing_names) is not None:
@@ -1057,7 +1064,7 @@ def auto_discover_models(data: dict, all_results: dict) -> list[str]:
         data["models"].append(new_entry)
         existing_names.append(name)
         newly_added.append(name)
-        log.info(f"  ★ Auto-discovered: {name} ({new_entry['company']})")
+        log.info(f"  ★ Auto-discovered: {name} ({new_entry['company']}) [{pillar_counts[name]} pillars]")
 
     return newly_added
 
