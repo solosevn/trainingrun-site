@@ -1149,7 +1149,7 @@ def main():
     if TODAY in dates:
         date_is_new = False
         today_idx   = dates.index(TODAY)
-        notify(f"âµï¸ {TODAYY} exists at index {today_idx}. Refreshing.")
+        notify(f"âµï¸ {TODAY} exists at index {today_idx}. Refreshing.")
     else:
         date_is_new = True
         data["dates"].append(TODAY)
