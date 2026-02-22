@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "5f1ce6c671a8032862b479b85114fa1280263ff8ef95c390cceafde46ba049dd",
+  "checksum": "5a7cfbb01c430e6584d33e6b417fce63ef0b67321e049663364414ed27012c30",
   "weights": {
     "factuality_simpleqa": 0.2,
     "factuality_newsguard": 0.2,
@@ -66,7 +66,8 @@
     "2026-02-15",
     "2026-02-15",
     "2026-02-19",
-    "2026-02-20"
+    "2026-02-20",
+    "2026-02-21"
   ],
   "models": [
     {
@@ -129,13 +130,15 @@
         80.15,
         80.3,
         88.14,
-        88.37
-      ]
+        88.37,
+        80.7
+      ],
+      "source_count": 1
     },
     {
       "name": "Gemini 3 Pro",
       "company": "Google",
-      "rank": 2,
+      "rank": 1,
       "scores": [
         null,
         null,
@@ -192,8 +195,10 @@
         77.65,
         77.67,
         86.03,
-        86.29
-      ]
+        86.29,
+        74.25
+      ],
+      "source_count": 2
     },
     {
       "name": "Grok 4.20",
@@ -255,8 +260,10 @@
         null,
         null,
         85.29,
-        85.71
-      ]
+        85.71,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "GPT-5.2",
@@ -318,8 +325,10 @@
         null,
         null,
         83.77,
-        83.92
-      ]
+        83.92,
+        59.65
+      ],
+      "source_count": 1
     },
     {
       "name": "DeepSeek V3.2",
@@ -381,8 +390,10 @@
         null,
         null,
         83.12,
-        83.48
-      ]
+        83.48,
+        56.14
+      ],
+      "source_count": 1
     },
     {
       "name": "Claude Sonnet 4.5",
@@ -444,8 +455,10 @@
         83.62,
         83.76,
         82.41,
-        82.68
-      ]
+        82.68,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Gemini Flash 3",
@@ -507,8 +520,10 @@
         null,
         null,
         81.88,
-        82.19
-      ]
+        82.19,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Qwen3",
@@ -570,8 +585,10 @@
         null,
         null,
         81.04,
-        81.49
-      ]
+        81.49,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "GLM-5",
@@ -633,8 +650,10 @@
         null,
         null,
         80.33,
-        80.82
-      ]
+        80.82,
+        70.18
+      ],
+      "source_count": 1
     },
     {
       "name": "Llama 4.05B",
@@ -696,8 +715,10 @@
         null,
         null,
         79.62,
-        80.17
-      ]
+        80.17,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "MiniMax M2",
@@ -759,8 +780,10 @@
         null,
         null,
         79.11,
-        79.6
-      ]
+        79.6,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Mistral Large",
@@ -822,8 +845,10 @@
         62.63,
         62.61,
         78.66,
-        79.09
-      ]
+        79.09,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "GPT-5.1",
@@ -885,8 +910,10 @@
         73.82,
         73.73,
         78.19,
-        78.83
-      ]
+        78.83,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "DeepSeek R1",
@@ -948,8 +975,10 @@
         61.47,
         61.35,
         77.74,
-        78.11
-      ]
+        78.11,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Llama 4.08B",
@@ -1011,13 +1040,15 @@
         null,
         null,
         77.28,
-        77.64
-      ]
+        77.64,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Gemini 3 Flash",
       "company": "Google",
-      "rank": 16,
+      "rank": 2,
       "scores": [
         null,
         null,
@@ -1074,8 +1105,10 @@
         null,
         null,
         76.81,
-        77.38
-      ]
+        77.38,
+        69.42
+      ],
+      "source_count": 3
     },
     {
       "name": "Cohere Aya",
@@ -1137,8 +1170,10 @@
         null,
         null,
         76.36,
-        76.81
-      ]
+        76.81,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Grok 4.1",
@@ -1200,8 +1235,10 @@
         75.08,
         75.08,
         75.92,
-        76.35
-      ]
+        76.35,
+        0.0
+      ],
+      "source_count": 0
     },
     {
       "name": "Mistral Voxtral",
@@ -1263,8 +1300,10 @@
         null,
         null,
         75.47,
-        75.92
-      ]
+        75.92,
+        0.0
+      ],
+      "source_count": 0
     }
   ]
 }

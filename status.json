@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-21T19:29:54",
+  "last_updated": "2026-02-21T19:35:12",
   "agents": {
     "trscode": {
       "name": "TRScode",
@@ -111,22 +111,33 @@
       "error": null
     },
     "truscore": {
-      "name": "TRUscore",
+      "name": "TRUscore DDP",
       "label": "Truth & Neutrality",
-      "emoji": "\u2696\ufe0f",
-      "enabled": false,
-      "last_run": null,
-      "last_run_date": null,
-      "status": "disabled",
-      "duration_seconds": null,
+      "emoji": "\u00f0\u009f\u008e\u00af",
+      "enabled": true,
+      "last_run": "2026-02-21T19:35:12",
+      "last_run_date": "2026-02-21",
+      "status": "success",
+      "duration_seconds": 149,
       "sources_total": 7,
-      "sources_hit": null,
-      "models_qualified": null,
-      "top_model": null,
-      "top_score": null,
-      "top5": [],
-      "leaderboard_url": "/truscore.html",
-      "next_run": null,
+      "sources_hit": 6,
+      "models_qualified": 2,
+      "top_model": "Gemini 3 Pro",
+      "top_score": 74.25,
+      "top5": [
+        {
+          "rank": 1,
+          "name": "Gemini 3 Pro",
+          "score": 74.25
+        },
+        {
+          "rank": 2,
+          "name": "Gemini 3 Flash",
+          "score": 69.42
+        }
+      ],
+      "leaderboard_url": "/truscore-scores.html",
+      "next_run": "2026-02-22T05:00:00",
       "error": null
     },
     "tragents": {
