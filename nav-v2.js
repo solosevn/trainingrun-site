@@ -13,7 +13,7 @@ const tabs = [
   { label:'Overview',   pill:'',          href:'v2.html',     keys:['v2.html','index.html','/','overview'] },
   { label:'TRS Arena',  pill:'Soon',      href:'#',           keys:['__never__'], soon:true },
   { label:'TRSbench',   pill:'Overall',   href:'scores.html', keys:['scores','trsbench'] },
-  { label:'TRUscore',   pill:'Truth',     href:'truscore.html',keys:['truscore'] },
+  { label:'TRUscore',   pill:'Truth',     href:'truscore-scores.html',keys:['truscore'] },
   { label:'TRScode',    pill:'Coding',    href:'trscode.html', keys:['trscode'] },
   { label:'TRFcast',    pill:'Prediction',href:'trfcast.html', keys:['trfcast'] },
   { label:'TRAgents',   pill:'Agents',    href:'tragents-scores.html',keys:['tragents','tragent'] },
