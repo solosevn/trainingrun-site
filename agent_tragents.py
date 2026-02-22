@@ -719,7 +719,7 @@ def generate_checksum(data: dict) -> str:
 def _infer_company(name: str) -> str:
     """Best-effort company inference from model name keywords."""
     n = name.lower()
-    if any(x in n for x in ["gpt", "o1", "o3", "o4", "chatgpt", "davinci", "turbo"]):
+    if any(x in n for x in ["gpt", "o1-", "o3-", "o4-", "chatgpt", "davinci"]):
         return "OpenAI"
     if any(x in n for x in ["claude", "opus", "sonnet", "haiku"]):
         return "Anthropic"
@@ -727,9 +727,9 @@ def _infer_company(name: str) -> str:
         return "Google"
     if any(x in n for x in ["grok"]):
         return "xAI"
-    if any(x in n for x in ["llama", "meta-"]):
+    if any(x in n for x in ["llama", "meta-", "turbo"]):
         return "Meta"
-    if any(x in n for x in ["mistral", "mixtral", "pixtral", "codestral", "voxtral"]):
+    if any(x in n for x in ["mistral", "mixtral", "pixtral", "codestral", "voxtral", "devstral"]):
         return "Mistral"
     if any(x in n for x in ["deepseek"]):
         return "DeepSeek"
@@ -753,6 +753,18 @@ def _infer_company(name: str) -> str:
         return "TII"
     if any(x in n for x in ["yi-", "01.ai"]):
         return "01.AI"
+    if any(x in n for x in ["granite", "ibm"]):
+        return "IBM"
+    if any(x in n for x in ["olmo", "olmoe", "molmo", "tulu"]):
+        return "AI2"
+    if any(x in n for x in ["palmyra", "writer"]):
+        return "Writer"
+    if any(x in n for x in ["dbrx", "databricks"]):
+        return "Databricks"
+    if any(x in n for x in ["mercury", "inception"]):
+        return "Inception"
+    if any(x in n for x in ["intellect"]):
+        return "PrimeIntellect"
     return "Unknown"
 
 
