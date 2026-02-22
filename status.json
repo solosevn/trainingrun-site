@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-22T06:10:57",
+  "last_updated": "2026-02-22T06:49:34",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -94,12 +94,12 @@
     "truscore": {
       "name": "TRUscore DDP",
       "label": "Truth & Neutrality",
-      "emoji": "\ud83c\udfaf",
+      "emoji": "\u00f0\u009f\u008e\u00af",
       "enabled": true,
-      "last_run": "2026-02-21T19:35:12",
-      "last_run_date": "2026-02-21",
+      "last_run": "2026-02-22T06:49:34",
+      "last_run_date": "2026-02-22",
       "status": "success",
-      "duration_seconds": 149,
+      "duration_seconds": 145,
       "sources_total": 7,
       "sources_hit": 6,
       "models_qualified": 2,
@@ -118,7 +118,7 @@
         }
       ],
       "leaderboard_url": "/truscore-scores.html",
-      "next_run": "2026-02-22T05:00:00",
+      "next_run": "2026-02-23T05:00:00",
       "error": null
     },
     "tragents": {
