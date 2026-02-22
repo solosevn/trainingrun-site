@@ -28,13 +28,14 @@
     "2026-02-17",
     "2026-02-20",
     "2026-02-20",
-    "2026-02-20"
+    "2026-02-20",
+    "2026-02-21"
   ],
   "models": [
     {
       "name": "Claude Opus 4.6",
       "company": "Anthropic",
-      "rank": 1,
+      "rank": 7,
       "scores": [
         null,
         null,
@@ -55,7 +56,8 @@
         73.8,
         93.15,
         93.15,
-        93.15
+        93.15,
+        44.53
       ]
     },
     {
@@ -82,7 +84,8 @@
         null,
         null,
         null,
-        93
+        93,
+        13.07
       ]
     },
     {
@@ -109,7 +112,8 @@
         79.41,
         90.06,
         90.06,
-        90.06
+        90.06,
+        63.98
       ]
     },
     {
@@ -136,13 +140,14 @@
         75.63,
         89.99,
         89.99,
-        89.99
+        89.99,
+        58.28
       ]
     },
     {
       "name": "DeepSeek V3.2",
       "company": "DeepSeek",
-      "rank": 5,
+      "rank": 2,
       "scores": [
         75.85,
         75.64,
@@ -163,13 +168,14 @@
         75.87,
         88.96,
         88.96,
-        88.96
+        88.96,
+        76.0
       ]
     },
     {
       "name": "Claude Sonnet 4.5",
       "company": "Anthropic",
-      "rank": 6,
+      "rank": 9,
       "scores": [
         68.58,
         69.08,
@@ -190,7 +196,8 @@
         69.05,
         87.7,
         87.7,
-        87.7
+        87.7,
+        34.57
       ]
     },
     {
@@ -217,13 +224,14 @@
         null,
         null,
         null,
-        86.57
+        86.57,
+        0.0
       ]
     },
     {
       "name": "Qwen3",
       "company": "Alibaba",
-      "rank": 8,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -244,13 +252,14 @@
         null,
         null,
         null,
-        86.68
+        86.68,
+        32.29
       ]
     },
     {
       "name": "GLM-5",
       "company": "Zhipu AI",
-      "rank": 9,
+      "rank": 1,
       "scores": [
         78.57,
         78.29,
@@ -271,7 +280,8 @@
         78.46,
         85.8,
         85.8,
-        85.8
+        85.8,
+        84.0
       ]
     },
     {
@@ -298,7 +308,8 @@
         null,
         null,
         null,
-        84.36
+        84.36,
+        67.6
       ]
     },
     {
@@ -325,7 +336,8 @@
         null,
         null,
         null,
-        84.8
+        84.8,
+        82.71
       ]
     },
     {
@@ -352,7 +364,8 @@
         null,
         null,
         null,
-        84.11
+        84.11,
+        0.0
       ]
     },
     {
@@ -379,7 +392,8 @@
         63.33,
         83.95,
         83.95,
-        83.95
+        83.95,
+        90.0
       ]
     },
     {
@@ -406,7 +420,8 @@
         68.78,
         82.36,
         82.36,
-        82.36
+        82.36,
+        34.2
       ]
     },
     {
@@ -433,13 +448,14 @@
         null,
         null,
         null,
-        82.46
+        82.46,
+        0.0
       ]
     },
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 16,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -460,7 +476,8 @@
         null,
         null,
         null,
-        82.16
+        82.16,
+        24.99
       ]
     },
     {
@@ -487,13 +504,14 @@
         82.73,
         null,
         null,
-        null
+        null,
+        0.0
       ]
     },
     {
       "name": "Gemini 3 Flash",
       "company": "Google",
-      "rank": 999,
+      "rank": 3,
       "scores": [
         81.59,
         81.6,
@@ -514,13 +532,14 @@
         81.68,
         null,
         null,
-        null
+        null,
+        63.76
       ]
     },
     {
       "name": "Kimi K2.5",
       "company": "Moonshot AI",
-      "rank": 999,
+      "rank": 5,
       "scores": [
         80.56,
         80.61,
@@ -541,13 +560,14 @@
         80.61,
         null,
         null,
-        null
+        null,
+        55.45
       ]
     },
     {
       "name": "MiniMax M2.5",
       "company": "MiniMax",
-      "rank": 999,
+      "rank": 6,
       "scores": [
         79.49,
         79.46,
@@ -568,7 +588,8 @@
         79.08,
         null,
         null,
-        null
+        null,
+        52.45
       ]
     },
     {
@@ -595,13 +616,14 @@
         73.15,
         null,
         null,
-        null
+        null,
+        59.38
       ]
     },
     {
       "name": "GPT-5",
       "company": "OpenAI",
-      "rank": 999,
+      "rank": 8,
       "scores": [
         67.67,
         67.75,
@@ -622,7 +644,8 @@
         67.52,
         null,
         null,
-        null
+        null,
+        36.2
       ]
     }
   ],
@@ -643,5 +666,5 @@
       "company": "Alibaba"
     }
   ],
-  "checksum": "05f8db3f21e670f8e10f64327abfdc02b47d09cb97ba839dd5a8b9688c9bf68f"
+  "checksum": "37b867b20c81c40b5e985608a008175b3c34877b24832418a36db12fe1b3be8c"
 }
