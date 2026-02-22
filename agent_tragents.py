@@ -723,7 +723,7 @@ def _infer_company(name: str) -> str:
         return "OpenAI"
     if any(x in n for x in ["claude", "opus", "sonnet", "haiku"]):
         return "Anthropic"
-    if any(x in n for x in ["gemini", "gemma", "palm", "bard"]):
+    if any(x in n for x in ["gemini", "gemma", "bard"]):
         return "Google"
     if any(x in n for x in ["grok"]):
         return "xAI"
@@ -757,7 +757,7 @@ def _infer_company(name: str) -> str:
         return "IBM"
     if any(x in n for x in ["olmo", "olmoe", "molmo", "tulu"]):
         return "AI2"
-    if any(x in n for x in ["palmyra", "writer"]):
+    if any(x in n for x in ["palmyra", "palm", "writer"]):
         return "Writer"
     if any(x in n for x in ["dbrx", "databricks"]):
         return "Databricks"
