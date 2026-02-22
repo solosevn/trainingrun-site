@@ -708,7 +708,7 @@ function buildTicker(models){
     const lc = labColor(m.company);
     const chg = getChange(m);
     const chgHTML = Math.abs(chg) < 0.005 || Math.abs(chg) > 12 ? '' : (chg > 0 ? `<span class="tup" style="margin-left:4px">↑${chg.toFixed(2)}</span>` : `<span class="tdn" style="margin-left:4px">↓${Math.abs(chg).toFixed(2)}</span>`);
-    return `<div class="ti"><span class="tl">#${i+1}</span><span class="tc">TRSbench</span>${logoImg(m.company, 18)}<span class="tn">${m.name}</span><span class="ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
+    return `<div class="ti"><span class="tl">#${i+1}</span>${logoImg(m.company, 18)}<span class="tn">${m.name}</span><span style="font-size:9px;color:rgba(255,255,255,0.3);margin:0 4px">${m.company}</span><span class="ts">${score.toFixed(2)}</span>${chgHTML}</div>`;
   });
 
   if(mover.name && mover.change > 0.5 && mover.change <= 12){
