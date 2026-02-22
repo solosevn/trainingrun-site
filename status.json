@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-22T06:53:13",
+  "last_updated": "2026-02-22T06:55:07",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -51,10 +51,10 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-02-21T19:29:54",
-      "last_run_date": "2026-02-21",
+      "last_run": "2026-02-22T06:55:07",
+      "last_run_date": "2026-02-22",
       "status": "success",
-      "duration_seconds": 40,
+      "duration_seconds": 49,
       "sources_total": 4,
       "sources_hit": 8,
       "models_qualified": 8,
@@ -88,7 +88,7 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-02-22T05:00:00",
+      "next_run": "2026-02-23T05:00:00",
       "error": null
     },
     "truscore": {
