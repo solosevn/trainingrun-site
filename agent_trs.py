@@ -1130,7 +1130,7 @@ def main():
 
     mode = "DRY RUN ð" if DRY_RUN else "LIVE ð"
     log.info(f"TRSbench DDP | {TODAY} | {mode}")
-    notify(f"ð¤ <b>TRSbench DDP starting</b>\nð {TODAY}\nâï¸ {mode}\n{TETAFAL_SOURCES} sources â trs-data.json")
+    notify(f"ð¤ <b>TRSbench DDP starting</b>\nð {TODAY}\nâï¸ {mode}\n{TOTAL_SOURCES} sources â trs-data.json")
 
     # ââ Load data ââ
     if not DATA_FILE.exists():
