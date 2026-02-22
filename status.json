@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-21T03:53:41",
+  "last_updated": "2026-02-21T19:25:03",
   "agents": {
     "trscode": {
       "name": "TRScode",
@@ -120,6 +120,25 @@
       "top5": [],
       "leaderboard_url": "/tragents.html",
       "next_run": null,
+      "error": null
+    },
+    "trsbench": {
+      "name": "TRSbench DDP",
+      "label": "Overall Rankings",
+      "emoji": "\ud83c\udfc6",
+      "enabled": true,
+      "last_run": "2026-02-21T19:25:03",
+      "last_run_date": "2026-02-21",
+      "status": "success",
+      "duration_seconds": 352,
+      "sources_total": 7,
+      "sources_hit": 5,
+      "models_qualified": 0,
+      "top_model": null,
+      "top_score": null,
+      "top5": [],
+      "leaderboard_url": "/scores.html",
+      "next_run": "2026-02-22T05:00:00",
       "error": null
     }
   }
