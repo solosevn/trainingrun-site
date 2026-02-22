@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-21T23:34:55",
+  "last_updated": "2026-02-22T06:10:57",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -171,10 +171,10 @@
       "label": "Overall Rankings",
       "emoji": "\u00f0\u009f\u008f\u0086",
       "enabled": true,
-      "last_run": "2026-02-21T23:34:55",
-      "last_run_date": "2026-02-21",
+      "last_run": "2026-02-22T06:10:57",
+      "last_run_date": "2026-02-22",
       "status": "success",
-      "duration_seconds": 568,
+      "duration_seconds": 570,
       "sources_total": 18,
       "sources_hit": 18,
       "models_qualified": 2,
@@ -189,11 +189,11 @@
         {
           "rank": 2,
           "name": "Claude Opus 4.6",
-          "score": 87.76
+          "score": 87.86
         }
       ],
       "leaderboard_url": "/scores.html",
-      "next_run": "2026-02-22T05:00:00",
+      "next_run": "2026-02-23T05:00:00",
       "error": null
     }
   }
