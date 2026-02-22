@@ -6,7 +6,7 @@
   Bible: TRSbench V2.4 (Feb 21, 2026)
 ════════════════════════════════════════════════════════════════════
   7 sources scraped:
-    1. Safety Bench        huggingface.co/spaces           0.21
+    1. Safety (HELM)       crfm.stanford.edu/helm/safety   0.21
     2. Reasoning (ARC)     arcprize.org/arc-agi-2          0.20
     3. Coding              swebench.com                    0.20
     4. Human Preference    lmarena.ai                      0.18
@@ -18,9 +18,9 @@
   Scoring: Option A — null categories excluded, available weights renormalized to 1.0.
 
   Usage:
-    python3 agent_trsbench.py                  # live run
-    python3 agent_trsbench.py --dry-run        # scrape + calculate, no push
-    python3 agent_trsbench.py --test-telegram  # test Telegram connection only
+    python3 agent_trs.py                  # live run
+    python3 agent_trs.py --dry-run        # scrape + calculate, no push
+    python3 agent_trs.py --test-telegram  # test Telegram connection only
 
   Env vars:
     TELEGRAM_TOKEN     BotFather token
@@ -414,36 +414,49 @@ def scrape_openrouter_usage() -> dict[str, float]:
 
 
 def scrape_safebench() -> dict[str, float]:
-    """Scale SEAL MASK leaderboard -- model honesty under pressure (safety proxy).
-    Higher score = safer/more honest. source: scale.com/leaderboard/mask
-    Uses playwright innerText parsing: rank lines followed by name then score."""
+    """HELM Safety leaderboard (Stanford CRFM) — mean safety score across 5 benchmarks.
+    Source: https://crfm.stanford.edu/helm/safety/latest/
+    Measures: HarmBench, SimpleSafetyTests, BBQ, Anthropic Red Team, XSTest.
+    Higher score = safer. HELM scores are 0-1, converted to 0-100 for normalization."""
     scores: dict[str, float] = {}
     try:
-        log.info("Scraping SafeBench (safety)...")
-        url = "https://scale.com/leaderboard/mask"
-        text = playwright_get_innertext(url, wait_ms=10000)
-        lines = [l.strip() for l in text.split('\n') if l.strip()]
-        i = 0
-        while i < len(lines) - 2:
-            if re.match(r'^\d+$', lines[i]):
-                name = lines[i + 1]
-                score_raw = lines[i + 2]
-                m = re.match(r'^(\d+(?:\.\d+)?)', score_raw)
-                if (m and 3 <= len(name) <= 80
-                        and not re.match(r'^[\d\u00b1\.\+\-\s]+$', name)):
-                    try:
-                        val = float(m.group(1))
-                        if 0 < val <= 100:
-                            if name not in scores or val > scores[name]:
-                                scores[name] = val
-                            i += 3
-                            continue
-                    except ValueError:
-                        pass
-            i += 1
-        log.info(f"  \u2705 SafeBench (SEAL MASK): {len(scores)} models")
+        log.info("Scraping HELM Safety (Stanford CRFM)...")
+        url = "https://crfm.stanford.edu/helm/safety/latest/#/leaderboard"
+        html = playwright_get(url, wait_ms=10000)
+        soup = BeautifulSoup(html, "html.parser")
+        tables = soup.find_all("table")
+        for table in tables:
+            rows = table.find_all("tr")
+            if len(rows) < 2:
+                continue
+            headers = [th.get_text(strip=True).lower() for th in rows[0].find_all(["th", "td"])]
+            model_col = next((i for i, h in enumerate(headers) if "model" in h), 0)
+            score_col = next((i for i, h in enumerate(headers) if "mean" in h or "score" in h), 1)
+            for row in rows[1:]:
+                cells = row.find_all(["td", "th"])
+                if len(cells) <= max(model_col, score_col):
+                    continue
+                raw_name = cells[model_col].get_text(strip=True)
+                # Strip date/qualifier in parens: "Claude 4 Sonnet (20250514)" -> "Claude 4 Sonnet"
+                name = re.sub(r'\s*\([^)]*\)', '', raw_name).strip()
+                if not name or len(name) < 2:
+                    continue
+                score_raw = cells[score_col].get_text(strip=True)
+                try:
+                    val = float(score_raw)
+                    # HELM scores are 0-1 floats — convert to 0-100
+                    if 0 < val <= 1.0:
+                        val = round(val * 100, 4)
+                    if 0 < val <= 100:
+                        if name not in scores or val > scores[name]:
+                            scores[name] = val
+                except ValueError:
+                    pass
+            if scores:
+                break
+        log.info(f" \u2705 HELM Safety: {len(scores)} models")
     except Exception as e:
-        log.warning(f"  \u26a0\ufe0f SafeBench not available: {e}")
+        log.warning(f" \u26a0\ufe0f HELM Safety not available: {e}")
     return scores
 def normalize_across_models(models: list, category: str, raw_values: dict[str, float]) -> dict[str, float]:
     """
