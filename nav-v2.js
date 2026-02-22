@@ -22,7 +22,7 @@ const tabs = [
 // ── Lab logos + fallback colors ───────────────────────────────────────────────
 const LOGOS = {
   'Anthropic':   'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
-  'Google':      'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+  'Google':      'https://www.google.com/s2/favicons?domain=google.com&sz=64',
   'OpenAI':      'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
   'xAI':         'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
   'Mistral':     'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
