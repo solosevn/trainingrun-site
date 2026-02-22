@@ -1289,8 +1289,9 @@ def main():
     new_models = auto_discover_models(data, all_results)
     if new_models:
         log.info(f"★ Auto-discovered {len(new_models)} new models: {new_models}")
-        notify(f"★ <b>Auto-discovered {len(new_models)} new models</b>\n" +
-               "\n".join(f"  • {n}" for n in new_models))
+        notify(f"★ <b>Auto-discovered {len(new_models)} new models</b>\n"
+               + "\n".join(f"  • {n}" for n in new_models[:10])
+               + (f"\n  ...and {len(new_models)-10} more" if len(new_models) > 10 else ""))
         models = data["models"]   # refresh reference after append
         names  = [m["name"] for m in models]
 
