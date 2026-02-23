@@ -443,9 +443,7 @@ body.compact .lb-table tbody tr { height:40px; }
           <tr>
             <th style="width:52px;text-align:center">#</th>
             <th>Model</th>
-            <th>Score <span class="sort-icon">↓</span></th>
-
-            <th>Change</th>
+            <th style="min-width:130px">Score <span class="sort-icon">↓</span></th>
             <th>Safety <span style="font-size:8px;color:rgba(255,255,255,0.2)">21%</span></th>
             <th>Reasoning <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
             <th>Coding <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
@@ -456,7 +454,7 @@ body.compact .lb-table tbody tr { height:40px; }
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
+          <tr><td colspan="12"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -603,7 +601,7 @@ function renderTable(){
   const maxScore = models.length ? getLatestScore(models[0]) : 100;
 
   if(!models.length){
-    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
     document.getElementById('metaCount').textContent = '0 models ranked';
     return;
   }
@@ -627,7 +625,7 @@ function renderTable(){
       const sparkSVG = buildSparklineSVG(pts7, sc);
       const covered = getCoverage(m);
       const coverageBadge = covered > 0
-        ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-left:5px;font-weight:400">${covered}/7</span>`
+        ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/7</span>`
         : '';
       const staleRowStyle = isStale ? 'opacity:0.62;' : '';
       const staleScoreNote = isStale
@@ -666,8 +664,7 @@ function renderTable(){
         ${logoImg(m.company, 28)}
         <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} &middot; Proprietary</div></div>
       </div></td>
-      <td><span class="score-val">${score.toFixed(2)}</span>${coverageBadge}${staleScoreNote}</td>
-      <td>${chgHTML}</td>
+      <td>${coverageBadge}<span class="score-val">${score.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span>${staleScoreNote}</td>
       <td>${pCol(m, 'safety')}</td>
       <td>${pCol(m, 'reasoning')}</td>
       <td>${pCol(m, 'coding')}</td>
@@ -681,7 +678,7 @@ function renderTable(){
 
   // Stale divider row
   const staleDivider = staleModels.length ? `
-    <tr><td colspan="13" style="padding:6px 16px;background:rgba(255,200,0,0.04);border-top:1px solid rgba(255,200,0,0.12);border-bottom:1px solid rgba(255,200,0,0.08);">
+    <tr><td colspan="12" style="padding:6px 16px;background:rgba(255,200,0,0.04);border-top:1px solid rgba(255,200,0,0.12);border-bottom:1px solid rgba(255,200,0,0.08);">
       <span style="font-size:10px;color:rgba(255,200,0,0.45);letter-spacing:0.08em">&#9203; NOT SCORED TODAY &middot; Last known scores shown &middot; Updates on next scrape</span>
     </td></tr>` : '';
 
@@ -878,7 +875,7 @@ fetch('trs-data.json?v=' + Date.now())
     renderTable();
   })
   .catch(err => {
-    document.getElementById('tableBody').innerHTML = `<tr><td colspan="13"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
+    document.getElementById('tableBody').innerHTML = `<tr><td colspan="12"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
     document.getElementById('tickerTrack').innerHTML = '<div class="ti"><span style="font-size:11px;color:rgba(248,113,113,0.7)">⚠ Score data unavailable</span></div>';
   });
 </script>
