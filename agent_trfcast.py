@@ -544,14 +544,27 @@ def auto_discover_models(data: dict, all_results: dict) -> list[str]:
 
 def match_name(scraped: str, existing: list[str]) -> str | None:
     s = scraped.lower().strip()
-    for name in existing:
-        if name.lower() == s:
-            return name
-    for name in existing:
-        n = name.lower()
-        if s in n or n in s:
-            return name
-    s_tok = set(s.replace("-", " ").replace("_", " ").split())
+    # Normalize known short-name patterns to canonical forms before matching
+    _PREFIXES = [
+        ("opus ",   "claude opus "),
+        ("sonnet ",  "claude sonnet "),
+        ("haiku ",   "claude haiku "),
+    ]
+    s_expanded = s
+    for short_prefix, full_prefix in _PREFIXES:
+        if s.startswith(short_prefix) and not s.startswith("claude"):
+            s_expanded = full_prefix + s[len(short_prefix):]
+            break
+    for candidate in [s, s_expanded]:
+        for name in existing:
+            if name.lower() == candidate:
+                return name
+    for candidate in [s, s_expanded]:
+        for name in existing:
+            n = name.lower()
+            if candidate in n or n in candidate:
+                return name
+    s_tok = set(s_expanded.replace("-", " ").replace("_", " ").split())
     for name in existing:
         n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
         if len(s_tok & n_tok) >= 2:

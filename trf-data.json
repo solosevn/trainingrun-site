@@ -2310,7 +2310,7 @@
       }
     },
     {
-      "name": "Opus 4.5",
+      "name": "Claude Opus 4.5",
       "company": "Anthropic",
       "rank": 999,
       "scores": [
@@ -2389,7 +2389,7 @@
       }
     },
     {
-      "name": "Opus 4.6",
+      "name": "Claude Opus 4.6",
       "company": "Anthropic",
       "rank": 999,
       "scores": [
@@ -2863,7 +2863,7 @@
       }
     },
     {
-      "name": "Sonnet 4.6",
+      "name": "Claude Sonnet 4.6",
       "company": "Anthropic",
       "rank": 999,
       "scores": [
