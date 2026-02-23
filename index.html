@@ -1,800 +1,1207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-20ZZ8BG99X"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-20ZZ8BG99X');
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Training Run | The AI Benchmark</title>
-  <meta name="description" content="Training Run - The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.">
-  <meta property="og:title" content="Training Run | The AI Benchmark">
-  <meta property="og:description" content="The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://trainingrun.ai">
-  <link rel="canonical" href="https://trainingrun.ai">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    /* ââ Hero: compact, 42vh ââ */
-    .hero { min-height: 34vh; padding-top: 186px; padding-bottom: 36px; }
-    .hero-badge { font-size: 10px; padding: 6px 16px; margin-bottom: 24px; }
-    .hero h1 { font-size: clamp(48px, 9.6vw, 112px); margin-bottom: 12px; }
-    .hero .tagline { font-size: clamp(13px, 2.4vw, 19px); margin-bottom: 24px; }
-    .hero-description { font-size: 14px; margin-bottom: 24px; }
-    .cta-button.primary { padding: 11px 25px; font-size: 14px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1440">
+<title>Training Run — AI Leaderboard & Daily Benchmark Rankings</title>
+<meta name="description" content="Training Run: Independent daily AI benchmark rankings. Live scores for TRSbench, TRUscore, TRScode, TRFcast, and TRAgents — updated every morning at 7AM CST.">
+<meta name="keywords" content="AI leaderboard, AI benchmark, daily AI rankings, LLM leaderboard, GPT benchmark, Claude benchmark, Gemini benchmark, AI conditioning, TRSbench">
+<meta property="og:title" content="Training Run — Daily AI Benchmark Rankings">
+<meta property="og:description" content="Independent daily AI leaderboard. Live scores updated every morning. TRSbench, TRUscore, TRScode, TRFcast, TRAgents.">
+<meta property="og:url" content="https://trainingrun.ai/">
+<meta name="twitter:card" content="summary_large_image">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #07071a;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-width: 1300px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-    /* ââ Leaderboard section ââ */
-    .leaderboards {
-      max-width: 1260px;
-      margin: -6px auto 0;
-      padding: 0 24px 40px;
-    }
+/* ─── CYAN GLOW LINE ─── */
+.glow-line {
+  height: 1px; flex-shrink: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.1) 10%, #00e5ff 40%, #00e5ff 60%, rgba(0,229,255,0.1) 90%, transparent 100%);
+  box-shadow: 0 0 6px rgba(0,229,255,0.45), 0 0 18px rgba(0,229,255,0.1);
+}
 
-    /* ââ TRSbench wrapper: narrower, centered ââ */
-    .trsbench-wrapper {
-      max-width: 540px;
-      margin: 0 auto 14px;
-    }
+/* ─── WHITE GLOW LINE (ticker borders) ─── */
+.glow-line-white {
+  height: 1px; flex-shrink: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 8%, rgba(255,255,255,0.65) 35%, rgba(255,255,255,0.65) 65%, rgba(255,255,255,0.08) 92%, transparent 100%);
+  box-shadow: 0 0 6px rgba(255,255,255,0.35), 0 0 16px rgba(255,255,255,0.08);
+}
 
-    /* ââ Section headers ââ */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .section-header.centered {
-      justify-content: center;
-      position: relative;
-    }
-    .section-header.centered .section-link { position: absolute; right: 0; }
+/* ─── TOP BAR ─── */
+.top-bar {
+  flex-shrink: 0; background: #0a0a20; height: 50px;
+  display: flex; align-items: center; padding: 0 24px; position: relative;
+}
+.logo-block { display:flex; flex-direction:column; gap:1px; }
+.logo-text { font-size:21px; font-weight:800; color:#00e5ff; letter-spacing:-0.5px; line-height:1; text-shadow:0 0 14px rgba(0,229,255,0.5); }
+.logo-sub  { font-size:10px; font-weight:600; letter-spacing:2.8px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
+.top-center { position:absolute; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
+.top-right { margin-left:auto; display:flex; align-items:center; gap:18px; }
+.top-link { font-size:11.5px; color:rgba(255,255,255,0.38); cursor:pointer; text-decoration:none; }
+.top-link:hover { color:rgba(255,255,255,0.7); }
+.watch-pill { display:flex; align-items:center; gap:6px; background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.2)); border:1px solid rgba(139,92,246,0.35); border-radius:20px; padding:5px 13px; font-size:11px; font-weight:700; color:rgba(255,255,255,0.82); cursor:pointer; }
+.watch-pill:hover { border-color:rgba(139,92,246,0.6); }
+.play { font-size:9px; color:#a78bfa; }
 
-    .section-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.5px;
-    }
-    .section-title .cyan { color: #00d4ff; }
-    .section-title .red  { color: #ff5252; text-shadow: 0 0 8px rgba(255,82,82,0.5); }
+/* ─── TICKER ─── */
+.ticker { flex-shrink:0; background:#000; height:46px; overflow:hidden; display:flex; align-items:center; border-bottom:1px solid rgba(0,212,255,0.18); }
+.ticker-track { display:flex; align-items:center; width:max-content; white-space:nowrap; }
+.ticker-track.animating { animation:tick 56s linear infinite; }
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-track:hover { animation-play-state:paused; }
+.ticker-item { display:inline-flex;align-items:center;gap:10px;padding:0 30px;text-decoration:none;color:rgba(255,255,255,0.82);border-right:1px solid rgba(255,255,255,0.08);transition:color 0.2s;cursor:pointer; }
+.ticker-item:hover { color:#00d4ff; }
+.ticker-logo { height:30px;width:30px;object-fit:contain;border-radius:5px;flex-shrink:0;background:rgba(255,255,255,0.06);padding:2px; }
+.ticker-logo-fb { height:30px;width:30px;border-radius:5px;background:rgba(255,255,255,0.08);display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:rgba(255,255,255,0.45);flex-shrink:0; }
+.ticker-badge { display:inline-flex;flex-direction:column;gap:1px;line-height:1.25; }
+.ticker-cat  { font-size:9px;font-weight:700;color:rgba(255,255,255,0.38);letter-spacing:0.6px; }
+.ticker-name { font-size:12px;font-weight:600;color:#ffffff; }
+.ticker-val  { font-size:11px;font-weight:700;margin-left:2px; }
+.ticker-val.up, .ticker-val.down { font-size:22px;line-height:1;margin-left:6px; }
+.ticker-val.up   { color:#00e676; }
+.ticker-val.down { color:#ff5252; }
+.ticker-val.neutral { color:rgba(0,212,255,0.85); }
+.lab-logo { object-fit:contain; border-radius:4px; background:rgba(255,255,255,0.06); padding:2px; flex-shrink:0; display:block; }
+.ts { font-size:12px; font-weight:800; color:#00e5ff; }
+.tup { color:#22d3a3; font-size:10.5px; font-weight:700; }
+.tdn { color:#f87171; font-size:10.5px; font-weight:700; }
 
-    .section-link {
-      font-size: 10px;
-      font-weight: 600;
-      color: #ffffff;
-      text-shadow: 0 0 8px rgba(255,255,255,0.5);
-      text-decoration: none;
-      transition: color 0.2s, text-shadow 0.2s;
-      white-space: nowrap;
-    }
-    .section-link:hover { color: #00d4ff; text-shadow: 0 0 8px rgba(0,212,255,0.6); }
+/* ─── HORIZONTAL NAV ─── */
+.h-nav {
+  flex-shrink:0; background:#0a0a20; height:42px;
+  display:flex; align-items:stretch; padding:0 24px; justify-content:space-between;
+}
+.htabs { display:flex; align-items:stretch; }
+.htab {
+  display:flex; align-items:center; gap:6px; padding:0 15px;
+  font-size:13px; font-weight:400; color:rgba(255,255,255,0.65); cursor:pointer;
+  position:relative; border-bottom:2px solid transparent; transition:color .2s; white-space:nowrap;
+  text-decoration:none;
+}
+.htab:hover { color:rgba(255,255,255,0.72); }
+.htab.active { color:#00e5ff; border-bottom-color:#00e5ff; text-shadow:0 0 10px rgba(0,229,255,0.3); }
+.htab.active::after {
+  content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px;
+  box-shadow:0 0 8px #00e5ff,0 0 16px rgba(0,229,255,0.35);
+}
+.tpill { font-size:8px; font-weight:400; letter-spacing:.8px; text-transform:uppercase; background:rgba(255,255,255,0.05); border-radius:3px; padding:1px 5px; color:rgba(255,255,255,0.8); }
+.htab.active .tpill { background:rgba(0,229,255,0.1); color:rgba(0,229,255,0.55); }
+.hnav-right { display:flex; align-items:center; gap:16px; }
+.hnav-right a { font-size:11px; color:rgba(255,255,255,0.3); cursor:pointer; text-decoration:none; }
+.hnav-right a:hover { color:rgba(255,255,255,0.6); }
+.hnav-pipe { color:rgba(255,255,255,0.08); }
 
-    /* ââ Score card rows ââ */
-    .cards-row {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 14px;
-    }
-    .score-card {
-      flex: 1;
-      min-width: 0;
-      background: linear-gradient(135deg, rgba(40,40,70,0.6), rgba(25,25,50,0.8));
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 6px;
-      padding: 6px 4px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-    .score-card:hover {
-      border-color: rgba(0,212,255,0.3);
-      transform: translateY(-1px);
-    }
-    .score-card.gold   { background: linear-gradient(135deg,rgba(255,215,0,0.12),rgba(255,180,0,0.05));  border-color: rgba(255,215,0,0.25); }
-    .score-card.silver { background: linear-gradient(135deg,rgba(192,192,192,0.10),rgba(160,160,180,0.05)); border-color: rgba(192,192,192,0.2); }
-    .score-card.bronze { background: linear-gradient(135deg,rgba(205,127,50,0.10),rgba(180,100,40,0.05)); border-color: rgba(205,127,50,0.2); }
+/* ─── BODY LAYOUT ─── */
+.body-row { flex:1; display:flex; overflow:hidden; min-height:0; }
 
-    .card-rank   { font-size: 8px;   font-weight: 700; color: #5a5a80; margin-bottom: 1px; }
-    .score-card.gold   .card-rank { color: #ffd700; }
-    .score-card.silver .card-rank { color: #c0c0c0; }
-    .score-card.bronze .card-rank { color: #cd7f32; }
+/* ─── SIDEBAR WRAPPER ─── */
+.sb-wrap { position:relative; flex-shrink:0; display:flex; }
 
-    .card-score   { font-size: 14px; font-weight: 800; color: #ffffff; margin-bottom: 1px; font-variant-numeric: tabular-nums; }
-    .card-model   { font-size: 7.5px; font-weight: 600; color: #b0b0d4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; }
-    .card-company { font-size: 7px; font-weight: 500; color: #5a5a80; }
-    .card-delta   { font-size: 7px; font-weight: 700; margin-top: 1px; }
-    .card-delta.up   { color: #00e676; }
-    .card-delta.down { color: #ff5252; }
-    .card-delta.flat { color: #4a4a70; }
+/* ─── LEFT SIDEBAR ─── */
+.l-sidebar {
+  width:228px; flex-shrink:0; background:#08081c;
+  border-right:1px solid rgba(255,255,255,0.06);
+  display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden;
+  transition:width .22s ease;
+  scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.08) transparent;
+}
+.l-sidebar.collapsed { width:0; border-right:none; }
+.sb-section { padding:14px 14px 11px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.sb-section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:9.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
+  color:rgba(255,255,255,0.3); margin-bottom:9px; cursor:pointer; user-select:none;
+}
+.sb-chevron { font-size:8px; color:rgba(255,255,255,0.2); transition:transform .15s; }
+.rank-toggle { display:flex; background:rgba(255,255,255,0.04); border-radius:6px; padding:2px; }
+.rtab { flex:1; text-align:center; padding:5px 0; font-size:11px; font-weight:600; color:rgba(255,255,255,0.35); border-radius:5px; cursor:pointer; }
+.rtab.active { background:rgba(0,229,255,0.1); color:#00e5ff; }
+.pillar-list { display:flex; flex-direction:column; gap:1px; }
+.pillar-item {
+  display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:6px;
+  font-size:11.5px; color:rgba(255,255,255,0.45); cursor:pointer;
+  transition:background .14s, color .14s; white-space:nowrap;
+}
+.pillar-item:hover { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.75); }
+.pillar-item.active { background:rgba(0,229,255,0.07); color:#00e5ff; }
+.p-check { font-size:9px; margin-left:auto; color:#00e5ff; }
+.p-icon { font-size:12px; width:17px; text-align:center; flex-shrink:0; }
+.lab-list { display:flex; flex-direction:column; gap:1px; }
+.lab-item {
+  display:flex; align-items:center; gap:8px; padding:5px 9px; border-radius:5px;
+  font-size:11px; color:rgba(255,255,255,0.38); cursor:pointer; transition:background .14s, color .14s;
+}
+.lab-item:hover { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.7); }
+.lab-item.active { background:rgba(0,229,255,0.06); color:rgba(255,255,255,0.82); }
+.lab-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.radio { width:12px; height:12px; border-radius:50%; border:1px solid rgba(255,255,255,0.18); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.radio.on { border-color:#00e5ff; }
+.radio.on::after { content:''; width:5px; height:5px; border-radius:50%; background:#00e5ff; }
+.lic-list { display:flex; flex-direction:column; gap:3px; }
+.lic-item { display:flex; align-items:center; gap:8px; padding:5px 9px; font-size:11px; color:rgba(255,255,255,0.38); cursor:pointer; border-radius:5px; }
+.lic-item:hover { color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.03); }
+.range-bar { position:relative; height:2.5px; background:rgba(255,255,255,0.07); border-radius:2px; margin:10px 0 5px; }
+.range-fill { position:absolute; left:0; right:18%; height:100%; background:linear-gradient(90deg,#0099bb,#00e5ff); border-radius:2px; box-shadow:0 0 6px rgba(0,229,255,0.35); }
+.range-nums { display:flex; justify-content:space-between; font-size:9px; color:rgba(255,255,255,0.28); }
 
-    /* ââ 2Ã2 grid ââ */
-    .benchmarks-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 80px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .benchmark-block {
-      background: rgba(255,255,255,0.015);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 8px;
-      padding: 8px 6px;
-    }
-    .benchmark-block .cards-row { margin-bottom: 0; }
+/* ─── COLLAPSE TAB ─── */
+.collapse-tab {
+  position:absolute; top:50%; right:-28px; transform:translateY(-50%);
+  width:28px; height:56px; background:#0d0d26;
+  border:1px solid rgba(0,229,255,0.22); border-left:none;
+  border-radius:0 8px 8px 0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; cursor:pointer; z-index:20;
+  box-shadow:3px 0 12px rgba(0,0,0,0.4), inset -1px 0 0 rgba(0,229,255,0.06);
+  transition:background .15s;
+}
+.collapse-tab:hover { background:#121232; box-shadow:3px 0 16px rgba(0,0,0,0.5), 0 0 10px rgba(0,229,255,0.08); }
+.collapse-tab .ct-arrow { font-size:10px; color:rgba(0,229,255,0.55); line-height:1; }
+.collapse-tab .ct-lines { display:flex; flex-direction:column; gap:3px; }
+.collapse-tab .ct-line { width:10px; height:1.5px; background:rgba(0,229,255,0.3); border-radius:1px; }
+.sb-wrap.is-collapsed .ct-arrow { transform:scaleX(-1); display:inline-block; }
 
-    /* ââ Responsive ââ */
-    @media (max-width: 900px) {
-      .hero { min-height: 35vh; }
-      .trsbench-wrapper { max-width: 100%; }
-      .benchmarks-grid { grid-template-columns: 1fr; gap: 12px 0; }
-      .card-score { font-size: 12px; }
-      .score-card { padding: 5px 3px; }
-    }
-    @media (max-width: 600px) {
-      body { overflow-x: hidden; }
-      .benchmark-block { max-width: 100%; }
-      .leaderboards { padding: 0 12px 30px; max-width: 100%; overflow-x: hidden; }
-      #model-modal { max-height: 100vh; }
-    }
+/* ─── MAIN CONTENT ─── */
+.main-content { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+.content-head { padding:16px 22px 11px; border-bottom:1px solid rgba(255,255,255,0.055); flex-shrink:0; }
+.content-title { font-size:19px; font-weight:400; letter-spacing:-.4px; margin-bottom:3px; }
+.content-title .hl { color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.28); font-weight:800; }
+.content-sub { font-size:13px; color:rgba(255,255,255,0.32); margin-bottom:7px; }
+.content-meta { display:flex; align-items:center; gap:14px; font-size:13px; color:rgba(255,255,255,0.25); }
+.meta-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,229,255,0.45); flex-shrink:0; animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.meta-link { color:rgba(0,229,255,0.48); cursor:pointer; }
+.meta-link:hover { color:rgba(0,229,255,0.8); }
 
-    /* ── News Ticker ── */
-    .news-ticker {
-      position: fixed;
-      top: 86px;
-      left: 0;
-      right: 0;
-      height: 46px;
-      background: #000000;
-      border-bottom: 1px solid rgba(0,212,255,0.18);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      z-index: 999;
-    }
-    .ticker-track {
-      display: flex;
-      align-items: center;
-      width: max-content;
-      white-space: nowrap;
-      animation: tickerScroll 56s linear infinite;
-    }
-    .ticker-track:hover { animation-play-state: paused; }
-    @keyframes tickerScroll {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .ticker-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 30px;
-      text-decoration: none;
-      color: rgba(255,255,255,0.82);
-      border-right: 1px solid rgba(255,255,255,0.08);
-      transition: color 0.2s;
-      cursor: pointer;
-    }
-    .ticker-item:hover { color: #00d4ff; }
-    .ticker-logo {
-      height: 30px;
-      width: 30px;
-      object-fit: contain;
-      border-radius: 5px;
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.06);
-      padding: 2px;
-    }
-    .ticker-logo-fb {
-      height: 30px;
-      width: 30px;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.08);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.45);
-      flex-shrink: 0;
-    }
-    .ticker-badge { display: inline-flex; flex-direction: column; gap: 1px; line-height: 1.25; }
-    .ticker-cat  { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.6px; }
-    .ticker-name { font-size: 12px; font-weight: 600; color: #ffffff; }
-    .ticker-val  { font-size: 11px; font-weight: 700; margin-left: 2px; }
-    .ticker-val.up, .ticker-val.down { font-size: 22px; line-height: 1; margin-left: 6px; }
-    .ticker-val.up      { color: #00e676; }
-    .ticker-val.down    { color: #ff5252; }
-    .ticker-val.neutral { color: rgba(0,212,255,0.85); }
+/* ─── TOOLBAR ─── */
+.toolbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 22px; border-bottom:1px solid rgba(255,255,255,0.045); flex-shrink:0;
+}
+.t-left { display:flex; align-items:center; gap:8px; }
+.t-right { display:flex; align-items:center; gap:8px; }
+.btn-sm {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:6px; padding:5px 10px; font-size:11px; color:rgba(255,255,255,0.42); cursor:pointer;
+}
+.f-pill { background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); border-radius:12px; padding:2px 9px; font-size:9.5px; font-weight:700; color:#00e5ff; }
+.f-pill-plain { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:2px 9px; font-size:9.5px; color:rgba(255,255,255,0.38); }
+.search-box {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+  border-radius:6px; padding:5px 10px; font-size:11px; color:rgba(255,255,255,0.28); min-width:160px;
+}
+.view-toggle {
+  display:flex; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:7px; padding:2px; gap:1px;
+}
+.vt-btn {
+  padding:4px 11px; font-size:10.5px; font-weight:600;
+  color:rgba(255,255,255,0.35); border-radius:5px; cursor:pointer; transition:background .14s, color .14s;
+}
+.vt-btn.active { background:rgba(0,229,255,0.1); color:#00e5ff; box-shadow:0 0 8px rgba(0,229,255,0.12); }
 
-    /* ── Nav date inline ── */
-    .nav-logo-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .nav-date-inline {
-      font-size: 11px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.42);
-      letter-spacing: 1.5px;
-      position: relative;
-      top: 2px;
-      white-space: nowrap;
-    }
+/* ─── TABLE ─── */
+.lb-wrap { flex:1; overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.07) transparent; }
+.lb-table { width:100%; border-collapse:collapse; }
+.lb-table thead tr { background:#09091e; border-bottom:1px solid rgba(255,255,255,0.06); position:sticky; top:0; z-index:2; }
+.lb-table th {
+  padding:8px 14px; font-size:10px; font-weight:700;
+  color:rgba(255,255,255,0.3); letter-spacing:.4px;
+  text-align:left; white-space:nowrap; cursor:pointer; background:#09091e;
+}
+.lb-table th:hover { color:rgba(255,255,255,0.6); }
+.sort-icon { color:#00e5ff; font-size:8px; margin-left:3px; }
+.lb-table td { padding:0 14px; border-bottom:1px solid rgba(255,255,255,0.03); vertical-align:middle; }
+.lb-table tbody tr { height:52px; cursor:pointer; transition:background .13s; }
+.lb-table tbody tr:hover { background:rgba(0,229,255,0.025) !important; }
 
-    /* ── Model expand modal ── */
-    #model-modal-backdrop {
-      display:none;position:fixed;inset:0;z-index:9999;
-      background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
-      align-items:center;justify-content:center;
-    }
-    #model-modal-backdrop.open { display:flex; }
-    #model-modal {
-      position:relative;width:360px;max-width:94vw;
-      max-height:90vh;
-      border-radius:20px;overflow:hidden;
-      background:linear-gradient(180deg,rgba(14,14,36,0.99),rgba(8,8,22,0.99));
-      transform:scale(0.85);opacity:0;
-      transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.18s ease;
-      border:1px solid rgba(255,255,255,0.1);
-      display:flex;flex-direction:column;
-    }
-    #model-modal-backdrop.open #model-modal { transform:scale(1);opacity:1; }
-    #model-modal.glow-gold { border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 28px rgba(255,215,0,0.45),0 0 8px rgba(255,215,0,0.25); }
-    #model-modal.glow-silver { border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 22px rgba(200,205,220,0.4),0 0 6px rgba(200,205,220,0.2); }
-    #model-modal.glow-bronze { border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 28px rgba(205,127,50,0.45),0 0 8px rgba(205,127,50,0.25); }
-    #model-modal-close {
-      position:absolute;top:12px;right:14px;z-index:10;
-      background:rgba(255,255,255,0.08);border:none;cursor:pointer;
-      color:rgba(255,255,255,0.5);font-size:16px;line-height:1;
-      border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
-      transition:background 0.15s;
-    }
-    #model-modal-close:hover { background:rgba(255,255,255,0.16);color:#fff; }
-    #model-modal-bg {
-      position:absolute;inset:0;width:100%;height:100%;
-      object-fit:cover;opacity:0.06;pointer-events:none;z-index:0;
-    }
-    .mm-scroll {
-      position:relative;z-index:1;flex:1;overflow-y:auto;
-      padding:18px 16px 16px;
-      display:flex;flex-direction:column;gap:14px;
-    }
-    .mm-watermark { position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:95%;opacity:0.12;pointer-events:none;z-index:0;filter:grayscale(100%) brightness(2);-webkit-mask-image:radial-gradient(ellipse 70% 75% at 50% 65%, black 20%, transparent 75%);mask-image:radial-gradient(ellipse 70% 75% at 50% 65%, black 20%, transparent 75%); }
-    .mm-header { display:flex;flex-direction:row;align-items:center;gap:14px; }
-    .mm-logo-big {
-      width:94px;height:94px;border-radius:16px;
-      object-fit:contain;background:rgba(255,255,255,0.06);
-      padding:4px;flex-shrink:0;
-    }
-    .mm-header-text { display:flex;flex-direction:column;gap:5px; }
-    .mm-name {
-      font-size:24px;font-weight:800;line-height:1.15;
-      color:#E8622A;
-      text-shadow:0 0 12px rgba(232,98,42,0.6),0 0 24px rgba(232,98,42,0.3);
-    }
-    .mm-company {
-      font-size:16px;font-weight:600;color:#ffffff;letter-spacing:0.2px;
-      text-shadow:0 0 8px rgba(255,255,255,0.5);
-    }
-    .mm-boards { display:flex;flex-direction:column;gap:5px; }
-    .mm-board-row {
-      display:flex;flex-direction:row;align-items:center;
-      padding:10px 13px;border-radius:10px;
-      background:rgba(255,255,255,0.04);border:1px solid transparent;
-    }
-    .mm-board-row.rank-gold { background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.35); }
-    .mm-board-row.rank-silver { background:rgba(200,205,220,0.1);border:1px solid rgba(200,205,220,0.3); }
-    .mm-board-row.rank-bronze { background:rgba(205,127,50,0.12);border:1px solid rgba(205,127,50,0.35); }
-    .mm-board-label { font-size:18px;font-weight:400; }
-    .mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
-    .mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right;white-space:nowrap; }
-    .mm-board-rank.not-ranked { font-size:13px;font-weight:600;margin-left:auto;text-align:right; }
-    .mm-board-row .mm-board-delta:empty::after { content: "NEW"; color: #00d4ff; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
-    .mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
-    .mm-tier-section { display:flex;flex-direction:row;align-items:center;gap:10px; }
-    .mm-tier-badge { font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:12px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);white-space:nowrap; }
-    .mm-tier-desc { font-size:14px;color:rgba(255,255,255,0.6);line-height:1.4; }
-    .mm-bio { font-size:15px;line-height:1.6;color:rgba(255,255,255,0.6);min-height:0; }
-    .mm-divider-cyan { border:none;border-top:1px solid rgba(0,212,255,0.35);margin:4px 0; }
-    .mm-tiers { display:flex;flex-direction:column;gap:6px; }
-    .mm-tier-row { display:flex;flex-direction:row;align-items:center;gap:10px; }
-    .mm-tier-desc-text { font-size:11px;color:rgba(255,255,255,0.45);line-height:1.3; }
-    .mm-tier-pill {
-      font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-      padding:4px 10px;border-radius:10px;
-      background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);
-      border:1px solid rgba(255,255,255,0.1);white-space:nowrap;
-      min-width:90px;text-align:center;
-    }
-    .mm-tier-pill.active {
-      background:rgba(255,255,255,0.1);color:#ffffff;
-      border:1px solid rgba(255,255,255,0.35);
-      text-shadow:0 0 6px rgba(255,255,255,0.4);
-    }
-    .mm-released {
-      text-align:center;font-size:15px;font-weight:700;
-      color:rgba(255,255,255,0.75);letter-spacing:0.5px;
-      margin-top:auto;padding-top:2px;
-      text-shadow:0 0 8px rgba(255,255,255,0.3);
-    }
-        /* ── Model expand modal ── */
-    #model-modal-backdrop {
-      display:none;position:fixed;inset:0;z-index:9999;
-      background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
-      align-items:center;justify-content:center;
-    }
-    #model-modal-backdrop.open { display:flex; }
-    
-        /* ── Freshness line ── */
-    .freshness-line {
-      font-size: 11px;
-      color: #ffffff;
-      text-shadow: 0 0 8px rgba(255,255,255,0.5);
-      letter-spacing: 0.3px;
-      margin-bottom: 5px;
-      margin-top: -3px;
-    }
-  </style>
+/* Top 3 highlights — full-row glowing borders */
+.row-1 { background:linear-gradient(90deg, rgba(255,215,0,0.07) 0%, rgba(255,215,0,0.02) 50%, transparent 100%); }
+.row-1 td { border-top:1px solid rgba(255,215,0,0.38) !important; border-bottom:1px solid rgba(255,215,0,0.38) !important; box-shadow:0 0 8px rgba(255,215,0,0.06) inset; }
+.row-1:hover { background:linear-gradient(90deg, rgba(255,215,0,0.11) 0%, rgba(255,215,0,0.04) 50%, transparent 100%) !important; }
+.row-2 { background:linear-gradient(90deg, rgba(192,192,192,0.055) 0%, rgba(192,192,192,0.015) 50%, transparent 100%); }
+.row-2 td { border-top:1px solid rgba(192,192,192,0.3) !important; border-bottom:1px solid rgba(192,192,192,0.3) !important; box-shadow:0 0 8px rgba(192,192,192,0.05) inset; }
+.row-2:hover { background:linear-gradient(90deg, rgba(192,192,192,0.09) 0%, rgba(192,192,192,0.025) 50%, transparent 100%) !important; }
+.row-3 { background:linear-gradient(90deg, rgba(205,127,50,0.06) 0%, rgba(205,127,50,0.015) 50%, transparent 100%); }
+.row-3 td { border-top:1px solid rgba(205,127,50,0.32) !important; border-bottom:1px solid rgba(205,127,50,0.32) !important; box-shadow:0 0 8px rgba(205,127,50,0.05) inset; }
+.row-3:hover { background:linear-gradient(90deg, rgba(205,127,50,0.09) 0%, rgba(205,127,50,0.025) 50%, transparent 100%) !important; }
+
+/* Rank cell */
+.rank-cell { width:52px; text-align:center; font-size:14px; font-weight:800; color:rgba(255,255,255,0.7); text-shadow:0 0 8px rgba(255,255,255,0.35); letter-spacing:-0.5px; }
+.medal { font-size:18px; line-height:1; display:inline-block; }
+.medal-gold   { filter:drop-shadow(0 0 6px rgba(255,215,0,0.9)) drop-shadow(0 0 14px rgba(255,215,0,0.5)); }
+.medal-silver { filter:drop-shadow(0 0 6px rgba(210,210,210,0.85)) drop-shadow(0 0 14px rgba(210,210,210,0.4)); }
+.medal-bronze { filter:drop-shadow(0 0 6px rgba(205,127,50,0.85)) drop-shadow(0 0 14px rgba(205,127,50,0.4)); }
+
+/* Model cell */
+.m-cell { display:flex; align-items:center; gap:10px; }
+.m-icon { width:27px; height:27px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:7.5px; font-weight:800; color:rgba(255,255,255,0.7); flex-shrink:0; border:1px solid rgba(255,255,255,0.07); }
+.m-name { font-size:15px; font-weight:400; color:#fff; }
+.m-lab  { font-size:9.5px; color:rgba(255,255,255,0.28); }
+
+/* Score */
+.score-val { font-size:16px; font-weight:400; color:#fff; }
+/* Bar + sparkline removed */
+/* Change */
+.chg { font-size:11px; font-weight:700; }
+.up { color:#22d3a3; } .dn { color:#f87171; } .nc { color:rgba(255,255,255,0.18); }
+/* Pillar score cols */
+.pcol { font-size:11.5px; color:rgba(255,255,255,0.55); }
+.pcol.hi { color:#00e5ff; font-weight:700; }
+
+/* Company left-border accent on rows */
+.lb-table tbody tr { border-left: 2px solid transparent; }
+.co-anthropic { border-left-color: rgba(204,93,57,0.55) !important; }
+.co-google    { border-left-color: rgba(66,133,244,0.55) !important; }
+.co-openai    { border-left-color: rgba(16,163,127,0.55) !important; }
+.co-xai       { border-left-color: rgba(200,200,200,0.3) !important; }
+.co-mistral   { border-left-color: rgba(255,140,0,0.55) !important; }
+.co-deepseek  { border-left-color: rgba(100,149,237,0.55) !important; }
+.co-meta      { border-left-color: rgba(24,119,242,0.55) !important; }
+.co-alibaba   { border-left-color: rgba(255,102,0,0.55) !important; }
+.co-other     { border-left-color: rgba(150,100,255,0.4) !important; }
+
+/* Compact view */
+body.compact .hide-compact { display:none; }
+body.compact .lb-table tbody tr { height:40px; }
+
+/* Loading state */
+.loading-state { display:flex; align-items:center; justify-content:center; height:200px; color:rgba(255,255,255,0.3); font-size:13px; gap:10px; }
+.spinner { width:18px; height:18px; border:2px solid rgba(0,229,255,0.15); border-top-color:#00e5ff; border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ─── MODEL MODAL ─── */
+#v2-modal-backdrop {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.82); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;
+}
+#v2-modal-backdrop.open { display:flex; }
+#v2-modal {
+  position:relative; width:360px; max-width:94vw; max-height:90vh;
+  background:linear-gradient(180deg,rgba(14,14,36,0.99),rgba(8,8,22,0.99));
+  border:1px solid rgba(255,255,255,0.1); border-radius:20px;
+  overflow:hidden; display:flex; flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,0.75);
+  transform:scale(0.85); opacity:0;
+  transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.18s ease;
+}
+#v2-modal-backdrop.open #v2-modal { transform:scale(1); opacity:1; }
+#v2-modal.glow-gold   { border:1px solid rgba(255,215,0,0.9);    box-shadow:0 0 28px rgba(255,215,0,0.45),   0 0 8px rgba(255,215,0,0.25); }
+#v2-modal.glow-silver { border:1px solid rgba(200,205,220,0.85); box-shadow:0 0 22px rgba(200,205,220,0.4),  0 0 6px rgba(200,205,220,0.2); }
+#v2-modal.glow-bronze { border:1px solid rgba(205,127,50,0.9);   box-shadow:0 0 28px rgba(205,127,50,0.45),  0 0 8px rgba(205,127,50,0.25); }
+#v2-modal-close {
+  position:absolute; top:11px; right:13px; z-index:10;
+  background:rgba(255,255,255,0.07); border:none; cursor:pointer;
+  color:rgba(255,255,255,0.45); font-size:17px;
+  border-radius:50%; width:28px; height:28px;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+#v2-modal-close:hover { background:rgba(255,255,255,0.16); color:#fff; }
+#v2-modal-tabs {
+  display:flex; flex-shrink:0; padding:0 18px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.v2-tab {
+  padding:13px 16px; font-size:12px; font-weight:600; letter-spacing:.3px;
+  color:rgba(255,255,255,0.33); cursor:pointer;
+  border-bottom:2px solid transparent; transition:color .15s;
+}
+.v2-tab:hover { color:rgba(255,255,255,0.6); }
+.v2-tab.active { color:#00e5ff; border-bottom-color:#00e5ff; }
+.v2-panel { flex:1; overflow-y:auto; padding:18px;
+  scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.07) transparent; }
+#v2-panel-about { padding:0; overflow:hidden; }
+/* ── mm-* card classes (ported from main card) ── */
+.mm-scroll { position:relative;z-index:1;overflow-y:auto;padding:18px 16px 16px;display:flex;flex-direction:column;gap:14px;height:100%;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.07) transparent; }
+.mm-watermark { position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:95%;opacity:0.12;pointer-events:none;z-index:0;filter:grayscale(100%) brightness(2);-webkit-mask-image:radial-gradient(ellipse 70% 75% at 50% 65%, black 20%, transparent 75%);mask-image:radial-gradient(ellipse 70% 75% at 50% 65%, black 20%, transparent 75%); }
+.mm-header { display:flex;flex-direction:row;align-items:center;gap:14px; }
+.mm-logo-big { width:94px;height:94px;border-radius:16px;object-fit:contain;background:rgba(255,255,255,0.06);padding:4px;flex-shrink:0; }
+.mm-header-text { display:flex;flex-direction:column;gap:5px; }
+.mm-name { font-size:24px;font-weight:800;line-height:1.15;color:#E8622A;text-shadow:0 0 12px rgba(232,98,42,0.6),0 0 24px rgba(232,98,42,0.3); }
+.mm-company { font-size:16px;font-weight:600;color:#ffffff;letter-spacing:0.2px;text-shadow:0 0 8px rgba(255,255,255,0.5); }
+.mm-boards { display:flex;flex-direction:column;gap:5px; }
+.mm-board-row { display:flex;flex-direction:row;align-items:center;padding:10px 13px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid transparent; }
+.mm-board-row.rank-gold   { background:rgba(255,215,0,0.12);  border:1px solid rgba(255,215,0,0.35); }
+.mm-board-row.rank-silver { background:rgba(200,205,220,0.1); border:1px solid rgba(200,205,220,0.3); }
+.mm-board-row.rank-bronze { background:rgba(205,127,50,0.12); border:1px solid rgba(205,127,50,0.35); }
+.mm-board-label { font-size:18px;font-weight:400; }
+.mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
+.mm-board-rank { font-size:18px;font-weight:400;min-width:40px;text-align:right;white-space:nowrap; }
+.mm-board-rank.not-ranked { font-size:13px;font-weight:400;margin-left:auto;text-align:right; }
+.mm-medal-glow { display:inline-block;font-size:20px;filter:drop-shadow(0 0 7px rgba(255,215,0,0.85)); }
+.mm-board-row.rank-silver .mm-medal-glow { filter:drop-shadow(0 0 7px rgba(200,205,220,0.9)); }
+.mm-board-row.rank-bronze .mm-medal-glow { filter:drop-shadow(0 0 7px rgba(205,127,50,0.9)); }
+.mm-board-row .mm-board-delta:empty::after { content:"NEW";color:#00d4ff;font-size:11px;font-weight:700;letter-spacing:0.5px; }
+.mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
+.mm-divider-cyan { border:none;border-top:1px solid rgba(0,212,255,0.35);margin:4px 0; }
+.mm-tiers { display:flex;flex-direction:column;gap:6px; }
+.mm-tier-row { display:flex;flex-direction:row;align-items:center;gap:10px; }
+.mm-tier-desc-text { font-size:11px;color:rgba(255,255,255,0.45);line-height:1.3; }
+.mm-tier-pill { font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:10px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.1);white-space:nowrap;min-width:90px;text-align:center; }
+.mm-tier-pill.active { background:rgba(255,255,255,0.1);color:#ffffff;border:1px solid rgba(255,255,255,0.35);text-shadow:0 0 6px rgba(255,255,255,0.4); }
+.mm-bio { font-size:15px;line-height:1.6;color:rgba(255,255,255,0.6);min-height:0; }
+.mm-released { text-align:center;font-size:15px;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.5px;margin-top:auto;padding-top:2px;text-shadow:0 0 8px rgba(255,255,255,0.3); }
+/* ── Trend panel ── */
+#v2-panel-trend { padding:14px 16px 16px; overflow:hidden; }
+#v2-trend-hero { display:flex; flex-direction:column; gap:3px; padding:2px 0 6px; }
+#v2-trend-hero-score { font-size:32px; font-weight:800; color:#ffffff; line-height:1; text-shadow:0 0 18px rgba(255,255,255,0.55),0 0 36px rgba(255,255,255,0.2); letter-spacing:-0.5px; }
+#v2-trend-hero-meta { display:flex; gap:8px; align-items:center; min-height:20px; }
+#v2-trend-hero-date { font-size:12px; color:rgba(255,255,255,0.38); }
+#v2-trend-hero-rank { font-size:12px; font-weight:700; color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.07); padding:1px 7px; border-radius:5px; }
+#v2-trend-hero-delta { font-size:12px; font-weight:700; }
+#v2-chart-wrap { position:relative; height:200px; touch-action:none; }
+.v2-trend-tooltip { position:absolute; pointer-events:none; background:rgba(8,8,28,0.96); border:1px solid rgba(0,229,255,0.35); border-radius:8px; padding:6px 10px; display:flex; flex-direction:column; gap:2px; transform:translateX(-50%); white-space:nowrap; z-index:10; transition:opacity .1s; box-shadow:0 4px 16px rgba(0,0,0,0.5),0 0 10px rgba(0,229,255,0.1); }
+.v2-trend-tooltip.hidden { opacity:0; }
+.v2-tt-date  { font-size:10px; color:rgba(255,255,255,0.45); letter-spacing:.3px; }
+.v2-tt-score { font-size:14px; font-weight:800; color:#ffffff; letter-spacing:-.3px; }
+#v2-trend-board-label { text-align:center; font-size:14px; font-weight:700; letter-spacing:0.5px; padding-top:6px; }
+</style>
 </head>
-<body>
-<div class="bg-animation"></div>
+<body id="mainbody">
 
-<nav>
-  <div class="nav-logo-group">
-    <a href="/" class="logo">Training Run</a>
-    <span class="nav-date-inline" id="current-week"></span>
+<!-- ══ TOP BAR ══════════════════════════════════ -->
+<div class="top-bar">
+  <div class="logo-block">
+    <span class="logo-text">Training Run</span>
+    <span class="logo-sub">Your Weekly AI Conditioning</span>
   </div>
-  <ul class="nav-links">
-    <li><a href="/sources">Verify Our Data</a></li>
-    <li><a href="/about">About</a></li>
-  </ul>
-</nav>
-<div class="news-ticker">
-  <div class="ticker-track" id="ticker-track">
+  <div class="top-center" id="todayDate"></div>
+  <div class="top-right">
+    <div class="watch-pill" onclick="window.open('https://www.youtube.com/watch?v=7rZEPc6vXZo','_blank')">
+      <span class="play">▶</span> Watch Latest Episode
+    </div>
+  </div>
+</div>
+
+<div class="glow-line"></div>
+
+<!-- ══ TICKER ═══════════════════════════════════ -->
+<div class="glow-line-white"></div>
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack">
     <span style="color:rgba(255,255,255,0.25);padding:0 24px;font-size:11px;font-style:italic;">Loading live data&hellip;</span>
   </div>
 </div>
-<section class="hero">
-  <h1>Training Run</h1>
-  <p class="tagline">Your Weekly AI Conditioning</p>
-  <p class="hero-description">
-    The independent AI benchmark and intelligence hub. Transparent methodology. Cited sources. No hype&mdash;just clarity.
-  </p>
-  <div class="hero-cta" style="flex-direction:column;align-items:center;">
-    <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Latest Episode</a>
+<div class="glow-line-white"></div>
+
+<!-- ══ MAIN NAV TABS ═════════════════════════════ -->
+<div class="h-nav">
+  <div class="htabs">
+    <div class="htab" style="cursor:default;opacity:0.45">
+      <span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>Arena</span> <span class="tpill" style="background:rgba(255,80,80,0.1);color:rgba(255,140,140,0.85);border:1px dashed rgba(255,100,100,0.35)">(Soon)</span>
+    </div>
+    <div class="htab active" data-ddp="trsbench" onclick="setDDP('trsbench')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>bench</span> <span class="tpill">(Overall)</span></div>
+    <div class="htab" data-ddp="truscore" onclick="setDDP('truscore')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRU</span>score</span> <span class="tpill">(Truth)</span></div>
+    <div class="htab" data-ddp="trscode" onclick="setDDP('trscode')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>code</span> <span class="tpill">(Coding)</span></div>
+    <div class="htab" data-ddp="trfcast" onclick="setDDP('trfcast')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRF</span>cast</span> <span class="tpill">(Prediction)</span></div>
+    <div class="htab" data-ddp="tragents" onclick="setDDP('tragents')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TR</span><span style="color:#f87171">Agents</span></span> <span class="tpill">(Agents)</span></div>
   </div>
-  
-</section>
-
-<!-- ââââââââââââââ LIVE LEADERBOARDS ââââââââââââââ -->
-<div class="leaderboards">
-
-  <!-- TRSbench Top 10 -->
-  <div class="trsbench-wrapper">
-    <div class="section-header">
-      <span class="section-title"><span class="cyan">TRS</span>bench &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Overall)</span></span>
-      <a href="/scores" class="section-link">View Full Rankings &rarr;</a>
-    </div>
-    <div class="freshness-line" id="fl-trsbench"></div>
-    <div id="trsbench-row" class="cards-row">
-      <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:20px 0;">Loading&hellip;</div>
-    </div>
-  </div>
-
-  <!-- 2Ã2 grid -->
-  <div class="benchmarks-grid">
-
-    <div class="benchmark-block">
-      <div class="section-header">
-        <span class="section-title"><span class="cyan">TRU</span>score &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Truth)</span></span>
-        <a href="/truscore-scores" class="section-link">Full Rankings &rarr;</a>
-      </div>
-      <div class="freshness-line" id="fl-truscore"></div>
-      <div id="truscore-row" class="cards-row">
-        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
-      </div>
-    </div>
-
-    <div class="benchmark-block">
-      <div class="section-header">
-        <span class="section-title"><span class="cyan">TRS</span>code &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Coding)</span></span>
-        <a href="/trscode" class="section-link">Full Rankings &rarr;</a>
-      </div>
-      <div class="freshness-line" id="fl-trscode"></div>
-      <div id="trscode-row" class="cards-row">
-        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
-      </div>
-    </div>
-
-    <div class="benchmark-block">
-      <div class="section-header">
-        <span class="section-title"><span class="cyan">TRF</span>cast &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Prediction)</span></span>
-        <a href="/trfcast" class="section-link">Full Rankings &rarr;</a>
-      </div>
-      <div class="freshness-line" id="fl-trfcast"></div>
-      <div id="trfcast-row" class="cards-row">
-        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
-      </div>
-    </div>
-
-    <div class="benchmark-block">
-      <div class="section-header">
-        <span class="section-title"><span class="cyan">TR</span><span class="red">Agents</span> &mdash; Top 5 <span style="opacity:0.5;font-weight:400;">(Best Agent)</span></span>
-        <a href="/tragents-scores" class="section-link">Full Rankings &rarr;</a>
-      </div>
-      <div class="freshness-line" id="fl-tragents"></div>
-      <div id="tragents-row" class="cards-row">
-        <div style="flex:1;text-align:center;color:rgba(255,255,255,0.3);padding:14px 0;">Loading&hellip;</div>
-      </div>
-    </div>
-
+  <div class="hnav-right">
+    <a href="sources.html">Verify Sources</a><span class="hnav-pipe">|</span>
+    <a href="https://www.youtube.com/@trainingrun" target="_blank">The Show</a><span class="hnav-pipe">|</span>
+    <a href="about.html">About</a>
   </div>
 </div>
+<div class="glow-line"></div>
 
-<!-- ââââââââââââââ REST OF PAGE ââââââââââââââ -->
-<section class="intro-section">
-  <div class="container">
-    <h2>Why Training Run Exists</h2>
-    <p class="intro-text">
-      AI is moving fast. Too fast for most people to keep up. Every week brings new models, new benchmarks, new claims. How do you know what&rsquo;s real?
-    </p>
-    <p class="intro-text">
-      <strong>Training Run</strong> cuts through the noise. We aggregate data from the most respected evaluation platforms, apply a transparent scoring methodology, and deliver a clear picture of where AI models actually stand&mdash;updated weekly.
-    </p>
-    <p class="intro-text">
-      Whether you&rsquo;re an investor evaluating AI companies, a policymaker shaping regulation, a developer choosing which API to use, or just someone who wants to understand this technology&mdash;we&rsquo;re building the resource you need.
-    </p>
-  </div>
-</section>
+<!-- ══ BODY ══════════════════════════════════════ -->
+<div class="body-row">
 
-<section class="trs-preview">
-  <div class="container">
-    <h2>The <span class="cyan">TRSbench</span></h2>
-    <p class="section-intro">
-      Our Training Run Score (TRS) is a weighted composite of seven performance dimensions, aggregated from peer-reviewed benchmarks and public evaluation platforms.
-    </p>
-    <div class="trs-components">
-      <div class="component"><span class="weight">21%</span><h3>Safety</h3><p>Reliability and responsible behavior</p></div>
-      <div class="component"><span class="weight">20%</span><h3>Reasoning</h3><p>Complex problem-solving and logical deduction</p></div>
-      <div class="component"><span class="weight">20%</span><h3>Coding</h3><p>Real-world programming ability</p></div>
-      <div class="component"><span class="weight">18%</span><h3>Human Preference</h3><p>What users actually prefer in blind tests</p></div>
-      <div class="component"><span class="weight">8%</span><h3>Knowledge</h3><p>Breadth and accuracy across domains</p></div>
-      <div class="component"><span class="weight">7%</span><h3>Efficiency</h3><p>Performance relative to cost</p></div>
-      <div class="component"><span class="weight">6%</span><h3>Usage Adoption</h3><p>Real-world developer adoption via OpenRouter</p></div>
-    </div>
-    <a href="/trsmethodology" class="learn-more">Learn More About Our Methodology &rarr;</a>
-  </div>
-</section>
+  <!-- SIDEBAR WRAPPER -->
+  <div class="sb-wrap" id="sbWrap">
+    <div class="l-sidebar" id="sidebar">
 
-<section class="trust-section">
-  <div class="container">
-    <h2>Built on Trusted Sources</h2>
-    <p class="section-intro">Every score we publish is derived from publicly verifiable data. No black boxes.</p>
-    <div class="sources-grid">
-      <div class="source-card">
-        <h3>LMSYS Chatbot Arena</h3>
-        <p>1M+ human preference votes via blind comparisons</p>
-        <a href="https://huggingface.co/spaces/lmarena-ai/chatbot-arena/" target="_blank" rel="noopener">huggingface.co/spaces/lmarena-ai/chatbot-arena</a>
+      <div class="sb-section">
+        <div class="sb-section-header">Rank by <span class="sb-chevron">▾</span></div>
+        <div class="rank-toggle">
+          <div class="rtab active" onclick="setRankBy('models',this)">Models</div>
+          <div class="rtab" onclick="setRankBy('labs',this)">Labs</div>
+        </div>
       </div>
-      <div class="source-card">
-        <h3>ARC-AGI-2</h3>
-        <p>Novel reasoning tasks that test genuine understanding</p>
-        <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>
+
+      <div class="sb-section" id="pillarSection">
+        <div class="sb-section-header" id="pillarHeader">Pillars <span class="sb-chevron">▾</span></div>
+        <div class="pillar-list" id="pillarList">
+          <!-- populated dynamically by buildPillarSidebar() -->
+        </div>
       </div>
-      <div class="source-card">
-        <h3>SWE-Bench</h3>
-        <p>Real GitHub issues to measure coding ability</p>
-        <a href="https://www.swebench.com/" target="_blank" rel="noopener">swebench.com</a>
+
+      <div class="sb-section">
+        <div class="sb-section-header">Filter by Lab <span class="sb-chevron">▾</span></div>
+        <div class="lab-list" id="labList">
+          <!-- populated by JS -->
+        </div>
       </div>
-      <div class="source-card">
-        <h3>MMLU / GPQA</h3>
-        <p>Graduate-level knowledge evaluation</p>
-        <a href="https://paperswithcode.com/dataset/mmlu" target="_blank" rel="noopener">paperswithcode.com</a>
+
+      <div class="sb-section">
+        <div class="sb-section-header">License <span class="sb-chevron">▾</span></div>
+        <div class="lic-list">
+          <div class="lic-item" onclick="setLicense('all',this)"><div class="radio on"></div> All</div>
+          <div class="lic-item" onclick="setLicense('proprietary',this)"><div class="radio"></div> Proprietary</div>
+          <div class="lic-item" onclick="setLicense('open',this)"><div class="radio"></div> Open Source</div>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-section-header">Score Range <span class="sb-chevron">▾</span></div>
+        <div class="range-bar"><div class="range-fill"></div></div>
+        <div class="range-nums"><span>0</span><span>100</span></div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+    <!-- COLLAPSE TAB -->
+    <div class="collapse-tab" id="collapseBtn" onclick="toggleSidebar()" title="Collapse / expand filters">
+      <div class="ct-arrow">‹</div>
+      <div class="ct-lines">
+        <div class="ct-line"></div>
+        <div class="ct-line"></div>
+        <div class="ct-line"></div>
       </div>
     </div>
-  </div>
-</section>
+  </div><!-- /sb-wrap -->
 
-<section class="segments-section">
-  <div class="container">
-    <h2>Show <span class="cyan">Segments</span></h2>
-    <p class="section-intro">
-      Every week, Training Run covers 9 data-driven segments. Each has its own transparent methodology&mdash;click to learn how we calculate every number.
-    </p>
-    <div class="segments-grid">
-      <a href="/trsmethodology" class="segment-card"><div class="segment-icon">&#x1F4CA;</div><h3><span style="color:#00d4ff">TRS</span> Benchmark</h3><p>Weighted composite AI ranking</p></a>
-      <a href="/truscore" class="segment-card"><div class="segment-icon">&#x1F680;</div><h3><span style="color:#00d4ff">TRU</span>score</h3><p>AI truth &amp; neutrality index</p></a>
-      <a href="/trfcast" class="segment-card"><div class="segment-icon">&#x1F4C8;</div><h3><span style="color:#00d4ff">TRF</span>cast</h3><p>AI forecasting &amp; trading scores</p></a>
-      <a href="/trscode" class="segment-card"><div class="segment-icon">&#x1F4BB;</div><h3><span style="color:#00d4ff">TRS</span>code</h3><p>Who writes the best code?</p></a>
-      <a href="/news" class="segment-card"><div class="segment-icon">&#x1F4F0;</div><h3>Weekly News Download</h3><p>Truth Filter verified headlines</p></a>
-      <a href="/frontier" class="segment-card"><div class="segment-icon">&#x1F3AF;</div><h3>Frontier</h3><p>The road to AGI</p></a>
-      <a href="/churn" class="segment-card"><div class="segment-icon">&#x1F4BC;</div><h3>The Churn</h3><p>Jobs leaving. Jobs arriving.</p></a>
-      <a href="/global-race" class="segment-card"><div class="segment-icon">&#x1F30D;</div><h3>Global AI Race</h3><p>Who&rsquo;s winning AI supremacy?</p></a>
-      <a href="/gigaburn" class="segment-card"><div class="segment-icon">&#x26A1;</div><h3>GIGABURN</h3><p>The AI power burn in gigawatts</p></a>
-    </div>
-    <a href="/sources" class="learn-more">Verify All Sources &amp; Methodology &rarr;</a>
-  </div>
-</section>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
 
-<section class="disclaimer-section">
-  <div class="container">
-    <div class="disclaimer-box">
-      <h3>What This Isn&rsquo;t</h3>
-      <p>
-        <strong>These aren&rsquo;t predictions about AGI timelines.</strong> That&rsquo;s not our department. These are measurements of specific capabilities, not prophecies about AI&rsquo;s future. The trend line is up. What that means? Above our pay grade.
-      </p>
-      <p>We measure what AI can do <em>today</em>. We cite our sources. We show our math. That&rsquo;s it.</p>
-    </div>
-  </div>
-</section>
-
-<section class="cta-section">
-  <div class="container">
-    <h2>Watch the Show</h2>
-    <p>New episodes every week breaking down the latest in AI performance.</p>
-    <a href="https://www.youtube.com/watch?v=7rZEPc6vXZo" target="_blank" class="cta-button primary">Watch Now</a>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <div class="footer-content">
-      <div class="footer-brand">
-        <a href="/" class="logo">Training Run</a>
-        <p>Your weekly AI conditioning.</p>
-      </div>
-      <div class="footer-links">
-        <h4>Resources</h4>
-        <a href="/trsmethodology">TRS Methodology</a>
-        <a href="/sources">Verify Our Data</a>
-        <a href="/scores">Current Scores</a>
-        <a href="/about">About Us</a>
-      </div>
-      <div class="footer-links">
-        <h4>Segment Methodologies</h4>
-        <a href="/truscore">TRUscore</a>
-        <a href="/trscode">TRScode</a>
-        <a href="/frontier">Frontier</a>
-        <a href="/churn">The Churn</a>
-        <a href="/global-race">Global AI Race</a>
-      </div>
-      <div class="footer-links">
-        <h4>More Segments</h4>
-        <a href="/gigaburn">GIGABURN</a>
-        <a href="/trfcast">TRFcast</a>
-        <a href="/news">Weekly News</a>
-        <a href="/sources">All Sources</a>
+    <div class="content-head">
+      <div class="content-title"><span class="hl">TRS</span>bench — Overall Rankings</div>
+      <div class="content-sub">Weighted composite · 7 pillars · 18 verified benchmark sources · Independent &amp; transparent</div>
+      <div class="content-meta">
+        <div class="meta-dot"></div>
+        <span id="metaUpdate">Loading…</span>
+        <span style="color:rgba(255,255,255,0.1)">|</span>
+        <span id="metaSources">18/18 sources fired</span>
+        <span style="color:rgba(255,255,255,0.1)">|</span>
+        <span id="metaCount">— models ranked</span>
+        <span style="color:rgba(255,255,255,0.1)">|</span>
+        <a href="trsmethodology.html" class="meta-link">View Methodology →</a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Training Run. All rights reserved.</p>
-      <p class="footer-disclaimer">Training Run is an independent publication and is not affiliated with any AI company.</p>
-    </div>
-  </div>
-</footer>
 
-<!-- Date badge -->
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="t-left">
+        <div class="btn-sm">⚙ Filters</div>
+        <div class="f-pill" id="activePillarPill">Overall ✓</div>
+        <div class="f-pill-plain" id="activeLabPill">All Labs</div>
+        <div class="f-pill-plain">All Licenses</div>
+      </div>
+      <div class="t-right">
+        <div class="search-box">
+          <span>🔍</span>
+          <input id="searchInput" type="text" placeholder="Search models…"
+            style="background:none;border:none;outline:none;color:rgba(255,255,255,0.7);font-size:11px;width:120px;"
+            oninput="renderTable()">
+        </div>
+        <div class="view-toggle">
+          <div class="vt-btn" id="btnCompact" onclick="setView('compact')">Compact</div>
+          <div class="vt-btn active" id="btnExtended" onclick="setView('extended')">Extended</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="lb-wrap">
+      <table class="lb-table" id="mainTable">
+        <thead>
+          <tr id="theadRow">
+            <th style="width:52px;text-align:center">#</th>
+            <th>Model</th>
+            <th style="min-width:130px">Score <span class="sort-icon">↓</span></th>
+            <th>Safety <span style="font-size:8px;color:rgba(255,255,255,0.2)">21%</span></th>
+            <th>Reasoning <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
+            <th>Coding <span style="font-size:8px;color:rgba(255,255,255,0.2)">20%</span></th>
+            <th class="hide-compact">Instruction <span style="font-size:8px;color:rgba(255,255,255,0.2)">18%</span></th>
+            <th class="hide-compact">Knowledge <span style="font-size:8px;color:rgba(255,255,255,0.2)">8%</span></th>
+            <th class="hide-compact">Efficiency <span style="font-size:8px;color:rgba(255,255,255,0.2)">7%</span></th>
+            <th class="hide-compact">Usage <span style="font-size:8px;color:rgba(255,255,255,0.2)">6%</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="12"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /body-row -->
+
 <script>
-  var now = new Date();
-  document.getElementById('current-week').textContent =
-    now.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}).toUpperCase();
-</script>
+// ══ CONFIG ══════════════════════════════════════════
+const LAB_COLORS = {
+  'Anthropic':  { bg:'rgba(204,93,57,0.22)',  dot:'rgba(204,93,57,0.75)',  init:'A'  },
+  'Google':     { bg:'rgba(66,133,244,0.2)',  dot:'rgba(66,133,244,0.75)', init:'G'  },
+  'OpenAI':     { bg:'rgba(16,163,127,0.2)',  dot:'rgba(16,163,127,0.75)',init:'OA' },
+  'xAI':        { bg:'rgba(200,200,200,0.1)', dot:'rgba(200,200,200,0.5)',init:'xAI'},
+  'Mistral':    { bg:'rgba(255,140,0,0.18)',  dot:'rgba(255,140,0,0.7)',   init:'M'  },
+  'DeepSeek':   { bg:'rgba(100,149,237,0.2)', dot:'rgba(100,149,237,0.7)',init:'DS' },
+  'Meta':       { bg:'rgba(24,119,242,0.18)', dot:'rgba(24,119,242,0.7)', init:'MT' },
+  'Alibaba':    { bg:'rgba(255,102,0,0.18)',  dot:'rgba(255,102,0,0.7)',  init:'QB' },
+  'Zhipu AI':   { bg:'rgba(100,149,237,0.18)',dot:'rgba(100,149,237,0.6)',init:'ZP' },
+  'MiniMax':    { bg:'rgba(80,200,180,0.18)', dot:'rgba(80,200,180,0.6)', init:'MM' },
+  'Cohere':     { bg:'rgba(150,100,255,0.18)',dot:'rgba(150,100,255,0.6)',init:'CO' },
+  'Writer':     { bg:'rgba(130,100,220,0.2)', dot:'rgba(130,100,220,0.7)',init:'W'  },
+  'IBM':        { bg:'rgba(0,95,184,0.2)',    dot:'rgba(0,95,184,0.7)',   init:'IB' },
+  'AI2':        { bg:'rgba(255,100,50,0.2)',  dot:'rgba(255,100,50,0.7)', init:'A2' },
+  'Databricks': { bg:'rgba(255,60,0,0.2)',    dot:'rgba(255,60,0,0.7)',   init:'DB' },
+  'Inception':  { bg:'rgba(0,200,150,0.2)',   dot:'rgba(0,200,150,0.7)', init:'IN' },
+  'PrimeIntellect':{ bg:'rgba(200,160,0,0.2)',dot:'rgba(200,160,0,0.7)',init:'PI'  },
+  'Moonshot AI':{ bg:'rgba(100,80,200,0.2)', dot:'rgba(100,80,200,0.7)', init:'KM' },
+  'TII':        { bg:'rgba(0,160,120,0.2)',   dot:'rgba(0,160,120,0.7)', init:'TI' },
+  '01.AI':      { bg:'rgba(180,50,50,0.2)',   dot:'rgba(180,50,50,0.7)', init:'01' },
+};
+function labColor(company){ return LAB_COLORS[company] || {bg:'rgba(255,255,255,0.08)',dot:'rgba(255,255,255,0.4)',init:(company||'?').slice(0,2).toUpperCase()}; }
 
-<!-- Live score card loader -->
-<script>
-function makeCard(m, i) {
-          var cls = i === 0 ? ' gold' : i === 1 ? ' silver' : i === 2 ? ' bronze' : '';
-          var rankLbl = '#' + (i + 1);
-          var dCls = m.d === null ? 'flat' : m.d > 0 ? 'up' : m.d < 0 ? 'down' : 'flat';
-          var dTxt = m.d === null ? '&mdash;' : m.d > 0 ? '&uarr;&thinsp;' + m.d.toFixed(2) : '&darr;&thinsp;' + Math.abs(m.d).toFixed(2);
-          var lu = (typeof tickerLogoUrl === 'function') ? tickerLogoUrl(m.company) : null;
-          var logoHtml = lu
-            ? '<img src="' + lu + '" style="height:14px;width:14px;border-radius:3px;object-fit:contain;background:rgba(255,255,255,0.06);padding:1px;" onerror="this.style.display=\'none\'">'
-            : '<span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);">' + (m.company||'?').charAt(0).toUpperCase() + '</span>';
-          return '<div class="score-card' + cls + '">' +
-            '<div class="card-rank">' + rankLbl + '</div>' +
-            '<div class="card-score">' + m.score.toFixed(2) + '</div>' +
-            '<div class="card-model">' + m.name + '</div>' +
-            '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:3px;">' +
-              logoHtml +
-              '<span class="card-delta ' + dCls + '">' + dTxt + '</span>' +
-            '</div>' +
-            '</div>';
-        }
-        function makeCardFeatured(m, i, boardId) {
-  var cls = i===0?' gold':i===1?' silver':i===2?' bronze':'';
-  var rankLbl = '#'+(i+1);
-  var dColor = m.d===null?'#4a4a70':m.d>0?'#00e676':'#ff5252';
-  var dTxt = m.d===null?'—':m.d>0?'↑ '+m.d.toFixed(2):'↓ '+Math.abs(m.d).toFixed(2);
-  var lu = (typeof tickerLogoUrl==='function')?tickerLogoUrl(m.company):null;
-  var bgImg = lu?'<img src="'+lu+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.10;pointer-events:none;" onerror="this.style.display=\'none\'">':'';
-  var glowStyle='', rankColor='#5a5a80';
-  if(i===0){ glowStyle='border:1px solid rgba(255,215,0,0.9);box-shadow:0 0 16px rgba(255,215,0,0.6),0 0 6px rgba(255,215,0,0.35);'; rankColor='#ffd700'; }
-  else if(i===1){ glowStyle='border:1px solid rgba(200,205,220,0.85);box-shadow:0 0 14px rgba(200,205,220,0.55),0 0 5px rgba(200,205,220,0.3);'; rankColor='#c8c8dc'; }
-  else if(i===2){ glowStyle='border:1px solid rgba(205,127,50,0.9);box-shadow:0 0 16px rgba(205,127,50,0.6),0 0 6px rgba(205,127,50,0.35);'; rankColor='#cd7f32'; }
-  var bd = boardId||'';
-  var da=' data-name="'+m.name+'" data-company="'+(m.company||'')+'" data-score="'+m.score.toFixed(2)+'" data-rank="'+rankLbl+'" data-delta="'+dTxt+'" data-dcolor="'+dColor+'" data-logo="'+(lu||'')+'" data-rankcolor="'+rankColor+'" data-board="'+bd+'"';
-  return '<div class="score-card'+cls+'" style="position:relative;overflow:hidden;padding:8px 5px 7px;cursor:pointer;'+glowStyle+'" onclick="showCardModal(this)"'+da+'>' +
-    bgImg +
-    '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0px;">' +
-      '<div style="font-size:14px;font-weight:700;color:'+rankColor+';line-height:1.1;">'+rankLbl+'</div>' +
-      '<div style="font-size:20px;font-weight:800;color:#ffffff;font-variant-numeric:tabular-nums;line-height:1.1;">'+m.score.toFixed(2)+'</div>' +
-      '<div style="font-size:9.5px;font-weight:600;color:#c8c8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:92%;text-align:center;line-height:1.2;">'+m.name+'</div>' +
-      '<div style="font-size:10px;font-weight:600;color:#8888b8;letter-spacing:0.3px;line-height:1.2;">'+(m.company||'')+'</div>' +
-      '<div style="font-size:13px;font-weight:700;color:'+dColor+';margin-top:5px;line-height:1.1;">'+dTxt+'</div>' +
-    '</div>' +
-  '</div>';
+const LOGOS = {
+  'Anthropic':   'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
+  'Google':      'https://www.google.com/s2/favicons?domain=google.com&sz=64',
+  'OpenAI':      'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+  'xAI':         'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
+  'Mistral':     'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  'Mistral AI':  'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  'DeepSeek':    'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
+  'Meta':        'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
+  'Alibaba':     'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+  'Zhipu AI':    'https://www.google.com/s2/favicons?domain=zhipuai.cn&sz=64',
+  'MiniMax':     'https://www.google.com/s2/favicons?domain=minimax.com&sz=64',
+  'Cohere':      'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
+  'Moonshot AI': 'https://www.google.com/s2/favicons?domain=moonshot.cn&sz=64',
+  'Amazon':      'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
+  'Microsoft':   'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
+  'NVIDIA':      'https://www.google.com/s2/favicons?domain=nvidia.com&sz=64',
+};
+function logoImg(company, size) {
+  const url = LOGOS[company];
+  const s = size || 20;
+  if (url) return '<img class="lab-logo" src="' + url + '" width="' + s + '" height="' + s + '" alt="' + (company||'') + '" onerror="this.style.display=\'none\'">';
+  const lc = labColor(company);
+  return '<span style="width:' + s + 'px;height:' + s + 'px;border-radius:4px;background:' + lc.bg + ';display:inline-flex;align-items:center;justify-content:center;font-size:' + Math.round(s*0.45) + 'px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0">' + lc.init + '</span>';
 }
-        function loadBoard(url, elId, count, cardFn) {
-    cardFn = cardFn || makeCard;
-    var el = document.getElementById(elId);
-    if (!el) return;
-    fetch(url)
-      .then(function(r){ return r.json(); })
-      .then(function(data) {
-        var raw = (data.models || data);
-        var allModels = raw.map(function(m) {
-          var sc = m.scores || [];
-          var vals = sc.filter(function(v){ return v !== null && v !== undefined; });
-          var score = vals.length ? vals[vals.length-1] : 0;
-          var prev = vals.length > 1 ? vals[vals.length-2] : null;
-          var d = (prev !== null) ? Math.round((score - prev)*100)/100 : null;
-          return { name: m.name, company: m.company, score: score, d: d };
-        }).filter(function(m){ return m.score > 0; })
-          .sort(function(a,b){ return b.score - a.score; });
-        if(typeof BOARD_RANKINGS !== 'undefined') {
-          BOARD_RANKINGS[elId] = allModels.map(function(m){ return {name:m.name, d:m.d}; });
-        }
-        var display = allModels.slice(0, count||5);
-        el.innerHTML = display.length ? display.map(function(m,i){ return cardFn(m,i,elId); }).join('') : '';
+
+// ══ DDP CONFIG ════════════════════════════════════════
+const DDP_CONFIG = {
+  trsbench: {
+    title: '<span class="hl">TRS</span>bench — Overall Rankings',
+    sub: 'Weighted composite · 7 pillars · 18 verified sources · Independent &amp; transparent',
+    file: 'trs-data.json', totalPillars: 7, sourceCount: 18,
+    methLink: 'trsmethodology.html',
+    pillars: [
+      { key:'safety',           label:'Safety',       icon:'🛡️', pct:'21%', compact:false },
+      { key:'reasoning',        label:'Reasoning',    icon:'🧠', pct:'20%', compact:false },
+      { key:'coding',           label:'Coding',       icon:'💻', pct:'20%', compact:false },
+      { key:'human_preference', label:'Instruction',  icon:'📋', pct:'18%', compact:true  },
+      { key:'knowledge',        label:'Knowledge',    icon:'📚', pct:'8%',  compact:true  },
+      { key:'efficiency',       label:'Efficiency',   icon:'⚡', pct:'7%',  compact:true  },
+      { key:'usage_adoption',   label:'Usage',        icon:'📊', pct:'6%',  compact:true  },
+    ],
+  },
+  truscore: {
+    title: '<span class="hl">TRU</span>score — Truth Rankings',
+    sub: 'Weighted composite · 4 pillars · 7 verified sources · Independent &amp; transparent',
+    file: 'truscore-data.json', totalPillars: 4, sourceCount: 7,
+    methLink: 'truscore.html',
+    pillars: [
+      { key:'factuality',    label:'Factuality',    icon:'✅', pct:'40%', compact:false },
+      { key:'neutrality',    label:'Neutrality',    icon:'⚖️', pct:'30%', compact:false },
+      { key:'hallucination', label:'Hallucination', icon:'👻', pct:'20%', compact:false },
+      { key:'calibration',   label:'Calibration',   icon:'🎯', pct:'10%', compact:true  },
+    ],
+  },
+  trscode: {
+    title: '<span class="hl">TRS</span>code — Coding Rankings',
+    sub: 'Weighted composite · 5 pillars · 8 verified sources · Independent &amp; transparent',
+    file: 'trscode-data.json', totalPillars: 5, sourceCount: 8,
+    methLink: 'trscode-methodology.html',
+    pillars: [
+      { key:'issue_resolution',  label:'Issue Res.',  icon:'🔧', pct:'30%', compact:false },
+      { key:'code_generation',   label:'Code Gen.',   icon:'💡', pct:'25%', compact:false },
+      { key:'agentic_coding',    label:'Agentic',     icon:'🤖', pct:'20%', compact:false },
+      { key:'scientific',        label:'Scientific',  icon:'🔬', pct:'15%', compact:true  },
+      { key:'human_preference',  label:'Human Pref',  icon:'👥', pct:'10%', compact:true  },
+    ],
+  },
+  trfcast: {
+    title: '<span class="hl">TRF</span>cast — Prediction Rankings',
+    sub: 'Weighted composite · 5 pillars · 4 verified sources · Independent &amp; transparent',
+    file: 'trf-data.json', totalPillars: 5, sourceCount: 4,
+    methLink: 'trfcast-methodology.html',
+    pillars: [
+      { key:'forecasting',         label:'Forecasting',    icon:'🔮', pct:'35%', compact:false },
+      { key:'trading',             label:'Trading',        icon:'📈', pct:'25%', compact:false },
+      { key:'calibration',         label:'Calibration',    icon:'🎯', pct:'20%', compact:false },
+      { key:'financial_reasoning', label:'Fin. Reasoning', icon:'💰', pct:'12%', compact:true  },
+      { key:'market_intelligence', label:'Market Intel',   icon:'🧮', pct:'8%',  compact:true  },
+    ],
+  },
+  tragents: {
+    title: '<span class="hl">TR</span><span style="color:#f87171">Agents</span> — Agent Rankings',
+    sub: 'Weighted composite · 6 pillars · 10+ verified sources · Independent &amp; transparent',
+    file: 'tragent-data.json', totalPillars: 6, sourceCount: 10,
+    methLink: 'tragents-methodology.html',
+    pillars: [
+      { key:'task_completion',  label:'Task Completion',  icon:'✅', pct:'25%', compact:false },
+      { key:'cost_efficiency',  label:'Cost Efficiency',  icon:'💰', pct:'20%', compact:false },
+      { key:'tool_reliability', label:'Tool Reliability', icon:'🔧', pct:'20%', compact:false },
+      { key:'safety_security',  label:'Safety',           icon:'🛡️', pct:'15%', compact:true  },
+      { key:'accessibility',    label:'Accessibility',    icon:'🌐', pct:'10%', compact:true  },
+      { key:'multi_model',      label:'Multi-Model',      icon:'🤝', pct:'10%', compact:true  },
+    ],
+  },
+};
+
+// ══ STATE ════════════════════════════════════════════
+const _ddpData = { trsbench:null, truscore:null, trscode:null, trfcast:null, tragents:null };
+let currentDDP = 'trsbench';
+function activeData(){ return _ddpData[currentDDP]; }
+function getColspan(){ return 3 + DDP_CONFIG[currentDDP].pillars.length; }
+
+let activeFilter = { lab:'All Labs', license:'all' };
+let searchQuery = '';
+let currentRankMode = 'models';
+
+// ══ UTILITIES ════════════════════════════════════════
+function fmtDate(iso){
+  const [,m,d] = iso.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[parseInt(m)-1]+' '+parseInt(d);
+}
+
+function getLatestScore(model){
+  const s = model.scores.filter(v=>v!==null && v>0);
+  return s.length ? s[s.length-1] : null;
+}
+
+function isFreshToday(model){
+  const data = activeData();
+  if(!data || !data.dates) return false;
+  const idx = data.dates.length - 1;
+  const s = model.scores[idx];
+  return s !== null && s !== undefined && s > 0;
+}
+
+function getCoverage(model){
+  if(currentDDP === 'trsbench'){
+    if(isFreshToday(model)) return model.category_count || 0;
+    return Object.keys(model.pillar_scores || {}).length;
+  }
+  return Object.keys(model.pillar_scores || {}).length;
+}
+
+function getChange(model){
+  const s = model.scores.filter(v=>v!==null && v>0);
+  if(s.length < 2) return 0;
+  return +(s[s.length-1] - s[s.length-2]).toFixed(2);
+}
+
+function getLast7(model){
+  return model.scores.filter(v=>v!==null && v>0).slice(-7);
+}
+
+function buildSparklineSVG(pts, color){
+  if(!pts || pts.length < 2) return '';
+  const mn = Math.min(...pts) - 0.5, mx = Math.max(...pts) + 0.5, rng = mx - mn || 1;
+  const svgPts = pts.map((s,i)=>{
+    const x = (i/(pts.length-1))*46;
+    const y = 20 - ((s-mn)/rng)*18;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  return `<svg class="spark" viewBox="0 0 46 20"><polyline points="${svgPts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+}
+
+function sparkColor(pts){
+  if(!pts || pts.length < 2) return 'rgba(0,229,255,0.25)';
+  const chg = pts[pts.length-1] - pts[0];
+  if(chg > 1) return 'rgba(34,211,163,0.55)';
+  if(chg < -1) return 'rgba(248,113,113,0.55)';
+  return 'rgba(0,229,255,0.35)';
+}
+
+// ══ THEAD + SIDEBAR PILLAR RENDERERS ═════════════════
+function renderThead(){
+  const pillars = DDP_CONFIG[currentDDP].pillars;
+  const ths = pillars.map(p =>
+    `<th${p.compact?' class="hide-compact"':''}>${p.label} <span style="font-size:8px;color:rgba(255,255,255,0.2)">${p.pct}</span></th>`
+  ).join('');
+  document.getElementById('theadRow').innerHTML =
+    `<th style="width:52px;text-align:center">#</th><th>Model</th><th style="min-width:130px">Score <span class="sort-icon">↓</span></th>${ths}`;
+}
+
+function buildPillarSidebar(){
+  const cfg = DDP_CONFIG[currentDDP];
+  document.getElementById('pillarHeader').innerHTML =
+    `Pillars (${cfg.totalPillars}) <span class="sb-chevron">▾</span>`;
+  document.getElementById('pillarList').innerHTML =
+    `<div class="pillar-item active" onclick="setPillar('overall',this)"><span class="p-icon">🏆</span> Overall <span class="p-check">✓</span></div>` +
+    cfg.pillars.map(p =>
+      `<div class="pillar-item" onclick="setPillar('${p.key}',this)"><span class="p-icon">${p.icon}</span> ${p.label}</div>`
+    ).join('');
+  document.getElementById('activePillarPill').textContent = 'Overall ✓';
+}
+
+// ══ SET DDP ═══════════════════════════════════════════
+function setDDP(ddp){
+  if(currentDDP === ddp && activeData()) return;
+  currentDDP = ddp;
+
+  // Nav tab active state
+  document.querySelectorAll('.htab[data-ddp]').forEach(t => t.classList.remove('active'));
+  const activeTab = document.querySelector(`.htab[data-ddp="${ddp}"]`);
+  if(activeTab) activeTab.classList.add('active');
+
+  // Update title, subtitle, methodology link
+  const cfg = DDP_CONFIG[ddp];
+  document.querySelector('.content-title').innerHTML = cfg.title;
+  document.querySelector('.content-sub').innerHTML = cfg.sub;
+  const methLink = document.querySelector('.meta-link');
+  if(methLink) methLink.href = cfg.methLink;
+
+  // Rebuild thead and sidebar pillars
+  renderThead();
+  buildPillarSidebar();
+
+  // Reset filters
+  activeFilter.lab = 'All Labs';
+  currentRankMode = 'models';
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.rtab')?.classList.add('active');
+
+  const data = activeData();
+  if(data){
+    buildLabFilter(data.models);
+    renderTable();
+    const lastDate = data.dates?.length ? data.dates[data.dates.length-1] : null;
+    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + (data.run_at ? ' · ' + data.run_at : '');
+    document.getElementById('metaSources').textContent = cfg.sourceCount + '/' + cfg.sourceCount + ' sources fired';
+  } else {
+    document.getElementById('tableBody').innerHTML =
+      `<tr><td colspan="${getColspan()}"><div class="loading-state"><div class="spinner"></div> Loading ${cfg.title.replace(/<[^>]*>/g,'')} data…</div></td></tr>`;
+    fetch(cfg.file + '?v=' + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        _ddpData[ddp] = d;
+        if(currentDDP !== ddp) return;
+        buildLabFilter(d.models);
+        renderTable();
+        const lastDate = d.dates?.length ? d.dates[d.dates.length-1] : null;
+        if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + (d.run_at ? ' · ' + d.run_at : '');
+        document.getElementById('metaSources').textContent = cfg.sourceCount + '/' + cfg.sourceCount + ' sources fired';
       })
-      .catch(function(){ el.innerHTML = ''; });
+      .catch(() => {
+        if(currentDDP === ddp)
+          document.getElementById('tableBody').innerHTML =
+            `<tr><td colspan="${getColspan()}"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load data</div></td></tr>`;
+      });
+  }
+}
+
+// Pillar score cell — highlights the top score in each column
+function pCol(model, pillar){
+  const ps = model.pillar_scores;
+  if(!ps || ps[pillar] == null) return '<span style="font-size:10px;color:rgba(255,255,255,0.18)">—</span>';
+  const val = ps[pillar];
+  // Highlight if this pillar score is notably high (>=90)
+  const hi = val >= 90 ? ' hi' : '';
+  return `<span class="pcol${hi}">${val.toFixed(1)}</span>`;
+}
+
+// ══ RENDER TABLE ═════════════════════════════════════
+function renderTable(){
+  const data = activeData();
+  if(!data) return;
+  if(currentRankMode === 'labs'){ renderLabsTable(); return; }
+  const tbody = document.getElementById('tableBody');
+  const query = (document.getElementById('searchInput').value||'').toLowerCase();
+
+  // Build global rank map using FRESH-FIRST ordering (same as table display)
+  const _allScored = data.models.filter(m => getLatestScore(m) !== null);
+  const _gFresh = _allScored.filter(m => isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+  const _gStale = _allScored.filter(m => !isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+  const globalRankMap = new Map();
+  [..._gFresh, ..._gStale].forEach((m, i) => globalRankMap.set(m.name, i + 1));
+
+  // Filter + sort models
+  let models = data.models
+    .filter(m => getLatestScore(m) !== null)
+    .filter(m => activeFilter.lab === 'All Labs' || m.company === activeFilter.lab)
+    .filter(m => !query || m.name.toLowerCase().includes(query) || (m.company||'').toLowerCase().includes(query))
+    .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
+
+  const maxScore = _gFresh.length ? getLatestScore(_gFresh[0]) : 100;
+
+  if(!models.length){
+    tbody.innerHTML = `<tr><td colspan="${getColspan()}" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>`;
+    document.getElementById('metaCount').textContent = '0 models ranked';
+    return;
   }
 
-// ── Freshness line ──
-  // ── Freshness lines — UPDATE this time each morning when scores are pushed ──
-  var LAST_PUSH_TIME = '1:04 PM CST';
-  ['fl-trsbench','fl-truscore','fl-trscode','fl-trfcast','fl-tragents'].forEach(function(id){
-    var el = document.getElementById(id);
-    if (el) el.textContent = 'Fresh Daily Rankings · Updated today at ' + LAST_PUSH_TIME;
+  document.getElementById('metaCount').textContent = models.length + ' models ranked';
+
+  // Split fresh (scored today) vs stale (carry-forward from previous day)
+  const freshModels = models.filter(m => isFreshToday(m));
+  const staleModels = models.filter(m => !isFreshToday(m));
+
+  // Build rows for a group of models
+  function buildRows(group, rankOffset, isStale){
+    const cfgPillars = DDP_CONFIG[currentDDP].pillars;
+    const totalP = DDP_CONFIG[currentDDP].totalPillars;
+    return group.map((m, i) => {
+      const rank = globalRankMap.get(m.name) || (i + 1 + rankOffset);
+      const score = getLatestScore(m);
+      const chg = getChange(m);
+      const pts7 = getLast7(m);
+      const sc = sparkColor(pts7);
+      const sparkSVG = buildSparklineSVG(pts7, sc);
+      const covered = getCoverage(m);
+      const coverageBadge = covered > 0
+        ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>`
+        : '';
+      const staleRowStyle = isStale ? 'opacity:0.62;' : '';
+      const staleScoreNote = isStale
+        ? `<span style="font-size:8px;color:rgba(255,200,0,0.55);margin-left:4px">${fmtDate(data.dates[data.dates.length-2]||'')}</span>`
+        : '';
+
+    let rankHTML;
+    if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
+    else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal medal-silver">🥈</span></div>`;
+    else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal medal-bronze">🥉</span></div>`;
+    else rankHTML = `<div class="rank-cell">${rank}</div>`;
+
+    let chgHTML;
+    if(Math.abs(chg) < 0.005) chgHTML = `<span class="chg nc">+0.00</span>`;
+    else if(chg > 0) chgHTML = `<span class="chg up">↑ ${chg.toFixed(2)}</span>`;
+    else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
+
+    let rowClass = '';
+    if(rank===1) rowClass = 'row-1';
+    else if(rank===2) rowClass = 'row-2';
+    else if(rank===3) rowClass = 'row-3';
+
+    const coClass = {
+      'Anthropic':'co-anthropic','Google':'co-google','OpenAI':'co-openai',
+      'xAI':'co-xai','Mistral':'co-mistral','DeepSeek':'co-deepseek',
+      'Meta':'co-meta','Alibaba':'co-alibaba'
+    }[m.company] || 'co-other';
+
+    const pillarCells = cfgPillars.map(p =>
+      `<td${p.compact?' class="hide-compact"':''}>${pCol(m, p.key)}</td>`
+    ).join('');
+
+    return `<tr class="${rowClass} ${coClass}" style="${staleRowStyle}" data-model="${m.name.replace(/"/g,'&quot;')}" onclick="openV2Modal(this.dataset.model,'${currentDDP}')">
+      <td>${rankHTML}</td>
+      <td><div class="m-cell">
+        ${logoImg(m.company, 28)}
+        <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} &middot; Proprietary</div></div>
+      </div></td>
+      <td>${coverageBadge}<span class="score-val">${score.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span>${staleScoreNote}</td>
+      ${pillarCells}
+    </tr>`;
+  }).join('');
+  }
+
+  // Stale divider row
+  const staleDivider = staleModels.length ? `
+    <tr><td colspan="${getColspan()}" style="padding:6px 16px;background:rgba(255,200,0,0.04);border-top:1px solid rgba(255,200,0,0.12);border-bottom:1px solid rgba(255,200,0,0.08);">
+      <span style="font-size:10px;color:rgba(255,200,0,0.45);letter-spacing:0.08em">&#9203; NOT SCORED TODAY &middot; Last known scores shown &middot; Updates on next scrape</span>
+    </td></tr>` : '';
+
+  tbody.innerHTML = buildRows(freshModels, 0, false)
+    + staleDivider
+    + buildRows(staleModels, freshModels.length, true);
+}
+
+// ══ BUILD TICKER ═════════════════════════════════════
+// ══ TICKER — mirrors original homepage exactly ════════════════════════════
+const TICKER_LOGOS = {
+  anthropic: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
+  openai:    'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+  google:    'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
+  meta:      'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
+  xai:       'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
+  mistral:   'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
+  alibaba:   'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
+  deepseek:  'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
+  cohere:    'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
+  amazon:    'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
+  nvidia:    'https://www.google.com/s2/favicons?domain=nvidia.com&sz=64',
+  microsoft: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
+};
+function tickerLogoUrl(company){
+  const k = (company||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  for(const key in TICKER_LOGOS){ if(k.includes(key)) return TICKER_LOGOS[key]; }
+  return null;
+}
+function makeTickerItem(logoUrl, company, cat, name, valHtml, href){
+  const logo = logoUrl
+    ? `<img class="ticker-logo" src="${logoUrl}" alt="" onerror="this.style.display='none'">`
+    : `<span class="ticker-logo-fb">${(company||'?').charAt(0).toUpperCase()}</span>`;
+  return `<a class="ticker-item" href="${href}">${logo}<span class="ticker-badge"><span class="ticker-cat">${cat}</span><span class="ticker-name">${name}</span></span>${valHtml}</a>`;
+}
+function buildTicker(datasets){
+  const benches = [
+    {catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">bench</span>',  url:'/scores',         data:datasets[0]},
+    {catHtml:'#1 <span style="color:#00d4ff">TRU</span><span style="color:rgba(255,255,255,0.75)">score</span>', url:'/truscore-scores', data:datasets[1]},
+    {catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">code</span>',  url:'/trscode-scores',  data:datasets[2]},
+    {catHtml:'#1 <span style="color:#00d4ff">TRF</span><span style="color:rgba(255,255,255,0.75)">cast</span>',  url:'/trfcast-scores',  data:datasets[3]},
+    {catHtml:'#1 <span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>',                url:'/tragents',        data:datasets[4]},
+  ];
+  const items = [];
+  let bigGain = {delta:-Infinity, name:null};
+  let bigDrop = {delta:Infinity,  name:null};
+  benches.forEach(b => {
+    const data = b.data; if(!data) return;
+    const dates = data.dates||[]; const li = dates.length-1; const pi = Math.max(0,li-7);
+    const models = (data.models||[])
+      .filter(m => m.scores && m.scores[li] != null)
+      .sort((a,b) => (b.scores[li]||0)-(a.scores[li]||0));
+    if(models.length){
+      const top = models[0];
+      const lu = tickerLogoUrl(top.company);
+      const sv = `<span class="ticker-val neutral">${top.scores[li].toFixed(2)}</span>`;
+      items.push(makeTickerItem(lu, top.company, b.catHtml, top.name, sv, b.url));
+    }
+    models.forEach(m => {
+      const s = m.scores[li], p = m.scores[pi];
+      if(s==null||p==null) return;
+      const d = parseFloat((s-p).toFixed(2));
+      if(d > bigGain.delta) bigGain = {delta:d, name:m.name, company:m.company, url:b.url};
+      if(d < bigDrop.delta) bigDrop = {delta:d, name:m.name, company:m.company, url:b.url};
+    });
+  });
+  if(bigGain.delta > 0 && bigGain.name){
+    const lu = tickerLogoUrl(bigGain.company);
+    const gainIcon = bigGain.delta >= 5
+      ? `<span style="font-size:28px;line-height:1;margin-left:6px">&#128293;</span>`
+      : `<span class="ticker-val up">&#8679;&#8201;+${bigGain.delta.toFixed(2)}</span>`;
+    const gainLabel = bigGain.delta >= 5 ? 'On Fire &#128293;' : 'Biggest Gainer';
+    items.push(makeTickerItem(lu, bigGain.company, gainLabel, bigGain.name,
+      gainIcon+`<span style="font-size:22px;color:#00e676;margin-left:4px;font-weight:700">+${bigGain.delta.toFixed(2)}</span>`, bigGain.url));
+  }
+  if(bigDrop.delta < 0 && bigDrop.name){
+    const lu = tickerLogoUrl(bigDrop.company);
+    items.push(makeTickerItem(lu, bigDrop.company, 'Biggest Drop', bigDrop.name,
+      `<span class="ticker-val down">&#8681;&#8201;${bigDrop.delta.toFixed(2)}</span>`, bigDrop.url));
+  }
+  if(!items.length) return;
+  const track = document.getElementById('tickerTrack');
+  track.innerHTML = items.join('') + items.join('');
+  track.style.animationDuration = Math.max(24, items.length * 7) + 's';
+  track.classList.add('animating');
+}
+// Load all 5 DDP feeds for ticker (independent of main table fetch)
+Promise.all([
+  fetch('trs-data.json?v='+Date.now()).then(r=>r.json()),
+  fetch('truscore-data.json?v='+Date.now()).then(r=>r.json()),
+  fetch('trscode-data.json?v='+Date.now()).then(r=>r.json()),
+  fetch('trf-data.json?v='+Date.now()).then(r=>r.json()),
+  fetch('tragent-data.json?v='+Date.now()).then(r=>r.json()),
+]).then(function(datasets){
+  // Cache all DDP data so About card works cross-benchmark without extra fetches
+  ['trsbench','truscore','trscode','trfcast','tragents'].forEach(function(k,i){
+    if(!_ddpData[k]) _ddpData[k] = datasets[i];
+  });
+  buildTicker(datasets);
+}).catch(e => console.warn('Ticker error:', e));
+
+// ══ BUILD LAB FILTER ═════════════════════════════════
+function buildLabFilter(models){
+  const labs = [...new Set(models.map(m=>m.company).filter(Boolean))].sort();
+  const list = document.getElementById('labList');
+  list.innerHTML = `<div class="lab-item active" onclick="filterByLab('All Labs',this)">
+    <div class="radio on"></div> All Labs
+  </div>` + labs.map(lab => {
+    const lc = labColor(lab);
+    return `<div class="lab-item" onclick="filterByLab('${lab}',this)">
+      <div class="radio"></div>
+      <div class="lab-dot" style="background:${lc.dot}"></div> ${lab}
+    </div>`;
+  }).join('');
+}
+
+// ══ FILTER HANDLERS ══════════════════════════════════
+function filterByLab(lab, el){
+  activeFilter.lab = lab;
+  document.querySelectorAll('#labList .lab-item').forEach(li=>{
+    li.classList.remove('active');
+    li.querySelector('.radio').classList.remove('on');
+    li.querySelector('.radio').innerHTML = '';
+  });
+  el.classList.add('active');
+  const r = el.querySelector('.radio');
+  r.classList.add('on');
+  r.innerHTML = '';
+  document.getElementById('activeLabPill').textContent = lab;
+  renderTable();
+}
+
+// ══ RENDER LABS TABLE ════════════════════════════════
+function renderLabsTable(){
+  const data = activeData();
+  if(!data) return;
+  const tbody = document.getElementById('tableBody');
+
+  const labMap = {};
+  data.models.forEach(m => {
+    const score = getLatestScore(m);
+    if(score === null || score <= 0) return;
+    const co = m.company || 'Unknown';
+    if(!labMap[co]) labMap[co] = { company:co, models:[], bestScore:0, bestModel:null };
+    labMap[co].models.push(m);
+    if(score > labMap[co].bestScore){ labMap[co].bestScore = score; labMap[co].bestModel = m; }
   });
 
-  // ── Ticker ──
-  var LOGOS = {
-    anthropic: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
-    openai:    'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
-    google:    'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
-    deepmind:  'https://www.google.com/s2/favicons?domain=deepmind.google&sz=64',
-    meta:      'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
-    xai:       'https://www.google.com/s2/favicons?domain=x.ai&sz=64',
-    mistral:   'https://www.google.com/s2/favicons?domain=mistral.ai&sz=64',
-    alibaba:   'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
-    qwen:      'https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64',
-    deepseek:  'https://www.google.com/s2/favicons?domain=deepseek.com&sz=64',
-    cohere:    'https://www.google.com/s2/favicons?domain=cohere.com&sz=64',
-    amazon:    'https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64',
-    nvidia:    'https://www.google.com/s2/favicons?domain=nvidia.com&sz=64',
-    microsoft: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
-    zhipu:     'https://www.google.com/s2/favicons?domain=zhipuai.cn&sz=64'
-  };
-  function tickerLogoUrl(company) {
-    var k = (company||'').toLowerCase().replace(/[^a-z0-9]/g,'');
-    for (var key in LOGOS) { if (k.indexOf(key) !== -1) return LOGOS[key]; }
-    return null;
-  }
-  function makeTickerItem(logoUrl, company, cat, name, valHtml, href) {
-    var logo = logoUrl
-      ? '<img class="ticker-logo" src="'+logoUrl+'" alt="" onerror="this.style.display=\'none\'">'
-      : '<span class="ticker-logo-fb">'+(company||'?').charAt(0).toUpperCase()+'</span>';
-    return '<a class="ticker-item" href="'+href+'">'
-      +logo
-      +'<span class="ticker-badge">'
-      +'<span class="ticker-cat">'+cat+'</span>'
-      +'<span class="ticker-name">'+name+'</span>'
-      +'</span>'
-      +valHtml+'</a>';
-  }
-  function buildTicker(datasets) {
-    var benches = [
-      {label:'TRSbench', url:'/scores',          catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">bench</span>', data:datasets[0]},
-      {label:'TRUscore', url:'/truscore-scores',  catHtml:'#1 <span style="color:#00d4ff">TRU</span><span style="color:rgba(255,255,255,0.75)">score</span>', data:datasets[1]},
-      {label:'TRScode',  url:'/trscode-scores',   catHtml:'#1 <span style="color:#00d4ff">TRS</span><span style="color:rgba(255,255,255,0.75)">code</span>',  data:datasets[2]},
-      {label:'TRFcast',  url:'/trfcast-scores',   catHtml:'#1 <span style="color:#00d4ff">TRF</span><span style="color:rgba(255,255,255,0.75)">cast</span>',  data:datasets[3]},
-      {label:'TRAgents', url:'/tragents',          catHtml:'#1 <span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>', data:datasets[4]}
-    ];
-    var items = [];
-    var bigGain = {delta:-Infinity, name:null};
-    var bigDrop = {delta:Infinity,  name:null};
-    benches.forEach(function(b) {
-      var data = b.data; if (!data) return;
-      var dates = data.dates||[]; var li = dates.length-1; var pi = Math.max(0,li-7);
-      var models = (data.models||[])
-        .filter(function(m){ return m.scores && m.scores[li] != null; })
-        .sort(function(a,b){ return (b.scores[li]||0)-(a.scores[li]||0); });
-      if (models.length) {
-        var top = models[0];
-        var lu = tickerLogoUrl(top.company);
-        var sv = '<span class="ticker-val neutral">'+top.scores[li].toFixed(2)+'</span>';
-        items.push(makeTickerItem(lu, top.company, b.catHtml, top.name, sv, b.url));
-      }
-      models.forEach(function(m) {
-        var s = m.scores[li], p = m.scores[pi];
-        if (s==null||p==null) return;
-        var d = parseFloat((s-p).toFixed(2));
-        if (d > bigGain.delta) bigGain = {delta:d, name:m.name, company:m.company, url:b.url};
-        if (d < bigDrop.delta) bigDrop = {delta:d, name:m.name, company:m.company, url:b.url};
-      });
-    });
-    if (bigGain.delta > 0 && bigGain.name) {
-      var lu = tickerLogoUrl(bigGain.company);
-      var gainIcon = bigGain.delta >= 5
-        ? '<span style="font-size:28px;line-height:1;margin-left:6px;" title="On Fire!">&#128293;</span>'
-        : '<span class="ticker-val up">&#8679;&#8201;+'+bigGain.delta.toFixed(2)+'</span>';
-      var gainLabel = bigGain.delta >= 5 ? 'On Fire &#128293;' : 'Biggest Gainer';
-      items.push(makeTickerItem(lu, bigGain.company, gainLabel, bigGain.name,
-        gainIcon + '<span style="font-size:22px;color:#00e676;margin-left:4px;font-weight:700;">+'+bigGain.delta.toFixed(2)+'</span>', bigGain.url));
-    }
-    if (bigDrop.delta < 0 && bigDrop.name) {
-      var lu = tickerLogoUrl(bigDrop.company);
-      items.push(makeTickerItem(lu, bigDrop.company, 'Biggest Drop', bigDrop.name,
-        '<span class="ticker-val down">&#8681;&#8201;'+bigDrop.delta.toFixed(2)+'</span>', bigDrop.url));
-    }
-    if (!items.length) return;
-    var track = document.getElementById('ticker-track');
-    if (!track) return;
-    track.innerHTML = items.join('') + items.join('');
-    track.style.animationDuration = Math.max(24, items.length * 7) + 's';
-  }
-  Promise.all([
-    fetch('trs-data.json?v='+Date.now()).then(function(r){return r.json();}),
-    fetch('truscore-data.json?v='+Date.now()).then(function(r){return r.json();}),
-    fetch('trscode-data.json?v='+Date.now()).then(function(r){return r.json();}),
-    fetch('trf-data.json?v='+Date.now()).then(function(r){return r.json();}),
-    fetch('tragent-data.json?v='+Date.now()).then(function(r){return r.json();})
-  ]).then(buildTicker).catch(function(e){ console.warn('Ticker error:',e); });
-// ── Load leaderboard boards ──
-loadBoard('trs-data.json'+('?v='+Date.now()), 'trsbench-row', 5, makeCardFeatured);
-loadBoard('truscore-data.json'+('?v='+Date.now()), 'truscore-row', 5, makeCardFeatured);
-loadBoard('trscode-data.json'+('?v='+Date.now()), 'trscode-row', 5, makeCardFeatured);
-loadBoard('trf-data.json'+('?v='+Date.now()), 'trfcast-row', 5, makeCardFeatured);
-loadBoard('tragent-data.json'+('?v='+Date.now()), 'tragents-row', 5, makeCardFeatured);
+  const labs = Object.values(labMap).sort((a,b) => b.bestScore - a.bestScore);
 
-  // ── Model bios + metadata ──
-          var BOARD_INFO = {
-    'trsbench-row':  {html:'<span style="color:#00d4ff">TRS</span><span style="color:#fff">bench</span>',  cat:'Overall'},
-    'truscore-row':  {html:'<span style="color:#00d4ff">TRU</span><span style="color:#fff">score</span>',  cat:'Truth'},
-    'trscode-row':   {html:'<span style="color:#00d4ff">TRS</span><span style="color:#fff">code</span>',   cat:'Coding'},
-    'trfcast-row':   {html:'<span style="color:#00d4ff">TRF</span><span style="color:#fff">cast</span>',   cat:'Prediction'},
-    'tragents-row':  {html:'<span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>', cat:'Best Agent'}
+  if(!labs.length){
+    tbody.innerHTML = `<tr><td colspan="${getColspan()}" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No labs found.</td></tr>`;
+    return;
+  }
+
+  document.getElementById('metaCount').textContent = labs.length + ' labs ranked';
+
+  const cfgPillars = DDP_CONFIG[currentDDP].pillars;
+  const totalP = DDP_CONFIG[currentDDP].totalPillars;
+  const coClassMap = {
+    'Anthropic':'co-anthropic','Google':'co-google','OpenAI':'co-openai',
+    'xAI':'co-xai','Mistral':'co-mistral','DeepSeek':'co-deepseek',
+    'Meta':'co-meta','Alibaba':'co-alibaba'
   };
-  var BOARD_ORDER = ['trsbench-row','truscore-row','trscode-row','trfcast-row','tragents-row'];
-  var BOARD_RANKINGS = {};
-  var MODEL_BIOS = {
+
+  tbody.innerHTML = labs.map((lab, i) => {
+    const rank = i + 1;
+    const chg = getChange(lab.bestModel);
+    let chgHTML;
+    if(Math.abs(chg) < 0.005) chgHTML = `<span class="chg nc">+0.00</span>`;
+    else if(chg > 0) chgHTML = `<span class="chg up">↑ ${chg.toFixed(2)}</span>`;
+    else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
+
+    const covered = getCoverage(lab.bestModel);
+    const covBadge = covered > 0 ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>` : '';
+
+    let rankHTML;
+    if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
+    else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal medal-silver">🥈</span></div>`;
+    else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal medal-bronze">🥉</span></div>`;
+    else rankHTML = `<div class="rank-cell">${rank}</div>`;
+
+    const coClass = coClassMap[lab.company] || 'co-other';
+    const modelCount = `<span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:3px;padding:1px 6px;color:rgba(255,255,255,0.4);margin-left:6px">${lab.models.length} model${lab.models.length!==1?'s':''}</span>`;
+
+    function bestPCol(pillar){
+      const vals = lab.models.map(m => m.pillar_scores?.[pillar]).filter(v => v!=null && v>0);
+      if(!vals.length) return `<span class="pcol" style="color:rgba(255,255,255,0.15)">—</span>`;
+      const best = Math.max(...vals);
+      return `<span class="pcol${best>=90?' hi':''}">${best.toFixed(1)}</span>`;
+    }
+
+    const pillarCells = cfgPillars.map(p =>
+      `<td${p.compact?' class="hide-compact"':''}>${bestPCol(p.key)}</td>`
+    ).join('');
+
+    const rowClass = rank===1?'row-1':rank===2?'row-2':rank===3?'row-3':'';
+    return `<tr class="${rowClass} ${coClass}">
+      <td>${rankHTML}</td>
+      <td><div class="m-cell">
+        ${logoImg(lab.company, 28)}
+        <div><div class="m-name">${lab.company}</div><div class="m-lab">Best: ${lab.bestModel.name}${modelCount}</div></div>
+      </div></td>
+      <td>${covBadge}<span class="score-val">${lab.bestScore.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span></td>
+      ${pillarCells}
+    </tr>`;
+  }).join('');
+}
+
+function setRankBy(mode, el){
+  document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentRankMode = mode;
+  renderTable();
+}
+
+function setPillar(pillar, el){
+  document.querySelectorAll('.pillar-item').forEach(p=>{ p.classList.remove('active'); p.querySelector('.p-check') && (p.querySelector('.p-check').textContent=''); });
+  el.classList.add('active');
+  const check = el.querySelector('.p-check') || el;
+  if(el.querySelector('.p-check')) el.querySelector('.p-check').textContent = '✓';
+  const label = el.textContent.replace('✓','').trim();
+  document.getElementById('activePillarPill').textContent = label + ' ✓';
+}
+
+function setLicense(mode, el){
+  document.querySelectorAll('.lic-item').forEach(li=>{ li.classList.remove('active'); const r=li.querySelector('.radio');r.classList.remove('on');r.innerHTML=''; });
+  el.classList.add('active');
+  const r = el.querySelector('.radio'); r.classList.add('on'); r.innerHTML='';
+}
+
+// ══ VIEW TOGGLE ═══════════════════════════════════════
+function setView(mode){
+  const body = document.getElementById('mainbody');
+  const btnC = document.getElementById('btnCompact');
+  const btnE = document.getElementById('btnExtended');
+  if(mode==='compact'){ body.classList.add('compact'); btnC.classList.add('active'); btnE.classList.remove('active'); }
+  else { body.classList.remove('compact'); btnE.classList.add('active'); btnC.classList.remove('active'); }
+}
+
+// ══ SIDEBAR COLLAPSE ══════════════════════════════════
+function toggleSidebar(){
+  const wrap = document.getElementById('sbWrap');
+  const sidebar = document.getElementById('sidebar');
+  const btn = document.getElementById('collapseBtn');
+  sidebar.classList.toggle('collapsed');
+  wrap.classList.toggle('is-collapsed');
+  btn.querySelector('.ct-arrow').textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
+}
+
+// ══ MODEL MODAL ══════════════════════════════════════
+let _v2Chart = null;
+
+const V2_BOARD_INFO = {
+  trsbench: { label:'TRSbench', cat:'Overall',    icon:'🏆' },
+  truscore: { label:'TRUscore', cat:'Truth',       icon:'✅' },
+  trscode:  { label:'TRScode',  cat:'Coding',      icon:'💻' },
+  trfcast:  { label:'TRFcast',  cat:'Prediction',  icon:'🔮' },
+  tragents: { label:'TRAgents', cat:'Agents',      icon:'🤖' },
+};
+const V2_BOARD_ORDER = ['trsbench','truscore','trscode','trfcast','tragents'];
+
+const V2_BOARD_LABEL_HTML = {
+  trsbench: '<span style="color:#00d4ff">TRS</span><span style="color:#fff">bench</span>',
+  truscore: '<span style="color:#00d4ff">TRU</span><span style="color:#fff">score</span>',
+  trscode:  '<span style="color:#00d4ff">TRS</span><span style="color:#fff">code</span>',
+  trfcast:  '<span style="color:#00d4ff">TRF</span><span style="color:#fff">cast</span>',
+  tragents: '<span style="color:#00d4ff">TR</span><span style="color:#ff5252">Agents</span>',
+};
+
+const MODEL_BIOS = {
   'Claude Opus 4.6':  { tier:'Flagship',    bio:'"Claude Opus 4.6 is our most capable model to date." — Anthropic',                                                released:'February 5, 2026',    by:'Anthropic'   },
   'Claude Opus 4.5':  { tier:'Flagship',    bio:'"Claude Opus 4.5 is our strongest model for coding and agents." — Anthropic',                                     released:'November 24, 2025',   by:'Anthropic'   },
-  'Claude Opus 4.1':  { tier:'Flagship',    bio:'As of August 2025, Anthropic described Claude Opus 4.1 as “our most capable model to date.”',               released:'August 5, 2025',      by:'Anthropic'   },
+  'Claude Opus 4.1':  { tier:'Flagship',    bio:'As of August 2025, Anthropic described Claude Opus 4.1 as "our most capable model to date."',                     released:'August 5, 2025',      by:'Anthropic'   },
   'Claude Sonnet 4.6':{ tier:'Pro',         bio:'"Claude Sonnet 4.6 is our most capable Sonnet model yet." — Anthropic',                                           released:'February 17, 2026',   by:'Anthropic'   },
   'Claude Sonnet 4.5':{ tier:'Pro',         bio:'"Claude Sonnet 4.5 is best for real-world agents and coding." — Anthropic',                                       released:'September 29, 2025',  by:'Anthropic'   },
   'GPT-5.2':          { tier:'Flagship',    bio:'"GPT-5.2 is our most advanced frontier model for professional work and agents." — OpenAI',                        released:'December 11, 2025',   by:'OpenAI'      },
-  'GPT-5.1':          { tier:'Pro',         bio:'"GPT-5.1 is a smarter, more conversational ChatGPT." — OpenAI',                                                  released:'November 12, 2025',   by:'OpenAI'      },
-  'GPT-5':            { tier:'Flagship',    bio:'As of October 2025, OpenAI called GPT-5 “our breakthrough model with native agents.”',                       released:'October 20, 2025',    by:'OpenAI'      },
+  'GPT-5.1':          { tier:'Pro',         bio:'"GPT-5.1 is a smarter, more conversational ChatGPT." — OpenAI',                                                   released:'November 12, 2025',   by:'OpenAI'      },
+  'GPT-5':            { tier:'Flagship',    bio:'As of October 2025, OpenAI called GPT-5 "our breakthrough model with native agents."',                            released:'October 20, 2025',    by:'OpenAI'      },
   'O3':               { tier:'Specialized', bio:'"o3 is our advanced step-by-step reasoning model." — OpenAI',                                                     released:'June 25, 2025',       by:'OpenAI'      },
-  'Gemini 3 Pro':     { tier:'Flagship',    bio:'"Gemini 3 Pro is Google’s most intelligent model yet." — Google',                                            released:'November 18, 2025',   by:'Google'      },
-  'Gemini 2.5 Pro':   { tier:'Flagship',    bio:'As of June 2025, Google described Gemini 2.5 Pro as “their most intelligent model yet.”',                   released:'June 10, 2025',       by:'Google'      },
+  'Gemini 3 Pro':     { tier:'Flagship',    bio:'"Gemini 3 Pro is Google\'s most intelligent model yet." — Google',                                                released:'November 18, 2025',   by:'Google'      },
+  'Gemini 2.5 Pro':   { tier:'Flagship',    bio:'As of June 2025, Google described Gemini 2.5 Pro as "their most intelligent model yet."',                        released:'June 10, 2025',       by:'Google'      },
   'Gemini Flash 3':   { tier:'Efficient',   bio:'"Gemini Flash 3 is frontier intelligence built for speed." — Google',                                             released:'December 17, 2025',   by:'Google'      },
   'Gemini 3 Flash':   { tier:'Efficient',   bio:'"Gemini 3 Flash is frontier intelligence built for speed." — Google',                                             released:'December 17, 2025',   by:'Google'      },
-  'Grok 4.20':        { tier:'Flagship',    bio:'"Grok 4.20 is xAI’s breakthrough multi-agent collaborative AI model." — xAI',                               released:'February 17, 2026',   by:'xAI'         },
+  'Grok 4.20':        { tier:'Flagship',    bio:'"Grok 4.20 is xAI\'s breakthrough multi-agent collaborative AI model." — xAI',                                   released:'February 17, 2026',   by:'xAI'         },
   'Grok 4.1':         { tier:'Specialized', bio:'"Grok 4.1 is exceptionally capable in creative and emotional interactions." — xAI',                              released:'November 17, 2025',   by:'xAI'         },
   'DeepSeek V3.2':    { tier:'Flagship',    bio:'"DeepSeek V3.2 is our most advanced open model yet." — DeepSeek',                                                released:'December 15, 2025',   by:'DeepSeek'    },
   'DeepSeek V3.1':    { tier:'Pro',         bio:'"DeepSeek V3.1 sets new open-source performance records." — DeepSeek',                                           released:'August 28, 2025',     by:'DeepSeek'    },
@@ -803,9 +1210,9 @@ loadBoard('tragent-data.json'+('?v='+Date.now()), 'tragents-row', 5, makeCardFea
   'GLM-4':            { tier:'Pro',         bio:'"GLM-4 is our powerful general-purpose frontier model." — Zhipu AI',                                             released:'June 20, 2025',       by:'Zhipu AI'    },
   'Llama 4.08B':      { tier:'Efficient',   bio:'"Llama 4.08B is our balanced efficient open model." — Meta',                                                     released:'April 5, 2025',       by:'Meta'        },
   'Llama 4.05B':      { tier:'Efficient',   bio:'"Llama 4.05B is our efficient high-performance variant." — Meta',                                                released:'April 5, 2025',       by:'Meta'        },
-  'Llama 4.0':        { tier:'Flagship',    bio:'As of April 2025, Meta described Llama 4.0 as “their most advanced open foundation model.”',                released:'April 5, 2025',       by:'Meta'        },
+  'Llama 4.0':        { tier:'Flagship',    bio:'As of April 2025, Meta described Llama 4.0 as "their most advanced open foundation model."',                     released:'April 5, 2025',       by:'Meta'        },
   'Mistral Large 3':  { tier:'Flagship',    bio:'"Mistral Large 3 is our most powerful model." — Mistral AI',                                                     released:'December 2, 2025',    by:'Mistral AI'  },
-  'Mistral Large':    { tier:'Flagship',    bio:'As of July 2025, Mistral described Mistral Large as “our flagship frontier model.”',                        released:'July 10, 2025',       by:'Mistral AI'  },
+  'Mistral Large':    { tier:'Flagship',    bio:'As of July 2025, Mistral described Mistral Large as "our flagship frontier model."',                             released:'July 10, 2025',       by:'Mistral AI'  },
   'Mistral Voxtral':  { tier:'Specialized', bio:'"Voxtral is our specialized multimodal voice model." — Mistral AI',                                              released:'July 25, 2025',       by:'Mistral AI'  },
   'Qwen3-Coder':      { tier:'Specialized', bio:'"Qwen3-Coder is our specialized coding and agent model." — Alibaba',                                             released:'December 10, 2025',   by:'Alibaba'     },
   'Qwen3':            { tier:'Flagship',    bio:'"Qwen3 is our most capable model family yet." — Alibaba',                                                        released:'November 25, 2025',   by:'Alibaba'     },
@@ -815,121 +1222,414 @@ loadBoard('tragent-data.json'+('?v='+Date.now()), 'tragents-row', 5, makeCardFea
   'MiniMax M1':       { tier:'Pro',         bio:'"M1 is our high-performance general AI model." — MiniMax',                                                       released:'June 15, 2025',       by:'MiniMax'     },
   'Kimi K2.5':        { tier:'Specialized', bio:'"Kimi K2.5 is our top long-context multimodal model." — Moonshot AI',                                            released:'January 27, 2026',    by:'Moonshot AI' },
   'Cohere Command R+':{ tier:'Pro',         bio:'"Command R+ is our most powerful enterprise RAG model." — Cohere',                                               released:'April 2, 2025',       by:'Cohere'      },
-  'Cohere Aya':       { tier:'Specialized', bio:'"Aya is our leading open multilingual model family." — Cohere',                                                  released:'February 17, 2026',   by:'Cohere'      }
+  'Cohere Aya':       { tier:'Specialized', bio:'"Aya is our leading open multilingual model family." — Cohere',                                                  released:'February 17, 2026',   by:'Cohere'      },
 };
-  function showCardModal(el) {
-  var nm = el.getAttribute('data-name')||'';
-  var co = el.getAttribute('data-company')||'';
-  var logo = el.getAttribute('data-logo')||'';
-  var bd = el.getAttribute('data-board')||'';
-  var m = document.getElementById('model-modal');
-  var bk = document.getElementById('model-modal-backdrop');
-  if(!m||!bk) return;
-  m.classList.remove('glow-gold','glow-silver','glow-bronze');
-  var rnkInBoard = 99;
-  if(typeof BOARD_RANKINGS!=='undefined' && BOARD_RANKINGS[bd]) {
-    var arr = BOARD_RANKINGS[bd];
-    for(var i=0;i<arr.length;i++){ if(arr[i].name===nm){rnkInBoard=i+1;break;} }
-  }
-  if(rnkInBoard===1) m.classList.add('glow-gold');
-  else if(rnkInBoard===2) m.classList.add('glow-silver');
-  else if(rnkInBoard===3) m.classList.add('glow-bronze');
-  var logoEl = document.getElementById('mm-logo');
-  if(logoEl){ logoEl.src=logo; logoEl.style.display=logo?'':'none'; }
-  var nameEl = document.getElementById('mm-name');
-  if(nameEl) nameEl.textContent=nm;
-  var coEl = document.getElementById('mm-company');
-  if(coEl) coEl.textContent=co;
-  var boardsEl = document.getElementById('mm-boards');
-  if(boardsEl) {
-    var rows = '';
-    var BORDER = typeof BOARD_ORDER!=='undefined'?BOARD_ORDER:[];
-    var BINFO = typeof BOARD_INFO!=='undefined'?BOARD_INFO:{};
-    for(var b=0;b<BORDER.length;b++) {
-      var bid = BORDER[b];
-      var info = BINFO[bid]||{};
-      var labelHtml = info.html||bid;
-      var cat = info.cat||'';
-      var rank = 0; var dv = null;
-      if(typeof BOARD_RANKINGS!=='undefined' && BOARD_RANKINGS[bid]) {
-        var arr2 = BOARD_RANKINGS[bid];
-        for(var j=0;j<arr2.length;j++){
-          if(arr2[j].name===nm){rank=j+1;dv=arr2[j].d;break;}
-        }
-      }
-      var rankLbl = rank ? '#'+rank : 'Not Ranked';
-      var rankCls = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
-      var rankColor = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':'#8888b8';
-      var deltaHtml = '';
-      if(rank && dv!==null && dv!==undefined) {
-        var dc = dv>0?'#4cff91':dv<0?'#ff5c5c':'rgba(255,255,255,0.4)';
-        var da = dv>0?'+'+dv:String(dv);
-        deltaHtml = '<span style="font-size:13px;font-weight:600;color:'+dc+'">'+da+'</span>';
-      }
-      rows += '<div class="mm-board-row '+rankCls+'">'
-        + '<span class="mm-board-label">'+labelHtml+'</span>'
-        + '<span class="mm-board-cat">('+cat+')</span>'
-        + '<span class="mm-board-rank'+(rank?'':' not-ranked')+'" style="color:'+rankColor+'">'+rankLbl+'</span>'
-        + '<span class="mm-board-delta">'+deltaHtml+'</span>'
-        + '</div>';
-    }
-    boardsEl.innerHTML = rows;
-  }
-  var tiersEl = document.getElementById('mm-tiers');
-  if(tiersEl) {
-    var bio = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
-    var activeTier = bio.tier||'';
-    var TIER_DESCS = {
-      'Flagship':'Most powerful, highest capability',
-      'Pro':'High performance, balanced cost',
-      'Efficient':'Fast, lightweight, cost-effective',
-      'Specialized':'Optimized for specific tasks'
-    };
-    var TIERS = ['Flagship','Pro','Efficient','Specialized'];
-    tiersEl.innerHTML = TIERS.map(function(t){
-      var cls = 'mm-tier-pill'+(t===activeTier?' active':'');
-      return '<div class="mm-tier-row"><span class="'+cls+'">'+t+'</span><span class="mm-tier-desc-text">'+TIER_DESCS[t]+'</span></div>';
-    }).join('');
-  }
-  var bioEl = document.getElementById('mm-bio');
-  if(bioEl) {
-    var bio2 = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
-    bioEl.textContent = bio2.bio||'';
-  }
-  var relEl = document.getElementById('mm-released');
-  if(relEl) {
-    var bio3 = (typeof MODEL_BIOS!=='undefined' && MODEL_BIOS[nm]) ? MODEL_BIOS[nm] : {};
-    relEl.textContent = bio3.released ? 'Released · '+bio3.released : '';
-  var wmEl=document.getElementById('mm-watermark');if(wmEl)wmEl.src=logo;
-  }
-  bk.classList.add('open');
+
+function _computeRankDelta(bData, modelName){
+  const withLatest = bData.models
+    .map(m => ({ name:m.name, s:getLatestScore(m) }))
+    .filter(m => m.s !== null);
+  withLatest.sort((a,b) => b.s - a.s);
+  const curRank = withLatest.findIndex(m => m.name === modelName) + 1;
+  if(curRank === 0) return null;
+  const withPrev = bData.models.map(m => {
+    const ss = (m.scores||[]).filter(v => v !== null && v > 0);
+    return { name:m.name, s: ss.length >= 2 ? ss[ss.length-2] : null };
+  }).filter(m => m.s !== null);
+  withPrev.sort((a,b) => b.s - a.s);
+  const prevRank = withPrev.findIndex(m => m.name === modelName) + 1;
+  if(prevRank === 0) return null;
+  return prevRank - curRank; // positive = improved (moved up)
 }
-function closeCardModal() {
-    document.getElementById('model-modal-backdrop').classList.remove('open');
+
+function openV2Modal(modelName, ddp){
+  const backdrop = document.getElementById('v2-modal-backdrop');
+  const modal    = document.getElementById('v2-modal');
+  if(!backdrop || !modal) return;
+
+  // Header — use current DDP data for logo/company
+  const curData = _ddpData[ddp];
+  const model   = curData ? curData.models.find(m => m.name === modelName) : null;
+  const company = model ? (model.company || '') : '';
+  const logoUrl = LOGOS[company] || '';
+
+  const logoEl = document.getElementById('v2-modal-logo');
+  logoEl.src = logoUrl; logoEl.style.display = logoUrl ? '' : 'none';
+  document.getElementById('v2-modal-name').textContent    = modelName;
+  document.getElementById('v2-modal-company').textContent = company;
+
+  // Medal glow
+  modal.classList.remove('glow-gold','glow-silver','glow-bronze');
+  if(curData){
+    const sorted = curData.models
+      .filter(m => getLatestScore(m) !== null)
+      .sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+    const rank = sorted.findIndex(m => m.name === modelName) + 1;
+    if(rank===1)      modal.classList.add('glow-gold');
+    else if(rank===2) modal.classList.add('glow-silver');
+    else if(rank===3) modal.classList.add('glow-bronze');
   }
-  document.addEventListener('click',function(e){ if(e.target===document.getElementById('model-modal-backdrop')) closeCardModal(); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeCardModal(); });</script>
-  <!-- Model expand modal -->
-  <div id="model-modal-backdrop">
-  <div id="model-modal">
-    <img id="model-modal-bg" src="" alt="">
-    <button id="model-modal-close" onclick="closeCardModal()">&#215;</button>
-    <div class="mm-scroll">
-      <div class="mm-header">
-        <img class="mm-logo-big" id="mm-logo" src="" alt="" onerror="this.style.display='none'">
-        <div class="mm-header-text">
-          <div class="mm-name" id="mm-name"></div>
-          <div class="mm-company" id="mm-company"></div>
+
+  // About boards — cross-DDP rankings (mm-* card style, no score)
+  let boardsHTML = '';
+  V2_BOARD_ORDER.forEach(bid => {
+    const info  = V2_BOARD_INFO[bid];
+    const bData = _ddpData[bid];
+    let rank = 0, delta = null;
+    if(bData){
+      const sorted = bData.models
+        .filter(m => getLatestScore(m) !== null)
+        .sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+      const idx = sorted.findIndex(m => m.name === modelName);
+      if(idx >= 0){
+        rank  = idx + 1;
+        const orig = bData.models.find(m => m.name === modelName);
+        if(orig) delta = getChange(orig);
+      }
+    }
+    const rankCls      = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
+    const rankColor    = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':rank>0?'rgba(255,255,255,0.82)':'rgba(255,255,255,0.85)';
+    // Medal emoji replaces "#N" for top 3; blank for not ranked
+    const rankLbl = rank===1 ? '<span class="mm-medal-glow">🥇</span>'
+                  : rank===2 ? '<span class="mm-medal-glow">🥈</span>'
+                  : rank===3 ? '<span class="mm-medal-glow">🥉</span>'
+                  : rank > 0 ? '#'+rank : '';
+    const notRankedCls = rank ? '' : ' not-ranked';
+    const labelHtml    = V2_BOARD_LABEL_HTML[bid] || info.label;
+    let deltaHtml = '';
+    if(rank > 0 && delta !== null && Math.abs(delta) >= 0.005){
+      const dc = delta>0?'#4cff91':delta<0?'#ff5c5c':'rgba(255,255,255,0.4)';
+      const da = (delta>0?'+':'')+delta.toFixed(2);
+      deltaHtml = '<span style="font-size:13px;font-weight:600;color:'+dc+'">'+da+'</span>';
+    }
+    boardsHTML += '<div class="mm-board-row '+rankCls+'">'
+      + '<span class="mm-board-label">'+labelHtml+'</span>'
+      + '<span class="mm-board-cat">('+info.cat+')</span>'
+      + '<span class="mm-board-rank'+notRankedCls+'" style="color:'+rankColor+'">'+rankLbl+'</span>'
+      + '<span class="mm-board-delta">'+deltaHtml+'</span>'
+      + '</div>';
+  });
+  document.getElementById('v2-modal-boards').innerHTML = boardsHTML;
+
+  // Tiers, bio, released from MODEL_BIOS
+  const mbio = MODEL_BIOS[modelName] || {};
+  const activeTier = mbio.tier || '';
+  const TIER_DESCS = {
+    'Flagship':'Most powerful, highest capability',
+    'Pro':'High performance, balanced cost',
+    'Efficient':'Fast, lightweight, cost-effective',
+    'Specialized':'Optimized for specific tasks'
+  };
+  const TIERS = ['Flagship','Pro','Efficient','Specialized'];
+  const tiersEl = document.getElementById('v2-mm-tiers');
+  if(tiersEl) tiersEl.innerHTML = TIERS.map(t =>
+    '<div class="mm-tier-row">'
+    + '<span class="mm-tier-pill'+(t===activeTier?' active':'')+'">'+t+'</span>'
+    + '<span class="mm-tier-desc-text">'+TIER_DESCS[t]+'</span>'
+    + '</div>'
+  ).join('');
+  const bioEl = document.getElementById('v2-mm-bio');
+  if(bioEl) bioEl.textContent = mbio.bio || '';
+  const relEl = document.getElementById('v2-mm-released');
+  if(relEl) relEl.textContent = mbio.released ? 'Released · '+mbio.released : '';
+  // Watermark
+  const wmEl = document.getElementById('v2-mm-watermark');
+  if(wmEl){ wmEl.src = logoUrl; wmEl.style.display = logoUrl ? '' : 'none'; }
+
+  // Switch to About tab and build trend
+  _switchV2Tab('about');
+  _buildV2TrendChart(modelName, ddp);
+
+  backdrop.classList.add('open');
+  document.addEventListener('keydown', _v2EscHandler);
+}
+
+function closeV2Modal(){
+  document.getElementById('v2-modal-backdrop').classList.remove('open');
+  document.removeEventListener('keydown', _v2EscHandler);
+  if(_v2Chart){ _v2Chart.destroy(); _v2Chart = null; }
+}
+
+function _v2EscHandler(e){ if(e.key==='Escape') closeV2Modal(); }
+
+function _switchV2Tab(tab){
+  document.querySelectorAll('.v2-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
+  document.getElementById('v2-panel-about').style.display = tab==='about' ? '' : 'none';
+  document.getElementById('v2-panel-trend').style.display = tab==='trend' ? '' : 'none';
+}
+
+function _buildV2TrendChart(modelName, ddp){
+  const data  = _ddpData[ddp];
+  if(!data) return;
+  const model = data.models.find(m => m.name === modelName);
+
+  // ── Board label ──
+  const boardLbl = document.getElementById('v2-trend-board-label');
+  if(boardLbl) boardLbl.innerHTML = V2_BOARD_LABEL_HTML[ddp] || ddp;
+
+  const allDates  = data.dates || [];
+  const allScores = model ? (model.scores || []) : [];
+  const allValues = allDates.map((d,i) => {
+    const s = allScores[i];
+    return (s !== null && s !== undefined && s > 0) ? s : null;
+  });
+
+  // Trim leading + trailing nulls — removes dead zones
+  let start = 0, end = allValues.length - 1;
+  while(start <= end && allValues[start] === null) start++;
+  while(end >= start && allValues[end]   === null) end--;
+
+  const labels = (start > end)
+    ? allDates.map(d => fmtDate(d))
+    : allDates.slice(start, end + 1).map(d => fmtDate(d));
+  const values = (start > end) ? [] : allValues.slice(start, end + 1);
+  const lastIdx = values.length - 1;
+
+  // ── Rank on this board ──
+  let boardRank = 0;
+  if(model){
+    const sorted = [...data.models]
+      .map(m => ({ name:m.name, s:getLatestScore(m) }))
+      .filter(m => m.s !== null)
+      .sort((a,b) => b.s - a.s);
+    boardRank = sorted.findIndex(m => m.name === modelName) + 1;
+  }
+
+  // ── Hero update helper ──
+  function _seedHero(idx){
+    const scoreEl = document.getElementById('v2-trend-hero-score');
+    const dateEl  = document.getElementById('v2-trend-hero-date');
+    const rankEl  = document.getElementById('v2-trend-hero-rank');
+    const deltaEl = document.getElementById('v2-trend-hero-delta');
+    if(!scoreEl) return;
+    const s = (idx >= 0 && idx < values.length) ? values[idx] : null;
+    if(s == null){
+      scoreEl.textContent = '—';
+      dateEl.textContent  = labels[idx] || '';
+      rankEl.textContent  = '';
+      deltaEl.textContent = '';
+      return;
+    }
+    scoreEl.textContent = s.toFixed(2);
+    dateEl.textContent  = labels[idx] || '';
+    rankEl.textContent  = boardRank > 0 ? '#' + boardRank : '';
+    const prev = idx > 0 ? values[idx - 1] : null;
+    if(prev !== null && prev !== undefined){
+      const diff = s - prev;
+      deltaEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(2);
+      deltaEl.style.color = diff >= 0 ? '#4ade80' : '#f87171';
+    } else {
+      deltaEl.textContent = '';
+      deltaEl.style.color = '';
+    }
+  }
+  if(lastIdx >= 0) _seedHero(lastIdx);
+
+  if(_v2Chart){ _v2Chart.destroy(); _v2Chart = null; }
+  const canvas = document.getElementById('v2-trend-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Gradient fill
+  const gradFill = ctx.createLinearGradient(0, 0, 0, 200);
+  gradFill.addColorStop(0,    'rgba(0,229,255,0.22)');
+  gradFill.addColorStop(0.55, 'rgba(0,229,255,0.07)');
+  gradFill.addColorStop(1,    'rgba(0,229,255,0.0)');
+
+  // Glow plugin
+  const glowPlugin = {
+    id: 'lineGlow',
+    beforeDatasetsDraw(chart){ chart.ctx.save(); chart.ctx.shadowColor='rgba(0,229,255,0.65)'; chart.ctx.shadowBlur=14; },
+    afterDatasetsDraw(chart){ chart.ctx.restore(); }
+  };
+
+  // Crosshair plugin
+  const crosshairPlugin = {
+    id: 'crosshair',
+    afterDraw(chart){
+      if(chart._activeX == null) return;
+      const c = chart.ctx;
+      c.save(); c.beginPath(); c.setLineDash([3,4]);
+      c.strokeStyle='rgba(0,229,255,0.3)'; c.lineWidth=1;
+      c.moveTo(chart._activeX, chart.chartArea.top);
+      c.lineTo(chart._activeX, chart.chartArea.bottom);
+      c.stroke(); c.restore();
+    }
+  };
+
+  const minVals = values.filter(x => x !== null);
+  const yMin    = minVals.length ? Math.max(0, Math.min(...minVals) - 3) : 0;
+
+  _v2Chart = new Chart(ctx, {
+    type: 'line',
+    plugins: [glowPlugin, crosshairPlugin],
+    data:{
+      labels,
+      datasets:[{
+        data: values,
+        borderColor: '#00e5ff',
+        backgroundColor: gradFill,
+        borderWidth: 2.5,
+        pointRadius: (c) => (values[c.dataIndex] !== null && c.dataIndex === lastIdx) ? 5 : 0,
+        pointHoverRadius: 6,
+        pointBackgroundColor: '#00e5ff',
+        pointBorderColor: 'rgba(0,229,255,0.6)',
+        pointBorderWidth: 2,
+        fill: true, tension: 0.35, spanGaps: false,
+      }]
+    },
+    options:{
+      responsive: true, maintainAspectRatio: false,
+      animation:{ duration:400 },
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'rgba(255,255,255,0.3)',font:{size:10},maxRotation:0,maxTicksLimit:7,autoSkip:true}, border:{color:'rgba(255,255,255,0.08)'} },
+        y:{ grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'rgba(255,255,255,0.3)',font:{size:10},maxTicksLimit:5}, border:{color:'rgba(255,255,255,0.08)'}, min:yMin }
+      }
+    }
+  });
+
+  // ── Pointer handlers (mouse + touch) ──
+  const ttEl    = document.getElementById('v2-trend-tooltip');
+  const ttDate  = document.getElementById('v2-tt-date');
+  const ttScore = document.getElementById('v2-tt-score');
+  const wrap    = document.getElementById('v2-chart-wrap');
+
+  // Remove previous listeners before re-attaching
+  if(canvas._v2PtrHandler){
+    canvas.removeEventListener('mousemove',   canvas._v2PtrHandler,    false);
+    canvas.removeEventListener('touchmove',   canvas._v2PtrHandler,    false);
+    canvas.removeEventListener('mouseleave',  canvas._v2PtrEndHandler, false);
+    canvas.removeEventListener('touchend',    canvas._v2PtrEndHandler, false);
+    canvas.removeEventListener('touchcancel', canvas._v2PtrEndHandler, false);
+  }
+
+  function handlePointer(e){
+    e.preventDefault();
+    const touch = e.touches ? e.touches[0] : e;
+    const rect  = canvas.getBoundingClientRect();
+    const pts   = _v2Chart.getElementsAtEventForMode(
+      { x: touch.clientX - rect.left, y: touch.clientY - rect.top, native: e },
+      'index', { intersect:false }, true
+    );
+    if(pts && pts.length){
+      const idx = pts[0].index;
+      _v2Chart._activeX = pts[0].element.x;
+      _v2Chart.draw();
+      _seedHero(idx);
+      if(ttEl && values[idx] !== null){
+        ttDate.textContent  = labels[idx];
+        ttScore.textContent = values[idx].toFixed(2);
+        ttEl.classList.remove('hidden');
+        const cx = Math.max(50, Math.min(pts[0].element.x, wrap.clientWidth - 50));
+        ttEl.style.left = cx + 'px';
+        ttEl.style.bottom = '28px';
+        ttEl.style.top = 'auto';
+      }
+    }
+  }
+  function handlePointerEnd(){
+    _v2Chart._activeX = null;
+    _v2Chart.draw();
+    if(ttEl) ttEl.classList.add('hidden');
+    if(lastIdx >= 0) _seedHero(lastIdx);
+  }
+
+  canvas._v2PtrHandler    = handlePointer;
+  canvas._v2PtrEndHandler = handlePointerEnd;
+  canvas.addEventListener('mousemove',   handlePointer,    { passive:false });
+  canvas.addEventListener('touchmove',   handlePointer,    { passive:false });
+  canvas.addEventListener('mouseleave',  handlePointerEnd);
+  canvas.addEventListener('touchend',    handlePointerEnd);
+  canvas.addEventListener('touchcancel', handlePointerEnd);
+}
+
+// ══ DATE HEADER ═══════════════════════════════════════
+(function setDate(){
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const d = new Date();
+  document.getElementById('todayDate').textContent = months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+})();
+
+// ══ LOAD DATA ═════════════════════════════════════════
+// Init thead + sidebar for default DDP (trsbench) immediately
+renderThead();
+buildPillarSidebar();
+
+fetch('trs-data.json?v=' + Date.now())
+  .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(data => {
+    _ddpData.trsbench = data;
+    if(currentDDP !== 'trsbench') return;
+
+    const lastDate = (data.dates||[]).slice(-1)[0] || null;
+    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + (data.run_at ? ' · ' + data.run_at : '');
+    document.getElementById('metaSources').textContent = '18/18 sources fired';
+
+    const rankedCount = data.models.filter(m => getLatestScore(m) !== null).length;
+    document.getElementById('metaCount').textContent = rankedCount + ' models ranked';
+
+    buildLabFilter(data.models);
+    renderTable();
+  })
+  .catch(err => {
+    document.getElementById('tableBody').innerHTML = `<tr><td colspan="${getColspan()}"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
+  });
+</script>
+
+<!-- ══ MODEL MODAL ════════════════════════════════════ -->
+<div id="v2-modal-backdrop" onclick="if(event.target===this)closeV2Modal()">
+  <div id="v2-modal">
+    <button id="v2-modal-close" onclick="closeV2Modal()">&#215;</button>
+
+    <!-- Tab bar -->
+    <div id="v2-modal-tabs">
+      <div class="v2-tab active" data-tab="about"  onclick="_switchV2Tab('about')">About</div>
+      <div class="v2-tab"        data-tab="trend"  onclick="_switchV2Tab('trend')">Performance Trend</div>
+    </div>
+
+    <!-- About panel -->
+    <div id="v2-panel-about" class="v2-panel">
+      <div class="mm-scroll">
+        <img class="mm-watermark" id="v2-mm-watermark" src="" alt="">
+        <div class="mm-header">
+          <img class="mm-logo-big" id="v2-modal-logo" src="" alt="" onerror="this.style.display='none'">
+          <div class="mm-header-text">
+            <div class="mm-name" id="v2-modal-name"></div>
+            <div class="mm-company" id="v2-modal-company"></div>
+          </div>
+        </div>
+        <div class="mm-boards" id="v2-modal-boards"></div>
+        <hr class="mm-divider-cyan">
+        <div class="mm-tiers" id="v2-mm-tiers"></div>
+        <hr class="mm-divider-cyan">
+        <div class="mm-bio" id="v2-mm-bio"></div>
+        <div class="mm-released" id="v2-mm-released"></div>
+      </div>
+    </div>
+
+    <!-- Trend panel -->
+    <div id="v2-panel-trend" class="v2-panel" style="display:none">
+      <div id="v2-trend-hero">
+        <div id="v2-trend-hero-score">—</div>
+        <div id="v2-trend-hero-meta">
+          <span id="v2-trend-hero-date"></span>
+          <span id="v2-trend-hero-rank"></span>
+          <span id="v2-trend-hero-delta"></span>
         </div>
       </div>
-      <div class="mm-boards" id="mm-boards"></div>
-      <hr class="mm-divider-cyan">
-      <div class="mm-tiers" id="mm-tiers"></div>
-      <hr class="mm-divider-cyan">
-      <div class="mm-bio" id="mm-bio"></div>
-      <div class="mm-released" id="mm-released"></div>
-          <img class="mm-watermark" id="mm-watermark" src="" alt="">
+      <div id="v2-chart-wrap">
+        <canvas id="v2-trend-canvas"></canvas>
+        <div class="v2-trend-tooltip hidden" id="v2-trend-tooltip">
+          <div class="v2-tt-date"  id="v2-tt-date"></div>
+          <div class="v2-tt-score" id="v2-tt-score"></div>
+        </div>
+      </div>
+      <div id="v2-trend-board-label"></div>
     </div>
+
   </div>
 </div>
 </body>
