@@ -189,6 +189,29 @@ def parse_first_table(html: str) -> list[dict]:
     return result
 
 
+def _parse_mcp_atlas_innertext(text: str) -> dict[str, float]:
+    """Parse MCP Atlas leaderboard innerText (scale.com/leaderboard/mcp_atlas).
+    Format: model_name line immediately followed by score% line (e.g. '62.30%').
+    Takes the FIRST score per model (public subset pass rate).
+    """
+    scores: dict[str, float] = {}
+    lines = [l.strip() for l in text.split('\n') if l.strip()]
+    score_pat = re.compile(r'^(\d+(?:\.\d+)?)\s*%$')
+    _skip = {'introduction', 'key metrics', 'release', 'paper', 'dataset',
+             'github', 'performance', 'top pass', 'held-out', 'mcp', 'atlas',
+             'scale', 'leaderboard', 'benchmark', 'tasks', 'tools', 'servers'}
+    for i, line in enumerate(lines):
+        m = score_pat.match(line)
+        if m and i > 0:
+            name = lines[i - 1]
+            if (len(name) > 2
+                    and not re.match(r'^\d+$', name)
+                    and not any(kw in name.lower() for kw in _skip)
+                    and name not in scores):
+                scores[name] = float(m.group(1))
+    return scores
+
+
 def _parse_seal_innertext(text: str) -> dict[str, float]:
     """Parse SEAL leaderboard innerText (rank/name/score format) → {model: score}."""
     scores = {}
@@ -302,10 +325,13 @@ def scrape_task_completion() -> dict[str, float]:
                 if (allRows.length < 2) return [];
                 const headers = Array.from(allRows[0].querySelectorAll('th,td'))
                     .map(h => h.textContent.trim().toLowerCase());
+                // GAIA uses 'primary model' (col 2) and 'accuracy' (col 4)
                 const nameIdx = Math.max(0, headers.findIndex(
-                    h => h.includes('model') || h.includes('agent') || h.includes('system')));
+                    h => h.includes('primary') || h.includes('model') ||
+                         h.includes('agent') || h.includes('system')));
                 const scoreIdx = headers.findIndex(
-                    h => h.includes('avg') || h.includes('overall') || h.includes('total'));
+                    h => h.includes('accuracy') || h.includes('avg') ||
+                         h.includes('overall') || h.includes('total'));
                 if (scoreIdx === -1) return [];
                 return allRows.slice(1).map(row => {
                     const cells = Array.from(row.querySelectorAll('td,th'))
@@ -316,13 +342,19 @@ def scrape_task_completion() -> dict[str, float]:
             browser.close()
         for row in rows:
             name = str(row.get('model', '')).strip()
-            score_raw = str(row.get('score', '')).replace('%', '').strip()
-            if not name or not score_raw:
+            # Strip trailing date/version in parens: "Claude Sonnet 4.5 (September 2025)"
+            name = re.sub(r'\s*\([^)]*\)\s*$', '', name).strip()
+            score_raw = str(row.get('score', '')).strip()
+            # Score may be "74.55% (-0.00/+0.00)" — extract first number only
+            m = re.match(r'([\d.]+)', score_raw.replace('%', '').strip())
+            if not name or not m:
                 continue
             try:
-                val = float(score_raw)
-                if 0 <= val <= 100:
-                    gaia_scores[name] = val
+                val = float(m.group(1))
+                # Keep best score per model (multiple scaffold rows per model)
+                if 0 < val <= 100:
+                    if name not in gaia_scores or val > gaia_scores[name]:
+                        gaia_scores[name] = val
             except ValueError:
                 pass
         log.info(f"    GAIA: {len(gaia_scores)} models")
@@ -335,34 +367,43 @@ def scrape_task_completion() -> dict[str, float]:
     tau_scores: dict[str, float] = {}
     try:
         log.info("  - tau-bench...")
-        html = playwright_get("https://www.taubench.com/", wait_ms=8000)
-        soup = BeautifulSoup(html, "html.parser")
-        tables = soup.find_all("table")
-        for table in tables:
-            rows = table.find_all("tr")
-            if len(rows) < 2:
-                continue
-            headers = [th.get_text(strip=True).lower()
-                       for th in rows[0].find_all(["th", "td"])]
-            name_col = next((i for i, h in enumerate(headers)
-                             if "model" in h or "name" in h or "agent" in h), 0)
-            score_col = next((i for i, h in enumerate(headers)
-                              if "score" in h or "pass" in h or "%" in h
-                              or "success" in h or "avg" in h), 1)
-            for row in rows[1:]:
-                cells = row.find_all(["td", "th"])
-                if len(cells) <= max(name_col, score_col):
-                    continue
-                name = cells[name_col].get_text(strip=True)
-                raw  = cells[score_col].get_text(strip=True).replace("%", "").strip()
-                try:
-                    val = float(raw)
-                    if name and 0 <= val <= 100:
-                        tau_scores[name] = val
-                except ValueError:
-                    pass
-            if tau_scores:
-                break
+        # Navigate to #leaderboard hash — the SPA only renders the table
+        # after this hash is active. BeautifulSoup on the root URL misses it.
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(user_agent=_UA)
+            page = ctx.new_page()
+            try:
+                page.goto("https://taubench.com/#leaderboard",
+                          wait_until="networkidle", timeout=90_000)
+            except Exception:
+                pass
+            page.wait_for_timeout(12000)
+            rows = page.evaluate("""() => {
+                const table = document.querySelector('table');
+                if (!table) return [];
+                const allRows = Array.from(table.querySelectorAll('tr'));
+                if (allRows.length < 2) return [];
+                // headers: Rank, Model, Submitting Org, User Sim, Pass^1, ...
+                // col 1 = model name, col 4 = Pass^1 (primary score)
+                return allRows.slice(1).map(row => {
+                    const cells = Array.from(row.querySelectorAll('td,th'))
+                        .map(td => td.textContent.replace(/[^\\w\\s.%\\-]/gu, '').trim());
+                    return {model: cells[1] || '', score: cells[4] || ''};
+                }).filter(r => r.model && r.score && r.score !== '' && r.score !== '-');
+            }""")
+            browser.close()
+        for row in rows:
+            name = str(row.get('model', '')).strip()
+            # Strip warning emoji, "NEW" badge etc.
+            name = re.sub(r'\s*(NEW|new)\s*$', '', name).strip()
+            score_raw = str(row.get('score', '')).replace('%', '').strip()
+            try:
+                val = float(score_raw)
+                if name and 0 < val <= 100:
+                    tau_scores[name] = val
+            except ValueError:
+                pass
         log.info(f"    tau-bench: {len(tau_scores)} models")
         if tau_scores:
             all_sources.append(tau_scores)
@@ -549,15 +590,16 @@ def scrape_tool_reliability() -> dict[str, float]:
     # ── 1. SEAL Agentic Tool Use (innerText) ─────────────────────
     seal_scores: dict[str, float] = {}
     try:
-        log.info("  - SEAL Agentic Tool Use...")
+        log.info("  - MCP Atlas (Scale AI / SEAL)...")
+        # /agentic_tool_use is a 404 as of Feb 2026; replaced by /mcp_atlas
         text = playwright_get_innertext(
-            "https://scale.com/leaderboard/agentic_tool_use", wait_ms=12000)
-        seal_scores = _parse_seal_innertext(text)
-        log.info(f"    SEAL Agentic Tool Use: {len(seal_scores)} models")
+            "https://scale.com/leaderboard/mcp_atlas", wait_ms=12000)
+        seal_scores = _parse_mcp_atlas_innertext(text)
+        log.info(f"    MCP Atlas: {len(seal_scores)} models")
         if seal_scores:
             all_sources.append(seal_scores)
     except Exception as e:
-        log.warning(f"    SEAL failed: {e}")
+        log.warning(f"    MCP Atlas failed: {e}")
 
     # ── 2. Galileo agent leaderboard (HF Space) ──────────────────
     galileo_scores: dict[str, float] = {}
@@ -594,6 +636,11 @@ def scrape_tool_reliability() -> dict[str, float]:
                     pass
             if galileo_scores:
                 break
+        # Galileo reports success rates as fractions (0.55) not percentages (55).
+        # Detect this and scale up so scores are consistent 0–100.
+        if galileo_scores and max(galileo_scores.values(), default=0) <= 1.0:
+            galileo_scores = {k: round(v * 100, 2) for k, v in galileo_scores.items()}
+            log.info("    Galileo: scaled fractional values × 100")
         log.info(f"    Galileo: {len(galileo_scores)} models")
         if galileo_scores:
             all_sources.append(galileo_scores)
