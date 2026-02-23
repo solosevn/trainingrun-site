@@ -742,7 +742,7 @@ def main():
     notify("📊 <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
     # -- Auto-discover new models --
-    new_models = auto_discover_models(data, all_results)
+    new_models = auto_discover_models(data, scrapers)
     if new_models:
         log.info(f"★ Auto-discovered {len(new_models)} new models: {new_models}")
         notify(f"★ <b>Auto-discovered {len(new_models)} new models</b>\n" +
