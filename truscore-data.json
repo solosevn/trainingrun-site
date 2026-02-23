@@ -1413,7 +1413,7 @@
       "source_count": 1
     },
     {
-      "name": "Command A",
+      "name": "Command R Plus",
       "company": "Cohere",
       "rank": 999,
       "scores": [
@@ -2753,7 +2753,7 @@
       "source_count": 1
     },
     {
-      "name": "INTELLECT-3",
+      "name": "intellect-3",
       "company": "PrimeIntellect",
       "rank": 999,
       "scores": [
@@ -4227,7 +4227,7 @@
       "source_count": 1
     },
     {
-      "name": "MiniMax M1 40K",
+      "name": "MiniMax M1",
       "company": "MiniMax",
       "rank": 10,
       "scores": [
@@ -5567,7 +5567,7 @@
       "source_count": 1
     },
     {
-      "name": "amazon/nova-pro-v1:0",
+      "name": "Amazon Nova Lite",
       "company": "Amazon",
       "rank": 999,
       "scores": [
@@ -5634,7 +5634,7 @@
       "source_count": 1
     },
     {
-      "name": "antgroup/finix_s1_32b",
+      "name": "finix_s1_32b",
       "company": "Unknown",
       "rank": 999,
       "scores": [
@@ -5701,7 +5701,7 @@
       "source_count": 1
     },
     {
-      "name": "gpt-oss-120B",
+      "name": "gpt-oss-120b",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -5969,7 +5969,7 @@
       "source_count": 2
     },
     {
-      "name": "snowflake/snowflake-arctic-instruct",
+      "name": "snowflake-arctic-instruct",
       "company": "Unknown",
       "rank": 999,
       "scores": [

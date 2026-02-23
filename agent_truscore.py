@@ -55,6 +55,7 @@ import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from telegram import Bot
+from model_names import match_name, canonicalize
 
 # ââ logging âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 logging.basicConfig(level=logging.INFO,
@@ -532,23 +533,8 @@ def auto_discover_models(data: dict, all_results: dict) -> list[str]:
     return newly_added
 
 
-def match_name(scraped: str, existing: list[str]) -> str | None:
-    s = scraped.lower().strip()
-    # Strip org prefix (e.g. "anthropic/claude-opus-4-6" -> "claude-opus-4-6")
-    s_stripped = s.split("/")[-1] if "/" in s else s
-    for name in existing:
-        if name.lower() == s or name.lower() == s_stripped:
-            return name
-    for name in existing:
-        n = name.lower()
-        if s_stripped in n or n in s_stripped:
-            return name
-    s_tok = set(s_stripped.replace("-", " ").replace("_", " ").split())
-    for name in existing:
-        n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
-        if len(s_tok & n_tok) >= 2:
-            return name
-    return None
+# match_name and canonicalize imported from model_names
+
 def write_status(status: str, ranked: list, source_summary: list,
                  duration_sec: int, error: str | None = None) -> None:
     """Update status.json with this agent's latest run info."""

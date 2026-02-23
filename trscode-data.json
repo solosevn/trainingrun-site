@@ -2084,7 +2084,7 @@
       }
     },
     {
-      "name": "Deepseek-v3",
+      "name": "DeepSeek-V3",
       "company": "DeepSeek",
       "rank": 13,
       "scores": [
@@ -2303,7 +2303,7 @@
       }
     },
     {
-      "name": "GPT-4-Turbo",
+      "name": "GPT-4",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -2665,7 +2665,7 @@
       }
     },
     {
-      "name": "GPT-OSS-120B",
+      "name": "gpt-oss-120b",
       "company": "OpenAI",
       "rank": 11,
       "scores": [
@@ -3028,7 +3028,7 @@
       }
     },
     {
-      "name": "Llama 4 Maverick Instruct",
+      "name": "Llama 4 Maverick",
       "company": "Meta",
       "rank": 33,
       "scores": [
@@ -3387,7 +3387,7 @@
       }
     },
     {
-      "name": "OpenAI o1-mini",
+      "name": "o1-mini",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -4247,7 +4247,7 @@
       }
     },
     {
-      "name": "\ud83c\udd95Claude 4.5 Haiku (high reasoning)",
+      "name": "Claude 3 Haiku",
       "company": "Anthropic",
       "rank": 999,
       "scores": [
@@ -4318,7 +4318,7 @@
       }
     },
     {
-      "name": "\ud83c\udd95Devstral (2512)",
+      "name": "Devstral 2",
       "company": "Mistral",
       "rank": 999,
       "scores": [
@@ -4460,7 +4460,7 @@
       }
     },
     {
-      "name": "\ud83c\udd95GPT-5 Mini",
+      "name": "GPT-5 mini",
       "company": "OpenAI",
       "rank": 999,
       "scores": [

@@ -62,6 +62,7 @@ import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from telegram import Bot
+from model_names import match_name, canonicalize
 
 # ── logging ───────────────────────────────────────────────────────
 logging.basicConfig(level=logging.INFO,
@@ -854,29 +855,7 @@ def auto_discover_models_from_sets(data: dict, scraped_name_sets: list[set]) -> 
     return newly_added
 
 
-def match_name(scraped: str, existing: list[str]) -> str | None:
-    """3-tier fuzzy match: exact norm → substring → 2-token overlap.
-    Same normalizer as agent_trs.py and agent_trscode.py for consistency."""
-    def _norm(s: str) -> str:
-        s = re.sub(r'[^\x00-\x7F]', '', s).strip()   # strip emoji / non-ASCII
-        if '/' in s:
-            s = s.split('/')[-1]                       # strip org prefix: openai/gpt-4o → gpt-4o
-        s = re.sub(r'(\d)-(\d)', r'\1.\2', s)         # 4-5 → 4.5
-        s = re.sub(r'\bv(\d)', r'\1', s)              # v3 → 3
-        s = s.replace('-', ' ').replace('_', ' ')
-        return re.sub(r'\s+', ' ', s).strip().lower()
-    s = _norm(scraped)
-    for name in existing:
-        if _norm(name) == s: return name
-    for name in existing:
-        n = _norm(name)
-        if s in n or n in s: return name
-    s_tok = set(s.split())
-    for name in existing:
-        n_tok = set(_norm(name).split())
-        if len(s_tok & n_tok) >= 2: return name
-    return None
-
+# match_name and canonicalize imported from model_names
 
 def write_status(status: str, ranked: list, source_summary: list,
                  duration_sec: int, error: str | None = None) -> None:

@@ -1197,7 +1197,7 @@
       "raw_data": {}
     },
     {
-      "name": "Claude-Haiku-4-5-20251001 (zero shot)",
+      "name": "Claude 3 Haiku",
       "company": "Anthropic",
       "rank": 999,
       "scores": [
@@ -1276,7 +1276,7 @@
       }
     },
     {
-      "name": "Command A",
+      "name": "Command R Plus",
       "company": "Cohere",
       "rank": 999,
       "scores": [
@@ -1355,7 +1355,7 @@
       }
     },
     {
-      "name": "DeepSeek-R1 (scratchpad)",
+      "name": "DeepSeek R1",
       "company": "DeepSeek",
       "rank": 6,
       "scores": [
@@ -1435,7 +1435,7 @@
       }
     },
     {
-      "name": "GPT 5.2",
+      "name": "GPT-5.2",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -1514,7 +1514,7 @@
       }
     },
     {
-      "name": "GPT-4.1 Mini",
+      "name": "GPT-4",
       "company": "OpenAI",
       "rank": 4,
       "scores": [
@@ -1595,7 +1595,7 @@
       }
     },
     {
-      "name": "GPT-4.5-Preview-2025-02-27 (scratchpad)",
+      "name": "GPT-4.5",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -1755,7 +1755,7 @@
       }
     },
     {
-      "name": "Grok 3",
+      "name": "Grok 3 Beta",
       "company": "xAI",
       "rank": 999,
       "scores": [
@@ -1834,7 +1834,7 @@
       }
     },
     {
-      "name": "KIMI-K2-THINKING",
+      "name": "Kimi K2.5",
       "company": "Moonshot AI",
       "rank": 999,
       "scores": [
@@ -2547,7 +2547,7 @@
       }
     },
     {
-      "name": "QWEN3-MAX",
+      "name": "Qwen3",
       "company": "Alibaba",
       "rank": 999,
       "scores": [
@@ -2626,7 +2626,7 @@
       }
     },
     {
-      "name": "QwQ-32B",
+      "name": "qwq-32b",
       "company": "Alibaba",
       "rank": 999,
       "scores": [

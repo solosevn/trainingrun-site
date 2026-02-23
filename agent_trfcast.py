@@ -59,6 +59,7 @@ import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from telegram import Bot
+from model_names import match_name, canonicalize
 
 # ── logging ───────────────────────────────────────────────────────
 logging.basicConfig(level=logging.INFO,
@@ -542,35 +543,7 @@ def auto_discover_models(data: dict, all_results: dict) -> list[str]:
     return newly_added
 
 
-def match_name(scraped: str, existing: list[str]) -> str | None:
-    s = scraped.lower().strip()
-    # Normalize known short-name patterns to canonical forms before matching
-    _PREFIXES = [
-        ("opus ",   "claude opus "),
-        ("sonnet ",  "claude sonnet "),
-        ("haiku ",   "claude haiku "),
-    ]
-    s_expanded = s
-    for short_prefix, full_prefix in _PREFIXES:
-        if s.startswith(short_prefix) and not s.startswith("claude"):
-            s_expanded = full_prefix + s[len(short_prefix):]
-            break
-    for candidate in [s, s_expanded]:
-        for name in existing:
-            if name.lower() == candidate:
-                return name
-    for candidate in [s, s_expanded]:
-        for name in existing:
-            n = name.lower()
-            if candidate in n or n in candidate:
-                return name
-    s_tok = set(s_expanded.replace("-", " ").replace("_", " ").split())
-    for name in existing:
-        n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
-        if len(s_tok & n_tok) >= 2:
-            return name
-    return None
-
+# match_name and canonicalize imported from model_names
 
 def write_status(status: str, ranked: list, source_summary: list,
                  duration_sec: int, error: str | None = None) -> None:

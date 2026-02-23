@@ -1234,7 +1234,7 @@
       "source_count": 3
     },
     {
-      "name": "Grok 3",
+      "name": "Grok 3 Beta",
       "company": "xAI",
       "rank": 999,
       "scores": [
@@ -2051,7 +2051,7 @@
       "source_count": 0
     },
     {
-      "name": "deepseek-v3",
+      "name": "DeepSeek-V3",
       "company": "DeepSeek",
       "rank": 999,
       "scores": [
@@ -2083,7 +2083,7 @@
       "source_count": 0
     },
     {
-      "name": "devstral",
+      "name": "Devstral 2",
       "company": "Mistral",
       "rank": 8,
       "scores": [
@@ -2612,7 +2612,7 @@
       "source_count": 0
     },
     {
-      "name": "\ud83c\udd95Claude 4.5 Haiku (high reasoning)",
+      "name": "Claude 3 Haiku",
       "company": "Anthropic",
       "rank": 999,
       "scores": [
@@ -2740,7 +2740,7 @@
       "source_count": 0
     },
     {
-      "name": "Qwen3-Coder 480B/A35B Instruct",
+      "name": "A35B Instruct",
       "company": "Alibaba",
       "rank": 999,
       "scores": [
@@ -2836,7 +2836,7 @@
       "source_count": 0
     },
     {
-      "name": "Command A",
+      "name": "Command R Plus",
       "company": "Cohere",
       "rank": 999,
       "scores": [
@@ -3252,7 +3252,7 @@
       "source_count": 0
     },
     {
-      "name": "INTELLECT-3",
+      "name": "intellect-3",
       "company": "PrimeIntellect",
       "rank": 999,
       "scores": [
