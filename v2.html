@@ -44,8 +44,8 @@ body {
 }
 .logo-block { display:flex; flex-direction:column; gap:1px; }
 .logo-text { font-size:19px; font-weight:800; color:#00e5ff; letter-spacing:-0.5px; line-height:1; text-shadow:0 0 14px rgba(0,229,255,0.5); }
-.logo-sub  { font-size:8px; font-weight:600; letter-spacing:2.8px; text-transform:uppercase; color:rgba(255,255,255,0.35); }
-.top-center { position:absolute; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:rgba(255,255,255,0.22); }
+.logo-sub  { font-size:10px; font-weight:600; letter-spacing:2.8px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
+.top-center { position:absolute; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
 .top-right { margin-left:auto; display:flex; align-items:center; gap:18px; }
 .top-link { font-size:11.5px; color:rgba(255,255,255,0.38); cursor:pointer; text-decoration:none; }
 .top-link:hover { color:rgba(255,255,255,0.7); }
@@ -84,7 +84,7 @@ body {
 .htabs { display:flex; align-items:stretch; }
 .htab {
   display:flex; align-items:center; gap:6px; padding:0 15px;
-  font-size:12px; font-weight:600; color:rgba(255,255,255,0.38); cursor:pointer;
+  font-size:13px; font-weight:400; color:rgba(255,255,255,0.65); cursor:pointer;
   position:relative; border-bottom:2px solid transparent; transition:color .2s; white-space:nowrap;
   text-decoration:none;
 }
@@ -94,7 +94,7 @@ body {
   content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px;
   box-shadow:0 0 8px #00e5ff,0 0 16px rgba(0,229,255,0.35);
 }
-.tpill { font-size:7px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; background:rgba(255,255,255,0.05); border-radius:3px; padding:1px 5px; color:rgba(255,255,255,0.28); }
+.tpill { font-size:8px; font-weight:400; letter-spacing:.8px; text-transform:uppercase; background:rgba(255,255,255,0.05); border-radius:3px; padding:1px 5px; color:rgba(255,255,255,0.8); }
 .htab.active .tpill { background:rgba(0,229,255,0.1); color:rgba(0,229,255,0.55); }
 .hnav-right { display:flex; align-items:center; gap:16px; }
 .hnav-right a { font-size:11px; color:rgba(255,255,255,0.3); cursor:pointer; text-decoration:none; }
@@ -293,8 +293,6 @@ body.compact .lb-table tbody tr { height:40px; }
   </div>
   <div class="top-center" id="todayDate"></div>
   <div class="top-right">
-    <a href="about.html" class="top-link">About</a>
-    <a href="trsmethodology.html" class="top-link">Methodology</a>
     <div class="watch-pill" onclick="window.open('https://www.youtube.com/watch?v=7rZEPc6vXZo','_blank')">
       <span class="play">▶</span> Watch Latest Episode
     </div>
@@ -316,14 +314,14 @@ body.compact .lb-table tbody tr { height:40px; }
 <div class="h-nav">
   <div class="htabs">
     <div class="htab active">Overview</div>
-    <div class="htab" style="color:rgba(255,255,255,0.2);cursor:default">
-      TRS Arena <span class="tpill" style="background:rgba(139,92,246,0.1);color:rgba(139,92,246,0.45);border:1px dashed rgba(139,92,246,0.25)">Soon</span>
+    <div class="htab" style="cursor:default;opacity:0.5">
+      <span style="color:#00e5ff">TRS</span> Arena <span class="tpill" style="background:rgba(139,92,246,0.1);color:rgba(139,92,246,0.45);border:1px dashed rgba(139,92,246,0.25)">Soon</span>
     </div>
-    <a href="scores.html" class="htab">TRSbench <span class="tpill">Overall</span></a>
-    <a href="truscore-scores.html" class="htab">TRUscore <span class="tpill">Truth</span></a>
-    <a href="trscode.html" class="htab">TRScode <span class="tpill">Coding</span></a>
-    <a href="trfcast.html" class="htab">TRFcast <span class="tpill">Prediction</span></a>
-    <a href="tragents-scores.html" class="htab">TRAgents <span class="tpill">Agents</span></a>
+    <a href="scores.html" class="htab"><span style="color:#00e5ff">TRS</span>bench <span class="tpill">Overall</span></a>
+    <a href="truscore-scores.html" class="htab"><span style="color:#00e5ff">TRU</span>score <span class="tpill">Truth</span></a>
+    <a href="trscode.html" class="htab"><span style="color:#00e5ff">TRS</span>code <span class="tpill">Coding</span></a>
+    <a href="trfcast.html" class="htab"><span style="color:#00e5ff">TRF</span>cast <span class="tpill">Prediction</span></a>
+    <a href="tragents-scores.html" class="htab"><span style="color:#00e5ff">TR</span><span style="color:#f87171">Agents</span> <span class="tpill">Agents</span></a>
   </div>
   <div class="hnav-right">
     <a href="sources.html">Verify Sources</a><span class="hnav-pipe">|</span>
