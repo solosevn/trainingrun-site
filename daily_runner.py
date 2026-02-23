@@ -35,11 +35,11 @@ import os
 # Set to True ONLY after the agent is tested
 # ─────────────────────────────────────────────
 ENABLED = {
-    "trscode":   False,   # agent_trscode.py    -> trscode-data.json
-    "trfcast":   False,   # agent_trfcast.py    -> trf-data.json
-    "trs":       False,   # agent_trs.py        -> trs-data.json
-    "truscore":  False,   # agent_truscore.py   -> truscore-data.json
-    "tragents":  False,   # agent_tragents.py   -> tragent-data.json
+    "trscode":   True,    # agent_trscode.py    -> trscode-data.json
+    "trfcast":   True,    # agent_trfcast.py    -> trf-data.json
+    "trs":       True,    # agent_trs.py        -> trs-data.json
+    "truscore":  True,    # agent_truscore.py   -> truscore-data.json
+    "tragents":  True,    # agent_tragents.py   -> tragent-data.json
 }
 
 # Agent script filenames (all live in repo root alongside this file)
