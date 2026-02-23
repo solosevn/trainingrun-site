@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1440">
-<title>Training Run — AI Leaderboard & Daily Benchmark Rankings</title>
-<meta name="description" content="Training Run: Independent daily AI benchmark rankings. Live scores for TRSbench, TRUscore, TRScode, TRFcast, and TRAgents — updated every morning at 7AM CST.">
+<title>Training Run â AI Leaderboard & Daily Benchmark Rankings</title>
+<meta name="description" content="Training Run: Independent daily AI benchmark rankings. Live scores for TRSbench, TRUscore, TRScode, TRFcast, and TRAgents â updated every morning at 7AM CST.">
 <meta name="keywords" content="AI leaderboard, AI benchmark, daily AI rankings, LLM leaderboard, GPT benchmark, Claude benchmark, Gemini benchmark, AI conditioning, TRSbench">
-<meta property="og:title" content="Training Run — Daily AI Benchmark Rankings">
+<meta property="og:title" content="Training Run â Daily AI Benchmark Rankings">
 <meta property="og:description" content="Independent daily AI leaderboard. Live scores updated every morning. TRSbench, TRUscore, TRScode, TRFcast, TRAgents.">
 <meta property="og:url" content="https://trainingrun.ai/v2.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -23,21 +23,21 @@ body {
   overflow: hidden;
 }
 
-/* ─── CYAN GLOW LINE ─── */
+/* âââ CYAN GLOW LINE âââ */
 .glow-line {
   height: 1px; flex-shrink: 0;
   background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.1) 10%, #00e5ff 40%, #00e5ff 60%, rgba(0,229,255,0.1) 90%, transparent 100%);
   box-shadow: 0 0 6px rgba(0,229,255,0.45), 0 0 18px rgba(0,229,255,0.1);
 }
 
-/* ─── WHITE GLOW LINE (ticker borders) ─── */
+/* âââ WHITE GLOW LINE (ticker borders) âââ */
 .glow-line-white {
   height: 1px; flex-shrink: 0;
   background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 8%, rgba(255,255,255,0.65) 35%, rgba(255,255,255,0.65) 65%, rgba(255,255,255,0.08) 92%, transparent 100%);
   box-shadow: 0 0 6px rgba(255,255,255,0.35), 0 0 16px rgba(255,255,255,0.08);
 }
 
-/* ─── TOP BAR ─── */
+/* âââ TOP BAR âââ */
 .top-bar {
   flex-shrink: 0; background: #0a0a20; height: 50px;
   display: flex; align-items: center; padding: 0 24px; position: relative;
@@ -53,7 +53,7 @@ body {
 .watch-pill:hover { border-color:rgba(139,92,246,0.6); }
 .play { font-size:9px; color:#a78bfa; }
 
-/* ─── TICKER ─── */
+/* âââ TICKER âââ */
 .ticker { flex-shrink:0; background:#000; height:46px; overflow:hidden; display:flex; align-items:center; border-bottom:1px solid rgba(0,212,255,0.18); }
 .ticker-track { display:flex; align-items:center; width:max-content; white-space:nowrap; }
 .ticker-track.animating { animation:tick 56s linear infinite; }
@@ -76,7 +76,7 @@ body {
 .tup { color:#22d3a3; font-size:10.5px; font-weight:700; }
 .tdn { color:#f87171; font-size:10.5px; font-weight:700; }
 
-/* ─── HORIZONTAL NAV ─── */
+/* âââ HORIZONTAL NAV âââ */
 .h-nav {
   flex-shrink:0; background:#0a0a20; height:42px;
   display:flex; align-items:stretch; padding:0 24px; justify-content:space-between;
@@ -101,13 +101,13 @@ body {
 .hnav-right a:hover { color:rgba(255,255,255,0.6); }
 .hnav-pipe { color:rgba(255,255,255,0.08); }
 
-/* ─── BODY LAYOUT ─── */
+/* âââ BODY LAYOUT âââ */
 .body-row { flex:1; display:flex; overflow:hidden; min-height:0; }
 
-/* ─── SIDEBAR WRAPPER ─── */
+/* âââ SIDEBAR WRAPPER âââ */
 .sb-wrap { position:relative; flex-shrink:0; display:flex; }
 
-/* ─── LEFT SIDEBAR ─── */
+/* âââ LEFT SIDEBAR âââ */
 .l-sidebar {
   width:228px; flex-shrink:0; background:#08081c;
   border-right:1px solid rgba(255,255,255,0.06);
@@ -154,7 +154,7 @@ body {
 .range-fill { position:absolute; left:0; right:18%; height:100%; background:linear-gradient(90deg,#0099bb,#00e5ff); border-radius:2px; box-shadow:0 0 6px rgba(0,229,255,0.35); }
 .range-nums { display:flex; justify-content:space-between; font-size:9px; color:rgba(255,255,255,0.28); }
 
-/* ─── COLLAPSE TAB ─── */
+/* âââ COLLAPSE TAB âââ */
 .collapse-tab {
   position:absolute; top:50%; right:-28px; transform:translateY(-50%);
   width:28px; height:56px; background:#0d0d26;
@@ -171,11 +171,11 @@ body {
 .collapse-tab .ct-line { width:10px; height:1.5px; background:rgba(0,229,255,0.3); border-radius:1px; }
 .sb-wrap.is-collapsed .ct-arrow { transform:scaleX(-1); display:inline-block; }
 
-/* ─── MAIN CONTENT ─── */
+/* âââ MAIN CONTENT âââ */
 .main-content { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
 .content-head { padding:16px 22px 11px; border-bottom:1px solid rgba(255,255,255,0.055); flex-shrink:0; }
-.content-title { font-size:19px; font-weight:800; letter-spacing:-.4px; margin-bottom:3px; }
-.content-title .hl { color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.28); }
+.content-title { font-size:19px; font-weight:400; letter-spacing:-.4px; margin-bottom:3px; }
+.content-title .hl { color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.28); font-weight:800; }
 .content-sub { font-size:11px; color:rgba(255,255,255,0.32); margin-bottom:7px; }
 .content-meta { display:flex; align-items:center; gap:14px; font-size:10.5px; color:rgba(255,255,255,0.25); }
 .meta-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,229,255,0.45); flex-shrink:0; animation:pulse 2s ease-in-out infinite; }
@@ -183,7 +183,7 @@ body {
 .meta-link { color:rgba(0,229,255,0.48); cursor:pointer; }
 .meta-link:hover { color:rgba(0,229,255,0.8); }
 
-/* ─── TOOLBAR ─── */
+/* âââ TOOLBAR âââ */
 .toolbar {
   display:flex; align-items:center; justify-content:space-between;
   padding:8px 22px; border-bottom:1px solid rgba(255,255,255,0.045); flex-shrink:0;
@@ -212,7 +212,7 @@ body {
 }
 .vt-btn.active { background:rgba(0,229,255,0.1); color:#00e5ff; box-shadow:0 0 8px rgba(0,229,255,0.12); }
 
-/* ─── TABLE ─── */
+/* âââ TABLE âââ */
 .lb-wrap { flex:1; overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.07) transparent; }
 .lb-table { width:100%; border-collapse:collapse; }
 .lb-table thead tr { background:#09091e; border-bottom:1px solid rgba(255,255,255,0.06); position:sticky; top:0; z-index:2; }
@@ -227,7 +227,7 @@ body {
 .lb-table tbody tr { height:52px; cursor:pointer; transition:background .13s; }
 .lb-table tbody tr:hover { background:rgba(0,229,255,0.025) !important; }
 
-/* Top 3 highlights — full-row glowing borders */
+/* Top 3 highlights â full-row glowing borders */
 .row-1 { background:linear-gradient(90deg, rgba(255,215,0,0.07) 0%, rgba(255,215,0,0.02) 50%, transparent 100%); }
 .row-1 td { border-top:1px solid rgba(255,215,0,0.38) !important; border-bottom:1px solid rgba(255,215,0,0.38) !important; box-shadow:0 0 8px rgba(255,215,0,0.06) inset; }
 .row-1:hover { background:linear-gradient(90deg, rgba(255,215,0,0.11) 0%, rgba(255,215,0,0.04) 50%, transparent 100%) !important; }
@@ -248,11 +248,11 @@ body {
 /* Model cell */
 .m-cell { display:flex; align-items:center; gap:10px; }
 .m-icon { width:27px; height:27px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:7.5px; font-weight:800; color:rgba(255,255,255,0.7); flex-shrink:0; border:1px solid rgba(255,255,255,0.07); }
-.m-name { font-size:13px; font-weight:700; color:#fff; }
+.m-name { font-size:15px; font-weight:400; color:#fff; }
 .m-lab  { font-size:9.5px; color:rgba(255,255,255,0.28); }
 
 /* Score */
-.score-val { font-size:14px; font-weight:800; color:#fff; }
+.score-val { font-size:16px; font-weight:400; color:#fff; }
 /* Bar + sparkline removed */
 /* Change */
 .chg { font-size:11px; font-weight:700; }
@@ -285,7 +285,7 @@ body.compact .lb-table tbody tr { height:40px; }
 </head>
 <body id="mainbody">
 
-<!-- ══ TOP BAR ══════════════════════════════════ -->
+<!-- ââ TOP BAR ââââââââââââââââââââââââââââââââââ -->
 <div class="top-bar">
   <div class="logo-block">
     <span class="logo-text">Training Run</span>
@@ -296,14 +296,14 @@ body.compact .lb-table tbody tr { height:40px; }
     <a href="about.html" class="top-link">About</a>
     <a href="trsmethodology.html" class="top-link">Methodology</a>
     <div class="watch-pill" onclick="window.open('https://www.youtube.com/watch?v=7rZEPc6vXZo','_blank')">
-      <span class="play">▶</span> Watch Latest Episode
+      <span class="play">â¶</span> Watch Latest Episode
     </div>
   </div>
 </div>
 
 <div class="glow-line"></div>
 
-<!-- ══ TICKER ═══════════════════════════════════ -->
+<!-- ââ TICKER âââââââââââââââââââââââââââââââââââ -->
 <div class="glow-line-white"></div>
 <div class="ticker">
   <div class="ticker-track" id="tickerTrack">
@@ -312,7 +312,7 @@ body.compact .lb-table tbody tr { height:40px; }
 </div>
 <div class="glow-line-white"></div>
 
-<!-- ══ MAIN NAV TABS ═════════════════════════════ -->
+<!-- ââ MAIN NAV TABS âââââââââââââââââââââââââââââ -->
 <div class="h-nav">
   <div class="htabs">
     <div class="htab active">Overview</div>
@@ -333,7 +333,7 @@ body.compact .lb-table tbody tr { height:40px; }
 </div>
 <div class="glow-line"></div>
 
-<!-- ══ BODY ══════════════════════════════════════ -->
+<!-- ââ BODY ââââââââââââââââââââââââââââââââââââââ -->
 <div class="body-row">
 
   <!-- SIDEBAR WRAPPER -->
@@ -341,7 +341,7 @@ body.compact .lb-table tbody tr { height:40px; }
     <div class="l-sidebar" id="sidebar">
 
       <div class="sb-section">
-        <div class="sb-section-header">Rank by <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header">Rank by <span class="sb-chevron">â¾</span></div>
         <div class="rank-toggle">
           <div class="rtab active" onclick="setRankBy('models',this)">Models</div>
           <div class="rtab" onclick="setRankBy('labs',this)">Labs</div>
@@ -349,27 +349,27 @@ body.compact .lb-table tbody tr { height:40px; }
       </div>
 
       <div class="sb-section">
-        <div class="sb-section-header">Pillars (7) <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header">Pillars (7) <span class="sb-chevron">â¾</span></div>
         <div class="pillar-list">
-          <div class="pillar-item active" onclick="setPillar('overall',this)"><span class="p-icon">🏆</span> Overall <span class="p-check">✓</span></div>
-          <div class="pillar-item" onclick="setPillar('safety',this)"><span class="p-icon">🛡️</span> Safety</div>
-          <div class="pillar-item" onclick="setPillar('reasoning',this)"><span class="p-icon">🧠</span> Reasoning</div>
-          <div class="pillar-item" onclick="setPillar('coding',this)"><span class="p-icon">💻</span> Coding</div>
-          <div class="pillar-item" onclick="setPillar('human_preference',this)"><span class="p-icon">📋</span> Instruction Following</div>
-          <div class="pillar-item" onclick="setPillar('knowledge',this)"><span class="p-icon">📚</span> Knowledge</div>
-          <div class="pillar-item" onclick="setPillar('efficiency',this)"><span class="p-icon">⚡</span> Cost Efficiency</div>
+          <div class="pillar-item active" onclick="setPillar('overall',this)"><span class="p-icon">ð</span> Overall <span class="p-check">â</span></div>
+          <div class="pillar-item" onclick="setPillar('safety',this)"><span class="p-icon">ð¡ï¸</span> Safety</div>
+          <div class="pillar-item" onclick="setPillar('reasoning',this)"><span class="p-icon">ð§ </span> Reasoning</div>
+          <div class="pillar-item" onclick="setPillar('coding',this)"><span class="p-icon">ð»</span> Coding</div>
+          <div class="pillar-item" onclick="setPillar('human_preference',this)"><span class="p-icon">ð</span> Instruction Following</div>
+          <div class="pillar-item" onclick="setPillar('knowledge',this)"><span class="p-icon">ð</span> Knowledge</div>
+          <div class="pillar-item" onclick="setPillar('efficiency',this)"><span class="p-icon">â¡</span> Cost Efficiency</div>
         </div>
       </div>
 
       <div class="sb-section">
-        <div class="sb-section-header">Filter by Lab <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header">Filter by Lab <span class="sb-chevron">â¾</span></div>
         <div class="lab-list" id="labList">
           <!-- populated by JS -->
         </div>
       </div>
 
       <div class="sb-section">
-        <div class="sb-section-header">License <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header">License <span class="sb-chevron">â¾</span></div>
         <div class="lic-list">
           <div class="lic-item" onclick="setLicense('all',this)"><div class="radio on"></div> All</div>
           <div class="lic-item" onclick="setLicense('proprietary',this)"><div class="radio"></div> Proprietary</div>
@@ -378,7 +378,7 @@ body.compact .lb-table tbody tr { height:40px; }
       </div>
 
       <div class="sb-section">
-        <div class="sb-section-header">Score Range <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header">Score Range <span class="sb-chevron">â¾</span></div>
         <div class="range-bar"><div class="range-fill"></div></div>
         <div class="range-nums"><span>0</span><span>100</span></div>
       </div>
@@ -387,7 +387,7 @@ body.compact .lb-table tbody tr { height:40px; }
 
     <!-- COLLAPSE TAB -->
     <div class="collapse-tab" id="collapseBtn" onclick="toggleSidebar()" title="Collapse / expand filters">
-      <div class="ct-arrow">‹</div>
+      <div class="ct-arrow">â¹</div>
       <div class="ct-lines">
         <div class="ct-line"></div>
         <div class="ct-line"></div>
@@ -400,32 +400,32 @@ body.compact .lb-table tbody tr { height:40px; }
   <div class="main-content">
 
     <div class="content-head">
-      <div class="content-title"><span class="hl">TRS</span>bench — Overall Rankings</div>
-      <div class="content-sub">Weighted composite · 7 pillars · 18 verified benchmark sources · Independent &amp; transparent</div>
+      <div class="content-title"><span class="hl">TRS</span>bench â Overall Rankings</div>
+      <div class="content-sub">Weighted composite Â· 7 pillars Â· 18 verified benchmark sources Â· Independent &amp; transparent</div>
       <div class="content-meta">
         <div class="meta-dot"></div>
-        <span id="metaUpdate">Loading…</span>
+        <span id="metaUpdate">Loadingâ¦</span>
         <span style="color:rgba(255,255,255,0.1)">|</span>
         <span id="metaSources">18/18 sources fired</span>
         <span style="color:rgba(255,255,255,0.1)">|</span>
-        <span id="metaCount">— models ranked</span>
+        <span id="metaCount">â models ranked</span>
         <span style="color:rgba(255,255,255,0.1)">|</span>
-        <a href="trsmethodology.html" class="meta-link">View Methodology →</a>
+        <a href="trsmethodology.html" class="meta-link">View Methodology â</a>
       </div>
     </div>
 
     <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="t-left">
-        <div class="btn-sm">⚙ Filters</div>
-        <div class="f-pill" id="activePillarPill">Overall ✓</div>
+        <div class="btn-sm">â Filters</div>
+        <div class="f-pill" id="activePillarPill">Overall â</div>
         <div class="f-pill-plain" id="activeLabPill">All Labs</div>
         <div class="f-pill-plain">All Licenses</div>
       </div>
       <div class="t-right">
         <div class="search-box">
-          <span>🔍</span>
-          <input id="searchInput" type="text" placeholder="Search models…"
+          <span>ð</span>
+          <input id="searchInput" type="text" placeholder="Search modelsâ¦"
             style="background:none;border:none;outline:none;color:rgba(255,255,255,0.7);font-size:11px;width:120px;"
             oninput="renderTable()">
         </div>
@@ -443,7 +443,7 @@ body.compact .lb-table tbody tr { height:40px; }
           <tr>
             <th style="width:52px;text-align:center">#</th>
             <th>Model</th>
-            <th>Score <span class="sort-icon">↓</span></th>
+            <th>Score <span class="sort-icon">â</span></th>
 
             <th>Change</th>
             <th>Safety <span style="font-size:8px;color:rgba(255,255,255,0.2)">21%</span></th>
@@ -456,7 +456,7 @@ body.compact .lb-table tbody tr { height:40px; }
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div> Loading live scores…</div></td></tr>
+          <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div> Loading live scoresâ¦</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -465,7 +465,7 @@ body.compact .lb-table tbody tr { height:40px; }
 </div><!-- /body-row -->
 
 <script>
-// ══ CONFIG ══════════════════════════════════════════
+// ââ CONFIG ââââââââââââââââââââââââââââââââââââââââââ
 const LAB_COLORS = {
   'Anthropic':  { bg:'rgba(204,93,57,0.22)',  dot:'rgba(204,93,57,0.75)',  init:'A'  },
   'Google':     { bg:'rgba(66,133,244,0.2)',  dot:'rgba(66,133,244,0.75)', init:'G'  },
@@ -516,12 +516,12 @@ function logoImg(company, size) {
   return '<span style="width:' + s + 'px;height:' + s + 'px;border-radius:4px;background:' + lc.bg + ';display:inline-flex;align-items:center;justify-content:center;font-size:' + Math.round(s*0.45) + 'px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0">' + lc.init + '</span>';
 }
 
-// ══ STATE ════════════════════════════════════════════
+// ââ STATE ââââââââââââââââââââââââââââââââââââââââââââ
 let trsData = null;
 let activeFilter = { lab:'All Labs', license:'all' };
 let searchQuery = '';
 
-// ══ UTILITIES ════════════════════════════════════════
+// ââ UTILITIES ââââââââââââââââââââââââââââââââââââââââ
 function fmtDate(iso){
   const [,m,d] = iso.split('-');
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -576,17 +576,17 @@ function sparkColor(pts){
   return 'rgba(0,229,255,0.35)';
 }
 
-// Pillar score cell — highlights the top score in each column
+// Pillar score cell â highlights the top score in each column
 function pCol(model, pillar){
   const ps = model.pillar_scores;
-  if(!ps || ps[pillar] == null) return '<span style="font-size:10px;color:rgba(255,255,255,0.18)">—</span>';
+  if(!ps || ps[pillar] == null) return '<span style="font-size:10px;color:rgba(255,255,255,0.18)">â</span>';
   const val = ps[pillar];
   // Highlight if this pillar score is notably high (>=90)
   const hi = val >= 90 ? ' hi' : '';
   return `<span class="pcol${hi}">${val.toFixed(1)}</span>`;
 }
 
-// ══ RENDER TABLE ═════════════════════════════════════
+// ââ RENDER TABLE âââââââââââââââââââââââââââââââââââââ
 function renderTable(){
   if(!trsData) return;
   const tbody = document.getElementById('tableBody');
@@ -636,16 +636,16 @@ function renderTable(){
 
     // Rank cell
     let rankHTML;
-    if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
-    else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal medal-silver">🥈</span></div>`;
-    else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal medal-bronze">🥉</span></div>`;
+    if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">ð¥</span></div>`;
+    else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal medal-silver">ð¥</span></div>`;
+    else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal medal-bronze">ð¥</span></div>`;
     else rankHTML = `<div class="rank-cell">${rank}</div>`;
 
     // Change cell
     let chgHTML;
     if(Math.abs(chg) < 0.005) chgHTML = `<span class="chg nc">+0.00</span>`;
-    else if(chg > 0) chgHTML = `<span class="chg up">↑ ${chg.toFixed(2)}</span>`;
-    else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
+    else if(chg > 0) chgHTML = `<span class="chg up">â ${chg.toFixed(2)}</span>`;
+    else chgHTML = `<span class="chg dn">â ${Math.abs(chg).toFixed(2)}</span>`;
 
     // Row class
     let rowClass = '';
@@ -690,8 +690,8 @@ function renderTable(){
     + buildRows(staleModels, freshModels.length, true);
 }
 
-// ══ BUILD TICKER ═════════════════════════════════════
-// ══ TICKER — mirrors original homepage exactly ════════════════════════════
+// ââ BUILD TICKER âââââââââââââââââââââââââââââââââââââ
+// ââ TICKER â mirrors original homepage exactly ââââââââââââââââââââââââââââ
 const TICKER_LOGOS = {
   anthropic: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=64',
   openai:    'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
@@ -777,7 +777,7 @@ Promise.all([
   fetch('tragent-data.json?v='+Date.now()).then(r=>r.json()),
 ]).then(buildTicker).catch(e => console.warn('Ticker error:', e));
 
-// ══ BUILD LAB FILTER ═════════════════════════════════
+// ââ BUILD LAB FILTER âââââââââââââââââââââââââââââââââ
 function buildLabFilter(models){
   const labs = [...new Set(models.map(m=>m.company).filter(Boolean))].sort();
   const list = document.getElementById('labList');
@@ -792,7 +792,7 @@ function buildLabFilter(models){
   }).join('');
 }
 
-// ══ FILTER HANDLERS ══════════════════════════════════
+// ââ FILTER HANDLERS ââââââââââââââââââââââââââââââââââ
 function filterByLab(lab, el){
   activeFilter.lab = lab;
   document.querySelectorAll('#labList .lab-item').forEach(li=>{
@@ -817,9 +817,9 @@ function setPillar(pillar, el){
   document.querySelectorAll('.pillar-item').forEach(p=>{ p.classList.remove('active'); p.querySelector('.p-check') && (p.querySelector('.p-check').textContent=''); });
   el.classList.add('active');
   const check = el.querySelector('.p-check') || el;
-  if(el.querySelector('.p-check')) el.querySelector('.p-check').textContent = '✓';
-  const label = el.textContent.replace('✓','').trim();
-  document.getElementById('activePillarPill').textContent = label + ' ✓';
+  if(el.querySelector('.p-check')) el.querySelector('.p-check').textContent = 'â';
+  const label = el.textContent.replace('â','').trim();
+  document.getElementById('activePillarPill').textContent = label + ' â';
 }
 
 function setLicense(mode, el){
@@ -828,7 +828,7 @@ function setLicense(mode, el){
   const r = el.querySelector('.radio'); r.classList.add('on'); r.innerHTML='';
 }
 
-// ══ VIEW TOGGLE ═══════════════════════════════════════
+// ââ VIEW TOGGLE âââââââââââââââââââââââââââââââââââââââ
 function setView(mode){
   const body = document.getElementById('mainbody');
   const btnC = document.getElementById('btnCompact');
@@ -837,24 +837,24 @@ function setView(mode){
   else { body.classList.remove('compact'); btnE.classList.add('active'); btnC.classList.remove('active'); }
 }
 
-// ══ SIDEBAR COLLAPSE ══════════════════════════════════
+// ââ SIDEBAR COLLAPSE ââââââââââââââââââââââââââââââââââ
 function toggleSidebar(){
   const wrap = document.getElementById('sbWrap');
   const sidebar = document.getElementById('sidebar');
   const btn = document.getElementById('collapseBtn');
   sidebar.classList.toggle('collapsed');
   wrap.classList.toggle('is-collapsed');
-  btn.querySelector('.ct-arrow').textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
+  btn.querySelector('.ct-arrow').textContent = sidebar.classList.contains('collapsed') ? 'âº' : 'â¹';
 }
 
-// ══ DATE HEADER ═══════════════════════════════════════
+// ââ DATE HEADER âââââââââââââââââââââââââââââââââââââââ
 (function setDate(){
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const d = new Date();
   document.getElementById('todayDate').textContent = months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
 })();
 
-// ══ LOAD DATA ═════════════════════════════════════════
+// ââ LOAD DATA âââââââââââââââââââââââââââââââââââââââââ
 fetch('trs-data.json?v=' + Date.now())
   .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(data => {
@@ -864,7 +864,7 @@ fetch('trs-data.json?v=' + Date.now())
     const dates = data.dates || [];
     const lastDate = dates.length ? dates[dates.length-1] : null;
     if(lastDate){
-      document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+      document.getElementById('metaUpdate').textContent = 'â» Updated ' + fmtDate(lastDate) + ' Â· 7:00 AM CST';
     }
 
     // Ranked model count
@@ -878,8 +878,8 @@ fetch('trs-data.json?v=' + Date.now())
     renderTable();
   })
   .catch(err => {
-    document.getElementById('tableBody').innerHTML = `<tr><td colspan="13"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
-    document.getElementById('tickerTrack').innerHTML = '<div class="ti"><span style="font-size:11px;color:rgba(248,113,113,0.7)">⚠ Score data unavailable</span></div>';
+    document.getElementById('tableBody').innerHTML = `<tr><td colspan="13"><div class="loading-state" style="color:rgba(248,113,113,0.8)">â  Failed to load score data: ${err.message}</div></td></tr>`;
+    document.getElementById('tickerTrack').innerHTML = '<div class="ti"><span style="font-size:11px;color:rgba(248,113,113,0.7)">â  Score data unavailable</span></div>';
   });
 </script>
 </body>
