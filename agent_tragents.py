@@ -802,21 +802,26 @@ def auto_discover_models_from_sets(data: dict, scraped_name_sets: list[set]) -> 
 
 
 def match_name(scraped: str, existing: list[str]) -> str | None:
-    s = scraped.lower().strip()
-    s_stripped = s.split("/")[-1]   # strip org prefix: "openai/gpt-4o" → "gpt-4o"
+    """3-tier fuzzy match: exact norm → substring → 2-token overlap.
+    Same normalizer as agent_trs.py and agent_trscode.py for consistency."""
+    def _norm(s: str) -> str:
+        s = re.sub(r'[^\x00-\x7F]', '', s).strip()   # strip emoji / non-ASCII
+        if '/' in s:
+            s = s.split('/')[-1]                       # strip org prefix: openai/gpt-4o → gpt-4o
+        s = re.sub(r'(\d)-(\d)', r'\1.\2', s)         # 4-5 → 4.5
+        s = re.sub(r'\bv(\d)', r'\1', s)              # v3 → 3
+        s = s.replace('-', ' ').replace('_', ' ')
+        return re.sub(r'\s+', ' ', s).strip().lower()
+    s = _norm(scraped)
     for name in existing:
-        n = name.lower()
-        if n == s or n == s_stripped:
-            return name
+        if _norm(name) == s: return name
     for name in existing:
-        n = name.lower()
-        if s in n or n in s or s_stripped in n or n in s_stripped:
-            return name
-    s_tok = set(s_stripped.replace("-", " ").replace("_", " ").split())
+        n = _norm(name)
+        if s in n or n in s: return name
+    s_tok = set(s.split())
     for name in existing:
-        n_tok = set(name.lower().replace("-", " ").replace("_", " ").split())
-        if len(s_tok & n_tok) >= 2:
-            return name
+        n_tok = set(_norm(name).split())
+        if len(s_tok & n_tok) >= 2: return name
     return None
 
 
@@ -948,6 +953,10 @@ def main():
     with open(DATA_FILE) as f:
         data = json.load(f)
 
+    # Ensure top-level schema fields per Bible V1.0
+    data.setdefault("formula_version", "1.0")
+    data.setdefault("weights", WEIGHTS)
+
     models = data["models"]
     names  = [m["name"] for m in models]
     dates  = data["dates"]
@@ -988,7 +997,13 @@ def main():
     notify("📊 <b>Scraping complete</b>\n" + "\n".join(source_summary))
 
     # ── Auto-discover new models ──
-    _all_scraped_sets = [set(d.keys()) for d in pillar_results.values() if d]
+    # Only discover from real performance benchmarks — NOT from accessibility
+    # or multi_model, which are supplementary scorers for existing roster models.
+    # Ollama/OpenRouter discovery was creating 100+ ghost models with no real data.
+    _DISCOVERY_PILLARS = ["task_completion", "cost_efficiency",
+                          "tool_reliability", "safety_security"]
+    _all_scraped_sets = [set(pillar_results[p].keys())
+                         for p in _DISCOVERY_PILLARS if pillar_results.get(p)]
     new_models = auto_discover_models_from_sets(data, _all_scraped_sets)
     if new_models:
         log.info(f"★ Auto-discovered {len(new_models)} new models: {new_models}")
@@ -1021,6 +1036,11 @@ def main():
         # Calculate composite score
         sc = calculate_composite(n, pillar_scores)
 
+        # Write pillar_scores to model object (required by Bible schema + v2.html display)
+        # Only include pillars that actually have data this run
+        model["pillar_scores"] = {p: round(v, 2) for p, v in pillar_scores.items()} if pillar_scores else {}
+        model["source_count"] = non_null_count
+
         # Update scores array
         while len(model["scores"]) < today_idx:
             model["scores"].append(None)
@@ -1044,6 +1064,16 @@ def main():
 
     qualified    = [m for m in models if model_pillar_counts.get(m["name"], 0) >= QUALIFICATION_MIN_PILLARS]
     disqualified = [m for m in models if model_pillar_counts.get(m["name"], 0) < QUALIFICATION_MIN_PILLARS]
+
+    # Null-out scores for disqualified models so they don't appear with garbage composites.
+    # This is critical: models with only 1-2 pillars (e.g. accessibility=100 only) would
+    # otherwise get composite=100.0 via proportional normalization.
+    for m in disqualified:
+        if today_idx < len(m["scores"]):
+            m["scores"][today_idx] = None
+        m["pillar_scores"] = {}
+        m["source_count"] = 0
+
     if disqualified:
         log.info(f"Disqualified (< {QUALIFICATION_MIN_PILLARS} pillars): "
                  f"{[m['name'] for m in disqualified]}")
