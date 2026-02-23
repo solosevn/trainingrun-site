@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-23T07:53:03",
+  "last_updated": "2026-02-23T07:55:32",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -96,13 +96,13 @@
       "label": "Truth & Neutrality",
       "emoji": "\u00f0\u009f\u008e\u00af",
       "enabled": true,
-      "last_run": "2026-02-22T06:49:34",
-      "last_run_date": "2026-02-22",
+      "last_run": "2026-02-23T07:55:32",
+      "last_run_date": "2026-02-23",
       "status": "success",
-      "duration_seconds": 145,
+      "duration_seconds": 147,
       "sources_total": 7,
       "sources_hit": 6,
-      "models_qualified": 2,
+      "models_qualified": 14,
       "top_model": "Gemini 3 Pro",
       "top_score": 74.25,
       "top5": [
@@ -115,10 +115,25 @@
           "rank": 2,
           "name": "Gemini 3 Flash",
           "score": 69.42
+        },
+        {
+          "rank": 3,
+          "name": "DeepSeek-V3",
+          "score": 25.64
+        },
+        {
+          "rank": 4,
+          "name": "ERNIE 4.5",
+          "score": 1.85
+        },
+        {
+          "rank": 5,
+          "name": "ERNIE 5.0",
+          "score": 77.24
         }
       ],
       "leaderboard_url": "/truscore-scores.html",
-      "next_run": "2026-02-23T05:00:00",
+      "next_run": "2026-02-24T05:00:00",
       "error": null
     },
     "tragents": {
