@@ -697,7 +697,7 @@ function setDDP(ddp){
     buildLabFilter(data.models);
     renderTable();
     const lastDate = data.dates?.length ? data.dates[data.dates.length-1] : null;
-    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + (data.run_at ? ' · ' + data.run_at : '');
     document.getElementById('metaSources').textContent = cfg.sourceCount + '/' + cfg.sourceCount + ' sources fired';
   } else {
     document.getElementById('tableBody').innerHTML =
@@ -710,7 +710,7 @@ function setDDP(ddp){
         buildLabFilter(d.models);
         renderTable();
         const lastDate = d.dates?.length ? d.dates[d.dates.length-1] : null;
-        if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+        if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + (d.run_at ? ' · ' + d.run_at : '');
         document.getElementById('metaSources').textContent = cfg.sourceCount + '/' + cfg.sourceCount + ' sources fired';
       })
       .catch(() => {
@@ -1091,7 +1091,7 @@ fetch('trs-data.json?v=' + Date.now())
     if(currentDDP !== 'trsbench') return;
 
     const lastDate = (data.dates||[]).slice(-1)[0] || null;
-    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + (data.run_at ? ' · ' + data.run_at : '');
     document.getElementById('metaSources').textContent = '18/18 sources fired';
 
     const rankedCount = data.models.filter(m => getLatestScore(m) !== null).length;

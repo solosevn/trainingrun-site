@@ -793,6 +793,9 @@ def main():
     _t0 = getattr(main, "_start_time", _time.time())
     duration = int(_time.time() - _t0)
 
+    from datetime import datetime as _dt
+    data["run_at"] = _dt.now().strftime("%-I:%M %p") + " CST"
+
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
     log.info(f"Wrote {DATA_FILE.name}")
