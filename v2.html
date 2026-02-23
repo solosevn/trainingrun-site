@@ -313,15 +313,14 @@ body.compact .lb-table tbody tr { height:40px; }
 <!-- ══ MAIN NAV TABS ═════════════════════════════ -->
 <div class="h-nav">
   <div class="htabs">
-    <div class="htab active">Overview</div>
-    <div class="htab" style="cursor:default;opacity:0.6">
+    <div class="htab" style="cursor:default;opacity:0.45">
       <span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>Arena</span> <span class="tpill" style="background:rgba(255,80,80,0.1);color:rgba(255,140,140,0.85);border:1px dashed rgba(255,100,100,0.35)">(Soon)</span>
     </div>
-    <a href="scores.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>bench</span> <span class="tpill">(Overall)</span></a>
-    <a href="truscore-scores.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRU</span>score</span> <span class="tpill">(Truth)</span></a>
-    <a href="trscode.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>code</span> <span class="tpill">(Coding)</span></a>
-    <a href="trfcast.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRF</span>cast</span> <span class="tpill">(Prediction)</span></a>
-    <a href="tragents-scores.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TR</span><span style="color:#f87171">Agents</span></span> <span class="tpill">(Agents)</span></a>
+    <div class="htab active" data-ddp="trsbench" onclick="setDDP('trsbench')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>bench</span> <span class="tpill">(Overall)</span></div>
+    <div class="htab" data-ddp="truscore" onclick="setDDP('truscore')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRU</span>score</span> <span class="tpill">(Truth)</span></div>
+    <div class="htab" data-ddp="trscode" onclick="setDDP('trscode')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>code</span> <span class="tpill">(Coding)</span></div>
+    <div class="htab" data-ddp="trfcast" onclick="setDDP('trfcast')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRF</span>cast</span> <span class="tpill">(Prediction)</span></div>
+    <div class="htab" data-ddp="tragents" onclick="setDDP('tragents')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TR</span><span style="color:#f87171">Agents</span></span> <span class="tpill">(Agents)</span></div>
   </div>
   <div class="hnav-right">
     <a href="sources.html">Verify Sources</a><span class="hnav-pipe">|</span>
@@ -346,16 +345,10 @@ body.compact .lb-table tbody tr { height:40px; }
         </div>
       </div>
 
-      <div class="sb-section">
-        <div class="sb-section-header">Pillars (7) <span class="sb-chevron">▾</span></div>
-        <div class="pillar-list">
-          <div class="pillar-item active" onclick="setPillar('overall',this)"><span class="p-icon">🏆</span> Overall <span class="p-check">✓</span></div>
-          <div class="pillar-item" onclick="setPillar('safety',this)"><span class="p-icon">🛡️</span> Safety</div>
-          <div class="pillar-item" onclick="setPillar('reasoning',this)"><span class="p-icon">🧠</span> Reasoning</div>
-          <div class="pillar-item" onclick="setPillar('coding',this)"><span class="p-icon">💻</span> Coding</div>
-          <div class="pillar-item" onclick="setPillar('human_preference',this)"><span class="p-icon">📋</span> Instruction Following</div>
-          <div class="pillar-item" onclick="setPillar('knowledge',this)"><span class="p-icon">📚</span> Knowledge</div>
-          <div class="pillar-item" onclick="setPillar('efficiency',this)"><span class="p-icon">⚡</span> Cost Efficiency</div>
+      <div class="sb-section" id="pillarSection">
+        <div class="sb-section-header" id="pillarHeader">Pillars <span class="sb-chevron">▾</span></div>
+        <div class="pillar-list" id="pillarList">
+          <!-- populated dynamically by buildPillarSidebar() -->
         </div>
       </div>
 
@@ -438,7 +431,7 @@ body.compact .lb-table tbody tr { height:40px; }
     <div class="lb-wrap">
       <table class="lb-table" id="mainTable">
         <thead>
-          <tr>
+          <tr id="theadRow">
             <th style="width:52px;text-align:center">#</th>
             <th>Model</th>
             <th style="min-width:130px">Score <span class="sort-icon">↓</span></th>
@@ -512,8 +505,83 @@ function logoImg(company, size) {
   return '<span style="width:' + s + 'px;height:' + s + 'px;border-radius:4px;background:' + lc.bg + ';display:inline-flex;align-items:center;justify-content:center;font-size:' + Math.round(s*0.45) + 'px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0">' + lc.init + '</span>';
 }
 
+// ══ DDP CONFIG ════════════════════════════════════════
+const DDP_CONFIG = {
+  trsbench: {
+    title: '<span class="hl">TRS</span>bench — Overall Rankings',
+    sub: 'Weighted composite · 7 pillars · 18 verified sources · Independent &amp; transparent',
+    file: 'trs-data.json', totalPillars: 7, sourceCount: 18,
+    methLink: 'trsmethodology.html',
+    pillars: [
+      { key:'safety',           label:'Safety',       icon:'🛡️', pct:'21%', compact:false },
+      { key:'reasoning',        label:'Reasoning',    icon:'🧠', pct:'20%', compact:false },
+      { key:'coding',           label:'Coding',       icon:'💻', pct:'20%', compact:false },
+      { key:'human_preference', label:'Instruction',  icon:'📋', pct:'18%', compact:true  },
+      { key:'knowledge',        label:'Knowledge',    icon:'📚', pct:'8%',  compact:true  },
+      { key:'efficiency',       label:'Efficiency',   icon:'⚡', pct:'7%',  compact:true  },
+      { key:'usage_adoption',   label:'Usage',        icon:'📊', pct:'6%',  compact:true  },
+    ],
+  },
+  truscore: {
+    title: '<span class="hl">TRU</span>score — Truth Rankings',
+    sub: 'Weighted composite · 4 pillars · 7 verified sources · Independent &amp; transparent',
+    file: 'truscore-data.json', totalPillars: 4, sourceCount: 7,
+    methLink: 'truscore.html',
+    pillars: [
+      { key:'factuality',    label:'Factuality',    icon:'✅', pct:'40%', compact:false },
+      { key:'neutrality',    label:'Neutrality',    icon:'⚖️', pct:'30%', compact:false },
+      { key:'hallucination', label:'Hallucination', icon:'👻', pct:'20%', compact:false },
+      { key:'calibration',   label:'Calibration',   icon:'🎯', pct:'10%', compact:true  },
+    ],
+  },
+  trscode: {
+    title: '<span class="hl">TRS</span>code — Coding Rankings',
+    sub: 'Weighted composite · 5 pillars · 8 verified sources · Independent &amp; transparent',
+    file: 'trscode-data.json', totalPillars: 5, sourceCount: 8,
+    methLink: 'trscode-methodology.html',
+    pillars: [
+      { key:'issue_resolution',  label:'Issue Res.',  icon:'🔧', pct:'30%', compact:false },
+      { key:'code_generation',   label:'Code Gen.',   icon:'💡', pct:'25%', compact:false },
+      { key:'agentic_coding',    label:'Agentic',     icon:'🤖', pct:'20%', compact:false },
+      { key:'scientific',        label:'Scientific',  icon:'🔬', pct:'15%', compact:true  },
+      { key:'human_preference',  label:'Human Pref',  icon:'👥', pct:'10%', compact:true  },
+    ],
+  },
+  trfcast: {
+    title: '<span class="hl">TRF</span>cast — Prediction Rankings',
+    sub: 'Weighted composite · 5 pillars · 4 verified sources · Independent &amp; transparent',
+    file: 'trf-data.json', totalPillars: 5, sourceCount: 4,
+    methLink: 'trfcast-methodology.html',
+    pillars: [
+      { key:'forecasting',         label:'Forecasting',    icon:'🔮', pct:'35%', compact:false },
+      { key:'trading',             label:'Trading',        icon:'📈', pct:'25%', compact:false },
+      { key:'calibration',         label:'Calibration',    icon:'🎯', pct:'20%', compact:false },
+      { key:'financial_reasoning', label:'Fin. Reasoning', icon:'💰', pct:'12%', compact:true  },
+      { key:'market_intelligence', label:'Market Intel',   icon:'🧮', pct:'8%',  compact:true  },
+    ],
+  },
+  tragents: {
+    title: '<span class="hl">TR</span><span style="color:#f87171">Agents</span> — Agent Rankings',
+    sub: 'Weighted composite · 6 pillars · 10+ verified sources · Independent &amp; transparent',
+    file: 'tragent-data.json', totalPillars: 6, sourceCount: 10,
+    methLink: 'tragents-methodology.html',
+    pillars: [
+      { key:'task_completion',  label:'Task Completion',  icon:'✅', pct:'25%', compact:false },
+      { key:'cost_efficiency',  label:'Cost Efficiency',  icon:'💰', pct:'20%', compact:false },
+      { key:'tool_reliability', label:'Tool Reliability', icon:'🔧', pct:'20%', compact:false },
+      { key:'safety_security',  label:'Safety',           icon:'🛡️', pct:'15%', compact:true  },
+      { key:'accessibility',    label:'Accessibility',    icon:'🌐', pct:'10%', compact:true  },
+      { key:'multi_model',      label:'Multi-Model',      icon:'🤝', pct:'10%', compact:true  },
+    ],
+  },
+};
+
 // ══ STATE ════════════════════════════════════════════
-let trsData = null;
+const _ddpData = { trsbench:null, truscore:null, trscode:null, trfcast:null, tragents:null };
+let currentDDP = 'trsbench';
+function activeData(){ return _ddpData[currentDDP]; }
+function getColspan(){ return 3 + DDP_CONFIG[currentDDP].pillars.length; }
+
 let activeFilter = { lab:'All Labs', license:'all' };
 let searchQuery = '';
 let currentRankMode = 'models';
@@ -531,16 +599,18 @@ function getLatestScore(model){
 }
 
 function isFreshToday(model){
-  // Fresh = has a non-zero score at today's index (last slot in dates)
-  if(!trsData || !trsData.dates) return false;
-  const idx = trsData.dates.length - 1;
+  const data = activeData();
+  if(!data || !data.dates) return false;
+  const idx = data.dates.length - 1;
   const s = model.scores[idx];
   return s !== null && s !== undefined && s > 0;
 }
 
 function getCoverage(model){
-  // Number of pillars covered (use category_count for fresh, pillar_scores keys for stale)
-  if(isFreshToday(model)) return model.category_count || 0;
+  if(currentDDP === 'trsbench'){
+    if(isFreshToday(model)) return model.category_count || 0;
+    return Object.keys(model.pillar_scores || {}).length;
+  }
   return Object.keys(model.pillar_scores || {}).length;
 }
 
@@ -573,6 +643,84 @@ function sparkColor(pts){
   return 'rgba(0,229,255,0.35)';
 }
 
+// ══ THEAD + SIDEBAR PILLAR RENDERERS ═════════════════
+function renderThead(){
+  const pillars = DDP_CONFIG[currentDDP].pillars;
+  const ths = pillars.map(p =>
+    `<th${p.compact?' class="hide-compact"':''}>${p.label} <span style="font-size:8px;color:rgba(255,255,255,0.2)">${p.pct}</span></th>`
+  ).join('');
+  document.getElementById('theadRow').innerHTML =
+    `<th style="width:52px;text-align:center">#</th><th>Model</th><th style="min-width:130px">Score <span class="sort-icon">↓</span></th>${ths}`;
+}
+
+function buildPillarSidebar(){
+  const cfg = DDP_CONFIG[currentDDP];
+  document.getElementById('pillarHeader').innerHTML =
+    `Pillars (${cfg.totalPillars}) <span class="sb-chevron">▾</span>`;
+  document.getElementById('pillarList').innerHTML =
+    `<div class="pillar-item active" onclick="setPillar('overall',this)"><span class="p-icon">🏆</span> Overall <span class="p-check">✓</span></div>` +
+    cfg.pillars.map(p =>
+      `<div class="pillar-item" onclick="setPillar('${p.key}',this)"><span class="p-icon">${p.icon}</span> ${p.label}</div>`
+    ).join('');
+  document.getElementById('activePillarPill').textContent = 'Overall ✓';
+}
+
+// ══ SET DDP ═══════════════════════════════════════════
+function setDDP(ddp){
+  if(currentDDP === ddp && activeData()) return;
+  currentDDP = ddp;
+
+  // Nav tab active state
+  document.querySelectorAll('.htab[data-ddp]').forEach(t => t.classList.remove('active'));
+  const activeTab = document.querySelector(`.htab[data-ddp="${ddp}"]`);
+  if(activeTab) activeTab.classList.add('active');
+
+  // Update title, subtitle, methodology link
+  const cfg = DDP_CONFIG[ddp];
+  document.querySelector('.content-title').innerHTML = cfg.title;
+  document.querySelector('.content-sub').innerHTML = cfg.sub;
+  const methLink = document.querySelector('.meta-link');
+  if(methLink) methLink.href = cfg.methLink;
+
+  // Rebuild thead and sidebar pillars
+  renderThead();
+  buildPillarSidebar();
+
+  // Reset filters
+  activeFilter.lab = 'All Labs';
+  currentRankMode = 'models';
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.rtab')?.classList.add('active');
+
+  const data = activeData();
+  if(data){
+    buildLabFilter(data.models);
+    renderTable();
+    const lastDate = data.dates?.length ? data.dates[data.dates.length-1] : null;
+    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+    document.getElementById('metaSources').textContent = cfg.sourceCount + '/' + cfg.sourceCount + ' sources fired';
+  } else {
+    document.getElementById('tableBody').innerHTML =
+      `<tr><td colspan="${getColspan()}"><div class="loading-state"><div class="spinner"></div> Loading ${cfg.title.replace(/<[^>]*>/g,'')} data…</div></td></tr>`;
+    fetch(cfg.file + '?v=' + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        _ddpData[ddp] = d;
+        if(currentDDP !== ddp) return;
+        buildLabFilter(d.models);
+        renderTable();
+        const lastDate = d.dates?.length ? d.dates[d.dates.length-1] : null;
+        if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+        document.getElementById('metaSources').textContent = cfg.sourceCount + '/' + cfg.sourceCount + ' sources fired';
+      })
+      .catch(() => {
+        if(currentDDP === ddp)
+          document.getElementById('tableBody').innerHTML =
+            `<tr><td colspan="${getColspan()}"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load data</div></td></tr>`;
+      });
+  }
+}
+
 // Pillar score cell — highlights the top score in each column
 function pCol(model, pillar){
   const ps = model.pillar_scores;
@@ -585,21 +733,21 @@ function pCol(model, pillar){
 
 // ══ RENDER TABLE ═════════════════════════════════════
 function renderTable(){
-  if(!trsData) return;
+  const data = activeData();
+  if(!data) return;
   if(currentRankMode === 'labs'){ renderLabsTable(); return; }
   const tbody = document.getElementById('tableBody');
   const query = (document.getElementById('searchInput').value||'').toLowerCase();
 
   // Build global rank map using FRESH-FIRST ordering (same as table display)
-  // Fresh models ranked 1..N_fresh, then stale models ranked N_fresh+1..total
-  const _allScored = trsData.models.filter(m => getLatestScore(m) !== null);
+  const _allScored = data.models.filter(m => getLatestScore(m) !== null);
   const _gFresh = _allScored.filter(m => isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
   const _gStale = _allScored.filter(m => !isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
   const globalRankMap = new Map();
   [..._gFresh, ..._gStale].forEach((m, i) => globalRankMap.set(m.name, i + 1));
 
   // Filter + sort models
-  let models = trsData.models
+  let models = data.models
     .filter(m => getLatestScore(m) !== null)
     .filter(m => activeFilter.lab === 'All Labs' || m.company === activeFilter.lab)
     .filter(m => !query || m.name.toLowerCase().includes(query) || (m.company||'').toLowerCase().includes(query))
@@ -608,7 +756,7 @@ function renderTable(){
   const maxScore = _gFresh.length ? getLatestScore(_gFresh[0]) : 100;
 
   if(!models.length){
-    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="${getColspan()}" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>`;
     document.getElementById('metaCount').textContent = '0 models ranked';
     return;
   }
@@ -621,71 +769,65 @@ function renderTable(){
 
   // Build rows for a group of models
   function buildRows(group, rankOffset, isStale){
+    const cfgPillars = DDP_CONFIG[currentDDP].pillars;
+    const totalP = DDP_CONFIG[currentDDP].totalPillars;
     return group.map((m, i) => {
       const rank = globalRankMap.get(m.name) || (i + 1 + rankOffset);
       const score = getLatestScore(m);
       const chg = getChange(m);
       const pts7 = getLast7(m);
-      const lc = labColor(m.company);
-      const barPct = Math.round((score / maxScore) * 100);
       const sc = sparkColor(pts7);
       const sparkSVG = buildSparklineSVG(pts7, sc);
       const covered = getCoverage(m);
       const coverageBadge = covered > 0
-        ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/7</span>`
+        ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>`
         : '';
       const staleRowStyle = isStale ? 'opacity:0.62;' : '';
       const staleScoreNote = isStale
-        ? `<span style="font-size:8px;color:rgba(255,200,0,0.55);margin-left:4px">Feb ${trsData.dates[trsData.dates.length-2]?.slice(8)||'?'}</span>`
+        ? `<span style="font-size:8px;color:rgba(255,200,0,0.55);margin-left:4px">${fmtDate(data.dates[data.dates.length-2]||'')}</span>`
         : '';
 
-    // Rank cell
     let rankHTML;
     if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
     else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal medal-silver">🥈</span></div>`;
     else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal medal-bronze">🥉</span></div>`;
     else rankHTML = `<div class="rank-cell">${rank}</div>`;
 
-    // Change cell
     let chgHTML;
     if(Math.abs(chg) < 0.005) chgHTML = `<span class="chg nc">+0.00</span>`;
     else if(chg > 0) chgHTML = `<span class="chg up">↑ ${chg.toFixed(2)}</span>`;
     else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
 
-    // Row class
     let rowClass = '';
     if(rank===1) rowClass = 'row-1';
     else if(rank===2) rowClass = 'row-2';
     else if(rank===3) rowClass = 'row-3';
 
-    // Company left-border class
     const coClass = {
       'Anthropic':'co-anthropic','Google':'co-google','OpenAI':'co-openai',
       'xAI':'co-xai','Mistral':'co-mistral','DeepSeek':'co-deepseek',
       'Meta':'co-meta','Alibaba':'co-alibaba'
     }[m.company] || 'co-other';
 
-    return `<tr class="${rowClass} ${coClass}" onclick="window.location='scores.html'" style="cursor:pointer;${staleRowStyle}">
+    const pillarCells = cfgPillars.map(p =>
+      `<td${p.compact?' class="hide-compact"':''}>${pCol(m, p.key)}</td>`
+    ).join('');
+
+    return `<tr class="${rowClass} ${coClass}" style="${staleRowStyle}">
       <td>${rankHTML}</td>
       <td><div class="m-cell">
         ${logoImg(m.company, 28)}
         <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} &middot; Proprietary</div></div>
       </div></td>
       <td>${coverageBadge}<span class="score-val">${score.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span>${staleScoreNote}</td>
-      <td>${pCol(m, 'safety')}</td>
-      <td>${pCol(m, 'reasoning')}</td>
-      <td>${pCol(m, 'coding')}</td>
-      <td class="hide-compact">${pCol(m, 'human_preference')}</td>
-      <td class="hide-compact">${pCol(m, 'knowledge')}</td>
-      <td class="hide-compact">${pCol(m, 'efficiency')}</td>
-      <td class="hide-compact">${pCol(m, 'usage_adoption')}</td>
+      ${pillarCells}
     </tr>`;
   }).join('');
   }
 
   // Stale divider row
   const staleDivider = staleModels.length ? `
-    <tr><td colspan="12" style="padding:6px 16px;background:rgba(255,200,0,0.04);border-top:1px solid rgba(255,200,0,0.12);border-bottom:1px solid rgba(255,200,0,0.08);">
+    <tr><td colspan="${getColspan()}" style="padding:6px 16px;background:rgba(255,200,0,0.04);border-top:1px solid rgba(255,200,0,0.12);border-bottom:1px solid rgba(255,200,0,0.08);">
       <span style="font-size:10px;color:rgba(255,200,0,0.45);letter-spacing:0.08em">&#9203; NOT SCORED TODAY &middot; Last known scores shown &middot; Updates on next scrape</span>
     </td></tr>` : '';
 
@@ -814,12 +956,12 @@ function filterByLab(lab, el){
 
 // ══ RENDER LABS TABLE ════════════════════════════════
 function renderLabsTable(){
-  if(!trsData) return;
+  const data = activeData();
+  if(!data) return;
   const tbody = document.getElementById('tableBody');
 
-  // Group all scored models by company
   const labMap = {};
-  trsData.models.forEach(m => {
+  data.models.forEach(m => {
     const score = getLatestScore(m);
     if(score === null || score <= 0) return;
     const co = m.company || 'Unknown';
@@ -831,13 +973,14 @@ function renderLabsTable(){
   const labs = Object.values(labMap).sort((a,b) => b.bestScore - a.bestScore);
 
   if(!labs.length){
-    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No labs found.</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="${getColspan()}" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No labs found.</td></tr>`;
     return;
   }
 
   document.getElementById('metaCount').textContent = labs.length + ' labs ranked';
 
-  const PILLARS = ['safety','reasoning','coding','human_preference','knowledge','efficiency','usage_adoption'];
+  const cfgPillars = DDP_CONFIG[currentDDP].pillars;
+  const totalP = DDP_CONFIG[currentDDP].totalPillars;
   const coClassMap = {
     'Anthropic':'co-anthropic','Google':'co-google','OpenAI':'co-openai',
     'xAI':'co-xai','Mistral':'co-mistral','DeepSeek':'co-deepseek',
@@ -853,7 +996,7 @@ function renderLabsTable(){
     else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
 
     const covered = getCoverage(lab.bestModel);
-    const covBadge = covered > 0 ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/7</span>` : '';
+    const covBadge = covered > 0 ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>` : '';
 
     let rankHTML;
     if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
@@ -864,13 +1007,16 @@ function renderLabsTable(){
     const coClass = coClassMap[lab.company] || 'co-other';
     const modelCount = `<span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:3px;padding:1px 6px;color:rgba(255,255,255,0.4);margin-left:6px">${lab.models.length} model${lab.models.length!==1?'s':''}</span>`;
 
-    // Best pillar score across all lab models
     function bestPCol(pillar){
       const vals = lab.models.map(m => m.pillar_scores?.[pillar]).filter(v => v!=null && v>0);
       if(!vals.length) return `<span class="pcol" style="color:rgba(255,255,255,0.15)">—</span>`;
       const best = Math.max(...vals);
       return `<span class="pcol${best>=90?' hi':''}">${best.toFixed(1)}</span>`;
     }
+
+    const pillarCells = cfgPillars.map(p =>
+      `<td${p.compact?' class="hide-compact"':''}>${bestPCol(p.key)}</td>`
+    ).join('');
 
     const rowClass = rank===1?'row-1':rank===2?'row-2':rank===3?'row-3':'';
     return `<tr class="${rowClass} ${coClass}">
@@ -880,13 +1026,7 @@ function renderLabsTable(){
         <div><div class="m-name">${lab.company}</div><div class="m-lab">Best: ${lab.bestModel.name}${modelCount}</div></div>
       </div></td>
       <td>${covBadge}<span class="score-val">${lab.bestScore.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span></td>
-      <td>${bestPCol('safety')}</td>
-      <td>${bestPCol('reasoning')}</td>
-      <td>${bestPCol('coding')}</td>
-      <td class="hide-compact">${bestPCol('human_preference')}</td>
-      <td class="hide-compact">${bestPCol('knowledge')}</td>
-      <td class="hide-compact">${bestPCol('efficiency')}</td>
-      <td class="hide-compact">${bestPCol('usage_adoption')}</td>
+      ${pillarCells}
     </tr>`;
   }).join('');
 }
@@ -940,31 +1080,28 @@ function toggleSidebar(){
 })();
 
 // ══ LOAD DATA ═════════════════════════════════════════
+// Init thead + sidebar for default DDP (trsbench) immediately
+renderThead();
+buildPillarSidebar();
+
 fetch('trs-data.json?v=' + Date.now())
   .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(data => {
-    trsData = data;
+    _ddpData.trsbench = data;
+    if(currentDDP !== 'trsbench') return;
 
-    // Dates / update time
-    const dates = data.dates || [];
-    const lastDate = dates.length ? dates[dates.length-1] : null;
-    if(lastDate){
-      document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
-    }
+    const lastDate = (data.dates||[]).slice(-1)[0] || null;
+    if(lastDate) document.getElementById('metaUpdate').textContent = '↻ Updated ' + fmtDate(lastDate) + ' · 7:00 AM CST';
+    document.getElementById('metaSources').textContent = '18/18 sources fired';
 
-    // Ranked model count
     const rankedCount = data.models.filter(m => getLatestScore(m) !== null).length;
     document.getElementById('metaCount').textContent = rankedCount + ' models ranked';
 
-    // Build sidebar lab filter
     buildLabFilter(data.models);
-
-    // Render table
     renderTable();
   })
   .catch(err => {
-    document.getElementById('tableBody').innerHTML = `<tr><td colspan="12"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
-    document.getElementById('tickerTrack').innerHTML = '<div class="ti"><span style="font-size:11px;color:rgba(248,113,113,0.7)">⚠ Score data unavailable</span></div>';
+    document.getElementById('tableBody').innerHTML = `<tr><td colspan="${getColspan()}"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
   });
 </script>
 </body>
