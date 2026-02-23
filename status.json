@@ -1,40 +1,40 @@
 {
-  "last_updated": "2026-02-23T10:30:32",
+  "last_updated": "2026-02-23T10:31:53",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-02-23T07:44:43",
+      "last_run": "2026-02-23T10:31:53",
       "last_run_date": "2026-02-23",
       "status": "success",
-      "duration_seconds": 168,
+      "duration_seconds": 79,
       "sources_total": 8,
       "sources_hit": 6,
-      "models_qualified": 14,
+      "models_qualified": 33,
       "top_model": "GPT-5.2",
-      "top_score": 77.51,
+      "top_score": 75.23,
       "top5": [
         {
           "rank": 1,
           "name": "GPT-5.2",
-          "score": 77.51
+          "score": 75.23
         },
         {
           "rank": 2,
           "name": "Claude Opus 4.6",
-          "score": 76.58
+          "score": 74.83
         },
         {
           "rank": 3,
           "name": "Gemini 3 Pro",
-          "score": 65.6
+          "score": 64.11
         },
         {
           "rank": 4,
           "name": "Claude Sonnet 4.5",
-          "score": 62.82
+          "score": 61.2
         },
         {
           "rank": 5,
