@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-23T10:58:41",
+  "last_updated": "2026-02-23T12:05:01",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -141,10 +141,10 @@
       "label": "Agents Leaderboard",
       "emoji": "\ud83e\udd16",
       "enabled": true,
-      "last_run": "2026-02-23T10:54:12",
+      "last_run": "2026-02-23T12:05:01",
       "last_run_date": "2026-02-23",
       "status": "success",
-      "duration_seconds": 285,
+      "duration_seconds": 312,
       "sources_total": 22,
       "sources_hit": 6,
       "models_qualified": 16,
@@ -159,22 +159,22 @@
         {
           "rank": 2,
           "name": "Gemini 3 Flash",
-          "score": 64.13
+          "score": 69.65
         },
         {
           "rank": 3,
-          "name": "Claude Opus 4.6",
-          "score": 61.84
-        },
-        {
-          "rank": 4,
           "name": "Kimi K2.5",
           "score": 55.45
         },
         {
-          "rank": 5,
+          "rank": 4,
           "name": "MiniMax M2.5",
           "score": 52.45
+        },
+        {
+          "rank": 5,
+          "name": "GPT-5.2",
+          "score": 51.82
         }
       ],
       "leaderboard_url": "/tragents-scores.html",
