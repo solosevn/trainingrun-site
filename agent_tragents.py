@@ -204,8 +204,13 @@ def _parse_mcp_atlas_innertext(text: str) -> dict[str, float]:
         m = score_pat.match(line)
         if m and i > 0:
             name = lines[i - 1]
+            # Skip if the candidate name is itself a score% (two consecutive % lines)
+            if score_pat.match(name):
+                continue
+            # Skip rubric/criteria lines (arrow descriptions, plain numbers)
+            if '→' in name or re.match(r'^\d+[\d.]*$', name):
+                continue
             if (len(name) > 2
-                    and not re.match(r'^\d+$', name)
                     and not any(kw in name.lower() for kw in _skip)
                     and name not in scores):
                 scores[name] = float(m.group(1))
