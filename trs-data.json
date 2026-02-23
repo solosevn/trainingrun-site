@@ -1,6 +1,6 @@
 {
   "formula_version": "2.4",
-  "checksum": "6183c3e3a291de0cae8f347072ebd1e033adeb1f1b593f84b4f56e4353c85a79",
+  "checksum": "1d6716e13213d9ef89b4f11b197b5b8cd790fb0bfc7c395639362eff8ce978ae",
   "weights": {
     "safety": 0.21,
     "reasoning": 0.2,
@@ -401,12 +401,12 @@
         94.19,
         63.65,
         44.04,
-        44.37
+        44.27
       ],
       "category_count": 3,
       "pillar_scores": {
         "reasoning": 49.9,
-        "efficiency": 29.4,
+        "efficiency": 28.8,
         "usage_adoption": 93.9
       }
     },
@@ -667,13 +667,13 @@
         90.97,
         72.87,
         59.68,
-        59.94
+        60.04
       ],
       "category_count": 3,
       "pillar_scores": {
         "coding": 79.6,
         "knowledge": 97.5,
-        "efficiency": 22.9
+        "efficiency": 23.5
       }
     },
     {

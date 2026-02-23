@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-23T08:52:41",
+  "last_updated": "2026-02-23T10:30:32",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -186,12 +186,12 @@
       "label": "Overall Rankings",
       "emoji": "\u00f0\u009f\u008f\u0086",
       "enabled": true,
-      "last_run": "2026-02-23T07:53:03",
+      "last_run": "2026-02-23T10:30:32",
       "last_run_date": "2026-02-23",
       "status": "success",
-      "duration_seconds": 393,
+      "duration_seconds": 328,
       "sources_total": 18,
-      "sources_hit": 18,
+      "sources_hit": 17,
       "models_qualified": 52,
       "top_model": "Claude Code",
       "top_score": 75.98,
