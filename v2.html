@@ -590,12 +590,13 @@ function renderTable(){
   const tbody = document.getElementById('tableBody');
   const query = (document.getElementById('searchInput').value||'').toLowerCase();
 
-  // Build global rank map BEFORE any filtering
+  // Build global rank map using FRESH-FIRST ordering (same as table display)
+  // Fresh models ranked 1..N_fresh, then stale models ranked N_fresh+1..total
+  const _allScored = trsData.models.filter(m => getLatestScore(m) !== null);
+  const _gFresh = _allScored.filter(m => isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+  const _gStale = _allScored.filter(m => !isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
   const globalRankMap = new Map();
-  trsData.models
-    .filter(m => getLatestScore(m) !== null)
-    .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0))
-    .forEach((m, i) => globalRankMap.set(m.name, i + 1));
+  [..._gFresh, ..._gStale].forEach((m, i) => globalRankMap.set(m.name, i + 1));
 
   // Filter + sort models
   let models = trsData.models
@@ -604,9 +605,7 @@ function renderTable(){
     .filter(m => !query || m.name.toLowerCase().includes(query) || (m.company||'').toLowerCase().includes(query))
     .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
 
-  // Max score for bar scaling (use global max so bars are consistent)
-  const globalMax = trsData.models.reduce((mx,m) => Math.max(mx, getLatestScore(m)||0), 0);
-  const maxScore = globalMax || 100;
+  const maxScore = _gFresh.length ? getLatestScore(_gFresh[0]) : 100;
 
   if(!models.length){
     tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
