@@ -532,11 +532,12 @@ def scrape_cost_efficiency() -> dict[str, float]:
                 if (!table) return [];
                 const allRows = Array.from(table.querySelectorAll('tr'));
                 // row0=group headers, row1=col headers, row2+=data
-                // col0=Model name, col1=Quality (normalized score)
+                // col0=Model, col1=ContextWindow, col2=Creator,
+                // col3=Intelligence Index, col4=Blended $/1M tokens
                 return allRows.slice(2).map(row => {
                     const cells = Array.from(row.querySelectorAll('td'))
                         .map(td => td.textContent.trim());
-                    return {model: cells[0] || '', quality: cells[1] || ''};
+                    return {model: cells[0] || '', quality: cells[3] || ''};
                 }).filter(r => r.model && r.quality);
             }""")
             browser.close()
