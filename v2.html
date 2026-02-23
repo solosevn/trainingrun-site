@@ -176,8 +176,8 @@ body {
 .content-head { padding:16px 22px 11px; border-bottom:1px solid rgba(255,255,255,0.055); flex-shrink:0; }
 .content-title { font-size:19px; font-weight:400; letter-spacing:-.4px; margin-bottom:3px; }
 .content-title .hl { color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.28); font-weight:800; }
-.content-sub { font-size:11px; color:rgba(255,255,255,0.32); margin-bottom:7px; }
-.content-meta { display:flex; align-items:center; gap:14px; font-size:10.5px; color:rgba(255,255,255,0.25); }
+.content-sub { font-size:13px; color:rgba(255,255,255,0.32); margin-bottom:7px; }
+.content-meta { display:flex; align-items:center; gap:14px; font-size:13px; color:rgba(255,255,255,0.25); }
 .meta-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,229,255,0.45); flex-shrink:0; animation:pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .meta-link { color:rgba(0,229,255,0.48); cursor:pointer; }
@@ -315,7 +315,7 @@ body.compact .lb-table tbody tr { height:40px; }
   <div class="htabs">
     <div class="htab active">Overview</div>
     <div class="htab" style="cursor:default;opacity:0.6">
-      <span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span> Arena</span> <span class="tpill" style="background:rgba(255,80,80,0.1);color:rgba(255,140,140,0.85);border:1px dashed rgba(255,100,100,0.35)">(Soon)</span>
+      <span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>Arena</span> <span class="tpill" style="background:rgba(255,80,80,0.1);color:rgba(255,140,140,0.85);border:1px dashed rgba(255,100,100,0.35)">(Soon)</span>
     </div>
     <a href="scores.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>bench</span> <span class="tpill">(Overall)</span></a>
     <a href="truscore-scores.html" class="htab"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRU</span>score</span> <span class="tpill">(Truth)</span></a>
@@ -516,6 +516,7 @@ function logoImg(company, size) {
 let trsData = null;
 let activeFilter = { lab:'All Labs', license:'all' };
 let searchQuery = '';
+let currentRankMode = 'models';
 
 // ══ UTILITIES ════════════════════════════════════════
 function fmtDate(iso){
@@ -585,6 +586,7 @@ function pCol(model, pillar){
 // ══ RENDER TABLE ═════════════════════════════════════
 function renderTable(){
   if(!trsData) return;
+  if(currentRankMode === 'labs'){ renderLabsTable(); return; }
   const tbody = document.getElementById('tableBody');
   const query = (document.getElementById('searchInput').value||'').toLowerCase();
 
@@ -803,9 +805,90 @@ function filterByLab(lab, el){
   renderTable();
 }
 
+// ══ RENDER LABS TABLE ════════════════════════════════
+function renderLabsTable(){
+  if(!trsData) return;
+  const tbody = document.getElementById('tableBody');
+
+  // Group all scored models by company
+  const labMap = {};
+  trsData.models.forEach(m => {
+    const score = getLatestScore(m);
+    if(score === null || score <= 0) return;
+    const co = m.company || 'Unknown';
+    if(!labMap[co]) labMap[co] = { company:co, models:[], bestScore:0, bestModel:null };
+    labMap[co].models.push(m);
+    if(score > labMap[co].bestScore){ labMap[co].bestScore = score; labMap[co].bestModel = m; }
+  });
+
+  const labs = Object.values(labMap).sort((a,b) => b.bestScore - a.bestScore);
+
+  if(!labs.length){
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No labs found.</td></tr>';
+    return;
+  }
+
+  document.getElementById('metaCount').textContent = labs.length + ' labs ranked';
+
+  const PILLARS = ['safety','reasoning','coding','human_preference','knowledge','efficiency','usage_adoption'];
+  const coClassMap = {
+    'Anthropic':'co-anthropic','Google':'co-google','OpenAI':'co-openai',
+    'xAI':'co-xai','Mistral':'co-mistral','DeepSeek':'co-deepseek',
+    'Meta':'co-meta','Alibaba':'co-alibaba'
+  };
+
+  tbody.innerHTML = labs.map((lab, i) => {
+    const rank = i + 1;
+    const chg = getChange(lab.bestModel);
+    let chgHTML;
+    if(Math.abs(chg) < 0.005) chgHTML = `<span class="chg nc">+0.00</span>`;
+    else if(chg > 0) chgHTML = `<span class="chg up">↑ ${chg.toFixed(2)}</span>`;
+    else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
+
+    const covered = getCoverage(lab.bestModel);
+    const covBadge = covered > 0 ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/7</span>` : '';
+
+    let rankHTML;
+    if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
+    else if(rank===2) rankHTML = `<div class="rank-cell"><span class="medal medal-silver">🥈</span></div>`;
+    else if(rank===3) rankHTML = `<div class="rank-cell"><span class="medal medal-bronze">🥉</span></div>`;
+    else rankHTML = `<div class="rank-cell">${rank}</div>`;
+
+    const coClass = coClassMap[lab.company] || 'co-other';
+    const modelCount = `<span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:3px;padding:1px 6px;color:rgba(255,255,255,0.4);margin-left:6px">${lab.models.length} model${lab.models.length!==1?'s':''}</span>`;
+
+    // Best pillar score across all lab models
+    function bestPCol(pillar){
+      const vals = lab.models.map(m => m.pillar_scores?.[pillar]).filter(v => v!=null && v>0);
+      if(!vals.length) return `<span class="pcol" style="color:rgba(255,255,255,0.15)">—</span>`;
+      const best = Math.max(...vals);
+      return `<span class="pcol${best>=90?' hi':''}">${best.toFixed(1)}</span>`;
+    }
+
+    const rowClass = rank===1?'row-1':rank===2?'row-2':rank===3?'row-3':'';
+    return `<tr class="${rowClass} ${coClass}">
+      <td>${rankHTML}</td>
+      <td><div class="m-cell">
+        ${logoImg(lab.company, 28)}
+        <div><div class="m-name">${lab.company}</div><div class="m-lab">Best: ${lab.bestModel.name}${modelCount}</div></div>
+      </div></td>
+      <td>${covBadge}<span class="score-val">${lab.bestScore.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span></td>
+      <td>${bestPCol('safety')}</td>
+      <td>${bestPCol('reasoning')}</td>
+      <td>${bestPCol('coding')}</td>
+      <td class="hide-compact">${bestPCol('human_preference')}</td>
+      <td class="hide-compact">${bestPCol('knowledge')}</td>
+      <td class="hide-compact">${bestPCol('efficiency')}</td>
+      <td class="hide-compact">${bestPCol('usage_adoption')}</td>
+    </tr>`;
+  }).join('');
+}
+
 function setRankBy(mode, el){
   document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
+  currentRankMode = mode;
+  renderTable();
 }
 
 function setPillar(pillar, el){
