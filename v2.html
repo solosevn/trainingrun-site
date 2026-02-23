@@ -341,8 +341,11 @@ body.compact .lb-table tbody tr { height:40px; }
 .mm-board-row.rank-bronze { background:rgba(205,127,50,0.12); border:1px solid rgba(205,127,50,0.35); }
 .mm-board-label { font-size:18px;font-weight:400; }
 .mm-board-cat { font-size:14px;font-weight:500;color:rgba(255,255,255,0.72);margin-left:8px;flex:1;white-space:nowrap; }
-.mm-board-rank { font-size:18px;font-weight:800;min-width:40px;text-align:right;white-space:nowrap; }
-.mm-board-rank.not-ranked { font-size:13px;font-weight:600;margin-left:auto;text-align:right; }
+.mm-board-rank { font-size:18px;font-weight:400;min-width:40px;text-align:right;white-space:nowrap; }
+.mm-board-rank.not-ranked { font-size:13px;font-weight:400;margin-left:auto;text-align:right; }
+.mm-medal-glow { display:inline-block;font-size:20px;filter:drop-shadow(0 0 7px rgba(255,215,0,0.85)); }
+.mm-board-row.rank-silver .mm-medal-glow { filter:drop-shadow(0 0 7px rgba(200,205,220,0.9)); }
+.mm-board-row.rank-bronze .mm-medal-glow { filter:drop-shadow(0 0 7px rgba(205,127,50,0.9)); }
 .mm-board-row .mm-board-delta:empty::after { content:"NEW";color:#00d4ff;font-size:11px;font-weight:700;letter-spacing:0.5px; }
 .mm-board-delta { font-size:14px;font-weight:600;min-width:62px;text-align:right; }
 .mm-divider-cyan { border:none;border-top:1px solid rgba(0,212,255,0.35);margin:4px 0; }
@@ -1271,19 +1274,23 @@ function openV2Modal(modelName, ddp){
       const idx = sorted.findIndex(m => m.name === modelName);
       if(idx >= 0){
         rank  = idx + 1;
-        delta = _computeRankDelta(bData, modelName);
+        const orig = bData.models.find(m => m.name === modelName);
+        if(orig) delta = getChange(orig);
       }
     }
     const rankCls      = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
     const rankColor    = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':rank>0?'rgba(255,255,255,0.82)':'rgba(255,255,255,0.85)';
-    const medalPrefix  = rank===1?'🥇 ':rank===2?'🥈 ':rank===3?'🥉 ':'';
-    const rankLbl      = rank > 0 ? medalPrefix+'#'+rank : 'Not Ranked';
+    // Medal emoji replaces "#N" for top 3; blank for not ranked
+    const rankLbl = rank===1 ? '<span class="mm-medal-glow">🥇</span>'
+                  : rank===2 ? '<span class="mm-medal-glow">🥈</span>'
+                  : rank===3 ? '<span class="mm-medal-glow">🥉</span>'
+                  : rank > 0 ? '#'+rank : '';
     const notRankedCls = rank ? '' : ' not-ranked';
     const labelHtml    = V2_BOARD_LABEL_HTML[bid] || info.label;
     let deltaHtml = '';
-    if(rank > 0 && delta !== null && delta !== 0){
+    if(rank > 0 && delta !== null && Math.abs(delta) >= 0.005){
       const dc = delta>0?'#4cff91':delta<0?'#ff5c5c':'rgba(255,255,255,0.4)';
-      const da = delta>0?'+'+delta:String(delta);
+      const da = (delta>0?'+':'')+delta.toFixed(2);
       deltaHtml = '<span style="font-size:13px;font-weight:600;color:'+dc+'">'+da+'</span>';
     }
     boardsHTML += '<div class="mm-board-row '+rankCls+'">'
