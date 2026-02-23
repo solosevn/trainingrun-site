@@ -10,6 +10,7 @@
 <meta property="og:description" content="Independent daily AI leaderboard. Live scores updated every morning. TRSbench, TRUscore, TRScode, TRFcast, TRAgents.">
 <meta property="og:url" content="https://trainingrun.ai/v2.html">
 <meta name="twitter:card" content="summary_large_image">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -281,6 +282,73 @@ body.compact .lb-table tbody tr { height:40px; }
 .loading-state { display:flex; align-items:center; justify-content:center; height:200px; color:rgba(255,255,255,0.3); font-size:13px; gap:10px; }
 .spinner { width:18px; height:18px; border:2px solid rgba(0,229,255,0.15); border-top-color:#00e5ff; border-radius:50%; animation:spin .7s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
+
+/* ─── MODEL MODAL ─── */
+#v2-modal-backdrop {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.82); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;
+}
+#v2-modal-backdrop.open { display:flex; }
+#v2-modal {
+  position:relative; width:500px; max-width:95vw; max-height:88vh;
+  background:linear-gradient(180deg,rgba(10,10,28,0.99),rgba(6,6,20,0.99));
+  border:1px solid rgba(0,229,255,0.2); border-radius:16px;
+  overflow:hidden; display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,229,255,0.07), 0 24px 60px rgba(0,0,0,0.75);
+  transform:scale(0.88); opacity:0;
+  transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.17s ease;
+}
+#v2-modal-backdrop.open #v2-modal { transform:scale(1); opacity:1; }
+#v2-modal.glow-gold   { border-color:rgba(255,215,0,0.55);   box-shadow:0 0 30px rgba(255,215,0,0.2),  0 24px 60px rgba(0,0,0,0.75); }
+#v2-modal.glow-silver { border-color:rgba(200,205,220,0.5);  box-shadow:0 0 24px rgba(200,205,220,0.15),0 24px 60px rgba(0,0,0,0.75); }
+#v2-modal.glow-bronze { border-color:rgba(205,127,50,0.55);  box-shadow:0 0 28px rgba(205,127,50,0.18),0 24px 60px rgba(0,0,0,0.75); }
+#v2-modal-close {
+  position:absolute; top:11px; right:13px; z-index:10;
+  background:rgba(255,255,255,0.07); border:none; cursor:pointer;
+  color:rgba(255,255,255,0.45); font-size:17px;
+  border-radius:50%; width:28px; height:28px;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+#v2-modal-close:hover { background:rgba(255,255,255,0.16); color:#fff; }
+#v2-modal-tabs {
+  display:flex; flex-shrink:0; padding:0 18px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.v2-tab {
+  padding:13px 16px; font-size:12px; font-weight:600; letter-spacing:.3px;
+  color:rgba(255,255,255,0.33); cursor:pointer;
+  border-bottom:2px solid transparent; transition:color .15s;
+}
+.v2-tab:hover { color:rgba(255,255,255,0.6); }
+.v2-tab.active { color:#00e5ff; border-bottom-color:#00e5ff; }
+.v2-panel { flex:1; overflow-y:auto; padding:18px 18px 18px;
+  scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.07) transparent; }
+#v2-about-header { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+#v2-modal-logo { width:54px; height:54px; border-radius:12px; object-fit:contain; background:rgba(255,255,255,0.06); padding:3px; flex-shrink:0; }
+#v2-modal-name { font-size:20px; font-weight:800; color:#fff; line-height:1.2; }
+#v2-modal-company { font-size:13px; color:rgba(255,255,255,0.4); margin-top:4px; }
+.v2-board-row {
+  display:flex; align-items:center; gap:8px;
+  padding:9px 12px; border-radius:9px; margin-bottom:5px;
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05);
+  cursor:default;
+}
+.v2-board-row.rank-gold   { background:rgba(255,215,0,0.07);   border-color:rgba(255,215,0,0.28); }
+.v2-board-row.rank-silver { background:rgba(200,205,220,0.06); border-color:rgba(200,205,220,0.24); }
+.v2-board-row.rank-bronze { background:rgba(205,127,50,0.07);  border-color:rgba(205,127,50,0.28); }
+.v2-board-icon { font-size:14px; flex-shrink:0; width:20px; text-align:center; }
+.v2-board-name { font-size:13px; font-weight:600; color:rgba(255,255,255,0.72); flex:1; white-space:nowrap; }
+.v2-board-cat  { font-size:10px; color:rgba(255,255,255,0.28); font-weight:400; margin-left:5px; }
+.v2-board-score { font-size:12px; color:rgba(255,255,255,0.38); min-width:40px; text-align:right; }
+.v2-board-rank  { font-size:15px; font-weight:800; min-width:38px; text-align:right; }
+.v2-board-delta { font-size:11px; font-weight:700; min-width:50px; text-align:right; }
+#v2-trend-label {
+  font-size:12px; color:rgba(255,255,255,0.35); text-align:center;
+  margin-bottom:12px; letter-spacing:.2px;
+}
+#v2-chart-wrap { position:relative; height:260px; }
 </style>
 </head>
 <body id="mainbody">
@@ -813,7 +881,7 @@ function renderTable(){
       `<td${p.compact?' class="hide-compact"':''}>${pCol(m, p.key)}</td>`
     ).join('');
 
-    return `<tr class="${rowClass} ${coClass}" style="${staleRowStyle}">
+    return `<tr class="${rowClass} ${coClass}" style="${staleRowStyle}" data-model="${m.name.replace(/"/g,'&quot;')}" onclick="openV2Modal(this.dataset.model,'${currentDDP}')">
       <td>${rankHTML}</td>
       <td><div class="m-cell">
         ${logoImg(m.company, 28)}
@@ -921,7 +989,13 @@ Promise.all([
   fetch('trscode-data.json?v='+Date.now()).then(r=>r.json()),
   fetch('trf-data.json?v='+Date.now()).then(r=>r.json()),
   fetch('tragent-data.json?v='+Date.now()).then(r=>r.json()),
-]).then(buildTicker).catch(e => console.warn('Ticker error:', e));
+]).then(function(datasets){
+  // Cache all DDP data so About card works cross-benchmark without extra fetches
+  ['trsbench','truscore','trscode','trfcast','tragents'].forEach(function(k,i){
+    if(!_ddpData[k]) _ddpData[k] = datasets[i];
+  });
+  buildTicker(datasets);
+}).catch(e => console.warn('Ticker error:', e));
 
 // ══ BUILD LAB FILTER ═════════════════════════════════
 function buildLabFilter(models){
@@ -1072,6 +1146,184 @@ function toggleSidebar(){
   btn.querySelector('.ct-arrow').textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
 }
 
+// ══ MODEL MODAL ══════════════════════════════════════
+let _v2Chart = null;
+
+const V2_BOARD_INFO = {
+  trsbench: { label:'TRSbench', cat:'Overall',    icon:'🏆' },
+  truscore: { label:'TRUscore', cat:'Truth',       icon:'✅' },
+  trscode:  { label:'TRScode',  cat:'Coding',      icon:'💻' },
+  trfcast:  { label:'TRFcast',  cat:'Prediction',  icon:'🔮' },
+  tragents: { label:'TRAgents', cat:'Agents',      icon:'🤖' },
+};
+const V2_BOARD_ORDER = ['trsbench','truscore','trscode','trfcast','tragents'];
+
+function openV2Modal(modelName, ddp){
+  const backdrop = document.getElementById('v2-modal-backdrop');
+  const modal    = document.getElementById('v2-modal');
+  if(!backdrop || !modal) return;
+
+  // Header — use current DDP data for logo/company
+  const curData = _ddpData[ddp];
+  const model   = curData ? curData.models.find(m => m.name === modelName) : null;
+  const company = model ? (model.company || '') : '';
+  const logoUrl = LOGOS[company] || '';
+
+  const logoEl = document.getElementById('v2-modal-logo');
+  logoEl.src = logoUrl; logoEl.style.display = logoUrl ? '' : 'none';
+  document.getElementById('v2-modal-name').textContent    = modelName;
+  document.getElementById('v2-modal-company').textContent = company;
+
+  // Medal glow
+  modal.classList.remove('glow-gold','glow-silver','glow-bronze');
+  if(curData){
+    const sorted = curData.models
+      .filter(m => getLatestScore(m) !== null)
+      .sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+    const rank = sorted.findIndex(m => m.name === modelName) + 1;
+    if(rank===1)      modal.classList.add('glow-gold');
+    else if(rank===2) modal.classList.add('glow-silver');
+    else if(rank===3) modal.classList.add('glow-bronze');
+  }
+
+  // About boards — cross-DDP rankings
+  let boardsHTML = '';
+  V2_BOARD_ORDER.forEach(bid => {
+    const info  = V2_BOARD_INFO[bid];
+    const bData = _ddpData[bid];
+    let rank = 0, score = null, delta = null;
+    if(bData){
+      const sorted = bData.models
+        .filter(m => getLatestScore(m) !== null)
+        .sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
+      const idx = sorted.findIndex(m => m.name === modelName);
+      if(idx >= 0){
+        rank  = idx + 1;
+        score = getLatestScore(sorted[idx]);
+        const orig = bData.models.find(m => m.name === modelName);
+        if(orig) delta = getChange(orig);
+      }
+    }
+    const rankCls   = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
+    const rankColor = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':rank>0?'rgba(255,255,255,0.82)':'rgba(255,255,255,0.22)';
+    const rankTxt   = rank > 0 ? '#'+rank : '—';
+    const scoreTxt  = score !== null ? score.toFixed(1) : '';
+    let deltaTxt = '';
+    if(rank > 0 && delta !== null && delta !== 0){
+      const dc = delta>0?'#22d3a3':'#f87171';
+      const da = delta>0?'↑ +'+delta.toFixed(2):'↓ '+delta.toFixed(2);
+      deltaTxt = `<span style="color:${dc}">${da}</span>`;
+    }
+    boardsHTML += `<div class="v2-board-row ${rankCls}">
+      <span class="v2-board-icon">${info.icon}</span>
+      <span class="v2-board-name">${info.label}<span class="v2-board-cat">(${info.cat})</span></span>
+      <span class="v2-board-score">${scoreTxt}</span>
+      <span class="v2-board-rank" style="color:${rankColor}">${rankTxt}</span>
+      <span class="v2-board-delta">${deltaTxt}</span>
+    </div>`;
+  });
+  document.getElementById('v2-modal-boards').innerHTML = boardsHTML;
+
+  // Switch to About tab and build trend
+  _switchV2Tab('about');
+  _buildV2TrendChart(modelName, ddp);
+
+  backdrop.classList.add('open');
+  document.addEventListener('keydown', _v2EscHandler);
+}
+
+function closeV2Modal(){
+  document.getElementById('v2-modal-backdrop').classList.remove('open');
+  document.removeEventListener('keydown', _v2EscHandler);
+  if(_v2Chart){ _v2Chart.destroy(); _v2Chart = null; }
+}
+
+function _v2EscHandler(e){ if(e.key==='Escape') closeV2Modal(); }
+
+function _switchV2Tab(tab){
+  document.querySelectorAll('.v2-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
+  document.getElementById('v2-panel-about').style.display = tab==='about' ? '' : 'none';
+  document.getElementById('v2-panel-trend').style.display = tab==='trend' ? '' : 'none';
+}
+
+function _buildV2TrendChart(modelName, ddp){
+  const data  = _ddpData[ddp];
+  if(!data) return;
+  const model = data.models.find(m => m.name === modelName);
+  if(!model) return;
+
+  const cfg    = DDP_CONFIG[ddp];
+  const ddpLabel = cfg.title.replace(/<[^>]*>/g,'').replace(/â/g,'—').replace(/—.*/,'').trim();
+  document.getElementById('v2-trend-label').textContent = modelName + ' · ' + ddpLabel + ' score over time';
+
+  const dates  = data.dates || [];
+  const scores = model.scores || [];
+  const labels = dates.map(d => fmtDate(d));
+  const values = dates.map((d,i) => {
+    const s = scores[i];
+    return (s !== null && s !== undefined && s > 0) ? s : null;
+  });
+
+  if(_v2Chart){ _v2Chart.destroy(); _v2Chart = null; }
+
+  const canvas = document.getElementById('v2-trend-canvas');
+  if(!canvas) return;
+  _v2Chart = new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets:[{
+        label: modelName,
+        data: values,
+        borderColor: '#00e5ff',
+        backgroundColor: 'rgba(0,229,255,0.07)',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 7,
+        pointBackgroundColor: '#00e5ff',
+        pointBorderColor: 'rgba(0,229,255,0.4)',
+        fill: true,
+        tension: 0.35,
+        spanGaps: false,
+      }]
+    },
+    options:{
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
+          backgroundColor:'rgba(8,8,24,0.96)',
+          titleColor:'rgba(255,255,255,0.55)',
+          bodyColor:'#00e5ff',
+          borderColor:'rgba(0,229,255,0.25)',
+          borderWidth:1,
+          padding:10,
+          callbacks:{
+            label: ctx => ctx.parsed.y !== null
+              ? ' Score: ' + ctx.parsed.y.toFixed(2)
+              : ' No data'
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{ color:'rgba(255,255,255,0.04)' },
+          ticks:{ color:'rgba(255,255,255,0.28)', font:{size:10}, maxRotation:45, maxTicksLimit:14 }
+        },
+        y:{
+          grid:{ color:'rgba(255,255,255,0.05)' },
+          ticks:{ color:'rgba(255,255,255,0.28)', font:{size:10} },
+          min:(()=>{ const v=values.filter(x=>x!==null); return v.length?Math.max(0,Math.min(...v)-5):0; })()
+        }
+      }
+    }
+  });
+}
+
 // ══ DATE HEADER ═══════════════════════════════════════
 (function setDate(){
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1104,5 +1356,39 @@ fetch('trs-data.json?v=' + Date.now())
     document.getElementById('tableBody').innerHTML = `<tr><td colspan="${getColspan()}"><div class="loading-state" style="color:rgba(248,113,113,0.8)">⚠ Failed to load score data: ${err.message}</div></td></tr>`;
   });
 </script>
+
+<!-- ══ MODEL MODAL ════════════════════════════════════ -->
+<div id="v2-modal-backdrop" onclick="if(event.target===this)closeV2Modal()">
+  <div id="v2-modal">
+    <button id="v2-modal-close" onclick="closeV2Modal()">&#215;</button>
+
+    <!-- Tab bar -->
+    <div id="v2-modal-tabs">
+      <div class="v2-tab active" data-tab="about"  onclick="_switchV2Tab('about')">About</div>
+      <div class="v2-tab"        data-tab="trend"  onclick="_switchV2Tab('trend')">Performance Trend</div>
+    </div>
+
+    <!-- About panel -->
+    <div id="v2-panel-about" class="v2-panel">
+      <div id="v2-about-header">
+        <img id="v2-modal-logo" src="" alt="" onerror="this.style.display='none'">
+        <div>
+          <div id="v2-modal-name"></div>
+          <div id="v2-modal-company"></div>
+        </div>
+      </div>
+      <div id="v2-modal-boards"></div>
+    </div>
+
+    <!-- Trend panel -->
+    <div id="v2-panel-trend" class="v2-panel" style="display:none">
+      <div id="v2-trend-label"></div>
+      <div id="v2-chart-wrap">
+        <canvas id="v2-trend-canvas"></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
 </body>
 </html>
