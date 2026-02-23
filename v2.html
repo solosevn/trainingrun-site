@@ -356,11 +356,20 @@ body.compact .lb-table tbody tr { height:40px; }
 .mm-tier-pill.active { background:rgba(255,255,255,0.1);color:#ffffff;border:1px solid rgba(255,255,255,0.35);text-shadow:0 0 6px rgba(255,255,255,0.4); }
 .mm-bio { font-size:15px;line-height:1.6;color:rgba(255,255,255,0.6);min-height:0; }
 .mm-released { text-align:center;font-size:15px;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.5px;margin-top:auto;padding-top:2px;text-shadow:0 0 8px rgba(255,255,255,0.3); }
-#v2-trend-label {
-  font-size:12px; color:rgba(255,255,255,0.35); text-align:center;
-  margin-bottom:12px; letter-spacing:.2px;
-}
-#v2-chart-wrap { position:relative; height:260px; }
+/* ── Trend panel ── */
+#v2-panel-trend { padding:14px 16px 16px; overflow:hidden; }
+#v2-trend-hero { display:flex; flex-direction:column; gap:3px; padding:2px 0 6px; }
+#v2-trend-hero-score { font-size:32px; font-weight:800; color:#ffffff; line-height:1; text-shadow:0 0 18px rgba(255,255,255,0.55),0 0 36px rgba(255,255,255,0.2); letter-spacing:-0.5px; }
+#v2-trend-hero-meta { display:flex; gap:8px; align-items:center; min-height:20px; }
+#v2-trend-hero-date { font-size:12px; color:rgba(255,255,255,0.38); }
+#v2-trend-hero-rank { font-size:12px; font-weight:700; color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.07); padding:1px 7px; border-radius:5px; }
+#v2-trend-hero-delta { font-size:12px; font-weight:700; }
+#v2-chart-wrap { position:relative; height:200px; touch-action:none; }
+.v2-trend-tooltip { position:absolute; pointer-events:none; background:rgba(8,8,28,0.96); border:1px solid rgba(0,229,255,0.35); border-radius:8px; padding:6px 10px; display:flex; flex-direction:column; gap:2px; transform:translateX(-50%); white-space:nowrap; z-index:10; transition:opacity .1s; box-shadow:0 4px 16px rgba(0,0,0,0.5),0 0 10px rgba(0,229,255,0.1); }
+.v2-trend-tooltip.hidden { opacity:0; }
+.v2-tt-date  { font-size:10px; color:rgba(255,255,255,0.45); letter-spacing:.3px; }
+.v2-tt-score { font-size:14px; font-weight:800; color:#ffffff; letter-spacing:-.3px; }
+#v2-trend-board-label { text-align:center; font-size:14px; font-weight:700; letter-spacing:0.5px; padding-top:6px; }
 </style>
 </head>
 <body id="mainbody">
@@ -1355,76 +1364,186 @@ function _buildV2TrendChart(modelName, ddp){
   const data  = _ddpData[ddp];
   if(!data) return;
   const model = data.models.find(m => m.name === modelName);
-  if(!model) return;
 
-  const cfg    = DDP_CONFIG[ddp];
-  const ddpLabel = cfg.title.replace(/<[^>]*>/g,'').replace(/â/g,'—').replace(/—.*/,'').trim();
-  document.getElementById('v2-trend-label').textContent = modelName + ' · ' + ddpLabel + ' score over time';
+  // ── Board label ──
+  const boardLbl = document.getElementById('v2-trend-board-label');
+  if(boardLbl) boardLbl.innerHTML = V2_BOARD_LABEL_HTML[ddp] || ddp;
 
-  const dates  = data.dates || [];
-  const scores = model.scores || [];
-  const labels = dates.map(d => fmtDate(d));
-  const values = dates.map((d,i) => {
-    const s = scores[i];
+  const allDates  = data.dates || [];
+  const allScores = model ? (model.scores || []) : [];
+  const allValues = allDates.map((d,i) => {
+    const s = allScores[i];
     return (s !== null && s !== undefined && s > 0) ? s : null;
   });
 
-  if(_v2Chart){ _v2Chart.destroy(); _v2Chart = null; }
+  // Trim leading + trailing nulls — removes dead zones
+  let start = 0, end = allValues.length - 1;
+  while(start <= end && allValues[start] === null) start++;
+  while(end >= start && allValues[end]   === null) end--;
 
+  const labels = (start > end)
+    ? allDates.map(d => fmtDate(d))
+    : allDates.slice(start, end + 1).map(d => fmtDate(d));
+  const values = (start > end) ? [] : allValues.slice(start, end + 1);
+  const lastIdx = values.length - 1;
+
+  // ── Rank on this board ──
+  let boardRank = 0;
+  if(model){
+    const sorted = [...data.models]
+      .map(m => ({ name:m.name, s:getLatestScore(m) }))
+      .filter(m => m.s !== null)
+      .sort((a,b) => b.s - a.s);
+    boardRank = sorted.findIndex(m => m.name === modelName) + 1;
+  }
+
+  // ── Hero update helper ──
+  function _seedHero(idx){
+    const scoreEl = document.getElementById('v2-trend-hero-score');
+    const dateEl  = document.getElementById('v2-trend-hero-date');
+    const rankEl  = document.getElementById('v2-trend-hero-rank');
+    const deltaEl = document.getElementById('v2-trend-hero-delta');
+    if(!scoreEl) return;
+    const s = (idx >= 0 && idx < values.length) ? values[idx] : null;
+    if(s == null){
+      scoreEl.textContent = '—';
+      dateEl.textContent  = labels[idx] || '';
+      rankEl.textContent  = '';
+      deltaEl.textContent = '';
+      return;
+    }
+    scoreEl.textContent = s.toFixed(2);
+    dateEl.textContent  = labels[idx] || '';
+    rankEl.textContent  = boardRank > 0 ? '#' + boardRank : '';
+    const prev = idx > 0 ? values[idx - 1] : null;
+    if(prev !== null && prev !== undefined){
+      const diff = s - prev;
+      deltaEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(2);
+      deltaEl.style.color = diff >= 0 ? '#4ade80' : '#f87171';
+    } else {
+      deltaEl.textContent = '';
+      deltaEl.style.color = '';
+    }
+  }
+  if(lastIdx >= 0) _seedHero(lastIdx);
+
+  if(_v2Chart){ _v2Chart.destroy(); _v2Chart = null; }
   const canvas = document.getElementById('v2-trend-canvas');
   if(!canvas) return;
-  _v2Chart = new Chart(canvas.getContext('2d'), {
+  const ctx = canvas.getContext('2d');
+
+  // Gradient fill
+  const gradFill = ctx.createLinearGradient(0, 0, 0, 200);
+  gradFill.addColorStop(0,    'rgba(0,229,255,0.22)');
+  gradFill.addColorStop(0.55, 'rgba(0,229,255,0.07)');
+  gradFill.addColorStop(1,    'rgba(0,229,255,0.0)');
+
+  // Glow plugin
+  const glowPlugin = {
+    id: 'lineGlow',
+    beforeDatasetsDraw(chart){ chart.ctx.save(); chart.ctx.shadowColor='rgba(0,229,255,0.65)'; chart.ctx.shadowBlur=14; },
+    afterDatasetsDraw(chart){ chart.ctx.restore(); }
+  };
+
+  // Crosshair plugin
+  const crosshairPlugin = {
+    id: 'crosshair',
+    afterDraw(chart){
+      if(chart._activeX == null) return;
+      const c = chart.ctx;
+      c.save(); c.beginPath(); c.setLineDash([3,4]);
+      c.strokeStyle='rgba(0,229,255,0.3)'; c.lineWidth=1;
+      c.moveTo(chart._activeX, chart.chartArea.top);
+      c.lineTo(chart._activeX, chart.chartArea.bottom);
+      c.stroke(); c.restore();
+    }
+  };
+
+  const minVals = values.filter(x => x !== null);
+  const yMin    = minVals.length ? Math.max(0, Math.min(...minVals) - 3) : 0;
+
+  _v2Chart = new Chart(ctx, {
     type: 'line',
-    data: {
+    plugins: [glowPlugin, crosshairPlugin],
+    data:{
       labels,
       datasets:[{
-        label: modelName,
         data: values,
         borderColor: '#00e5ff',
-        backgroundColor: 'rgba(0,229,255,0.07)',
-        borderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 7,
+        backgroundColor: gradFill,
+        borderWidth: 2.5,
+        pointRadius: (c) => (values[c.dataIndex] !== null && c.dataIndex === lastIdx) ? 5 : 0,
+        pointHoverRadius: 6,
         pointBackgroundColor: '#00e5ff',
-        pointBorderColor: 'rgba(0,229,255,0.4)',
-        fill: true,
-        tension: 0.35,
-        spanGaps: false,
+        pointBorderColor: 'rgba(0,229,255,0.6)',
+        pointBorderWidth: 2,
+        fill: true, tension: 0.35, spanGaps: false,
       }]
     },
     options:{
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction:{ mode:'index', intersect:false },
-      plugins:{
-        legend:{ display:false },
-        tooltip:{
-          backgroundColor:'rgba(8,8,24,0.96)',
-          titleColor:'rgba(255,255,255,0.55)',
-          bodyColor:'#00e5ff',
-          borderColor:'rgba(0,229,255,0.25)',
-          borderWidth:1,
-          padding:10,
-          callbacks:{
-            label: ctx => ctx.parsed.y !== null
-              ? ' Score: ' + ctx.parsed.y.toFixed(2)
-              : ' No data'
-          }
-        }
-      },
+      responsive: true, maintainAspectRatio: false,
+      animation:{ duration:400 },
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
       scales:{
-        x:{
-          grid:{ color:'rgba(255,255,255,0.04)' },
-          ticks:{ color:'rgba(255,255,255,0.28)', font:{size:10}, maxRotation:45, maxTicksLimit:14 }
-        },
-        y:{
-          grid:{ color:'rgba(255,255,255,0.05)' },
-          ticks:{ color:'rgba(255,255,255,0.28)', font:{size:10} },
-          min:(()=>{ const v=values.filter(x=>x!==null); return v.length?Math.max(0,Math.min(...v)-5):0; })()
-        }
+        x:{ grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'rgba(255,255,255,0.3)',font:{size:10},maxRotation:0,maxTicksLimit:7,autoSkip:true}, border:{color:'rgba(255,255,255,0.08)'} },
+        y:{ grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'rgba(255,255,255,0.3)',font:{size:10},maxTicksLimit:5}, border:{color:'rgba(255,255,255,0.08)'}, min:yMin }
       }
     }
   });
+
+  // ── Pointer handlers (mouse + touch) ──
+  const ttEl    = document.getElementById('v2-trend-tooltip');
+  const ttDate  = document.getElementById('v2-tt-date');
+  const ttScore = document.getElementById('v2-tt-score');
+  const wrap    = document.getElementById('v2-chart-wrap');
+
+  // Remove previous listeners before re-attaching
+  if(canvas._v2PtrHandler){
+    canvas.removeEventListener('mousemove',   canvas._v2PtrHandler,    false);
+    canvas.removeEventListener('touchmove',   canvas._v2PtrHandler,    false);
+    canvas.removeEventListener('mouseleave',  canvas._v2PtrEndHandler, false);
+    canvas.removeEventListener('touchend',    canvas._v2PtrEndHandler, false);
+    canvas.removeEventListener('touchcancel', canvas._v2PtrEndHandler, false);
+  }
+
+  function handlePointer(e){
+    e.preventDefault();
+    const touch = e.touches ? e.touches[0] : e;
+    const rect  = canvas.getBoundingClientRect();
+    const pts   = _v2Chart.getElementsAtEventForMode(
+      { x: touch.clientX - rect.left, y: touch.clientY - rect.top, native: e },
+      'index', { intersect:false }, true
+    );
+    if(pts && pts.length){
+      const idx = pts[0].index;
+      _v2Chart._activeX = pts[0].element.x;
+      _v2Chart.draw();
+      _seedHero(idx);
+      if(ttEl && values[idx] !== null){
+        ttDate.textContent  = labels[idx];
+        ttScore.textContent = values[idx].toFixed(2);
+        ttEl.classList.remove('hidden');
+        const cx = Math.max(50, Math.min(pts[0].element.x, wrap.clientWidth - 50));
+        ttEl.style.left = cx + 'px';
+        ttEl.style.bottom = '28px';
+        ttEl.style.top = 'auto';
+      }
+    }
+  }
+  function handlePointerEnd(){
+    _v2Chart._activeX = null;
+    _v2Chart.draw();
+    if(ttEl) ttEl.classList.add('hidden');
+    if(lastIdx >= 0) _seedHero(lastIdx);
+  }
+
+  canvas._v2PtrHandler    = handlePointer;
+  canvas._v2PtrEndHandler = handlePointerEnd;
+  canvas.addEventListener('mousemove',   handlePointer,    { passive:false });
+  canvas.addEventListener('touchmove',   handlePointer,    { passive:false });
+  canvas.addEventListener('mouseleave',  handlePointerEnd);
+  canvas.addEventListener('touchend',    handlePointerEnd);
+  canvas.addEventListener('touchcancel', handlePointerEnd);
 }
 
 // ══ DATE HEADER ═══════════════════════════════════════
@@ -1493,10 +1612,22 @@ fetch('trs-data.json?v=' + Date.now())
 
     <!-- Trend panel -->
     <div id="v2-panel-trend" class="v2-panel" style="display:none">
-      <div id="v2-trend-label"></div>
+      <div id="v2-trend-hero">
+        <div id="v2-trend-hero-score">—</div>
+        <div id="v2-trend-hero-meta">
+          <span id="v2-trend-hero-date"></span>
+          <span id="v2-trend-hero-rank"></span>
+          <span id="v2-trend-hero-delta"></span>
+        </div>
+      </div>
       <div id="v2-chart-wrap">
         <canvas id="v2-trend-canvas"></canvas>
+        <div class="v2-trend-tooltip hidden" id="v2-trend-tooltip">
+          <div class="v2-tt-date"  id="v2-tt-date"></div>
+          <div class="v2-tt-score" id="v2-tt-score"></div>
+        </div>
       </div>
+      <div id="v2-trend-board-label"></div>
     </div>
 
   </div>
