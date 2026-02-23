@@ -590,6 +590,13 @@ function renderTable(){
   const tbody = document.getElementById('tableBody');
   const query = (document.getElementById('searchInput').value||'').toLowerCase();
 
+  // Build global rank map BEFORE any filtering
+  const globalRankMap = new Map();
+  trsData.models
+    .filter(m => getLatestScore(m) !== null)
+    .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0))
+    .forEach((m, i) => globalRankMap.set(m.name, i + 1));
+
   // Filter + sort models
   let models = trsData.models
     .filter(m => getLatestScore(m) !== null)
@@ -597,8 +604,9 @@ function renderTable(){
     .filter(m => !query || m.name.toLowerCase().includes(query) || (m.company||'').toLowerCase().includes(query))
     .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
 
-  // Max score for bar scaling
-  const maxScore = models.length ? getLatestScore(models[0]) : 100;
+  // Max score for bar scaling (use global max so bars are consistent)
+  const globalMax = trsData.models.reduce((mx,m) => Math.max(mx, getLatestScore(m)||0), 0);
+  const maxScore = globalMax || 100;
 
   if(!models.length){
     tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:13px;">No models match your filters.</td></tr>';
@@ -612,10 +620,10 @@ function renderTable(){
   const freshModels = models.filter(m => isFreshToday(m));
   const staleModels = models.filter(m => !isFreshToday(m));
 
-  // Build rows for a group of models, starting rank at rankOffset
+  // Build rows for a group of models
   function buildRows(group, rankOffset, isStale){
     return group.map((m, i) => {
-      const rank = i + 1 + rankOffset;
+      const rank = globalRankMap.get(m.name) || (i + 1 + rankOffset);
       const score = getLatestScore(m);
       const chg = getChange(m);
       const pts7 = getLast7(m);
