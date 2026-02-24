@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "4ea4bcd59e5c2ee13897e65f95cd62b105a3190b413c55bbe366125d93d58783",
+  "checksum": "9b182c1e3dfda3261989d97f803cbc74eb8a8e487a2d24e04db65b788ab8771b",
   "weights": {
     "factuality_simpleqa": 0.2,
     "factuality_newsguard": 0.2,
@@ -69,7 +69,8 @@
     "2026-02-20",
     "2026-02-21",
     "2026-02-22",
-    "2026-02-23"
+    "2026-02-23",
+    "2026-02-24"
   ],
   "models": [
     {
@@ -133,6 +134,7 @@
         80.3,
         88.14,
         88.37,
+        80.7,
         80.7,
         80.7,
         80.7
@@ -202,6 +204,7 @@
         86.29,
         74.25,
         74.25,
+        74.25,
         74.25
       ],
       "source_count": 2
@@ -267,6 +270,7 @@
         null,
         85.29,
         85.71,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -336,6 +340,7 @@
         83.92,
         59.65,
         59.65,
+        59.65,
         59.65
       ],
       "source_count": 1
@@ -401,6 +406,7 @@
         null,
         83.12,
         83.48,
+        56.14,
         56.14,
         56.14,
         56.14
@@ -470,6 +476,7 @@
         82.68,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0
@@ -535,6 +542,7 @@
         null,
         81.88,
         82.19,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -604,6 +612,7 @@
         81.49,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0
@@ -669,6 +678,7 @@
         null,
         80.33,
         80.82,
+        70.18,
         70.18,
         70.18,
         70.18
@@ -738,6 +748,7 @@
         80.17,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0
@@ -803,6 +814,7 @@
         null,
         79.11,
         79.6,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -872,6 +884,7 @@
         79.09,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0
@@ -937,6 +950,7 @@
         73.73,
         78.19,
         78.83,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1006,6 +1020,7 @@
         78.11,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0
@@ -1071,6 +1086,7 @@
         null,
         77.28,
         77.64,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1140,6 +1156,7 @@
         77.38,
         69.42,
         69.42,
+        69.42,
         69.42
       ],
       "source_count": 3
@@ -1205,6 +1222,7 @@
         null,
         76.36,
         76.81,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1274,6 +1292,7 @@
         76.35,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0
@@ -1339,6 +1358,7 @@
         null,
         75.47,
         75.92,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1408,6 +1428,7 @@
         null,
         null,
         null,
+        49.12,
         49.12
       ],
       "source_count": 1
@@ -1475,9 +1496,10 @@
         null,
         null,
         null,
-        22.81
+        22.81,
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0
     },
     {
       "name": "DeepSeek-V3",
@@ -1542,6 +1564,7 @@
         null,
         null,
         null,
+        25.64,
         25.64
       ],
       "source_count": 2
@@ -1609,6 +1632,7 @@
         null,
         null,
         null,
+        38.6,
         38.6
       ],
       "source_count": 1
@@ -1676,6 +1700,7 @@
         null,
         null,
         null,
+        59.65,
         59.65
       ],
       "source_count": 1
@@ -1683,7 +1708,7 @@
     {
       "name": "ERNIE 4.5",
       "company": "Unknown",
-      "rank": 14,
+      "rank": 13,
       "scores": [
         null,
         null,
@@ -1743,6 +1768,7 @@
         null,
         null,
         null,
+        1.85,
         1.85
       ],
       "source_count": 2
@@ -1810,6 +1836,7 @@
         null,
         null,
         null,
+        77.24,
         77.24
       ],
       "source_count": 2
@@ -1877,6 +1904,7 @@
         null,
         null,
         null,
+        21.05,
         21.05
       ],
       "source_count": 1
@@ -1944,6 +1972,7 @@
         null,
         null,
         null,
+        28.07,
         28.07
       ],
       "source_count": 1
@@ -2011,6 +2040,7 @@
         null,
         null,
         null,
+        29.82,
         29.82
       ],
       "source_count": 1
@@ -2078,6 +2108,7 @@
         null,
         null,
         null,
+        36.84,
         36.84
       ],
       "source_count": 1
@@ -2145,6 +2176,7 @@
         null,
         null,
         null,
+        64.37,
         64.37
       ],
       "source_count": 2
@@ -2212,6 +2244,7 @@
         null,
         null,
         null,
+        39.34,
         39.34
       ],
       "source_count": 2
@@ -2279,6 +2312,7 @@
         null,
         null,
         null,
+        71.93,
         71.93
       ],
       "source_count": 1
@@ -2286,7 +2320,7 @@
     {
       "name": "Gemma 3 12B",
       "company": "Google",
-      "rank": 12,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -2346,6 +2380,7 @@
         null,
         null,
         null,
+        7.82,
         7.82
       ],
       "source_count": 3
@@ -2413,6 +2448,7 @@
         null,
         null,
         null,
+        8.77,
         8.77
       ],
       "source_count": 1
@@ -2480,6 +2516,7 @@
         null,
         null,
         null,
+        12.28,
         12.28
       ],
       "source_count": 1
@@ -2547,6 +2584,7 @@
         null,
         null,
         null,
+        56.14,
         56.14
       ],
       "source_count": 1
@@ -2614,6 +2652,7 @@
         null,
         null,
         null,
+        97.84,
         97.84
       ],
       "source_count": 2
@@ -2681,6 +2720,7 @@
         null,
         null,
         null,
+        31.58,
         31.58
       ],
       "source_count": 1
@@ -2748,6 +2788,7 @@
         null,
         null,
         null,
+        42.11,
         42.11
       ],
       "source_count": 1
@@ -2815,9 +2856,10 @@
         null,
         null,
         null,
-        38.6
+        38.6,
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0
     },
     {
       "name": "Jamba 1.7 Large",
@@ -2882,6 +2924,7 @@
         null,
         null,
         null,
+        15.79,
         15.79
       ],
       "source_count": 1
@@ -2949,6 +2992,7 @@
         null,
         null,
         null,
+        17.54,
         17.54
       ],
       "source_count": 1
@@ -3016,6 +3060,7 @@
         null,
         null,
         null,
+        40.35,
         40.35
       ],
       "source_count": 1
@@ -3083,6 +3128,7 @@
         null,
         null,
         null,
+        43.86,
         43.86
       ],
       "source_count": 1
@@ -3150,6 +3196,7 @@
         null,
         null,
         null,
+        63.16,
         63.16
       ],
       "source_count": 1
@@ -3217,6 +3264,7 @@
         null,
         null,
         null,
+        36.35,
         36.35
       ],
       "source_count": 2
@@ -3284,6 +3332,7 @@
         null,
         null,
         null,
+        64.91,
         64.91
       ],
       "source_count": 1
@@ -3351,6 +3400,7 @@
         null,
         null,
         null,
+        14.04,
         14.04
       ],
       "source_count": 1
@@ -3418,6 +3468,7 @@
         null,
         null,
         null,
+        12.28,
         12.28
       ],
       "source_count": 1
@@ -3485,6 +3536,7 @@
         null,
         null,
         null,
+        14.04,
         14.04
       ],
       "source_count": 1
@@ -3552,6 +3604,7 @@
         null,
         null,
         null,
+        10.53,
         10.53
       ],
       "source_count": 1
@@ -3619,6 +3672,7 @@
         null,
         null,
         null,
+        33.33,
         33.33
       ],
       "source_count": 1
@@ -3686,6 +3740,7 @@
         null,
         null,
         null,
+        26.32,
         26.32
       ],
       "source_count": 1
@@ -3753,6 +3808,7 @@
         null,
         null,
         null,
+        24.56,
         24.56
       ],
       "source_count": 1
@@ -3820,6 +3876,7 @@
         null,
         null,
         null,
+        15.79,
         15.79
       ],
       "source_count": 1
@@ -3887,6 +3944,7 @@
         null,
         null,
         null,
+        24.56,
         24.56
       ],
       "source_count": 1
@@ -3954,6 +4012,7 @@
         null,
         null,
         null,
+        31.58,
         31.58
       ],
       "source_count": 1
@@ -4021,6 +4080,7 @@
         null,
         null,
         null,
+        26.32,
         26.32
       ],
       "source_count": 1
@@ -4088,6 +4148,7 @@
         null,
         null,
         null,
+        47.37,
         47.37
       ],
       "source_count": 1
@@ -4155,6 +4216,7 @@
         null,
         null,
         null,
+        40.35,
         40.35
       ],
       "source_count": 1
@@ -4222,6 +4284,7 @@
         null,
         null,
         null,
+        54.39,
         54.39
       ],
       "source_count": 1
@@ -4289,9 +4352,10 @@
         null,
         null,
         null,
-        18.43
+        18.43,
+        0.0
       ],
-      "source_count": 2
+      "source_count": 0
     },
     {
       "name": "MiniMax-M2.5",
@@ -4356,6 +4420,7 @@
         null,
         null,
         null,
+        73.68,
         73.68
       ],
       "source_count": 1
@@ -4423,6 +4488,7 @@
         null,
         null,
         null,
+        28.07,
         28.07
       ],
       "source_count": 1
@@ -4490,6 +4556,7 @@
         null,
         null,
         null,
+        36.84,
         36.84
       ],
       "source_count": 1
@@ -4557,6 +4624,7 @@
         null,
         null,
         null,
+        26.32,
         26.32
       ],
       "source_count": 1
@@ -4624,6 +4692,7 @@
         null,
         null,
         null,
+        33.33,
         33.33
       ],
       "source_count": 1
@@ -4691,6 +4760,7 @@
         null,
         null,
         null,
+        22.81,
         22.81
       ],
       "source_count": 1
@@ -4758,6 +4828,7 @@
         null,
         null,
         null,
+        31.58,
         31.58
       ],
       "source_count": 1
@@ -4825,6 +4896,7 @@
         null,
         null,
         null,
+        17.54,
         17.54
       ],
       "source_count": 1
@@ -4892,6 +4964,7 @@
         null,
         null,
         null,
+        33.33,
         33.33
       ],
       "source_count": 1
@@ -4959,6 +5032,7 @@
         null,
         null,
         null,
+        14.04,
         14.04
       ],
       "source_count": 1
@@ -5026,6 +5100,7 @@
         null,
         null,
         null,
+        21.05,
         21.05
       ],
       "source_count": 1
@@ -5033,7 +5108,7 @@
     {
       "name": "Phi 4",
       "company": "Unknown",
-      "rank": 13,
+      "rank": 12,
       "scores": [
         null,
         null,
@@ -5093,6 +5168,7 @@
         null,
         null,
         null,
+        3.09,
         3.09
       ],
       "source_count": 2
@@ -5160,6 +5236,7 @@
         null,
         null,
         null,
+        86.15,
         86.15
       ],
       "source_count": 1
@@ -5227,6 +5304,7 @@
         null,
         null,
         null,
+        40.35,
         40.35
       ],
       "source_count": 1
@@ -5294,6 +5372,7 @@
         null,
         null,
         null,
+        38.6,
         38.6
       ],
       "source_count": 1
@@ -5361,6 +5440,7 @@
         null,
         null,
         null,
+        24.56,
         24.56
       ],
       "source_count": 1
@@ -5428,6 +5508,7 @@
         null,
         null,
         null,
+        26.32,
         26.32
       ],
       "source_count": 1
@@ -5495,6 +5576,7 @@
         null,
         null,
         null,
+        8.77,
         8.77
       ],
       "source_count": 1
@@ -5562,6 +5644,7 @@
         null,
         null,
         null,
+        33.33,
         33.33
       ],
       "source_count": 1
@@ -5629,9 +5712,10 @@
         null,
         null,
         null,
-        35.29
+        35.29,
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0
     },
     {
       "name": "finix_s1_32b",
@@ -5696,9 +5780,10 @@
         null,
         null,
         null,
-        100.0
+        100.0,
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0
     },
     {
       "name": "gpt-oss-120b",
@@ -5763,9 +5848,10 @@
         null,
         null,
         null,
-        42.11
+        42.11,
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0
     },
     {
       "name": "o1-preview",
@@ -5830,6 +5916,7 @@
         null,
         null,
         null,
+        43.67,
         43.67
       ],
       "source_count": 2
@@ -5897,6 +5984,7 @@
         null,
         null,
         null,
+        100.0,
         100.0
       ],
       "source_count": 1
@@ -5904,7 +5992,7 @@
     {
       "name": "o3-mini",
       "company": "OpenAI",
-      "rank": 11,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -5964,6 +6052,7 @@
         null,
         null,
         null,
+        15.45,
         15.45
       ],
       "source_count": 2
@@ -6031,10 +6120,80 @@
         null,
         null,
         null,
-        41.86
+        41.86,
+        0.0
+      ],
+      "source_count": 0
+    },
+    {
+      "name": "Claude 4.5 Haiku",
+      "company": "Anthropic",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        54.39
       ],
       "source_count": 1
     }
   ],
-  "run_at": "1:04 PM CST"
+  "run_at": "7:55 AM CST"
 }
