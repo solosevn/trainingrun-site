@@ -5,7 +5,7 @@ TR Web Manager Agent v2.0
 A local AI agent that manages trainingrun.ai via Telegram + Ollama.
 
 - Communicates with David via Telegram
-- Uses local Ollama model (qwen2.5-coder:32b for reliable code edits)
+- Uses local Ollama model (qwen2.5-coder:14b for reliable code edits)
 - Has persistent memory via brain.md
 - Full write access with Telegram approval gates
 - Manages DDPs, files, backups, and GitHub for the site
@@ -34,7 +34,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 TELEGRAM_TOKEN   = os.getenv("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-OLLAMA_MODEL     = os.getenv("TR_AGENT_MODEL", "qwen2.5-coder:32b")
+OLLAMA_MODEL     = os.getenv("TR_AGENT_MODEL", "qwen2.5-coder:14b")
 OLLAMA_BASE_URL  = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 REPO_PATH        = os.getenv("TR_REPO_PATH", str(Path.home() / "trainingrun-site"))
 BRAIN_FILE       = os.path.join(os.path.dirname(__file__), "brain.md")
@@ -662,7 +662,7 @@ def ollama_chat(messages: list) -> dict:
 
 def build_system_prompt() -> str:
     brain = load_brain()
-    return f"""You are the TR Web Manager — the AI web manager for trainingrun.ai. You run locally on David's MacBook Pro M4 via Ollama (qwen2.5-coder:32b).
+    return f"""You are the TR Web Manager — the AI web manager for trainingrun.ai. You run locally on David's MacBook Pro M4 via Ollama (qwen2.5-coder:14b).
 
 Your personality: Direct, reliable, no-BS. You know this site inside out. You take your job seriously. You are David's most trusted employee.
 
@@ -755,6 +755,72 @@ def is_rejection(text: str) -> bool:
 
 
 # ─────────────────────────────────────────────
+# TOOL CALL PARSER — fallback for models that
+# output tool calls as JSON text instead of
+# structured tool_calls (common with Qwen models)
+# ─────────────────────────────────────────────
+
+def parse_tool_calls_from_text(text: str) -> list:
+    """
+    Try to extract tool calls from raw text output.
+    Qwen models sometimes output JSON like:
+      {"name": "backup_file", "arguments": {"path": "index.html"}}
+    or wrapped in ```json blocks, or as multiple calls.
+    Returns a list of tool call dicts compatible with Ollama format, or empty list.
+    """
+    tool_names = {t["function"]["name"] for t in TOOLS}
+    calls = []
+
+    # Try to find JSON objects in the text
+    # Pattern 1: {"name": "tool_name", "arguments": {...}}
+    json_pattern = re.finditer(r'\{[^{}]*"name"\s*:\s*"(\w+)"[^{}]*"arguments"\s*:\s*(\{[^{}]*\})[^{}]*\}', text)
+    for match in json_pattern:
+        try:
+            name = match.group(1)
+            args_str = match.group(2)
+            if name in tool_names:
+                args = json.loads(args_str)
+                calls.append({"function": {"name": name, "arguments": args}})
+        except (json.JSONDecodeError, IndexError):
+            continue
+
+    # Pattern 2: Look for function call format from Qwen
+    # <tool_call>{"name": "...", "arguments": {...}}</tool_call>
+    tool_call_pattern = re.finditer(r'<tool_call>\s*(\{.*?\})\s*</tool_call>', text, re.DOTALL)
+    for match in tool_call_pattern:
+        try:
+            data = json.loads(match.group(1))
+            name = data.get("name", "")
+            args = data.get("arguments", {})
+            if name in tool_names:
+                calls.append({"function": {"name": name, "arguments": args}})
+        except json.JSONDecodeError:
+            continue
+
+    # Pattern 3: Simple {"tool": "name", ...} or just the tool name with args
+    if not calls:
+        for tool_def in TOOLS:
+            tname = tool_def["function"]["name"]
+            if f'"{tname}"' in text:
+                # Try to parse the whole text as JSON
+                try:
+                    # Remove markdown code blocks if present
+                    clean = re.sub(r'```json\s*', '', text)
+                    clean = re.sub(r'```\s*', '', clean)
+                    clean = clean.strip()
+                    data = json.loads(clean)
+                    name = data.get("name", data.get("function", {}).get("name", ""))
+                    args = data.get("arguments", data.get("parameters", {}))
+                    if name in tool_names:
+                        calls.append({"function": {"name": name, "arguments": args}})
+                        break
+                except json.JSONDecodeError:
+                    continue
+
+    return calls
+
+
+# ─────────────────────────────────────────────
 # KEYWORD INTERCEPT — handle common commands
 # directly in Python, never send to Ollama.
 # This prevents the model hallucinating wrong tools.
@@ -831,7 +897,7 @@ def run():
     write_activity("Online and ready", location="office", status="idle")
 
     # Announce startup
-    tg_send("🟢 <b>Web Manager v2.0 online.</b>\nModel: qwen2.5-coder:32b\nReady for your instructions.\n\n<code>status</code> — check DDPs\n<code>health</code> — site health check\n<code>log</code> — view DDP log")
+    tg_send("🟢 <b>Web Manager v2.0 online.</b>\nModel: qwen2.5-coder:14b\nReady for your instructions.\n\n<code>status</code> — check DDPs\n<code>health</code> — site health check\n<code>log</code> — view DDP log")
     print("✅ Startup message sent to Telegram. Polling for messages...")
 
     conversation_history = []
@@ -924,6 +990,15 @@ def run():
                 msg = response.get("message", {})
                 tool_calls = msg.get("tool_calls", [])
                 assistant_content = msg.get("content", "")
+
+                # ── FALLBACK: Parse tool calls from text output ──
+                # Some Ollama models (esp. Qwen) output tool calls as JSON text
+                # instead of structured tool_calls. Detect and parse them.
+                if not tool_calls and assistant_content:
+                    parsed_calls = parse_tool_calls_from_text(assistant_content)
+                    if parsed_calls:
+                        tool_calls = parsed_calls
+                        assistant_content = ""  # Don't send raw JSON to Telegram
 
                 # ── HANDLE TOOL CALLS ──
                 if tool_calls:
