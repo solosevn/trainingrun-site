@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "ea949f6032a61204e50c5f75dbc0d15f56b7484af1546cba1fe2fddfe028b0d7",
+  "checksum": "45f9a0c69f67ba299f272af0bee2e39ba77390fdd1a136cbb87bb9a2a9edc358",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,
@@ -71,13 +71,14 @@
     "2026-02-20",
     "2026-02-21",
     "2026-02-22",
-    "2026-02-23"
+    "2026-02-23",
+    "2026-02-24"
   ],
   "models": [
     {
       "name": "Grok 4.20",
       "company": "xAI",
-      "rank": 11,
+      "rank": 8,
       "scores": [
         97.55,
         97.58,
@@ -137,6 +138,7 @@
         97.69,
         43.89,
         43.89,
+        14.66,
         14.66
       ],
       "pillar_scores": {
@@ -221,6 +223,7 @@
         95.43,
         61.85,
         61.85,
+        61.01,
         61.01
       ],
       "pillar_scores": {
@@ -245,7 +248,7 @@
     {
       "name": "Gemini 2.5 Pro",
       "company": "Google",
-      "rank": 10,
+      "rank": 7,
       "scores": [
         74.13,
         73.95,
@@ -305,6 +308,7 @@
         79.4,
         51.62,
         51.62,
+        50.45,
         50.45
       ],
       "pillar_scores": {
@@ -389,6 +393,7 @@
         77.24,
         65.15,
         65.15,
+        62.67,
         62.67
       ],
       "pillar_scores": {
@@ -413,7 +418,7 @@
     {
       "name": "Claude Opus 4.1",
       "company": "Anthropic",
-      "rank": 9,
+      "rank": 6,
       "scores": [
         66.25,
         66.43,
@@ -473,6 +478,7 @@
         75.72,
         52.84,
         52.84,
+        51.68,
         51.68
       ],
       "pillar_scores": {
@@ -557,6 +563,7 @@
         74.49,
         56.56,
         56.56,
+        60.26,
         60.26
       ],
       "pillar_scores": {
@@ -581,7 +588,7 @@
     {
       "name": "Gemini 3 Pro",
       "company": "Google",
-      "rank": 8,
+      "rank": 5,
       "scores": [
         62.46,
         62.4,
@@ -641,19 +648,20 @@
         73.88,
         61.58,
         61.58,
-        51.88
+        51.88,
+        52.24
       ],
       "pillar_scores": {
-        "forecasting": 90.23,
+        "forecasting": 90.91,
         "trading": 7.91,
-        "calibration": 96.99,
+        "calibration": 97.73,
         "financial_reasoning": null,
         "market_intelligence": 84.64
       },
       "source_count": 4,
       "raw_data": {
-        "forecastbench_baseline_brier": 0.133,
-        "forecastbench_tournament_brier": 0.133,
+        "forecastbench_baseline_brier": 0.132,
+        "forecastbench_tournament_brier": 0.132,
         "rallies_return_pct": 2.8,
         "alpha_arena_return_pct": -10.94,
         "alpha_arena_sharpe": -0.018,
@@ -725,6 +733,7 @@
         72.55,
         58.69,
         58.69,
+        60.01,
         60.01
       ],
       "pillar_scores": {
@@ -809,6 +818,7 @@
         72.02,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -882,6 +892,7 @@
         null,
         70.92,
         71.43,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -959,6 +970,7 @@
         70.88,
         0.0,
         0.0,
+        4.93,
         4.93
       ],
       "pillar_scores": {
@@ -1037,6 +1049,7 @@
         70.43,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -1112,6 +1125,7 @@
         69.89,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -1185,6 +1199,7 @@
         null,
         68.79,
         69.39,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1263,7 +1278,8 @@
         null,
         null,
         45.44,
-        0.0
+        0.0,
+        45.44
       ],
       "pillar_scores": {
         "forecasting": 88.24,
@@ -1342,7 +1358,8 @@
         null,
         null,
         4.36,
-        0.0
+        0.0,
+        4.36
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -1360,7 +1377,7 @@
     {
       "name": "DeepSeek R1",
       "company": "DeepSeek",
-      "rank": 7,
+      "rank": 9,
       "scores": [
         null,
         null,
@@ -1421,7 +1438,8 @@
         null,
         null,
         52.12,
-        0.0
+        0.0,
+        52.12
       ],
       "pillar_scores": {
         "forecasting": 88.89,
@@ -1501,7 +1519,8 @@
         null,
         null,
         6.06,
-        0.0
+        0.0,
+        6.06
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -1519,7 +1538,7 @@
     {
       "name": "GPT-4",
       "company": "OpenAI",
-      "rank": 6,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -1580,7 +1599,8 @@
         null,
         null,
         53.64,
-        0.0
+        0.0,
+        53.64
       ],
       "pillar_scores": {
         "forecasting": 91.6,
@@ -1661,7 +1681,8 @@
         null,
         null,
         47.18,
-        0.0
+        0.0,
+        47.18
       ],
       "pillar_scores": {
         "forecasting": 91.6,
@@ -1740,7 +1761,8 @@
         null,
         null,
         47.18,
-        0.0
+        0.0,
+        47.18
       ],
       "pillar_scores": {
         "forecasting": 91.6,
@@ -1760,7 +1782,7 @@
     {
       "name": "Grok 3 Beta",
       "company": "xAI",
-      "rank": 5,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -1821,7 +1843,8 @@
         null,
         null,
         54.82,
-        0.0
+        0.0,
+        54.82
       ],
       "pillar_scores": {
         "forecasting": 93.02,
@@ -1902,7 +1925,8 @@
         null,
         null,
         5.26,
-        0.0
+        0.0,
+        5.26
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -1983,6 +2007,7 @@
         null,
         null,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -2062,7 +2087,8 @@
         null,
         null,
         6.44,
-        0.0
+        0.0,
+        6.44
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2141,7 +2167,8 @@
         null,
         null,
         6.86,
-        0.0
+        0.0,
+        6.86
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2220,7 +2247,8 @@
         null,
         null,
         4.93,
-        0.0
+        0.0,
+        4.93
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2299,7 +2327,8 @@
         null,
         null,
         3.2,
-        0.0
+        0.0,
+        3.2
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2378,7 +2407,8 @@
         null,
         null,
         6.71,
-        0.0
+        0.0,
+        6.71
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2457,7 +2487,8 @@
         null,
         null,
         3.13,
-        0.0
+        0.0,
+        3.13
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2536,7 +2567,8 @@
         null,
         null,
         6.65,
-        0.0
+        0.0,
+        6.65
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2615,7 +2647,8 @@
         null,
         null,
         20.78,
-        0.0
+        0.0,
+        20.78
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2698,7 +2731,8 @@
         null,
         null,
         6.6,
-        0.0
+        0.0,
+        6.6
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2777,7 +2811,8 @@
         null,
         null,
         14.15,
-        0.0
+        0.0,
+        14.15
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2856,7 +2891,8 @@
         null,
         null,
         5.78,
-        0.0
+        0.0,
+        5.78
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -2935,7 +2971,8 @@
         null,
         null,
         0.59,
-        0.0
+        0.0,
+        0.59
       ],
       "pillar_scores": {
         "forecasting": null,
@@ -3013,17 +3050,21 @@
         null,
         null,
         null,
-        0.0
+        0.0,
+        44.46
       ],
       "pillar_scores": {
-        "forecasting": null,
+        "forecasting": 86.33,
         "trading": null,
-        "calibration": null,
+        "calibration": 92.81,
         "financial_reasoning": null,
         "market_intelligence": null
       },
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 2,
+      "raw_data": {
+        "forecastbench_baseline_brier": 0.139,
+        "forecastbench_tournament_brier": 0.139
+      }
     },
     {
       "name": "O4-Mini-2025-04-16 (scratchpad)",
@@ -3088,18 +3129,22 @@
         null,
         null,
         null,
-        0.0
+        0.0,
+        47.91
       ],
       "pillar_scores": {
-        "forecasting": null,
+        "forecasting": 93.02,
         "trading": null,
-        "calibration": null,
+        "calibration": 100.0,
         "financial_reasoning": null,
         "market_intelligence": null
       },
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 2,
+      "raw_data": {
+        "forecastbench_baseline_brier": 0.129,
+        "forecastbench_tournament_brier": 0.129
+      }
     }
   ],
-  "run_at": "9:36 PM CST"
+  "run_at": "7:43 AM CST"
 }
