@@ -6,853 +6,927 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
-:root {
-  --cyan:    #00d4ff;
-  --cyan2:   #00ffff;
-  --gold:    #ffd700;
-  --red:     #ff3333;
-  --dark:    #060b14;
-  --dark2:   #0a1220;
-  --dark3:   #0d1830;
-  --wall:    #0c1828;
-  --floor:   #080f1c;
-}
-
 body {
-  background: var(--dark);
+  background: #020810;
   font-family: 'Courier New', monospace;
   min-height: 100vh;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ════════════════════════════════
-   HEADER
-════════════════════════════════ */
+/* ── HEADER ── */
 .hq-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 28px;
-  background: rgba(6,11,20,0.97);
-  border-bottom: 1px solid rgba(0,212,255,0.15);
-  position: sticky; top: 0; z-index: 200;
+  padding: 12px 28px;
+  background: rgba(2,8,16,0.97);
+  border-bottom: 1px solid rgba(0,212,255,0.18);
 }
-.hq-logo { display: flex; align-items: center; gap: 14px; }
-.logo-mark {
-  width: 36px; height: 36px; border-radius: 8px;
-  background: linear-gradient(135deg, #001a30, #003050);
-  border: 1px solid var(--cyan);
+.logo-wrap { display: flex; align-items: center; gap: 12px; }
+.logo-box {
+  width: 34px; height: 34px; border-radius: 7px;
+  background: linear-gradient(135deg, #001525, #003050);
+  border: 1px solid #00d4ff;
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 900; color: var(--cyan); letter-spacing: -1px;
-  box-shadow: 0 0 12px rgba(0,212,255,0.3);
+  font-size: 13px; font-weight: 900; color: #00d4ff; letter-spacing: -1px;
+  box-shadow: 0 0 14px rgba(0,212,255,0.35);
 }
-.logo-text { font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,0.5); }
-.logo-text strong { color: var(--cyan); letter-spacing: 2px; }
+.logo-title { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 2px; }
+.logo-sub   { font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+
+.header-right { display: flex; align-items: center; gap: 20px; }
 .bridge-pill {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 14px; border-radius: 20px;
-  border: 1px solid rgba(0,212,255,0.2);
-  font-size: 10px; letter-spacing: 1.5px; color: rgba(255,255,255,0.4);
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 20px; padding: 5px 12px; font-size: 10px; color: rgba(255,255,255,0.45);
 }
-.bridge-led {
-  width: 7px; height: 7px; border-radius: 50%; background: #333;
-  transition: all 0.4s;
+.bridge-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #333; transition: background 0.4s;
 }
-.bridge-led.online  { background: #00ff88; box-shadow: 0 0 8px #00ff88; animation: blink 2s infinite; }
-.bridge-led.active  { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation: blink 0.8s infinite; }
-.bridge-led.waiting { background: var(--gold); box-shadow: 0 0 10px var(--gold); animation: blink 0.6s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.bridge-dot.live { background: #00d4ff; box-shadow: 0 0 7px #00d4ff; }
+.clock-display { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 1px; }
 
-/* ════════════════════════════════
-   SCENE WRAPPER
-════════════════════════════════ */
+/* ── SCENE ── */
 .scene-wrap {
-  padding: 40px 30px 20px;
-  perspective: 1800px;
-}
-.scene {
-  transform: rotateX(12deg);
-  transform-style: preserve-3d;
-  max-width: 1300px;
-  margin: 0 auto;
-}
-
-/* ════════════════════════════════
-   ROOM GRID
-════════════════════════════════ */
-.room-grid {
-  display: grid;
-  grid-template-columns: 340px 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 18px;
-}
-
-/* ════════════════════════════════
-   ROOM BASE — 3D BOX EFFECT
-════════════════════════════════ */
-.room {
-  position: relative;
-  border-radius: 14px;
-  overflow: visible;
-  /* The 3D box look: left/bottom shadows simulate walls */
-  filter: drop-shadow(6px 6px 0px rgba(0,0,0,0.7))
-          drop-shadow(12px 12px 0px rgba(0,0,0,0.4));
-}
-.room-inner {
-  background: var(--dark3);
-  border: 1px solid rgba(0,212,255,0.12);
-  border-radius: 14px;
-  padding: 20px;
-  position: relative;
+  flex: 1;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 8px 0 4px;
   overflow: hidden;
-  min-height: 280px;
-  /* Floor grid */
-  background-image:
-    linear-gradient(rgba(0,212,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.025) 1px, transparent 1px);
-  background-size: 30px 30px;
-  background-color: var(--dark3);
 }
+#iso-stage { width: 100%; max-width: 1400px; }
 
-/* Left wall illusion */
-.room-inner::before {
-  content: '';
-  position: absolute; left: 0; top: 0;
-  width: 4px; height: 100%;
-  background: linear-gradient(to bottom, var(--cyan), rgba(0,212,255,0.1));
-  border-radius: 14px 0 0 14px;
-  opacity: 0.4;
+/* ── STATUS BAR ── */
+.agent-bar {
+  text-align: center;
+  padding: 4px 20px 8px;
+  font-size: 10px; letter-spacing: 2px;
+  color: rgba(0,212,255,0.5);
 }
+#agent-action-text { color: rgba(255,255,255,0.4); }
 
-/* Bottom wall illusion */
-.room-inner::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0;
-  width: 100%; height: 4px;
-  background: linear-gradient(to right, var(--cyan), rgba(0,212,255,0.1));
-  border-radius: 0 0 14px 14px;
-  opacity: 0.25;
+/* ── DDP CHIPS ── */
+.info-row {
+  display: flex; justify-content: center;
+  gap: 10px; padding: 0 20px 16px;
+  flex-wrap: wrap;
 }
+.ddp-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 6px 13px;
+  font-size: 9px; color: rgba(255,255,255,0.35);
+  transition: border-color 0.3s;
+}
+.ddp-chip .chip-dot { width: 7px; height: 7px; border-radius: 50%; background: #222; }
+.ddp-chip.ok        { border-color: rgba(0,212,255,0.18); color: rgba(255,255,255,0.65); }
+.chip-name          { font-weight: 700; }
+.chip-score         { color: rgba(255,255,255,0.3); margin-left: 4px; }
 
-.room.agent-here .room-inner {
-  border-color: rgba(0,212,255,0.4);
-  background-color: #0e1f38;
-  box-shadow: inset 0 0 60px rgba(0,212,255,0.05);
-}
-.room.agent-here .room-inner::before { opacity: 0.9; }
-
-.room.future-room .room-inner {
-  background-color: #080d18;
-  opacity: 0.45;
-  filter: grayscale(0.6);
-}
-
-/* ════════════════════════════════
-   ROOM LABEL + NAME
-════════════════════════════════ */
-.room-tag {
-  font-size: 8px; letter-spacing: 2.5px;
-  text-transform: uppercase; color: rgba(0,212,255,0.4);
-  margin-bottom: 4px;
-}
-.room-name {
-  font-size: 14px; font-weight: 800; color: #fff;
-  letter-spacing: 0.5px; margin-bottom: 2px;
-}
-.room-name .c { color: var(--cyan); }
-.room-name .g { color: var(--gold); }
-.room-name .r { color: var(--red); }
-.room-sub {
-  font-size: 10px; color: rgba(255,255,255,0.25);
-  letter-spacing: 0.5px; margin-bottom: 18px;
-}
-
-/* Location dot in room corner */
-.loc-dot {
-  position: absolute; top: 16px; right: 16px;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: transparent; transition: all 0.4s;
-}
-.loc-dot.here {
-  background: var(--cyan);
-  box-shadow: 0 0 12px var(--cyan), 0 0 24px rgba(0,212,255,0.4);
-  animation: blink 1.5s infinite;
-}
-
-/* ════════════════════════════════
-   DESK + MONITOR SVG
-════════════════════════════════ */
-.desk-wrap { position: relative; margin-top: 8px; }
-
-/* ════════════════════════════════
-   MANAGER ROOM
-════════════════════════════════ */
-.manager-room {
-  grid-column: 1;
-  grid-row: 1 / 3;
-}
-.manager-room .room-inner { min-height: 580px; }
-
-.manager-stage {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 12px 0;
-}
-
-/* ════════════════════════════════
-   MINION CHARACTER — TR MANAGER
-════════════════════════════════ */
-.character-wrap {
-  position: relative;
-  display: inline-block;
-  animation: idle-bob 3s ease-in-out infinite;
-}
-.character-wrap.active-anim { animation: working-bob 0.8s ease-in-out infinite; }
-.character-wrap.waiting-anim { animation: waiting-sway 1.5s ease-in-out infinite; }
-
+/* ── CHARACTER ANIMATIONS ── */
 @keyframes idle-bob {
-  0%,100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
 }
-@keyframes working-bob {
-  0%,100% { transform: translateY(0px) rotate(-2deg); }
-  50% { transform: translateY(-5px) rotate(2deg); }
-}
-@keyframes waiting-sway {
-  0%,100% { transform: rotate(-4deg); }
-  50% { transform: rotate(4deg); }
-}
-
-.char-glow {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120px; height: 120px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,212,255,0.15) 0%, transparent 70%);
-  animation: glow-pulse 3s ease-in-out infinite;
-  pointer-events: none;
+@keyframes work-bounce {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  30%      { transform: translateY(-4px) rotate(-3deg); }
+  70%      { transform: translateY(-4px) rotate(3deg); }
 }
 @keyframes glow-pulse {
-  0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
-  50% { opacity: 1; transform: translate(-50%,-50%) scale(1.2); }
+  0%,100% { filter: drop-shadow(0 0 8px rgba(0,212,255,0.5)); }
+  50%      { filter: drop-shadow(0 0 18px rgba(0,212,255,0.95)); }
 }
-.char-glow.gold { background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%); }
+@keyframes mon-flicker {
+  0%,92%,100% { opacity:1; } 95% { opacity:0.55; }
+}
+.char-idle    { animation: idle-bob 2.8s ease-in-out infinite; }
+.char-working { animation: work-bounce 0.9s ease-in-out infinite; }
+.char-waiting { animation: idle-bob 4.5s ease-in-out infinite; opacity:0.65; }
+.char-offline { opacity:0.2; }
+.mgr-glow     { animation: glow-pulse 2.2s ease-in-out infinite; }
+.mon-anim     { animation: mon-flicker 9s ease-in-out infinite; }
 
-.agent-name-tag {
-  text-align: center; margin-top: 12px;
-  font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 1px;
-}
-.agent-role-tag {
-  text-align: center; font-size: 9px;
-  color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;
-}
-.status-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 10px; padding: 5px 16px; border-radius: 20px;
-  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-  border: 1px solid rgba(0,212,255,0.3);
-  color: var(--cyan); background: rgba(0,212,255,0.07);
-  transition: all 0.3s;
-}
-.status-badge.active  { border-color: rgba(0,212,255,0.6); background: rgba(0,212,255,0.12); }
-.status-badge.waiting { border-color: rgba(255,215,0,0.6); color: var(--gold); background: rgba(255,215,0,0.08); }
-
-.current-action {
-  font-size: 10px; color: rgba(255,255,255,0.35);
-  text-align: center; margin-top: 10px; min-height: 28px;
-  line-height: 1.5; padding: 0 8px;
-}
-
-/* Manager's desk */
-.manager-desk { margin-top: 20px; width: 100%; }
-
-/* ════════════════════════════════
-   DDP ROOM
-════════════════════════════════ */
-.ddp-room {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.ddp-team {
-  display: flex; justify-content: center; gap: 8px;
-  flex-wrap: wrap; margin: 10px 0 14px;
-}
-
-.ddp-agent-wrap {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  animation: idle-bob 3s ease-in-out infinite;
-}
-.ddp-agent-wrap:nth-child(2) { animation-delay: 0.4s; }
-.ddp-agent-wrap:nth-child(3) { animation-delay: 0.8s; }
-.ddp-agent-wrap:nth-child(4) { animation-delay: 1.2s; }
-.ddp-agent-wrap:nth-child(5) { animation-delay: 1.6s; }
-.ddp-agent-wrap.sleeping { animation: none; opacity: 0.5; }
-.ddp-agent-wrap.running  { animation: working-bob 0.6s ease-in-out infinite; }
-
-.ddp-mini-label {
-  font-size: 8px; color: rgba(0,212,255,0.6);
-  letter-spacing: 1px; text-align: center;
-}
-
-/* DDP rows */
-.ddp-rows { display: flex; flex-direction: column; gap: 7px; }
-.ddp-row-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px; border-radius: 8px;
-  background: rgba(0,0,0,0.25);
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: all 0.3s;
-}
-.ddp-row-item.success { border-color: rgba(0,255,136,0.2); }
-.ddp-row-item.failed  { border-color: rgba(255,51,51,0.3); }
-.ddp-row-item.running { border-color: rgba(0,212,255,0.4); background: rgba(0,212,255,0.06); animation: row-pulse 1s infinite; }
-@keyframes row-pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
-
-.ddp-row-name { font-size: 12px; color: rgba(255,255,255,0.75); }
-.ddp-row-name .c { color: var(--cyan); font-weight: 700; }
-.ddp-row-name .r { color: var(--red); font-weight: 700; }
-.ddp-row-right { display: flex; align-items: center; gap: 10px; }
-.ddp-score { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 600; }
-.ddp-status-icon { font-size: 14px; }
-
-/* ════════════════════════════════
-   FUTURE ROOMS
-════════════════════════════════ */
-.future-room .room-inner {
-  display: flex; flex-direction: column;
-}
-.future-body {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 12px;
-}
-.future-icon-big { font-size: 42px; opacity: 0.3; }
-.future-tag-pill {
-  font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.2);
-  padding: 4px 12px; border-radius: 10px;
-}
-
-/* ════════════════════════════════
-   MONITOR SVG COMPONENT (inline)
-════════════════════════════════ */
-.monitor-svg { filter: drop-shadow(0 0 6px rgba(0,212,255,0.5)); }
-
-/* ════════════════════════════════
-   ACTIVITY STRIP
-════════════════════════════════ */
-.activity-strip {
-  max-width: 1300px; margin: 18px auto 0;
-  background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(0,212,255,0.08);
-  border-radius: 10px; padding: 14px 20px;
-}
-.activity-hdr {
-  font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase;
-  color: rgba(0,212,255,0.4); margin-bottom: 10px;
-}
-.activity-items { display: flex; flex-direction: column; gap: 4px; }
-.act-item { display: flex; gap: 12px; font-size: 11px; }
-.act-time { color: rgba(0,212,255,0.5); min-width: 62px; }
-.act-text { color: rgba(255,255,255,0.5); }
-.act-item:nth-child(n+4) { opacity: 0.35; }
-
+svg text { font-family:'Courier New',monospace; user-select:none; }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="hq-header">
-  <div class="hq-logo">
-    <div class="logo-mark">TR</div>
+<header class="hq-header">
+  <div class="logo-wrap">
+    <div class="logo-box">TR</div>
     <div>
-      <div class="logo-text"><strong>TRAININGRUN</strong> HQ</div>
-      <div class="logo-text" style="font-size:9px;margin-top:2px;letter-spacing:2px;color:rgba(255,255,255,0.2)">AGENT OPERATIONS CENTER</div>
+      <div class="logo-title"><span style="color:#00d4ff">TRAINING</span>RUN HQ</div>
+      <div class="logo-sub">OPERATIONS CENTER — <span style="color:#00d4ff">LIVE</span></div>
     </div>
   </div>
-  <div class="bridge-pill">
-    <div class="bridge-led" id="bridgeLed"></div>
-    <span id="bridgeLabel">CONNECTING</span>
+  <div class="header-right">
+    <div class="bridge-pill">
+      <div class="bridge-dot" id="bridge-dot"></div>
+      <span id="bridge-label">AGENT OFFLINE</span>
+    </div>
+    <div class="clock-display" id="clock">--:--:--</div>
   </div>
-</div>
+</header>
 
-<!-- SCENE -->
+<!-- ISOMETRIC SCENE -->
 <div class="scene-wrap">
-<div class="scene">
-<div class="room-grid">
+  <svg id="iso-stage" viewBox="0 0 1400 860" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="f-cyan" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="4" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="f-gold" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="f-soft" x="-25%" y="-25%" width="150%" height="150%">
+        <feGaussianBlur stdDeviation="3" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <pattern id="floor-dots" x="0" y="0" width="38" height="19" patternUnits="userSpaceOnUse">
+        <circle cx="19" cy="9.5" r="0.8" fill="rgba(0,212,255,0.12)"/>
+      </pattern>
+    </defs>
 
-  <!-- ══════════════════════════════════
-       ROOM 1 — TR MANAGER'S OFFICE
-  ══════════════════════════════════ -->
-  <div class="room manager-room" id="room-office">
-  <div class="room-inner">
-    <div class="loc-dot" id="dot-office"></div>
-    <div class="room-tag">Room 01 · Manager</div>
-    <div class="room-name"><span class="c">TR</span> Manager's Office</div>
-    <div class="room-sub">Website Manager · Agent v1.0</div>
+    <text x="700" y="22" text-anchor="middle"
+          fill="rgba(0,212,255,0.3)" font-size="9" letter-spacing="5">
+      TRAININGRUN HQ — FLOOR 01
+    </text>
 
-    <div class="manager-stage">
-      <div class="character-wrap" id="managerChar">
-        <div class="char-glow" id="managerGlow"></div>
-        <!-- MINION CHARACTER — TR MANAGER (large, cyan) -->
-        <svg width="130" height="160" viewBox="0 0 130 160">
-          <defs>
-            <radialGradient id="bodyGrad" cx="40%" cy="35%">
-              <stop offset="0%" stop-color="#1a3a5c"/>
-              <stop offset="100%" stop-color="#0a1a30"/>
-            </radialGradient>
-            <radialGradient id="visorGrad" cx="35%" cy="35%">
-              <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.6"/>
-              <stop offset="100%" stop-color="#001a30" stop-opacity="0.9"/>
-            </radialGradient>
-            <radialGradient id="eyeGrad" cx="35%" cy="35%">
-              <stop offset="0%" stop-color="#00ffff"/>
-              <stop offset="70%" stop-color="#00a0cc"/>
-              <stop offset="100%" stop-color="#004466"/>
-            </radialGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <!-- LEGS -->
-          <rect x="42" y="132" width="18" height="20" rx="7" fill="#0d2040" stroke="#00d4ff" stroke-width="1.5"/>
-          <rect x="70" y="132" width="18" height="20" rx="7" fill="#0d2040" stroke="#00d4ff" stroke-width="1.5"/>
-          <!-- Feet glow -->
-          <ellipse cx="51" cy="152" rx="12" ry="4" fill="rgba(0,212,255,0.2)"/>
-          <ellipse cx="79" cy="152" rx="12" ry="4" fill="rgba(0,212,255,0.2)"/>
-
-          <!-- BODY -->
-          <ellipse cx="65" cy="100" rx="36" ry="42" fill="url(#bodyGrad)" stroke="#00d4ff" stroke-width="1.8"/>
-
-          <!-- Suit detail — horizontal band -->
-          <path d="M 32 108 Q 65 120 98 108" fill="none" stroke="#00d4ff" stroke-width="1.2" opacity="0.5"/>
-          <!-- Suit belt line -->
-          <rect x="38" y="115" width="54" height="5" rx="2.5" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
-
-          <!-- TR BADGE on chest -->
-          <rect x="50" y="90" width="30" height="18" rx="4"
-            fill="#001525" stroke="#00d4ff" stroke-width="1.5"
-            filter="url(#glow)"/>
-          <text x="65" y="103" text-anchor="middle"
-            fill="#00d4ff" font-size="10" font-weight="900"
-            font-family="monospace" letter-spacing="1">TR</text>
-
-          <!-- LEFT ARM -->
-          <ellipse cx="24" cy="95" rx="9" ry="22"
-            fill="#0d2040" stroke="#00d4ff" stroke-width="1.5"
-            transform="rotate(15 24 95)"/>
-          <!-- Hand -->
-          <circle cx="18" cy="115" r="8" fill="#0d2040" stroke="#00d4ff" stroke-width="1.5"/>
-
-          <!-- RIGHT ARM -->
-          <ellipse cx="106" cy="95" rx="9" ry="22"
-            fill="#0d2040" stroke="#00d4ff" stroke-width="1.5"
-            transform="rotate(-15 106 95)"/>
-          <!-- Hand -->
-          <circle cx="112" cy="115" r="8" fill="#0d2040" stroke="#00d4ff" stroke-width="1.5"/>
-
-          <!-- NECK -->
-          <rect x="56" y="60" width="18" height="12" rx="4" fill="#0d2040"/>
-
-          <!-- HEAD -->
-          <ellipse cx="65" cy="45" rx="34" ry="36" fill="url(#bodyGrad)" stroke="#00d4ff" stroke-width="1.8"/>
-
-          <!-- VISOR FRAME (big Minion goggles) -->
-          <ellipse cx="65" cy="44" rx="26" ry="20"
-            fill="#001020" stroke="#00d4ff" stroke-width="2.5"
-            filter="url(#glow)"/>
-          <!-- Visor lens glow -->
-          <ellipse cx="65" cy="44" rx="24" ry="18" fill="url(#visorGrad)" opacity="0.8"/>
-
-          <!-- EYE -->
-          <circle cx="65" cy="44" r="12" fill="#060b14" stroke="#00a0cc" stroke-width="1"/>
-          <circle cx="65" cy="44" r="9" fill="url(#eyeGrad)"/>
-          <!-- Pupil -->
-          <circle cx="65" cy="44" r="4" fill="#001a20"/>
-          <!-- Eye shine -->
-          <circle cx="60" cy="40" r="3" fill="white" opacity="0.8"/>
-          <circle cx="70" cy="48" r="1.5" fill="white" opacity="0.4"/>
-
-          <!-- Visor side screws -->
-          <circle cx="40" cy="44" r="3" fill="#001525" stroke="#00d4ff" stroke-width="1"/>
-          <circle cx="90" cy="44" r="3" fill="#001525" stroke="#00d4ff" stroke-width="1"/>
-
-          <!-- HEAD TOP DETAIL (little antenna/hair) -->
-          <ellipse cx="65" cy="11" rx="5" ry="7" fill="#0d2040" stroke="#00d4ff" stroke-width="1.2"/>
-          <circle cx="65" cy="5" r="4" fill="#00d4ff" opacity="0.8" filter="url(#glow)"/>
-
-          <!-- VISOR SCAN LINE ANIMATION -->
-          <rect x="41" y="26" width="48" height="2" rx="1" fill="rgba(0,212,255,0.4)" opacity="0.7">
-            <animateTransform attributeName="transform" type="translate" values="0,0;0,36;0,0" dur="3s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" repeatCount="indefinite"/>
-          </rect>
-        </svg>
-
-        <div class="agent-name-tag">TR Manager</div>
-        <div class="agent-role-tag">Website Manager</div>
-        <div class="status-badge" id="agentBadge">
-          <span id="agentBadgeText">● IDLE</span>
-        </div>
-        <div class="current-action" id="agentAction">Standing by...</div>
-      </div>
-    </div>
-
-    <!-- MANAGER'S DESK + MONITOR -->
-    <svg class="monitor-svg" width="100%" viewBox="0 0 260 90" style="margin-top:12px">
-      <!-- Desk surface -->
-      <rect x="10" y="55" width="240" height="28" rx="6" fill="#0a1525" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
-      <!-- Monitor stand -->
-      <rect x="118" y="30" width="24" height="28" rx="3" fill="#081018" stroke="rgba(0,212,255,0.15)" stroke-width="1"/>
-      <rect x="108" y="55" width="44" height="5" rx="2" fill="#081018" stroke="rgba(0,212,255,0.15)" stroke-width="1"/>
-      <!-- Monitor screen -->
-      <rect x="60" y="5" width="140" height="50" rx="6" fill="#050d18" stroke="#00d4ff" stroke-width="1.5"/>
-      <!-- Screen glow -->
-      <rect x="62" y="7" width="136" height="46" rx="5" fill="rgba(0,212,255,0.04)"/>
-      <!-- Screen content — code lines -->
-      <rect x="70" y="14" width="80" height="3" rx="1.5" fill="rgba(0,212,255,0.5)"/>
-      <rect x="70" y="21" width="55" height="3" rx="1.5" fill="rgba(0,212,255,0.3)"/>
-      <rect x="70" y="28" width="70" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
-      <rect x="70" y="35" width="40" height="3" rx="1.5" fill="rgba(0,212,255,0.4)"/>
-      <rect x="70" y="42" width="60" height="3" rx="1.5" fill="rgba(255,255,255,0.1)"/>
-      <!-- Cursor blink -->
-      <rect x="70" y="42" width="6" height="3" rx="1" fill="#00d4ff">
-        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-      </rect>
-      <!-- Screen glow reflection on desk -->
-      <ellipse cx="130" cy="60" rx="50" ry="6" fill="rgba(0,212,255,0.06)"/>
-      <!-- Keyboard -->
-      <rect x="90" y="65" width="80" height="12" rx="3" fill="#081018" stroke="rgba(0,212,255,0.12)" stroke-width="1"/>
-      <rect x="94" y="68" width="8" height="4" rx="1" fill="rgba(0,212,255,0.2)"/>
-      <rect x="105" y="68" width="8" height="4" rx="1" fill="rgba(0,212,255,0.2)"/>
-      <rect x="116" y="68" width="8" height="4" rx="1" fill="rgba(0,212,255,0.2)"/>
-      <rect x="127" y="68" width="30" height="4" rx="1" fill="rgba(0,212,255,0.15)"/>
-      <rect x="160" y="68" width="8" height="4" rx="1" fill="rgba(0,212,255,0.2)"/>
-    </svg>
-
-  </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════
-       ROOM 2 — DDP OPERATIONS
-  ══════════════════════════════════ -->
-  <div class="room ddp-room" id="room-ddp_room">
-  <div class="room-inner">
-    <div class="loc-dot" id="dot-ddp_room"></div>
-    <div class="room-tag">Room 02 · Operations</div>
-    <div class="room-name"><span class="c">DDP</span> Operations Center</div>
-    <div class="room-sub">5 Daily Data Pipelines</div>
-
-    <!-- 5 DDP Mini-Characters -->
-    <div class="ddp-team" id="ddpTeam">
-
-      <!-- TRSbench -->
-      <div class="ddp-agent-wrap" id="ddp-trsbench">
-        <svg width="52" height="68" viewBox="0 0 52 68">
-          <defs><radialGradient id="bg1" cx="40%" cy="35%"><stop offset="0%" stop-color="#2a1a00"/><stop offset="100%" stop-color="#0f0a00"/></radialGradient></defs>
-          <rect x="17" y="54" width="8" height="10" rx="3" fill="#0f0a00" stroke="#ffd700" stroke-width="1"/>
-          <rect x="27" y="54" width="8" height="10" rx="3" fill="#0f0a00" stroke="#ffd700" stroke-width="1"/>
-          <ellipse cx="26" cy="34" rx="15" ry="18" fill="url(#bg1)" stroke="#ffd700" stroke-width="1.2"/>
-          <rect x="18" y="28" width="16" height="8" rx="2" fill="#1a0d00" stroke="#ffd700" stroke-width="0.8"/>
-          <text x="26" y="35" text-anchor="middle" fill="#ffd700" font-size="5" font-weight="900" font-family="monospace">TRS</text>
-          <ellipse cx="26" cy="14" rx="14" ry="13" fill="url(#bg1)" stroke="#ffd700" stroke-width="1.2"/>
-          <ellipse cx="26" cy="14" rx="10" ry="7" fill="#0a0500" stroke="#ffd700" stroke-width="1"/>
-          <circle cx="26" cy="14" r="4" fill="#ffd700" opacity="0.8"/>
-          <circle cx="23" cy="12" r="1.5" fill="white" opacity="0.7"/>
-        </svg>
-        <div class="ddp-mini-label">bench</div>
-      </div>
-
-      <!-- TRScode -->
-      <div class="ddp-agent-wrap" id="ddp-trscode">
-        <svg width="52" height="68" viewBox="0 0 52 68">
-          <defs><radialGradient id="bg2" cx="40%" cy="35%"><stop offset="0%" stop-color="#001a2a"/><stop offset="100%" stop-color="#000a14"/></radialGradient></defs>
-          <rect x="17" y="54" width="8" height="10" rx="3" fill="#000a14" stroke="#00d4ff" stroke-width="1"/>
-          <rect x="27" y="54" width="8" height="10" rx="3" fill="#000a14" stroke="#00d4ff" stroke-width="1"/>
-          <ellipse cx="26" cy="34" rx="15" ry="18" fill="url(#bg2)" stroke="#00d4ff" stroke-width="1.2"/>
-          <rect x="18" y="28" width="16" height="8" rx="2" fill="#001020" stroke="#00d4ff" stroke-width="0.8"/>
-          <text x="26" y="35" text-anchor="middle" fill="#00d4ff" font-size="5" font-weight="900" font-family="monospace">TRS</text>
-          <ellipse cx="26" cy="14" rx="14" ry="13" fill="url(#bg2)" stroke="#00d4ff" stroke-width="1.2"/>
-          <ellipse cx="26" cy="14" rx="10" ry="7" fill="#000a14" stroke="#00d4ff" stroke-width="1"/>
-          <circle cx="26" cy="14" r="4" fill="#00d4ff" opacity="0.8"/>
-          <circle cx="23" cy="12" r="1.5" fill="white" opacity="0.7"/>
-        </svg>
-        <div class="ddp-mini-label">code</div>
-      </div>
-
-      <!-- TRUscore -->
-      <div class="ddp-agent-wrap" id="ddp-truscore">
-        <svg width="52" height="68" viewBox="0 0 52 68">
-          <defs><radialGradient id="bg3" cx="40%" cy="35%"><stop offset="0%" stop-color="#001a14"/><stop offset="100%" stop-color="#000a08"/></radialGradient></defs>
-          <rect x="17" y="54" width="8" height="10" rx="3" fill="#000a08" stroke="#00ff88" stroke-width="1"/>
-          <rect x="27" y="54" width="8" height="10" rx="3" fill="#000a08" stroke="#00ff88" stroke-width="1"/>
-          <ellipse cx="26" cy="34" rx="15" ry="18" fill="url(#bg3)" stroke="#00ff88" stroke-width="1.2"/>
-          <rect x="18" y="28" width="16" height="8" rx="2" fill="#001008" stroke="#00ff88" stroke-width="0.8"/>
-          <text x="26" y="35" text-anchor="middle" fill="#00ff88" font-size="5" font-weight="900" font-family="monospace">TRU</text>
-          <ellipse cx="26" cy="14" rx="14" ry="13" fill="url(#bg3)" stroke="#00ff88" stroke-width="1.2"/>
-          <ellipse cx="26" cy="14" rx="10" ry="7" fill="#000a08" stroke="#00ff88" stroke-width="1"/>
-          <circle cx="26" cy="14" r="4" fill="#00ff88" opacity="0.8"/>
-          <circle cx="23" cy="12" r="1.5" fill="white" opacity="0.7"/>
-        </svg>
-        <div class="ddp-mini-label">score</div>
-      </div>
-
-      <!-- TRFcast -->
-      <div class="ddp-agent-wrap" id="ddp-trfcast">
-        <svg width="52" height="68" viewBox="0 0 52 68">
-          <defs><radialGradient id="bg4" cx="40%" cy="35%"><stop offset="0%" stop-color="#1a001a"/><stop offset="100%" stop-color="#0a000a"/></radialGradient></defs>
-          <rect x="17" y="54" width="8" height="10" rx="3" fill="#0a000a" stroke="#cc44ff" stroke-width="1"/>
-          <rect x="27" y="54" width="8" height="10" rx="3" fill="#0a000a" stroke="#cc44ff" stroke-width="1"/>
-          <ellipse cx="26" cy="34" rx="15" ry="18" fill="url(#bg4)" stroke="#cc44ff" stroke-width="1.2"/>
-          <rect x="18" y="28" width="16" height="8" rx="2" fill="#0a0010" stroke="#cc44ff" stroke-width="0.8"/>
-          <text x="26" y="35" text-anchor="middle" fill="#cc44ff" font-size="5" font-weight="900" font-family="monospace">TRF</text>
-          <ellipse cx="26" cy="14" rx="14" ry="13" fill="url(#bg4)" stroke="#cc44ff" stroke-width="1.2"/>
-          <ellipse cx="26" cy="14" rx="10" ry="7" fill="#0a000a" stroke="#cc44ff" stroke-width="1"/>
-          <circle cx="26" cy="14" r="4" fill="#cc44ff" opacity="0.8"/>
-          <circle cx="23" cy="12" r="1.5" fill="white" opacity="0.7"/>
-        </svg>
-        <div class="ddp-mini-label">cast</div>
-      </div>
-
-      <!-- TRAgents -->
-      <div class="ddp-agent-wrap" id="ddp-tragents">
-        <svg width="52" height="68" viewBox="0 0 52 68">
-          <defs><radialGradient id="bg5" cx="40%" cy="35%"><stop offset="0%" stop-color="#2a0000"/><stop offset="100%" stop-color="#0f0000"/></radialGradient></defs>
-          <rect x="17" y="54" width="8" height="10" rx="3" fill="#0f0000" stroke="#ff3333" stroke-width="1"/>
-          <rect x="27" y="54" width="8" height="10" rx="3" fill="#0f0000" stroke="#ff3333" stroke-width="1"/>
-          <ellipse cx="26" cy="34" rx="15" ry="18" fill="url(#bg5)" stroke="#ff3333" stroke-width="1.2"/>
-          <rect x="18" y="28" width="16" height="8" rx="2" fill="#100000" stroke="#ff3333" stroke-width="0.8"/>
-          <text x="26" y="35" text-anchor="middle" fill="#ff3333" font-size="5" font-weight="900" font-family="monospace">TRA</text>
-          <ellipse cx="26" cy="14" rx="14" ry="13" fill="url(#bg5)" stroke="#ff3333" stroke-width="1.2"/>
-          <ellipse cx="26" cy="14" rx="10" ry="7" fill="#0f0000" stroke="#ff3333" stroke-width="1"/>
-          <circle cx="26" cy="14" r="4" fill="#ff3333" opacity="0.8"/>
-          <circle cx="23" cy="12" r="1.5" fill="white" opacity="0.7"/>
-        </svg>
-        <div class="ddp-mini-label" style="color:#ff6666">agents</div>
-      </div>
-
-    </div><!-- /ddp-team -->
-
-    <!-- DDP STATUS ROWS -->
-    <div class="ddp-rows" id="ddpRows">
-      <div class="ddp-row-item" id="row-trsbench">
-        <span class="ddp-row-name"><span class="c">TRS</span>bench</span>
-        <div class="ddp-row-right"><span class="ddp-score" id="score-trsbench">—</span><span class="ddp-status-icon" id="icon-trsbench">⚫</span></div>
-      </div>
-      <div class="ddp-row-item" id="row-trscode">
-        <span class="ddp-row-name"><span class="c">TRS</span>code</span>
-        <div class="ddp-row-right"><span class="ddp-score" id="score-trscode">—</span><span class="ddp-status-icon" id="icon-trscode">⚫</span></div>
-      </div>
-      <div class="ddp-row-item" id="row-truscore">
-        <span class="ddp-row-name"><span class="c">TRU</span>score</span>
-        <div class="ddp-row-right"><span class="ddp-score" id="score-truscore">—</span><span class="ddp-status-icon" id="icon-truscore">⚫</span></div>
-      </div>
-      <div class="ddp-row-item" id="row-trfcast">
-        <span class="ddp-row-name"><span class="c">TRF</span>cast</span>
-        <div class="ddp-row-right"><span class="ddp-score" id="score-trfcast">—</span><span class="ddp-status-icon" id="icon-trfcast">⚫</span></div>
-      </div>
-      <div class="ddp-row-item" id="row-tragents">
-        <span class="ddp-row-name"><span class="c">TR</span><span class="r">Agents</span></span>
-        <div class="ddp-row-right"><span class="ddp-score" id="score-tragents">—</span><span class="ddp-status-icon" id="icon-tragents">⚫</span></div>
-      </div>
-    </div>
-
-    <!-- DDP shared monitor -->
-    <svg class="monitor-svg" width="100%" viewBox="0 0 260 65" style="margin-top:14px">
-      <rect x="10" y="40" width="240" height="20" rx="5" fill="#0a1525" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
-      <rect x="50" y="4" width="160" height="38" rx="5" fill="#050d18" stroke="#00d4ff" stroke-width="1.5"/>
-      <rect x="52" y="6" width="156" height="34" rx="4" fill="rgba(0,212,255,0.03)"/>
-      <!-- scrolling data lines -->
-      <rect x="58" y="11" width="90" height="2" rx="1" fill="rgba(0,212,255,0.6)"/>
-      <rect x="58" y="17" width="60" height="2" rx="1" fill="rgba(0,255,136,0.5)"/>
-      <rect x="58" y="23" width="75" height="2" rx="1" fill="rgba(0,212,255,0.3)"/>
-      <rect x="58" y="29" width="45" height="2" rx="1" fill="rgba(255,215,0,0.4)"/>
-      <rect x="58" y="35" width="65" height="2" rx="1" fill="rgba(0,212,255,0.4)"/>
-      <text x="155" y="30" text-anchor="middle" fill="rgba(0,212,255,0.5)" font-size="7" font-family="monospace">LIVE DATA</text>
-      <ellipse cx="130" cy="44" rx="40" ry="4" fill="rgba(0,212,255,0.05)"/>
-    </svg>
-
-  </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════
-       ROOM 3 — TRS ARENA (future)
-  ══════════════════════════════════ -->
-  <div class="room future-room" id="room-arena" style="grid-column:3;grid-row:1">
-  <div class="room-inner">
-    <div class="room-tag">Room 03 · Future</div>
-    <div class="room-name"><span class="c">TRS</span> Arena</div>
-    <div class="room-sub">Human Truth Leaderboard</div>
-    <div class="future-body">
-      <div class="future-icon-big">⚔️</div>
-      <svg width="80" height="80" viewBox="0 0 80 80" opacity="0.3">
-        <!-- Ghost/placeholder minion -->
-        <ellipse cx="40" cy="52" rx="18" ry="22" fill="#1a1a2e" stroke="#aaa" stroke-width="1"/>
-        <ellipse cx="40" cy="28" rx="17" ry="16" fill="#1a1a2e" stroke="#aaa" stroke-width="1"/>
-        <ellipse cx="40" cy="28" rx="12" ry="8" fill="#111" stroke="#888" stroke-width="1"/>
-        <circle cx="40" cy="28" r="4" fill="#888" opacity="0.5"/>
-      </svg>
-      <div class="future-tag-pill">COMING SOON</div>
-    </div>
-  </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════
-       ROOM 4 — CONTENT STUDIO (future)
-  ══════════════════════════════════ -->
-  <div class="room future-room" id="room-content" style="grid-column:2;grid-row:2">
-  <div class="room-inner">
-    <div class="room-tag">Room 04 · Future</div>
-    <div class="room-name">Content Studio</div>
-    <div class="room-sub">YouTube · Shorts · Episodes</div>
-    <div class="future-body">
-      <div class="future-icon-big">🎬</div>
-      <div class="future-tag-pill">COMING SOON</div>
-    </div>
-  </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════
-       ROOM 5 — SOCIAL COMMAND (future)
-  ══════════════════════════════════ -->
-  <div class="room future-room" id="room-social" style="grid-column:3;grid-row:2">
-  <div class="room-inner">
-    <div class="room-tag">Room 05 · Future</div>
-    <div class="room-name">Social Command</div>
-    <div class="room-sub">X · Distribution · Flywheel</div>
-    <div class="future-body">
-      <div class="future-icon-big">📱</div>
-      <div class="future-tag-pill">COMING SOON</div>
-    </div>
-  </div>
-  </div>
-
-
-</div><!-- /room-grid -->
-</div><!-- /scene -->
-</div><!-- /scene-wrap -->
-
-<!-- ACTIVITY STRIP -->
-<div class="activity-strip" style="padding-left:30px;padding-right:30px">
-  <div class="activity-hdr">TR Manager — Activity Log</div>
-  <div class="activity-items" id="actLog">
-    <div class="act-item"><span class="act-time">—</span><span class="act-text">Waiting for agent to connect...</span></div>
-  </div>
+    <g id="world"></g>
+    <g id="characters"></g>
+    <g id="labels"></g>
+  </svg>
 </div>
 
-<br>
+<!-- AGENT BAR -->
+<div class="agent-bar">
+  TR MANAGER — <span id="agent-action-text">OFFLINE</span>
+</div>
+
+<!-- DDP CHIPS -->
+<div class="info-row" id="ddp-chips"></div>
 
 <script>
-const BRIDGE  = 'http://localhost:7432';
-const POLL_MS = 2000;
+'use strict';
+// ══════════════════════════════════════════════
+//  ISOMETRIC PROJECTION PARAMS
+//  3 cols × 2 rows, room size 4W × 3D
+//  Layout fits within 1400×860 viewBox
+// ══════════════════════════════════════════════
+const TILE  = 38;    // half-tile width (px per grid unit, screen x)
+const HTILE = 19;    // half-tile height (TILE/2)
+const WALL  = 90;    // wall height in screen pixels
+const OX    = 515;   // scene origin X
+const OY    = 195;   // scene origin Y
 
-// ── LOAD STATUS.JSON ──
-async function loadStatus() {
-  try {
-    const r = await fetch('/status.json?t=' + Date.now());
-    const d = await r.json();
-    const agents = d.agents || {};
-    const keys = ['trsbench','trscode','truscore','trfcast','tragents'];
-    keys.forEach(k => {
-      const a = agents[k] || {};
-      const st = a.status || '';
-      const sc = a.top_score != null ? a.top_score.toFixed(1) : '—';
-      const icon = st === 'success' ? '✅' : (st === 'failed' ? '❌' : '⚫');
-      const el = document.getElementById('row-'+k);
-      const sc_el = document.getElementById('score-'+k);
-      const ic_el = document.getElementById('icon-'+k);
-      if(el) { el.className = 'ddp-row-item ' + (st||''); }
-      if(sc_el) sc_el.textContent = sc;
-      if(ic_el) ic_el.textContent = icon;
-    });
-  } catch(e) {}
+// Room grid layout
+const RW  = 4;    // room width  (x-axis)
+const RD  = 3;    // room depth  (y-axis)
+const GAP = 1.0;  // gap between rooms (grid units)
+
+const COL0 = 0;
+const COL1 = RW + GAP;   // 5.0
+const COL2 = (RW + GAP) * 2; // 10.0
+
+const ROW0 = 0;
+const ROW1 = RD + GAP;   // 4.0
+
+// iso(gx, gy, gz) → screen {x, y}
+// gx: rightward axis, gy: forward axis, gz: elevation (up)
+function iso(gx, gy, gz = 0) {
+  return {
+    x: OX + (gx - gy) * TILE,
+    y: OY + (gx + gy) * HTILE - gz
+  };
 }
 
-// ── POLL BRIDGE ──
+// ══════════════════════════════════════════════
+//  PATH GENERATORS
+// ══════════════════════════════════════════════
+function pts(arr) {
+  return arr.map(p => `${p.x},${p.y}`).join(' ');
+}
+function poly(points, attrs = {}) {
+  const e = svgEl('polygon', { points: pts(points), ...attrs });
+  return e;
+}
+
+// Floor rhombus: corners at (gx,gy), (gx+w,gy), (gx+w,gy+d), (gx,gy+d)
+function floorPoly(gx, gy, w, d, attrs = {}) {
+  return poly([
+    iso(gx,   gy),
+    iso(gx+w, gy),
+    iso(gx+w, gy+d),
+    iso(gx,   gy+d),
+  ], attrs);
+}
+
+// Back-left wall (XZ plane at gy edge, looking toward +y)
+function wallBackLeft(gx, gy, w, h, attrs = {}) {
+  return poly([
+    iso(gx,   gy),
+    iso(gx+w, gy),
+    iso(gx+w, gy, h),
+    iso(gx,   gy, h),
+  ], attrs);
+}
+
+// Back-right wall (YZ plane at gx edge, looking toward +x)
+function wallBackRight(gx, gy, d, h, attrs = {}) {
+  return poly([
+    iso(gx, gy),
+    iso(gx, gy+d),
+    iso(gx, gy+d, h),
+    iso(gx, gy,   h),
+  ], attrs);
+}
+
+// Front-left wall (XZ plane at gy+d, visible to viewer)
+function wallFrontLeft(gx, gy, w, d, h, attrs = {}) {
+  return poly([
+    iso(gx,   gy+d),
+    iso(gx+w, gy+d),
+    iso(gx+w, gy+d, h),
+    iso(gx,   gy+d, h),
+  ], attrs);
+}
+
+// Front-right wall (YZ plane at gx+w, visible to viewer)
+function wallFrontRight(gx, gy, w, d, h, attrs = {}) {
+  return poly([
+    iso(gx+w, gy),
+    iso(gx+w, gy+d),
+    iso(gx+w, gy+d, h),
+    iso(gx+w, gy,   h),
+  ], attrs);
+}
+
+// ══════════════════════════════════════════════
+//  SVG HELPERS
+// ══════════════════════════════════════════════
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs = {}) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+  return e;
+}
+function svgG(attrs = {}) { return svgEl('g', attrs); }
+function svgText(x, y, str, attrs = {}) {
+  const t = svgEl('text', { x, y, ...attrs });
+  t.textContent = str;
+  return t;
+}
+function svgLine(x1, y1, x2, y2, attrs = {}) {
+  return svgEl('line', { x1, y1, x2, y2, ...attrs });
+}
+function svgRect(x, y, w, h, attrs = {}) {
+  return svgEl('rect', { x, y, width: w, height: h, ...attrs });
+}
+function svgCircle(cx, cy, r, attrs = {}) {
+  return svgEl('circle', { cx, cy, r, ...attrs });
+}
+function svgEllipse(cx, cy, rx, ry, attrs = {}) {
+  return svgEl('ellipse', { cx, cy, rx, ry, ...attrs });
+}
+function svgPath(d, attrs = {}) {
+  return svgEl('path', { d, ...attrs });
+}
+function appendAll(parent, ...children) {
+  children.forEach(c => c && parent.appendChild(c));
+}
+
+// ══════════════════════════════════════════════
+//  ROOM BUILDER
+// ══════════════════════════════════════════════
+function buildRoom(gx, gy, w, d, opts = {}) {
+  const {
+    floorFill  = '#0a1525',
+    wallBL     = '#0d1e38',  // back-left
+    wallBR     = '#091628',  // back-right
+    wallFL     = '#0c1c35',  // front-left (visible)
+    wallFR     = '#0a1a30',  // front-right (visible)
+    accent     = '#00d4ff',
+    accentOp   = 0.22,
+    number     = '',
+    label      = '',
+    active     = true,
+  } = opts;
+
+  const g = svgG({ class: 'room' });
+  const aO = active ? accentOp : 0.06;
+  const aS = active ? `rgba(0,212,255,${aO})` : 'rgba(255,255,255,0.04)';
+  const sw = '0.8';
+
+  // Floor
+  appendAll(g,
+    floorPoly(gx, gy, w, d, { fill: floorFill, stroke: aS, 'stroke-width': sw }),
+    floorPoly(gx, gy, w, d, { fill: 'url(#floor-dots)', opacity: active ? '0.9' : '0.2' }),
+
+    // Back walls (draw first — behind everything)
+    wallBackLeft(gx, gy, w, WALL, { fill: wallBL, stroke: aS, 'stroke-width': sw }),
+    wallBackRight(gx, gy, d, WALL, { fill: wallBR, stroke: aS, 'stroke-width': sw }),
+
+    // Ceiling edge (top ridge lines)
+    ...(active ? [
+      svgPath(`M${iso(gx,gy,WALL).x},${iso(gx,gy,WALL).y} L${iso(gx+w,gy,WALL).x},${iso(gx+w,gy,WALL).y}`,
+        { stroke: accent, 'stroke-width': '1', opacity: '0.35', fill: 'none' }),
+      svgPath(`M${iso(gx,gy,WALL).x},${iso(gx,gy,WALL).y} L${iso(gx,gy+d,WALL).x},${iso(gx,gy+d,WALL).y}`,
+        { stroke: accent, 'stroke-width': '1', opacity: '0.25', fill: 'none' }),
+    ] : []),
+
+    // Front walls (on top — visible face)
+    wallFrontLeft(gx, gy, w, d, WALL, { fill: wallFL, stroke: aS, 'stroke-width': sw }),
+    wallFrontRight(gx, gy, w, d, WALL, { fill: wallFR, stroke: aS, 'stroke-width': sw }),
+  );
+
+  // Room number label (on back-left wall, top)
+  if (number && active) {
+    const np = iso(gx + 0.25, gy + 0.05, WALL - 12);
+    appendAll(g,
+      svgText(np.x, np.y, number, {
+        fill: accent, 'font-size': '8', 'letter-spacing': '1', opacity: '0.5',
+      })
+    );
+  }
+
+  // Room label (on front-left wall center)
+  if (label && active) {
+    const lp = iso(gx + w * 0.5, gy + d, WALL * 0.52);
+    appendAll(g,
+      svgText(lp.x, lp.y, label, {
+        fill: 'rgba(255,255,255,0.45)', 'font-size': '7.5', 'text-anchor': 'middle',
+        'letter-spacing': '2.5',
+      })
+    );
+  }
+
+  return g;
+}
+
+// ══════════════════════════════════════════════
+//  DESK + MONITOR
+// ══════════════════════════════════════════════
+function buildDesk(gx, gy, opts = {}) {
+  const { color = '#00d4ff', screenText = '▮' } = opts;
+  const g = svgG();
+
+  const DW = 1.5, DD = 0.6, DH = 32;
+
+  // Desk top face
+  appendAll(g,
+    floorPoly(gx, gy, DW, DD, {
+      fill: '#0d1e30', stroke: color, 'stroke-width': '1', 'stroke-opacity': '0.5',
+    }),
+    // Desk front face
+    wallFrontLeft(gx, gy, DW, DD, DH, {
+      fill: '#091525', stroke: color, 'stroke-width': '0.8', 'stroke-opacity': '0.3',
+    }),
+    wallFrontRight(gx, gy, DW, DD, DH, {
+      fill: '#07111f', stroke: color, 'stroke-width': '0.8', 'stroke-opacity': '0.25',
+    }),
+  );
+
+  // Monitor stand
+  const desk_top = iso(gx + 0.45, gy + 0.15, DH);
+  const mon_top  = iso(gx + 0.45, gy + 0.1, DH + 38);
+
+  appendAll(g,
+    // Stand base
+    svgRect(desk_top.x - 14, desk_top.y - 3, 28, 5, {
+      fill: '#1a2a3a', rx: '2', stroke: color, 'stroke-width': '0.5', 'stroke-opacity': '0.4',
+    }),
+    // Stand pole
+    svgLine(desk_top.x, desk_top.y, mon_top.x, mon_top.y - 22, {
+      stroke: color, 'stroke-width': '1.5', 'stroke-opacity': '0.45',
+    }),
+    // Screen bezel
+    svgRect(mon_top.x - 22, mon_top.y - 36, 44, 32, {
+      fill: '#010d18', rx: '3', stroke: color, 'stroke-width': '1.8',
+      filter: 'url(#f-cyan)', class: 'mon-anim',
+    }),
+    // Screen content
+    svgText(mon_top.x, mon_top.y - 22, screenText, {
+      fill: color, 'font-size': '7', 'text-anchor': 'middle', opacity: '0.85',
+    }),
+  );
+
+  return g;
+}
+
+// ══════════════════════════════════════════════
+//  LARGE MINION (Manager — ~130px tall)
+// ══════════════════════════════════════════════
+function buildMinion(px, py, opts = {}) {
+  const {
+    id          = 'minion',
+    bodyColor   = '#f5c800',
+    overallColor= '#1a3a5a',
+    accentColor = '#00d4ff',
+    glassColor  = '#a0e8ff',
+    eyeCount    = 2,
+    hairStyle   = 'spiky',
+    label       = '',
+    labelColor  = '#00d4ff',
+    animClass   = 'char-idle',
+  } = opts;
+
+  const g = svgG({ id, class: animClass });
+  const S = 1.1;
+
+  // Measurements
+  const BW = 40 * S, BH = 50 * S, HH = 42 * S, HW = 36 * S;
+  const legH = 15 * S;
+  const bodyY = py - legH - BH;
+  const headY = bodyY - HH * 0.9;
+
+  // Shadow
+  appendAll(g,
+    svgEllipse(px, py + 3, 22 * S, 5 * S, {
+      fill: accentColor, opacity: '0.18', filter: 'url(#f-soft)',
+    })
+  );
+
+  // Legs
+  appendAll(g,
+    svgRect(px - BW * 0.28 - 5, py - legH, 11 * S, legH, { fill: '#1a2540', rx: '4' }),
+    svgRect(px + BW * 0.28 - 6, py - legH, 11 * S, legH, { fill: '#1a2540', rx: '4' }),
+    svgEllipse(px - BW * 0.22, py, 9 * S, 3.5 * S, { fill: '#0d0d0d' }),
+    svgEllipse(px + BW * 0.26, py, 9 * S, 3.5 * S, { fill: '#0d0d0d' }),
+  );
+
+  // Body (overalls)
+  appendAll(g,
+    svgRect(px - BW / 2, bodyY, BW, BH, { fill: overallColor, rx: String(7 * S) }),
+    // Bib
+    svgRect(px - BW * 0.2, bodyY + 4 * S, BW * 0.4, BH * 0.52, {
+      fill: '#5a8ab0', rx: '5', opacity: '0.65',
+    }),
+    // Pocket seam
+    svgLine(px - BW * 0.2, bodyY + BH * 0.3, px + BW * 0.2, bodyY + BH * 0.3, {
+      stroke: 'rgba(255,255,255,0.12)', 'stroke-width': '0.8',
+    }),
+    // Buttons
+    svgCircle(px - 4, bodyY + BH * 0.72, 2.2, { fill: '#c0d8ea' }),
+    svgCircle(px + 4, bodyY + BH * 0.72, 2.2, { fill: '#c0d8ea' }),
+  );
+
+  // Arms
+  appendAll(g,
+    svgRect(px - BW / 2 - 9 * S, bodyY + 9, 9 * S, 26 * S, { fill: bodyColor, rx: '5' }),
+    svgEllipse(px - BW / 2 - 4.5 * S, bodyY + 35 * S, 7 * S, 5.5 * S, { fill: bodyColor }),
+    svgRect(px + BW / 2,          bodyY + 9, 9 * S, 26 * S, { fill: bodyColor, rx: '5' }),
+    svgEllipse(px + BW / 2 + 4.5 * S, bodyY + 35 * S, 7 * S, 5.5 * S, { fill: bodyColor }),
+  );
+
+  // Head capsule
+  appendAll(g,
+    svgEllipse(px, headY + HH / 2, HW / 2, HH / 2, { fill: bodyColor }),
+  );
+
+  // Goggle band
+  appendAll(g,
+    svgRect(px - HW / 2, headY + HH * 0.3, HW, 11 * S, { fill: '#1a1a1a', rx: '2' }),
+  );
+
+  // Goggles
+  if (eyeCount === 1) {
+    const gc = px, gcY = headY + HH * 0.4;
+    appendAll(g,
+      svgEllipse(gc, gcY, 14 * S, 12 * S, { fill: '#111', stroke: '#777', 'stroke-width': '2' }),
+      svgEllipse(gc, gcY, 9 * S, 8 * S, { fill: glassColor, opacity: '0.88' }),
+      svgCircle(gc + 2, gcY + 1, 4.5 * S, { fill: '#111' }),
+      svgCircle(gc + 3, gcY - 1, 2, { fill: '#fff', opacity: '0.8' }),
+    );
+  } else {
+    for (const gx2 of [-(HW * 0.27), HW * 0.27]) {
+      const gc = px + gx2, gcY = headY + HH * 0.4;
+      appendAll(g,
+        svgEllipse(gc, gcY, 10 * S, 9 * S, { fill: '#111', stroke: '#777', 'stroke-width': '2' }),
+        svgEllipse(gc, gcY, 6.5 * S, 6.5 * S, { fill: glassColor, opacity: '0.88' }),
+        svgCircle(gc + 1.5, gcY + 1, 3 * S, { fill: '#111' }),
+        svgCircle(gc + 2.5, gcY - 0.5, 1.5, { fill: '#fff', opacity: '0.8' }),
+      );
+    }
+    // Bridge
+    appendAll(g,
+      svgRect(px - 4, headY + HH * 0.4 - 1, 8, 2, { fill: '#555' }),
+    );
+  }
+
+  // Smile
+  const mY = headY + HH * 0.72;
+  appendAll(g,
+    svgPath(`M${px - 8 * S},${mY} Q${px},${mY + 7 * S} ${px + 8 * S},${mY}`, {
+      fill: 'none', stroke: '#7a4a2a', 'stroke-width': '2.5', 'stroke-linecap': 'round',
+    }),
+  );
+
+  // Hair
+  if (hairStyle === 'spiky') {
+    const hairs = [
+      [px - 10, headY + 4, px - 14, headY - 20],
+      [px,      headY + 2, px,      headY - 28],
+      [px + 10, headY + 4, px + 12, headY - 22],
+    ];
+    for (const [x1,y1,x2,y2] of hairs) {
+      appendAll(g,
+        svgPath(`M${x1},${y1} Q${(x1+x2)/2},${(y1+y2)/2} ${x2},${y2}`, {
+          fill: 'none', stroke: '#111', 'stroke-width': '4', 'stroke-linecap': 'round',
+        }),
+      );
+    }
+  }
+
+  // Label
+  if (label) {
+    appendAll(g,
+      svgText(px, py + 17, label, {
+        fill: labelColor, 'font-size': '8', 'text-anchor': 'middle',
+        'letter-spacing': '1', opacity: '0.85',
+      }),
+    );
+  }
+
+  return g;
+}
+
+// ══════════════════════════════════════════════
+//  MINI MINION (DDP agents — ~75px tall)
+// ══════════════════════════════════════════════
+function buildMini(px, py, opts = {}) {
+  const {
+    id          = 'mini',
+    bodyColor   = '#f5c800',
+    overallColor= '#1a4060',
+    accentColor = '#00d4ff',
+    glassColor  = '#8cd4ff',
+    label       = '',
+    labelColor  = '#00d4ff',
+    animClass   = 'char-idle',
+    statusColor = '#00d4ff',
+  } = opts;
+
+  const g = svgG({ id, class: animClass });
+  const S = 0.6;
+
+  const BW = 40 * S, BH = 50 * S, HH = 42 * S, HW = 36 * S;
+  const legH = 13 * S;
+  const bodyY = py - legH - BH;
+  const headY = bodyY - HH * 0.88;
+
+  // Shadow
+  appendAll(g,
+    svgEllipse(px, py + 2, 13 * S, 3 * S, {
+      fill: accentColor, opacity: '0.14', filter: 'url(#f-soft)',
+    }),
+  );
+
+  // Legs
+  appendAll(g,
+    svgRect(px - BW * 0.28 - 3, py - legH, 8 * S, legH, { fill: '#1a2540', rx: '3' }),
+    svgRect(px + BW * 0.28 - 5, py - legH, 8 * S, legH, { fill: '#1a2540', rx: '3' }),
+    svgEllipse(px - BW * 0.2,  py, 7 * S, 2.8 * S, { fill: '#0d0d0d' }),
+    svgEllipse(px + BW * 0.24, py, 7 * S, 2.8 * S, { fill: '#0d0d0d' }),
+  );
+
+  // Body
+  appendAll(g,
+    svgRect(px - BW / 2, bodyY, BW, BH, { fill: overallColor, rx: String(6 * S) }),
+    svgRect(px - BW * 0.18, bodyY + 3 * S, BW * 0.36, BH * 0.5, {
+      fill: '#5a8ab0', rx: '4', opacity: '0.6',
+    }),
+  );
+
+  // Arms (small)
+  appendAll(g,
+    svgRect(px - BW / 2 - 7 * S, bodyY + 7, 7 * S, 21 * S, { fill: bodyColor, rx: '3' }),
+    svgRect(px + BW / 2,          bodyY + 7, 7 * S, 21 * S, { fill: bodyColor, rx: '3' }),
+  );
+
+  // Head
+  appendAll(g,
+    svgEllipse(px, headY + HH / 2, HW / 2, HH / 2, { fill: bodyColor }),
+    svgRect(px - HW / 2, headY + HH * 0.3, HW, 9 * S, { fill: '#1a1a1a', rx: '1.5' }),
+    // Single goggle
+    svgEllipse(px, headY + HH * 0.4, 11 * S, 9.5 * S, { fill: '#111', stroke: '#666', 'stroke-width': '1.5' }),
+    svgEllipse(px, headY + HH * 0.4, 7.5 * S, 6.5 * S, { fill: glassColor, opacity: '0.85' }),
+    svgCircle(px + 1, headY + HH * 0.41, 3.5 * S, { fill: '#111' }),
+    svgCircle(px + 2, headY + HH * 0.38, 1.2, { fill: '#fff', opacity: '0.8' }),
+    // Status dot on top
+    svgCircle(px, headY, 3.5, { fill: statusColor, filter: 'url(#f-soft)' }),
+  );
+
+  // Label
+  if (label) {
+    appendAll(g,
+      svgText(px, py + 13, label, {
+        fill: labelColor, 'font-size': '6.5', 'text-anchor': 'middle', 'letter-spacing': '0.5',
+      }),
+    );
+  }
+
+  return g;
+}
+
+// ══════════════════════════════════════════════
+//  ROOM DEFINITIONS
+// ══════════════════════════════════════════════
+const ROOMS = [
+  // Row 0 (back)
+  {
+    id: 'manager_office',
+    gx: COL0, gy: ROW0,
+    label: 'MANAGER OFFICE', number: 'RM 01',
+    active: true, accent: '#00d4ff',
+    floorFill: '#0c1c30',
+    wallBL: '#0e2040', wallBR: '#0a1830',
+    wallFL: '#0d1e3e', wallFR: '#0b1a38',
+  },
+  {
+    id: 'ddp_ops',
+    gx: COL1, gy: ROW0,
+    label: 'DDP OPERATIONS', number: 'RM 02',
+    active: true, accent: '#00d4ff',
+    floorFill: '#0a1828',
+    wallBL: '#0c1d38', wallBR: '#091628',
+    wallFL: '#0b1c36', wallFR: '#091530',
+  },
+  {
+    id: 'trs_arena',
+    gx: COL2, gy: ROW0,
+    label: 'TRS ARENA', number: 'RM 03',
+    active: false, accent: '#ffd700',
+    floorFill: '#090d1c',
+    wallBL: '#0b1020', wallBR: '#090e1a',
+    wallFL: '#0a0f1e', wallFR: '#08111a',
+  },
+  // Row 1 (front)
+  {
+    id: 'content',
+    gx: COL0, gy: ROW1,
+    label: 'CONTENT STUDIO', number: 'RM 04',
+    active: false, accent: '#ff3333',
+    floorFill: '#0f0a14',
+    wallBL: '#130c18', wallBR: '#100a14',
+    wallFL: '#120b16', wallFR: '#0f0a12',
+  },
+  {
+    id: 'social',
+    gx: COL1, gy: ROW1,
+    label: 'SOCIAL COMMAND', number: 'RM 05',
+    active: false, accent: '#9955ff',
+    floorFill: '#0d0a1a',
+    wallBL: '#110d20', wallBR: '#0e0b1c',
+    wallFL: '#100c1e', wallFR: '#0d0b1a',
+  },
+  {
+    id: 'reserved',
+    gx: COL2, gy: ROW1,
+    label: 'RESERVED', number: 'RM 06',
+    active: false, accent: '#333',
+    floorFill: '#080c14',
+    wallBL: '#090c16', wallBR: '#080a14',
+    wallFL: '#090b15', wallFR: '#070913',
+  },
+];
+
+// ══════════════════════════════════════════════
+//  DDP DEFINITIONS
+// ══════════════════════════════════════════════
+const DDPS = [
+  { id: 'trsbench', name: 'TRSbench', color: '#00d4ff', glass: '#a0e8ff', overall: '#144060' },
+  { id: 'trscode',  name: 'TRScode',  color: '#00ee88', glass: '#88ffcc', overall: '#104038' },
+  { id: 'truscore', name: 'TRUscore', color: '#aa66ff', glass: '#ddaaff', overall: '#30105a' },
+  { id: 'trfcast',  name: 'TRFcast',  color: '#ffd700', glass: '#fff080', overall: '#504010' },
+  { id: 'tragents', name: 'TRAgents', color: '#ff4444', glass: '#ffaaaa', overall: '#501010' },
+];
+
+// ══════════════════════════════════════════════
+//  BUILD THE SCENE
+// ══════════════════════════════════════════════
+function buildScene() {
+  const world = document.getElementById('world');
+  const chars = document.getElementById('characters');
+  const lbls  = document.getElementById('labels');
+
+  // ── ROOMS (back-to-front: sorted by gx+gy) ──
+  const sorted = [...ROOMS].sort((a, b) => (a.gx + a.gy) - (b.gx + b.gy));
+  for (const r of sorted) {
+    world.appendChild(buildRoom(r.gx, r.gy, RW, RD, r));
+  }
+
+  // ── MANAGER OFFICE DESKS ──
+  const mgr = ROOMS.find(r => r.id === 'manager_office');
+  world.appendChild(buildDesk(mgr.gx + 0.8,  mgr.gy + 0.4, { color: '#00d4ff', screenText: '> status' }));
+  world.appendChild(buildDesk(mgr.gx + 2.4,  mgr.gy + 0.4, { color: '#0099cc', screenText: '> agent' }));
+
+  // ── DDP OPS DESKS (5 desks for 5 DDPs) ──
+  const ops = ROOMS.find(r => r.id === 'ddp_ops');
+  const deskPositions = [
+    { gx: ops.gx + 0.2, gy: ops.gy + 0.2 },
+    { gx: ops.gx + 1.9, gy: ops.gy + 0.2 },
+    { gx: ops.gx + 3.1, gy: ops.gy + 0.2 },  // note: 3.1 stays within room (4 wide)
+    { gx: ops.gx + 0.6, gy: ops.gy + 1.6 },
+    { gx: ops.gx + 2.4, gy: ops.gy + 1.6 },
+  ];
+  DDPS.forEach((ddp, i) => {
+    const d = deskPositions[i];
+    world.appendChild(buildDesk(d.gx, d.gy, { color: ddp.color, screenText: ddp.name }));
+  });
+
+  // ── MANAGER MINION ──
+  const mgrPos = iso(mgr.gx + 1.9, mgr.gy + 2.0);
+  chars.appendChild(buildMinion(mgrPos.x, mgrPos.y, {
+    id:           'manager-minion',
+    bodyColor:    '#f5c800',
+    overallColor: '#143a5a',
+    accentColor:  '#00d4ff',
+    glassColor:   '#a0e8ff',
+    eyeCount:     2,
+    hairStyle:    'spiky',
+    label:        'TR MANAGER',
+    labelColor:   '#00d4ff',
+    animClass:    'char-idle mgr-glow',
+  }));
+
+  // ── DDP MINI MINIONS in OPS ROOM ──
+  const miniPositions = [
+    { gx: ops.gx + 0.55, gy: ops.gy + 1.1 },
+    { gx: ops.gx + 1.6,  gy: ops.gy + 1.1 },
+    { gx: ops.gx + 2.7,  gy: ops.gy + 1.1 },
+    { gx: ops.gx + 0.9,  gy: ops.gy + 2.5 },
+    { gx: ops.gx + 2.4,  gy: ops.gy + 2.5 },
+  ];
+
+  DDPS.forEach((ddp, i) => {
+    const p = miniPositions[i];
+    const sp = iso(p.gx, p.gy);
+    chars.appendChild(buildMini(sp.x, sp.y, {
+      id:          `ddp-${ddp.id}`,
+      bodyColor:   '#f5c800',
+      overallColor: ddp.overall,
+      accentColor: ddp.color,
+      glassColor:  ddp.glass,
+      label:       ddp.name,
+      labelColor:  ddp.color,
+      animClass:   'char-idle',
+      statusColor: '#00d4ff',
+    }));
+  });
+
+  // ── FUTURE ROOM SIGNS ──
+  for (const r of ROOMS.filter(r => !r.active)) {
+    const mid = iso(r.gx + RW / 2, r.gy + RD * 0.55, 24);
+    appendAll(lbls,
+      svgText(mid.x, mid.y, r.label, {
+        fill: r.accent === '#333' ? 'rgba(60,60,60,0.5)' : r.accent + '55',
+        'font-size': '8', 'text-anchor': 'middle', 'letter-spacing': '2.5',
+      }),
+      svgText(mid.x, mid.y + 13, 'COMING SOON', {
+        fill: 'rgba(255,255,255,0.1)',
+        'font-size': '6.5', 'text-anchor': 'middle', 'letter-spacing': '3',
+      }),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════
+//  DDP CHIPS
+// ══════════════════════════════════════════════
+function buildChips(scores) {
+  const row = document.getElementById('ddp-chips');
+  row.innerHTML = '';
+  for (const ddp of DDPS) {
+    const score = scores[ddp.id] || null;
+    const div = document.createElement('div');
+    div.className = `ddp-chip${score ? ' ok' : ''}`;
+    div.innerHTML = `
+      <div class="chip-dot" style="${score ? `background:${ddp.color};box-shadow:0 0 5px ${ddp.color}` : ''}"></div>
+      <span class="chip-name" style="color:${score ? ddp.color : 'rgba(255,255,255,0.2)'}">${ddp.name}</span>
+      <span class="chip-score">${score || '—'}</span>
+    `;
+    row.appendChild(div);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  LIVE DATA POLLING
+// ══════════════════════════════════════════════
+let bridgeOnline = false;
+const BRIDGE_URL = 'http://localhost:7432/activity';
+const STATUS_URL = 'status.json';
+
+function setCharClass(id, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('char-idle','char-working','char-waiting','char-offline');
+  el.classList.add(cls);
+  if (id === 'manager-minion') {
+    el.classList.toggle('mgr-glow', cls !== 'char-offline');
+  }
+}
+
+function setDdpGlowColor(ddpId, color) {
+  const el = document.getElementById(`ddp-${ddpId}`);
+  if (!el) return;
+  const dot = el.querySelector('circle:last-of-type');
+  if (dot) dot.setAttribute('fill', color);
+}
+
 async function pollBridge() {
   try {
-    const r = await fetch(BRIDGE + '/activity', {signal: AbortSignal.timeout(1500)});
+    const r = await fetch(BRIDGE_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error('not ok');
     const d = await r.json();
-    updateHQ(d);
-  } catch(e) {
-    setBridgeStatus(false);
+
+    bridgeOnline = true;
+    document.getElementById('bridge-dot').className = 'bridge-dot live';
+    document.getElementById('bridge-label').textContent = 'AGENT LIVE';
+    document.getElementById('agent-action-text').textContent = d.action || 'STANDBY';
+
+    if (d.status === 'active') {
+      const loc = (d.location || '').toLowerCase();
+      setCharClass('manager-minion', loc === 'ddp_room' ? 'char-working' : 'char-working');
+      const act = (d.action || '').toLowerCase();
+      DDPS.forEach(ddp => {
+        if (act.includes(ddp.id) || act.includes(ddp.name.toLowerCase())) {
+          setCharClass(`ddp-${ddp.id}`, 'char-working');
+          setDdpGlowColor(ddp.id, '#ffd700');
+        }
+      });
+    } else if (d.status === 'waiting') {
+      setCharClass('manager-minion', 'char-waiting');
+    } else {
+      setCharClass('manager-minion', 'char-idle');
+    }
+  } catch {
+    if (bridgeOnline) {
+      bridgeOnline = false;
+      document.getElementById('bridge-dot').className = 'bridge-dot';
+      document.getElementById('bridge-label').textContent = 'AGENT OFFLINE';
+      document.getElementById('agent-action-text').textContent = 'OFFLINE';
+      setCharClass('manager-minion', 'char-offline');
+    }
   }
 }
 
-function updateHQ(d) {
-  const status   = d.status   || 'idle';
-  const location = d.location || 'office';
-  const action   = d.action   || 'Standing by...';
-  const acts     = d.last_actions || [];
-
-  setBridgeStatus(true, status);
-  moveAgent(location, status);
-  updateAgentCard(status, action);
-  updateLog(acts);
-}
-
-function moveAgent(loc, status) {
-  // Clear all
-  document.querySelectorAll('.loc-dot').forEach(d => d.classList.remove('here'));
-  document.querySelectorAll('.room').forEach(r => r.classList.remove('agent-here'));
-
-  const dot  = document.getElementById('dot-' + loc);
-  const room = document.getElementById('room-' + loc);
-  if(dot)  dot.classList.add('here');
-  if(room) room.classList.add('agent-here');
-}
-
-function updateAgentCard(status, action) {
-  const char  = document.getElementById('managerChar');
-  const glow  = document.getElementById('managerGlow');
-  const badge = document.getElementById('agentBadge');
-  const badgeTx = document.getElementById('agentBadgeText');
-  const act   = document.getElementById('agentAction');
-
-  char.className = 'character-wrap';
-  badge.className = 'status-badge';
-  glow.className = 'char-glow';
-
-  if(status === 'active') {
-    char.classList.add('active-anim');
-    badge.classList.add('active');
-    badgeTx.textContent = '● ACTIVE';
-  } else if(status === 'waiting') {
-    char.classList.add('waiting-anim');
-    badge.classList.add('waiting');
-    badgeTx.textContent = '● AWAITING';
-    glow.classList.add('gold');
-  } else {
-    badgeTx.textContent = '● IDLE';
+async function pollStatus() {
+  try {
+    const r = await fetch(STATUS_URL + '?t=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    const scores = {};
+    for (const [rawKey, val] of Object.entries(d)) {
+      const key = rawKey.toLowerCase().replace(/[^a-z]/g, '');
+      const ddp = DDPS.find(x => {
+        const xk = x.id.replace(/[^a-z]/g, '');
+        const xn = x.name.toLowerCase().replace(/[^a-z]/g, '');
+        return xk === key || xn === key || key.includes(xk) || xk.includes(key);
+      });
+      if (ddp) {
+        const top = val.top5?.[0];
+        const scoreText = top
+          ? `${(top.model || top.name || '').split(' ').pop()} ${top.score || ''}`.trim()
+          : (val.status || '');
+        scores[ddp.id] = scoreText;
+        // Update dot color based on status
+        const dotColor = val.status === 'success' ? '#00d4ff'
+                       : val.status === 'running' ? '#ffd700'
+                       : '#333';
+        setDdpGlowColor(ddp.id, dotColor);
+        setCharClass(`ddp-${ddp.id}`, val.status === 'running' ? 'char-working' : 'char-idle');
+      }
+    }
+    buildChips(scores);
+  } catch {
+    buildChips({});
   }
-
-  act.textContent = action;
 }
 
-function updateLog(acts) {
-  if(!acts || !acts.length) return;
-  document.getElementById('actLog').innerHTML = acts.map(a =>
-    `<div class="act-item"><span class="act-time">${a.time}</span><span class="act-text">${a.text}</span></div>`
-  ).join('');
+// ══════════════════════════════════════════════
+//  CLOCK
+// ══════════════════════════════════════════════
+function tick() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('en-US', { hour12: false });
 }
 
-function setBridgeStatus(live, status) {
-  const led   = document.getElementById('bridgeLed');
-  const label = document.getElementById('bridgeLabel');
-  led.className = 'bridge-led';
-  if(!live) { label.textContent = 'AGENT OFFLINE'; return; }
-  if(status === 'active')  { led.classList.add('active');  label.textContent = 'AGENT ACTIVE'; }
-  else if(status === 'waiting') { led.classList.add('waiting'); label.textContent = 'AWAITING APPROVAL'; }
-  else { led.classList.add('online'); label.textContent = 'AGENT ONLINE'; }
-}
-
-loadStatus();
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+buildScene();
+buildChips({});
+tick();
+setInterval(tick, 1000);
+setInterval(pollBridge, 3000);
+setInterval(pollStatus, 30000);
 pollBridge();
-setInterval(pollBridge, POLL_MS);
-setInterval(loadStatus, 20000);
+pollStatus();
 </script>
-
 </body>
 </html>
