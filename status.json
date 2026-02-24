@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-23T21:35:50",
+  "last_updated": "2026-02-23T21:36:41",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -51,40 +51,40 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-02-23T10:58:41",
+      "last_run": "2026-02-23T21:36:41",
       "last_run_date": "2026-02-23",
       "status": "success",
-      "duration_seconds": 41,
+      "duration_seconds": 42,
       "sources_total": 4,
       "sources_hit": 8,
-      "models_qualified": 10,
+      "models_qualified": 11,
       "top_model": "Claude Sonnet 4.5",
-      "top_score": 63.15,
+      "top_score": 62.67,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Sonnet 4.5",
-          "score": 63.15
+          "score": 62.67
         },
         {
           "rank": 2,
           "name": "O3",
-          "score": 61.61
+          "score": 61.01
         },
         {
           "rank": 3,
           "name": "DeepSeek V3.1",
-          "score": 54.55
+          "score": 60.26
         },
         {
           "rank": 4,
-          "name": "GPT-4.1 Mini",
-          "score": 0.0
+          "name": "GPT-5.1",
+          "score": 60.01
         },
         {
           "rank": 5,
-          "name": "Gemini 3 Pro",
-          "score": 54.08
+          "name": "Grok 3 Beta",
+          "score": 0.0
         }
       ],
       "leaderboard_url": "/trfcast.html",
