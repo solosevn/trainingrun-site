@@ -631,6 +631,7 @@ def git_push(commit_msg: str) -> bool:
                 return True
             log.error(f"Commit failed:\n{r.stderr}")
             return False
+        subprocess.run(["git", "pull", "--rebase"], cwd=REPO_PATH, capture_output=True)
         subprocess.run(["git", "push"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         log.info("â Pushed to GitHub")
