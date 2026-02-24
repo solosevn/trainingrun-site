@@ -515,8 +515,15 @@ def request_approval(tool_name: str, args: dict) -> str:
     """Format an approval request message for Telegram."""
     global pending_approval
 
+    content = args.get('content', '')
+    preview = content[:120].replace('<', '&lt;').replace('>', '&gt;') + ('...' if len(content) > 120 else '')
     descriptions = {
-        "write_file": f"Edit file: <b>{args.get('path')}</b>\n{args.get('description', '')}",
+        "write_file": (
+            f"Write file: <b>{args.get('path')}</b>\n"
+            f"Size: <b>{len(content)} chars</b>\n"
+            f"Reason: {args.get('description', '—')}\n"
+            f"Preview: <code>{preview}</code>"
+        ),
         "git_push": f"Push to GitHub:\nFiles: {', '.join(args.get('files', []))}\nCommit: {args.get('message', '')}",
         "run_ddp": f"Run DDP: <b>{args.get('target', 'all')}</b>"
     }
@@ -572,7 +579,17 @@ def run():
     print("✅ Startup message sent to Telegram. Polling for messages...")
 
     conversation_history = []
-    offset = 0
+
+    # Skip all old Telegram messages on startup — only process NEW ones
+    # This prevents replaying previous conversations after a restart
+    print("[Startup] Skipping old Telegram messages...")
+    old_updates = tg_get_updates(0)
+    if old_updates:
+        offset = old_updates[-1]["update_id"] + 1
+        print(f"[Startup] Skipped {len(old_updates)} old messages. Offset: {offset}")
+    else:
+        offset = 0
+    print("[Startup] Ready for new messages.")
 
     while True:
         try:
