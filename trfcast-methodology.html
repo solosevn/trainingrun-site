@@ -393,6 +393,11 @@
             opacity: 0.8;
         }
 
+        /* TOC layout */
+        @media (min-width: 1101px) {
+            article.methodology-page { margin-left: 240px; }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             nav .container {
@@ -436,6 +441,19 @@
     </nav>
     <a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
 
+<aside class="toc-sidebar">
+    <div class="toc-header">On This Page</div>
+    <ul class="toc-list">
+        <li><a class="toc-link" href="#why-trfcast">Why TRFcast Exists</a></li>
+        <li><a class="toc-link" href="#five-pillars">The Five Pillars</a></li>
+        <li><a class="toc-link" href="#pillar-details">Pillar Details</a></li>
+        <li><a class="toc-link" href="#complete-formula">Complete Formula</a></li>
+        <li class="toc-divider"></li>
+        <li><a class="toc-link" href="#discovery-first">Discovery-First</a></li>
+        <li><a class="toc-link" href="#data-sources">Data Sources</a></li>
+    </ul>
+</aside>
+
     <!-- Main Content -->
     <article class="methodology-page">
         <div class="container">
@@ -448,13 +466,13 @@
             </div>
 
             <!-- Why TRFcast Exists -->
-            <section>
+            <section id="why-trfcast">
                 <h2>Why TRFcast Exists</h2>
                 <p>AI models are increasingly used to make financial decisions, predict market movements, and forecast real-world events. But which models actually predict the future accurately? Existing benchmarks test knowledge and reasoning &mdash; not forecasting ability. TRFcast fills this gap with 5 independent pillars drawn from 4 live forecasting and trading platforms. Every score is derived from real predictions with verifiable outcomes. No synthetic benchmarks. No self-reported metrics. Just real forecasting performance.</p>
             </section>
 
             <!-- The Five Pillars -->
-            <section>
+            <section id="five-pillars">
                 <h2>The Five Pillars</h2>
                 <p>TRFcast aggregates forecasting performance across five distinct dimensions, each measured on live platforms with real-world outcomes:</p>
 
@@ -497,7 +515,7 @@
             </section>
 
             <!-- Pillar Details -->
-            <section>
+            <section id="pillar-details">
                 <h2>Pillar Details</h2>
 
                 <div>
@@ -573,7 +591,7 @@
             </section>
 
             <!-- Complete Formula -->
-            <section>
+            <section id="complete-formula">
                 <h2>Complete Formula</h2>
                 <div class="formula-section">
                     <p>TRFcast combines all 9 sub-metrics into a single normalized score:</p>
@@ -591,13 +609,13 @@
             </section>
 
             <!-- Key Differentiator -->
-            <section>
+            <section id="discovery-first">
                 <h2>Key Differentiator: Discovery-First Approach</h2>
                 <p>TRFcast uses a discovery-first approach. Unlike benchmarks with fixed model lists, every daily update scans ALL models on ALL 4 source platforms. Any model from any company in the world can qualify if it appears across enough sources to produce scores in at least 3 of the 5 pillars. New entrants are discovered and added automatically.</p>
             </section>
 
             <!-- Data Sources -->
-            <section>
+            <section id="data-sources">
                 <h2>Data Sources</h2>
                 <p>All TRFcast scores are derived from these 4 independent, live platforms:</p>
 

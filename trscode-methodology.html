@@ -349,6 +349,11 @@
             font-weight: 700;
         }
 
+        /* TOC layout */
+        @media (min-width: 1101px) {
+            main { margin-left: 240px; }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             nav {
@@ -447,6 +452,19 @@
     </nav>
     <a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
 
+<aside class="toc-sidebar">
+    <div class="toc-header">On This Page</div>
+    <ul class="toc-list">
+        <li><a class="toc-link" href="#why-trscode">Why TRScode Exists</a></li>
+        <li><a class="toc-link" href="#five-pillars">The Five Pillars</a></li>
+        <li><a class="toc-link" href="#the-sources">The 8 Sources</a></li>
+        <li><a class="toc-link" href="#the-formula">The Formula</a></li>
+        <li class="toc-divider"></li>
+        <li><a class="toc-link" href="#why-these-sources">Why These Sources</a></li>
+        <li><a class="toc-link" href="#data-integrity">Data Integrity</a></li>
+    </ul>
+</aside>
+
     <!-- Main Content -->
     <main>
         <!-- Page Header -->
@@ -461,13 +479,13 @@
         </div>
 
         <!-- Why TRScode Exists Section -->
-        <section>
+        <section id="why-trscode">
             <h2>Why TRScode Exists</h2>
             <p>AI models are increasingly used to write, debug, and review code. But which models actually write the best code? Existing benchmarks test individual tasks — not comprehensive coding ability across multiple dimensions. TRScode fills this gap with 5 independent pillars drawn from 7 coding benchmark platforms. Every score is derived from real coding tasks with verifiable outcomes. No synthetic benchmarks. No self-reported metrics. Just real coding performance.</p>
         </section>
 
         <!-- The Five Pillars Section -->
-        <section>
+        <section id="five-pillars">
             <h2>The Five Pillars</h2>
             <div class="pillars-grid">
                 <div class="pillar-card">
@@ -504,7 +522,7 @@
         </section>
 
         <!-- The 8 Sources Section -->
-        <section>
+        <section id="the-sources">
             <h2>The 8 Sources</h2>
             <div class="sources-container">
                 <!-- Pillar 1 Sources -->
@@ -568,7 +586,7 @@
         </section>
 
         <!-- The Formula Section -->
-        <section>
+        <section id="the-formula">
             <h2>The Formula</h2>
             <div class="formula-box">
                 <div class="formula-box-content">
@@ -588,7 +606,7 @@
         </section>
 
         <!-- Why These 8 Sources Section -->
-        <section>
+        <section id="why-these-sources">
             <h2>Why These 8 Sources</h2>
             <ul class="reasons-list">
                 <li>7 independent organizations — no single org controls the score</li>
@@ -600,7 +618,7 @@
         </section>
 
         <!-- Data Integrity Section -->
-        <section>
+        <section id="data-integrity">
             <h2>Data Integrity</h2>
             <div class="integrity-box">
                 <p>Every daily update includes an SHA-256 checksum. The chart page verifies this checksum on load and displays a warning if data has been modified outside the official pipeline.</p>

@@ -951,3 +951,57 @@ footer {
   stroke-width: 2;
   fill: none;
 }
+
+/* ========================================
+   TOC Sidebar (On This Page)
+   ======================================== */
+.toc-sidebar {
+    position: fixed;
+    left: 20px;
+    top: 150px;
+    width: 200px;
+    background: rgba(10,15,26,0.95);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+.toc-header {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #00e5ff;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,229,255,0.2);
+}
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.toc-list li { margin-bottom: 4px; }
+.toc-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 8px 0;
+}
+.toc-link {
+    display: block;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+}
+.toc-link:hover { color: #fff; background: rgba(0,229,255,0.08); }
+.toc-link.active {
+    color: #00e5ff;
+    border-left-color: #00e5ff;
+    background: rgba(0,229,255,0.05);
+}
+@media (max-width: 1100px) {
+    .toc-sidebar { display: none; }
+}

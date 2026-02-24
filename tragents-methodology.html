@@ -340,6 +340,11 @@
             .meth-table { font-size: 12px; }
             .meth-table thead th, .meth-table tbody td { padding: 10px 10px; }
         }
+
+        /* TOC sidebar layout */
+        @media (min-width: 1101px) {
+            .methodology-container { margin-left: 240px; }
+        }
     </style>
 </head>
 <body>
@@ -354,6 +359,21 @@
 </nav>
 <a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
 
+<aside class="toc-sidebar">
+    <div class="toc-header">On This Page</div>
+    <ul class="toc-list">
+        <li><a class="toc-link" href="#what-is-tragents">What is TRAgents?</a></li>
+        <li><a class="toc-link" href="#the-formula">The Formula</a></li>
+        <li><a class="toc-link" href="#why-these-weights">Why These Weights</a></li>
+        <li><a class="toc-link" href="#all-sources">All 11 Sources</a></li>
+        <li class="toc-divider"></li>
+        <li><a class="toc-link" href="#qualification-rules">Qualification Rules</a></li>
+        <li><a class="toc-link" href="#data-integrity">Data Integrity</a></li>
+        <li><a class="toc-link" href="#other-benchmarks">Other Benchmarks</a></li>
+        <li><a class="toc-link" href="#worth-following">Worth Following</a></li>
+    </ul>
+</aside>
+
 <div class="methodology-container">
 
     <!-- âââ Hero âââ -->
@@ -365,7 +385,7 @@
     </div>
 
     <!-- âââ Section 1 â What is TRAgents? âââ -->
-    <div class="meth-section">
+    <div id="what-is-tragents" class="meth-section">
         <span class="meth-section-number">Section 1</span>
         <h2>What is TRAgents?</h2>
         <p>TRAgents is the interactive daily agentic AI benchmark tracker. It tracks composite TRAgents scores measuring how well AI models perform as autonomous agents across real-world tasks, updated daily.</p>
@@ -375,7 +395,7 @@
     <div class="meth-divider"></div>
 
     <!-- âââ Section 2 â The TRAgents Formula âââ -->
-    <div class="meth-section">
+    <div id="the-formula" class="meth-section">
         <span class="meth-section-number">Section 2</span>
         <h2>The TRAgents Formula</h2>
 
@@ -446,7 +466,7 @@
     <div class="meth-divider"></div>
 
     <!-- âââ Section 3 â Why These Weights? âââ -->
-    <div class="meth-section">
+    <div id="why-these-weights" class="meth-section">
         <span class="meth-section-number">Section 3</span>
         <h2>Why These Weights?</h2>
 
@@ -502,7 +522,7 @@
     <div class="meth-divider"></div>
 
     <!-- âââ Section 4 â All 11 Verified Sources âââ -->
-    <div class="meth-section">
+    <div id="all-sources" class="meth-section">
         <span class="meth-section-number">Section 4</span>
         <h2>All 11 Verified Sources</h2>
 
@@ -603,7 +623,7 @@
     <div class="meth-divider"></div>
 
     <!-- âââ Section 5 â Qualification Rules âââ -->
-    <div class="meth-section">
+    <div id="qualification-rules" class="meth-section">
         <span class="meth-section-number">Section 5</span>
         <h2>Qualification Rules</h2>
 
@@ -617,7 +637,7 @@
     <div class="meth-divider"></div>
 
     <!-- âââ Section 6 â Data Integrity âââ -->
-    <div class="meth-section">
+    <div id="data-integrity" class="meth-section">
         <span class="meth-section-number">Section 6</span>
         <h2>Data Integrity</h2>
 
@@ -631,7 +651,7 @@
     <div class="meth-divider"></div>
 
     <!-- âââ Section 7 â Relationship to Other Benchmarks âââ -->
-    <div class="meth-section">
+    <div id="other-benchmarks" class="meth-section">
         <span class="meth-section-number">Section 7</span>
         <h2>Relationship to Other Training Run Benchmarks</h2>
 
@@ -679,7 +699,7 @@
         <div class="meth-divider"></div>
 
     <!-- Worth Following -->
-    <div class="meth-section">
+    <div id="worth-following" class="meth-section">
         <span class="meth-section-number">Worth Following</span>
         <h2>Emerging Resources Worth Watching</h2>
 

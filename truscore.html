@@ -20,7 +20,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-  </head>
+    <style>
+    @media (min-width: 1101px) {
+      article.methodology-page { margin-left: 240px; }
+    }
+  </style>
+</head>
 <body>
 <script src="nav-v2.js"></script>
 
@@ -34,6 +39,21 @@
     </nav>
     <a href="#" onclick="history.back(); return false;" class="back-btn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</a>
 
+<aside class="toc-sidebar">
+    <div class="toc-header">On This Page</div>
+    <ul class="toc-list">
+        <li><a class="toc-link" href="#why-truscore">Why TRUscore Exists</a></li>
+        <li><a class="toc-link" href="#four-pillars">The Four Pillars</a></li>
+        <li class="toc-divider"></li>
+        <li><a class="toc-link" href="#factuality">Factuality (40%)</a></li>
+        <li><a class="toc-link" href="#neutrality">Neutrality (30%)</a></li>
+        <li><a class="toc-link" href="#hallucination">Hallucination (20%)</a></li>
+        <li><a class="toc-link" href="#calibration">Calibration (10%)</a></li>
+        <li class="toc-divider"></li>
+        <li><a class="toc-link" href="#complete-formula">Complete Formula</a></li>
+    </ul>
+</aside>
+
     <article class="methodology-page">
         <header class="page-header">
             <h1><span style="color:#00d4ff">TRU</span><span style="color:#ffffff">score</span> <span style="color:#ffffff">Methodology</span></h1>
@@ -45,7 +65,7 @@
             <p class="last-updated">Last Updated: February 9, 2026</p>
         </header>
 
-        <section class="method-section">
+        <section id="why-truscore" class="method-section">
             <h2>Why TRUscore Exists</h2>
             <div class="summary-box">
                 <p>
@@ -59,7 +79,7 @@
             </div>
         </section>
 
-        <section class="method-section">
+        <section id="four-pillars" class="method-section">
             <h2>The Four Pillars</h2>
             <div class="method-content">
                 <div class="formula-display">
@@ -99,7 +119,7 @@
             </div>
         </section>
 
-        <section class="method-section">
+        <section id="factuality" class="method-section">
             <h2>Pillar 1: Factuality (40%)</h2>
             <div class="method-content">
                 <div class="source-citation">
@@ -124,7 +144,7 @@
             </div>
         </section>
 
-        <section class="method-section">
+        <section id="neutrality" class="method-section">
             <h2>Pillar 2: Neutrality (30%)</h2>
             <div class="method-content">
                 <div class="source-citation">
@@ -151,7 +171,7 @@
             </div>
         </section>
 
-        <section class="method-section">
+        <section id="hallucination" class="method-section">
             <h2>Pillar 3: Hallucination (20%)</h2>
             <div class="method-content">
                 <div class="source-citation">
@@ -176,7 +196,7 @@
             </div>
         </section>
 
-        <section class="method-section">
+        <section id="calibration" class="method-section">
             <h2>Pillar 4: Calibration (10%)</h2>
             <div class="method-content">
                 <div class="source-citation">
@@ -193,7 +213,7 @@
             </div>
         </section>
 
-        <section class="method-section">
+        <section id="complete-formula" class="method-section">
             <h2>Complete TRUscore Formula</h2>
             <div class="method-content">
                 <div class="formula-display">
