@@ -568,25 +568,16 @@ def run():
                             tg_send(approval_msg)
                             break  # Wait for approval before doing anything else
                         else:
-                            # Safe tool — execute immediately
+                            # Safe tool — execute immediately and send result directly
                             result = execute_tool(tool_name, tool_args)
                             print(f"[Tool result] {result[:200]}")
 
-                            # Feed result back to model
-                            conversation_history.append({"role": "assistant", "content": f"[Called {tool_name}]"})
-                            conversation_history.append({"role": "user", "content": f"[Tool result: {tool_name}]\n{result}"})
+                            # Send tool result straight to Telegram — no second LLM call needed
+                            tg_send(result[:3000])
 
-                            # Get final response from model with the tool result
-                            messages = [
-                                {"role": "system", "content": build_system_prompt()}
-                            ] + conversation_history[-10:]
+                            # Keep conversation history updated
+                            conversation_history.append({"role": "assistant", "content": f"[Called {tool_name}] {result[:500]}"})
 
-                            response2 = ollama_chat(messages)
-                            final_msg = response2.get("message", {}).get("content", result)
-
-                            if final_msg:
-                                tg_send(final_msg[:3000])
-                                conversation_history.append({"role": "assistant", "content": final_msg})
 
                 elif assistant_content:
                     # Plain text response
