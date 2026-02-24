@@ -502,6 +502,15 @@ function renderCard(id, agent) {
                   : agent.status === "running"  ? "RUNNING"
                   : "OFF";
 
+  const brandedNames = {
+    trsbench: `<span style="color:#00d4ff">TRS</span><span style="color:#ffffff">bench DDP</span>`,
+    trscode:  `<span style="color:#00d4ff">TRS</span><span style="color:#ffffff">code DDP</span>`,
+    truscore: `<span style="color:#00d4ff">TRU</span><span style="color:#ffffff">score DDP</span>`,
+    trfcast:  `<span style="color:#00d4ff">TRF</span><span style="color:#ffffff">cast DDP</span>`,
+    tragents: `<span style="color:#00d4ff">TR</span><span style="color:#ff3333">Agents</span><span style="color:#ffffff"> DDP</span>`,
+  };
+  const brandedName = brandedNames[id] || agent.name;
+
   let top5HTML = "";
   if (agent.top5 && agent.top5.length > 0) {
     top5HTML = `
@@ -537,7 +546,7 @@ function renderCard(id, agent) {
       <div class="card-header">
         <div class="agent-icon ${iconClass}">${agent.emoji}</div>
         <div class="card-info">
-          <div class="card-name">${agent.name}</div>
+          <div class="card-name">${brandedName}</div>
           <div class="card-label">${agent.label}</div>
         </div>
         <div class="card-right">
