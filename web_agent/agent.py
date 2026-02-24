@@ -557,6 +557,39 @@ def is_rejection(text: str) -> bool:
 
 
 # ─────────────────────────────────────────────
+# KEYWORD INTERCEPT — handle common commands
+# directly in Python, never send to Ollama.
+# This prevents the model hallucinating wrong tools.
+# ─────────────────────────────────────────────
+
+def keyword_intercept(text: str):
+    """
+    Check if text matches a known command pattern.
+    Returns (tool_name, args) if matched, or None if Ollama should handle it.
+    """
+    t = text.strip().lower()
+
+    # STATUS
+    if t in ("status", "check status", "ddp status", "how are the ddps",
+             "what's the status", "whats the status", "show status", "s"):
+        return ("check_status", {})
+
+    # LOG
+    if any(k in t for k in ("log", "show log", "check log", "ddp log", "what happened")):
+        return ("read_log", {})
+
+    # LIST FILES
+    if any(k in t for k in ("list files", "what files", "show files", "ls")):
+        return ("list_files", {})
+
+    # READ BRAIN
+    if any(k in t for k in ("brain", "show brain", "read brain", "memory")):
+        return ("read_file", {"path": "web_agent/brain.md"})
+
+    return None  # Let Ollama handle it
+
+
+# ─────────────────────────────────────────────
 # MAIN AGENT LOOP
 # ─────────────────────────────────────────────
 
@@ -646,16 +679,25 @@ def run():
                         tg_send("⚠️ Still waiting on approval. Reply <b>YES</b> or <b>NO</b>.")
                         continue
 
-                # ── NORMAL MESSAGE HANDLING ──
-                # Add user message to conversation
+                # ── KEYWORD INTERCEPT — handle common commands without Ollama ──
+                intercept = keyword_intercept(text)
+                if intercept:
+                    tool_name, tool_args = intercept
+                    print(f"[Intercept] {tool_name} matched for: '{text}'")
+                    location = TOOL_ROOM_MAP.get(tool_name, "office")
+                    write_activity(f"Running: {tool_name}", location=location, status="active")
+                    result = execute_tool(tool_name, tool_args)
+                    write_activity(f"Done: {tool_name}", location="office", status="idle")
+                    tg_send(result[:3000])
+                    continue  # Skip Ollama entirely
+
+                # ── NORMAL MESSAGE HANDLING — send to Ollama ──
                 conversation_history.append({"role": "user", "content": text})
 
-                # Build full message list with system prompt
                 messages = [
                     {"role": "system", "content": build_system_prompt()}
-                ] + conversation_history[-10:]  # Keep last 10 turns in context
+                ] + conversation_history[-10:]
 
-                # Call Ollama
                 tg_send("⏳ Thinking...")
                 response = ollama_chat(messages)
 
