@@ -23,7 +23,9 @@ import subprocess
 import requests
 import datetime
 import re
+import threading
 from pathlib import Path
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # ─────────────────────────────────────────────
 # CONFIG — edit these or set as env vars
@@ -36,6 +38,83 @@ OLLAMA_BASE_URL  = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 REPO_PATH        = os.getenv("TR_REPO_PATH", str(Path.home() / "trainingrun-site"))
 BRAIN_FILE       = os.path.join(os.path.dirname(__file__), "brain.md")
 MEMORY_FILE      = os.path.join(os.path.dirname(__file__), "memory_log.jsonl")
+ACTIVITY_FILE    = os.path.join(REPO_PATH, "agent_activity.json")
+BRIDGE_PORT      = 7432
+
+# ─────────────────────────────────────────────
+# BRIDGE SERVER — serves agent_activity.json
+# to hq.html running locally on David's Mac
+# ─────────────────────────────────────────────
+
+# Maps tool names → HQ room location
+TOOL_ROOM_MAP = {
+    "check_status":  "ddp_room",
+    "run_ddp":       "ddp_room",
+    "read_file":     "office",
+    "write_file":    "office",
+    "git_push":      "office",
+    "list_files":    "office",
+    "remember":      "office",
+    "read_log":      "ddp_room",
+}
+
+def write_activity(action: str, location: str = "office", status: str = "active"):
+    """Write current agent state to agent_activity.json for the HQ bridge."""
+    try:
+        with open(ACTIVITY_FILE) as f:
+            existing = json.load(f)
+        last_actions = existing.get("last_actions", [])
+    except Exception:
+        last_actions = []
+
+    timestamp = datetime.datetime.now().strftime("%-I:%M %p")
+    last_actions.insert(0, {"time": timestamp, "text": action})
+    last_actions = last_actions[:10]
+
+    activity = {
+        "status":       status,
+        "agent":        "tr_manager",
+        "location":     location,
+        "action":       action,
+        "last_actions": last_actions,
+        "last_updated": datetime.datetime.now().isoformat()
+    }
+    try:
+        with open(ACTIVITY_FILE, "w") as f:
+            json.dump(activity, f, indent=2)
+    except Exception as e:
+        print(f"[Bridge] Failed to write activity: {e}")
+
+
+class BridgeHandler(BaseHTTPRequestHandler):
+    """Serves agent_activity.json to hq.html with CORS headers."""
+    def do_GET(self):
+        try:
+            with open(ACTIVITY_FILE) as f:
+                data = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(data.encode())
+        except Exception:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, format, *args):
+        pass  # Suppress server logs
+
+
+def start_bridge():
+    """Start the local bridge server in a background thread."""
+    try:
+        server = HTTPServer(("localhost", BRIDGE_PORT), BridgeHandler)
+        t = threading.Thread(target=server.serve_forever, daemon=True)
+        t.start()
+        print(f"[Bridge] Running at http://localhost:{BRIDGE_PORT}")
+    except Exception as e:
+        print(f"[Bridge] Could not start server: {e}")
+
 
 # ─────────────────────────────────────────────
 # TELEGRAM HELPERS
@@ -482,6 +561,12 @@ def run():
         print(f"   Set TR_REPO_PATH env var if your repo is in a different location.")
         sys.exit(1)
 
+    # Start the HQ bridge server
+    start_bridge()
+
+    # Set initial idle state
+    write_activity("Online and ready", location="office", status="idle")
+
     # Announce startup
     tg_send("🟢 <b>TR Manager online.</b>\nReady for your instructions. Type <code>status</code> to check the DDPs.")
     print("✅ Startup message sent to Telegram. Polling for messages...")
@@ -564,12 +649,17 @@ def run():
 
                         if tool_name in PROTECTED_TOOLS:
                             # Need approval — send request and pause
+                            location = TOOL_ROOM_MAP.get(tool_name, "office")
+                            write_activity(f"Waiting for approval: {tool_name}", location=location, status="waiting")
                             approval_msg = request_approval(tool_name, tool_args)
                             tg_send(approval_msg)
                             break  # Wait for approval before doing anything else
                         else:
                             # Safe tool — execute immediately and send result directly
+                            location = TOOL_ROOM_MAP.get(tool_name, "office")
+                            write_activity(f"Running: {tool_name}", location=location, status="active")
                             result = execute_tool(tool_name, tool_args)
+                            write_activity(f"Done: {tool_name}", location="office", status="idle")
                             print(f"[Tool result] {result[:200]}")
 
                             # Send tool result straight to Telegram — no second LLM call needed

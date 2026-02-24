@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainingRun HQ</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #060b14;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.hq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid rgba(0,212,255,0.12);
+  background: rgba(6,11,20,0.95);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hq-title {
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00d4ff;
+}
+
+.hq-title span { color: rgba(255,255,255,0.4); }
+
+.bridge-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+}
+
+.bridge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #333;
+  transition: all 0.3s;
+}
+
+.bridge-dot.live { background: #00d4ff; box-shadow: 0 0 8px #00d4ff; animation: pulse-dot 2s infinite; }
+.bridge-dot.idle { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
+.bridge-dot.waiting { background: #ffaa00; box-shadow: 0 0 8px #ffaa00; animation: pulse-dot 0.8s infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── MAIN LAYOUT ── */
+.hq-world {
+  padding: 40px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Isometric-style floor grid background */
+.hq-floor {
+  position: relative;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid rgba(0,212,255,0.08);
+}
+
+/* ── ROOM GRID ── */
+.room-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+/* ── ROOM BASE ── */
+.room {
+  position: relative;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(145deg, #0c1525 0%, #080f1d 100%);
+  transition: all 0.4s ease;
+  overflow: hidden;
+  /* Fake isometric shadow */
+  box-shadow:
+    4px 4px 0 rgba(0,0,0,0.4),
+    8px 8px 0 rgba(0,0,0,0.2),
+    0 0 0 1px rgba(0,0,0,0.3);
+}
+
+/* Room bottom/left accent lines — isometric wall feel */
+.room::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 3px;
+  background: rgba(0,212,255,0.06);
+  border-radius: 0 0 12px 12px;
+}
+
+.room::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: rgba(0,212,255,0.06);
+  border-radius: 12px 0 0 12px;
+}
+
+/* ── ACTIVE ROOM (agent is here) ── */
+.room.agent-here {
+  border-color: rgba(0,212,255,0.35);
+  background: linear-gradient(145deg, #0d1f35 0%, #0a1525 100%);
+  box-shadow:
+    4px 4px 0 rgba(0,212,255,0.1),
+    8px 8px 0 rgba(0,0,0,0.2),
+    0 0 30px rgba(0,212,255,0.08),
+    inset 0 0 40px rgba(0,212,255,0.03);
+}
+
+.room.agent-here::after {
+  background: linear-gradient(to bottom, #00d4ff, rgba(0,212,255,0.2));
+}
+
+/* ── FUTURE ROOMS ── */
+.room.future {
+  opacity: 0.28;
+  filter: grayscale(0.8);
+  cursor: default;
+}
+
+.room.future:hover { opacity: 0.35; }
+
+/* ── ROOM LABEL ── */
+.room-label {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(0,212,255,0.5);
+  margin-bottom: 12px;
+}
+
+.room-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.room-name .accent { color: #00d4ff; }
+.room-name .red { color: #ff3333; }
+
+.room-subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* ── TR MANAGER ROOM (top-left, spans 1 col, 2 rows) ── */
+.room.manager-room {
+  grid-row: 1 / 3;
+  grid-column: 1 / 2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── AGENT CHARACTER ── */
+.agent-character {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20px 0;
+}
+
+.agent-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #00d4ff, #0066aa);
+  border: 2px solid rgba(0,212,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 16px;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.agent-avatar.pulse-idle {
+  animation: pulse-idle 3s ease-in-out infinite;
+}
+
+.agent-avatar.pulse-active {
+  animation: pulse-active 1s ease-in-out infinite;
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0,212,255,0.4);
+}
+
+.agent-avatar.pulse-waiting {
+  animation: pulse-waiting 0.7s ease-in-out infinite;
+  border-color: #ffaa00;
+  background: radial-gradient(circle at 35% 35%, #ffaa00, #aa6600);
+  box-shadow: 0 0 20px rgba(255,170,0,0.4);
+}
+
+@keyframes pulse-idle {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,212,255,0.2); transform: scale(1); }
+  50% { box-shadow: 0 0 20px rgba(0,212,255,0.35); transform: scale(1.03); }
+}
+
+@keyframes pulse-active {
+  0%, 100% { box-shadow: 0 0 15px rgba(0,212,255,0.5); transform: scale(1); }
+  50% { box-shadow: 0 0 35px rgba(0,212,255,0.8); transform: scale(1.06); }
+}
+
+@keyframes pulse-waiting {
+  0%, 100% { box-shadow: 0 0 10px rgba(255,170,0,0.4); }
+  50% { box-shadow: 0 0 30px rgba(255,170,0,0.8); }
+}
+
+.agent-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.agent-role {
+  font-size: 10px;
+  color: rgba(0,212,255,0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.agent-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: 1px solid rgba(0,212,255,0.3);
+  color: #00d4ff;
+  background: rgba(0,212,255,0.06);
+  transition: all 0.3s;
+}
+
+.agent-status-pill.active {
+  border-color: rgba(0,212,255,0.5);
+  color: #00d4ff;
+  background: rgba(0,212,255,0.1);
+}
+
+.agent-status-pill.waiting {
+  border-color: rgba(255,170,0,0.5);
+  color: #ffaa00;
+  background: rgba(255,170,0,0.08);
+}
+
+.agent-current-action {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  margin-top: 12px;
+  padding: 0 12px;
+  min-height: 32px;
+  line-height: 1.4;
+}
+
+/* ── DDP ROOM ── */
+.room.ddp-room {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.ddp-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ddp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: all 0.3s;
+}
+
+.ddp-row.running {
+  border-color: rgba(0,212,255,0.3);
+  background: rgba(0,212,255,0.05);
+}
+
+.ddp-row.success { border-color: rgba(0,255,136,0.15); }
+.ddp-row.failed { border-color: rgba(255,51,51,0.25); }
+
+.ddp-name { font-size: 12px; color: rgba(255,255,255,0.7); }
+.ddp-name .cyan { color: #00d4ff; }
+.ddp-name .red { color: #ff3333; }
+
+.ddp-meta { display: flex; align-items: center; gap: 10px; }
+.ddp-score { font-size: 11px; color: rgba(255,255,255,0.35); }
+.ddp-icon { font-size: 13px; }
+
+/* ── FUTURE ROOM CONTENT ── */
+.future-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 100px;
+  gap: 10px;
+}
+
+.future-icon { font-size: 28px; opacity: 0.4; }
+
+.future-tag {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+/* ── ARENA ROOM ── */
+.room.arena-room {
+  grid-column: 3 / 4;
+  grid-row: 1 / 3;
+}
+
+/* ── ACTIVITY FEED ── */
+.activity-strip {
+  margin-top: 24px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(0,212,255,0.08);
+  padding: 16px 20px;
+}
+
+.activity-title {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(0,212,255,0.4);
+  margin-bottom: 12px;
+}
+
+.activity-log {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.activity-item:nth-child(n+4) { opacity: 0.4; }
+.activity-item:nth-child(n+7) { opacity: 0.15; }
+
+.activity-time { color: rgba(0,212,255,0.5); min-width: 60px; }
+.activity-text { color: rgba(255,255,255,0.6); }
+
+/* ── NO BRIDGE BANNER ── */
+.no-bridge-banner {
+  text-align: center;
+  padding: 10px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+/* ── LOCATION INDICATOR DOTS IN ROOMS ── */
+.location-dot {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.4s ease;
+}
+
+.location-dot.here {
+  background: #00d4ff;
+  box-shadow: 0 0 10px #00d4ff;
+  animation: pulse-dot 1.5s infinite;
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hq-header">
+  <div class="hq-title">TRAININGRUN <span>// </span>HQ</div>
+  <div class="bridge-status">
+    <div class="bridge-dot" id="bridgeDot"></div>
+    <span id="bridgeLabel">CONNECTING...</span>
+  </div>
+</div>
+
+<!-- WORLD -->
+<div class="hq-world">
+
+  <div class="no-bridge-banner" id="noBridgeBanner">
+    ⚠ Agent offline — start agent.py to see live activity
+  </div>
+
+  <div class="hq-floor">
+    <div class="room-grid">
+
+      <!-- ── ROOM 1: TR MANAGER OFFICE ── -->
+      <div class="room manager-room" id="room-office">
+        <div class="location-dot" id="dot-office"></div>
+        <div class="room-label">Room 01 · Manager</div>
+        <div class="room-name"><span class="accent">TR</span> Manager's Office</div>
+        <div class="room-subtitle">Website Manager · Agent v1</div>
+
+        <div class="agent-character">
+          <div class="agent-avatar pulse-idle" id="agentAvatar">🤖</div>
+          <div class="agent-name">TR Manager</div>
+          <div class="agent-role">Website Manager</div>
+          <div class="agent-status-pill" id="agentPill">
+            <span id="agentPillDot">●</span>
+            <span id="agentPillText">IDLE</span>
+          </div>
+          <div class="agent-current-action" id="agentAction">Waiting for instructions...</div>
+        </div>
+      </div>
+
+      <!-- ── ROOM 2: DDP OPERATIONS ── -->
+      <div class="room ddp-room" id="room-ddp_room">
+        <div class="location-dot" id="dot-ddp_room"></div>
+        <div class="room-label">Room 02 · Operations</div>
+        <div class="room-name"><span class="accent">DDP</span> Operations</div>
+        <div class="room-subtitle">5 Daily Data Pipelines</div>
+
+        <div class="ddp-indicators" id="ddpList">
+          <!-- Populated by JS from status.json -->
+          <div class="ddp-row">
+            <span class="ddp-name"><span class="cyan">TRS</span>bench</span>
+            <div class="ddp-meta"><span class="ddp-score">—</span><span class="ddp-icon">🏆</span></div>
+          </div>
+          <div class="ddp-row">
+            <span class="ddp-name"><span class="cyan">TRS</span>code</span>
+            <div class="ddp-meta"><span class="ddp-score">—</span><span class="ddp-icon">💻</span></div>
+          </div>
+          <div class="ddp-row">
+            <span class="ddp-name"><span class="cyan">TRU</span>score</span>
+            <div class="ddp-meta"><span class="ddp-score">—</span><span class="ddp-icon">🎯</span></div>
+          </div>
+          <div class="ddp-row">
+            <span class="ddp-name"><span class="cyan">TRF</span>cast</span>
+            <div class="ddp-meta"><span class="ddp-score">—</span><span class="ddp-icon">🔮</span></div>
+          </div>
+          <div class="ddp-row">
+            <span class="ddp-name"><span class="cyan">TR</span><span class="red">Agents</span></span>
+            <div class="ddp-meta"><span class="ddp-score">—</span><span class="ddp-icon">🤖</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ROOM 3: ARENA (future) ── -->
+      <div class="room arena-room future" id="room-arena">
+        <div class="room-label">Room 03 · Future</div>
+        <div class="room-name"><span class="accent">TRS</span> Arena</div>
+        <div class="room-subtitle">Verified Human Truth Leaderboard</div>
+        <div class="future-content">
+          <div class="future-icon">⚔️</div>
+          <div class="future-tag">Coming Soon</div>
+        </div>
+      </div>
+
+      <!-- ── ROOM 4: CONTENT STUDIO (future) ── -->
+      <div class="room future" id="room-content">
+        <div class="room-label">Room 04 · Future</div>
+        <div class="room-name">Content Studio</div>
+        <div class="room-subtitle">YouTube · Shorts · Episodes</div>
+        <div class="future-content">
+          <div class="future-icon">🎬</div>
+          <div class="future-tag">Coming Soon</div>
+        </div>
+      </div>
+
+      <!-- ── ROOM 5: SOCIAL COMMAND (future) ── -->
+      <div class="room future" id="room-social">
+        <div class="room-label">Room 05 · Future</div>
+        <div class="room-name">Social Command</div>
+        <div class="room-subtitle">X · Distribution · Flywheel</div>
+        <div class="future-content">
+          <div class="future-icon">📱</div>
+          <div class="future-tag">Coming Soon</div>
+        </div>
+      </div>
+
+      <!-- ── ROOM 6: RESERVED ── -->
+      <div class="room future" id="room-reserved">
+        <div class="room-label">Room 06 · Future</div>
+        <div class="room-name">Reserved</div>
+        <div class="room-subtitle">Next Agent</div>
+        <div class="future-content">
+          <div class="future-icon">🔮</div>
+          <div class="future-tag">Unlocked Later</div>
+        </div>
+      </div>
+
+    </div><!-- /room-grid -->
+  </div><!-- /hq-floor -->
+
+  <!-- ACTIVITY FEED -->
+  <div class="activity-strip">
+    <div class="activity-title">Activity Log — TR Manager</div>
+    <div class="activity-log" id="activityLog">
+      <div class="activity-item">
+        <span class="activity-time">—</span>
+        <span class="activity-text">Waiting for agent...</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /hq-world -->
+
+<script>
+const BRIDGE_URL  = 'http://localhost:7432';
+const STATUS_URL  = '/status.json?t=' + Date.now();
+const POLL_MS     = 2000;
+
+let currentLocation = 'office';
+let bridgeLive = false;
+
+// ── LOAD STATUS.JSON ──
+async function loadStatus() {
+  try {
+    const r = await fetch('/status.json?t=' + Date.now());
+    const d = await r.json();
+    const agents = d.agents || {};
+
+    const keyMap = {
+      trsbench: { name: '<span class="cyan">TRS</span>bench', emoji: '🏆' },
+      trscode:  { name: '<span class="cyan">TRS</span>code',  emoji: '💻' },
+      truscore: { name: '<span class="cyan">TRU</span>score', emoji: '🎯' },
+      trfcast:  { name: '<span class="cyan">TRF</span>cast',  emoji: '🔮' },
+      tragents: { name: '<span class="cyan">TR</span><span class="red">Agents</span>', emoji: '🤖' }
+    };
+
+    const list = document.getElementById('ddpList');
+    list.innerHTML = '';
+
+    for (const [key, meta] of Object.entries(keyMap)) {
+      const a = agents[key] || {};
+      const status = a.status || 'unknown';
+      const score  = a.top_score != null ? a.top_score.toFixed(1) : '—';
+      const cls    = status === 'success' ? 'success' : (status === 'failed' ? 'failed' : '');
+      const icon   = status === 'success' ? '✅' : (status === 'failed' ? '❌' : '⚫');
+
+      list.innerHTML += `
+        <div class="ddp-row ${cls}">
+          <span class="ddp-name">${meta.name}</span>
+          <div class="ddp-meta">
+            <span class="ddp-score">${score}</span>
+            <span class="ddp-icon">${icon}</span>
+          </div>
+        </div>`;
+    }
+  } catch(e) {
+    console.log('[HQ] Could not load status.json:', e.message);
+  }
+}
+
+// ── POLL BRIDGE ──
+async function pollBridge() {
+  try {
+    const r = await fetch(BRIDGE_URL + '/activity', { signal: AbortSignal.timeout(1500) });
+    const d = await r.json();
+    bridgeLive = true;
+    updateHQ(d);
+  } catch(e) {
+    bridgeLive = false;
+    updateBridgeUI(false);
+    document.getElementById('noBridgeBanner').style.display = 'block';
+  }
+}
+
+// ── UPDATE HQ VISUALS ──
+function updateHQ(data) {
+  const status   = data.status   || 'idle';
+  const location = data.location || 'office';
+  const action   = data.action   || 'Standing by...';
+  const lastActs = data.last_actions || [];
+
+  updateBridgeUI(true, status);
+  moveAgentTo(location, status);
+  updateAgentCard(status, action);
+  updateActivityLog(lastActs);
+
+  document.getElementById('noBridgeBanner').style.display = 'none';
+}
+
+// ── AGENT CARD ──
+function updateAgentCard(status, action) {
+  const avatar = document.getElementById('agentAvatar');
+  const pill   = document.getElementById('agentPill');
+  const pillTx = document.getElementById('agentPillText');
+  const act    = document.getElementById('agentAction');
+
+  avatar.className = 'agent-avatar';
+  pill.className   = 'agent-status-pill';
+
+  if (status === 'active') {
+    avatar.classList.add('pulse-active');
+    pill.classList.add('active');
+    pillTx.textContent = 'ACTIVE';
+  } else if (status === 'waiting') {
+    avatar.classList.add('pulse-waiting');
+    pill.classList.add('waiting');
+    pillTx.textContent = 'WAITING';
+  } else {
+    avatar.classList.add('pulse-idle');
+    pillTx.textContent = 'IDLE';
+  }
+
+  act.textContent = action;
+}
+
+// ── MOVE AGENT ──
+function moveAgentTo(location, status) {
+  // Clear all location dots
+  document.querySelectorAll('.location-dot').forEach(d => d.classList.remove('here'));
+  document.querySelectorAll('.room').forEach(r => r.classList.remove('agent-here'));
+
+  const dotEl  = document.getElementById('dot-' + location);
+  const roomEl = document.getElementById('room-' + location);
+
+  if (dotEl)  dotEl.classList.add('here');
+  if (roomEl) roomEl.classList.add('agent-here');
+
+  currentLocation = location;
+}
+
+// ── ACTIVITY LOG ──
+function updateActivityLog(actions) {
+  const log = document.getElementById('activityLog');
+  if (!actions || actions.length === 0) return;
+
+  log.innerHTML = actions.map(a =>
+    `<div class="activity-item">
+      <span class="activity-time">${a.time}</span>
+      <span class="activity-text">${a.text}</span>
+    </div>`
+  ).join('');
+}
+
+// ── BRIDGE STATUS UI ──
+function updateBridgeUI(live, status) {
+  const dot   = document.getElementById('bridgeDot');
+  const label = document.getElementById('bridgeLabel');
+
+  dot.className = 'bridge-dot';
+
+  if (!live) {
+    dot.classList.add('');
+    label.textContent = 'AGENT OFFLINE';
+    return;
+  }
+
+  if (status === 'active') {
+    dot.classList.add('live');
+    label.textContent = 'AGENT ACTIVE';
+  } else if (status === 'waiting') {
+    dot.classList.add('waiting');
+    label.textContent = 'AWAITING APPROVAL';
+  } else {
+    dot.classList.add('idle');
+    label.textContent = 'AGENT ONLINE';
+  }
+}
+
+// ── INIT ──
+loadStatus();
+pollBridge();
+setInterval(pollBridge, POLL_MS);
+setInterval(loadStatus, 30000);
+</script>
+</body>
+</html>
