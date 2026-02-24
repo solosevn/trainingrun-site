@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "90e50ab373df1676f0d542da29eef7737a09088b7d1d1438c7292eecae3aa8a5",
+  "checksum": "c312cde5b2ac2c179d8b5ceb9db796146e82052a32f49fe367b1206e4fe46906",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -76,7 +76,7 @@
     {
       "name": "Claude Opus 4.6",
       "company": "Anthropic",
-      "rank": 2,
+      "rank": 1,
       "scores": [
         null,
         null,
@@ -220,7 +220,7 @@
         62.77,
         62.82,
         62.82,
-        61.2
+        62.61
       ],
       "pillar_scores": {
         "issue_resolution": 89.3,
@@ -235,7 +235,7 @@
         "swe_rebench_pass1": 48.5,
         "livecodebench_pct": 73.1,
         "bigcodebench_pct": null,
-        "terminalbench_hard_pct": 35.5,
+        "terminalbench_hard_pct": 42.7,
         "swebench_pro_pct": 42.7,
         "scicode_pct": null,
         "arena_code_elo": 1390
@@ -328,7 +328,7 @@
     {
       "name": "GPT-5.2",
       "company": "OpenAI",
-      "rank": 1,
+      "rank": 2,
       "scores": [
         52.8,
         53.3,
@@ -388,7 +388,7 @@
         77.8,
         77.51,
         77.51,
-        75.23
+        74.19
       ],
       "pillar_scores": {
         "issue_resolution": 94.4,
@@ -403,7 +403,7 @@
         "swe_rebench_pass1": 51.7,
         "livecodebench_pct": 75.8,
         "bigcodebench_pct": 35.5,
-        "terminalbench_hard_pct": 49.6,
+        "terminalbench_hard_pct": 44.3,
         "swebench_pro_pct": 29.94,
         "scicode_pct": null,
         "arena_code_elo": 1336.0
@@ -412,7 +412,7 @@
     {
       "name": "DeepSeek V3.2",
       "company": "DeepSeek",
-      "rank": 7,
+      "rank": 8,
       "scores": [
         39.7,
         40.2,
@@ -496,7 +496,7 @@
     {
       "name": "Qwen3-Coder",
       "company": "Alibaba",
-      "rank": 15,
+      "rank": 16,
       "scores": [
         null,
         null,
@@ -569,7 +569,7 @@
     {
       "name": "Grok 4.20",
       "company": "xAI",
-      "rank": 10,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -643,7 +643,7 @@
     {
       "name": "GLM-5",
       "company": "Zhipu AI",
-      "rank": 9,
+      "rank": 5,
       "scores": [
         null,
         null,
@@ -703,7 +703,7 @@
         36.59,
         36.64,
         36.64,
-        36.64
+        46.91
       ],
       "pillar_scores": {
         "issue_resolution": 79.6,
@@ -712,13 +712,13 @@
         "scientific": null,
         "human_preference": 92.5
       },
-      "source_count": 3,
+      "source_count": 4,
       "raw_data": {
         "swebench_verified_pct": 72.8,
         "swe_rebench_pass1": 42.1,
         "livecodebench_pct": null,
         "bigcodebench_pct": null,
-        "terminalbench_hard_pct": null,
+        "terminalbench_hard_pct": 52.4,
         "swebench_pro_pct": null,
         "scicode_pct": null,
         "arena_code_elo": 1456.0
@@ -867,7 +867,7 @@
     {
       "name": "MiniMax M2",
       "company": "MiniMax",
-      "rank": 14,
+      "rank": 15,
       "scores": [
         null,
         null,
@@ -1009,7 +1009,7 @@
     {
       "name": "Grok 4.1",
       "company": "xAI",
-      "rank": 5,
+      "rank": 6,
       "scores": [
         null,
         null,
@@ -1083,7 +1083,7 @@
     {
       "name": "DeepSeek R1",
       "company": "DeepSeek",
-      "rank": 6,
+      "rank": 7,
       "scores": [
         35.5,
         35.4,
@@ -1239,7 +1239,7 @@
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 31,
+      "rank": 34,
       "scores": [
         null,
         null,
@@ -2086,7 +2086,7 @@
     {
       "name": "DeepSeek-V3",
       "company": "DeepSeek",
-      "rank": 13,
+      "rank": 14,
       "scores": [
         null,
         null,
@@ -2231,7 +2231,7 @@
     {
       "name": "GLM 4.7",
       "company": "Zhipu AI",
-      "rank": 8,
+      "rank": 9,
       "scores": [
         null,
         null,
@@ -2305,7 +2305,7 @@
     {
       "name": "GPT-4",
       "company": "OpenAI",
-      "rank": 999,
+      "rank": 31,
       "scores": [
         null,
         null,
@@ -2365,12 +2365,13 @@
         null,
         null,
         null,
-        4.89
+        9.94
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 2,
       "raw_data": {
-        "scicode_pct": 1.5
+        "scicode_pct": 1.5,
+        "swebench_verified_pct": 21.62
       }
     },
     {
@@ -2436,12 +2437,12 @@
         null,
         null,
         null,
-        18.77
+        21.31
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
-        "swebench_verified_pct": 23.94,
+        "swebench_verified_pct": 34.8,
         "swe_rebench_pass1": 31.8,
         "livecodebench_pct": 28.7
       }
@@ -2449,7 +2450,7 @@
     {
       "name": "GPT-4o",
       "company": "OpenAI",
-      "rank": 29,
+      "rank": 32,
       "scores": [
         null,
         null,
@@ -2521,7 +2522,7 @@
     {
       "name": "GPT-5-Codex",
       "company": "OpenAI",
-      "rank": 23,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -2581,20 +2582,21 @@
         null,
         null,
         null,
-        18.43
+        35.43
       ],
       "pillar_scores": {},
-      "source_count": 3,
+      "source_count": 4,
       "raw_data": {
         "terminalbench_hard_pct": 11.5,
         "swebench_pro_pct": 41.78,
-        "arena_code_elo": 1393.0
+        "arena_code_elo": 1393.0,
+        "swebench_verified_pct": 72.8
       }
     },
     {
       "name": "GPT-5.1",
       "company": "OpenAI",
-      "rank": 12,
+      "rank": 13,
       "scores": [
         null,
         null,
@@ -2667,7 +2669,7 @@
     {
       "name": "gpt-oss-120b",
       "company": "OpenAI",
-      "rank": 11,
+      "rank": 12,
       "scores": [
         null,
         null,
@@ -2742,7 +2744,7 @@
     {
       "name": "Grok Code Fast 1",
       "company": "xAI",
-      "rank": 27,
+      "rank": 29,
       "scores": [
         null,
         null,
@@ -2814,7 +2816,7 @@
     {
       "name": "Kimi K2 Instruct",
       "company": "Moonshot AI",
-      "rank": 21,
+      "rank": 24,
       "scores": [
         null,
         null,
@@ -2887,7 +2889,7 @@
     {
       "name": "Kimi K2.5",
       "company": "Moonshot AI",
-      "rank": 16,
+      "rank": 20,
       "scores": [
         null,
         null,
@@ -2947,13 +2949,13 @@
         null,
         null,
         null,
-        25.0
+        21.8
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
-        "swebench_verified_pct": 70.8,
-        "terminalbench_hard_pct": 43.2
+        "swebench_verified_pct": 63.4,
+        "terminalbench_hard_pct": 35.7
       }
     },
     {
@@ -3030,7 +3032,7 @@
     {
       "name": "Llama 4 Maverick",
       "company": "Meta",
-      "rank": 33,
+      "rank": 36,
       "scores": [
         null,
         null,
@@ -3102,7 +3104,7 @@
     {
       "name": "Llama-3-70B-Chat",
       "company": "Meta",
-      "rank": 32,
+      "rank": 35,
       "scores": [
         null,
         null,
@@ -3174,7 +3176,7 @@
     {
       "name": "Mixtral-8x22B-Instruct",
       "company": "Mistral",
-      "rank": 24,
+      "rank": 26,
       "scores": [
         null,
         null,
@@ -3460,7 +3462,7 @@
     {
       "name": "Qwen 3 Coder 480B",
       "company": "Alibaba",
-      "rank": 28,
+      "rank": 30,
       "scores": [
         null,
         null,
@@ -3603,7 +3605,7 @@
     {
       "name": "Qwen2.5-Coder 32B Instruct",
       "company": "Alibaba",
-      "rank": 30,
+      "rank": 33,
       "scores": [
         null,
         null,
@@ -3746,7 +3748,7 @@
     {
       "name": "codestral-2405",
       "company": "Mistral",
-      "rank": 20,
+      "rank": 23,
       "scores": [
         null,
         null,
@@ -3891,7 +3893,7 @@
     {
       "name": "devstral-medium-2507",
       "company": "Mistral",
-      "rank": 26,
+      "rank": 28,
       "scores": [
         null,
         null,
@@ -3963,7 +3965,7 @@
     {
       "name": "gemma-3-27b-it",
       "company": "Google",
-      "rank": 25,
+      "rank": 27,
       "scores": [
         null,
         null,
@@ -4249,7 +4251,7 @@
     {
       "name": "Claude 3 Haiku",
       "company": "Anthropic",
-      "rank": 999,
+      "rank": 19,
       "scores": [
         null,
         null,
@@ -4309,12 +4311,13 @@
         null,
         null,
         null,
-        15.55
+        22.51
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 2,
       "raw_data": {
-        "swebench_verified_pct": 66.6
+        "swebench_verified_pct": 66.6,
+        "terminalbench_hard_pct": 35.5
       }
     },
     {
@@ -4462,7 +4465,7 @@
     {
       "name": "GPT-5 mini",
       "company": "OpenAI",
-      "rank": 999,
+      "rank": 25,
       "scores": [
         null,
         null,
@@ -4522,18 +4525,19 @@
         null,
         null,
         null,
-        13.12
+        19.95
       ],
       "pillar_scores": {},
-      "source_count": 1,
+      "source_count": 2,
       "raw_data": {
-        "swebench_verified_pct": 56.2
+        "swebench_verified_pct": 56.2,
+        "terminalbench_hard_pct": 34.8
       }
     },
     {
       "name": "\ud83c\udd95Kimi K2 Thinking",
       "company": "Moonshot AI",
-      "rank": 19,
+      "rank": 21,
       "scores": [
         null,
         null,
@@ -4601,7 +4605,283 @@
         "swebench_verified_pct": 63.4,
         "terminalbench_hard_pct": 35.7
       }
+    },
+    {
+      "name": "OpenAI o1-preview",
+      "company": "OpenAI",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0
+      ],
+      "pillar_scores": {},
+      "source_count": 0,
+      "raw_data": {}
+    },
+    {
+      "name": "llama4-maverick-17b-instruct",
+      "company": "Meta",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0
+      ],
+      "pillar_scores": {},
+      "source_count": 0,
+      "raw_data": {}
+    },
+    {
+      "name": "\ud83c\udd95Devstral small (2512)",
+      "company": "Mistral",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0
+      ],
+      "pillar_scores": {},
+      "source_count": 0,
+      "raw_data": {}
+    },
+    {
+      "name": "\ud83e\udd47 OpenAI o3-mini-low",
+      "company": "OpenAI",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0
+      ],
+      "pillar_scores": {},
+      "source_count": 0,
+      "raw_data": {}
     }
   ],
-  "run_at": "1:04 PM CST"
+  "run_at": "9:35 PM CST"
 }
