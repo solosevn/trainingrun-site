@@ -1,507 +1,399 @@
-# TRAINING RUN - Production Bible
-
-**Show:** Training Run - The AI Scoreboard
-**Format:** Weekly YouTube show (drops every Thursday)
+# TRAINING RUN — Production Bible
+**Version 3.0 | Last Updated: February 2026**
 **Website:** https://trainingrun.ai
 **GitHub Repo:** https://github.com/solosevn/trainingrun-site
+**Owner:** David Solomon | solosevn@gmail.com
+
+---
+
+## HOW TO USE THIS DOCUMENT
+
+Read this entire file at the start of every session before touching anything. It tells you exactly what the project is, where every file lives, what every file does, what has been built, and what the standards are. Do not create new files without checking here first — everything almost certainly already exists.
 
 ---
 
 ## WHAT IS TRAINING RUN?
 
-A weekly AI news show that tracks and scores AI model performance. We aggregate data from respected benchmarks (LMSYS Arena, SWE-Bench, ARC-AGI, HELM Safety, TrustLLM, MLCommons AILuminate, OpenRouter) and deliver it in an engaging video format with AI-generated avatars.
+Training Run (trainingrun.ai) is a daily AI model scoreboard. It tracks and scores AI models across 5 independent benchmark categories, updated automatically every day. The site is a static GitHub Pages site — no server, no database. All data lives in JSON files in the repo. All pages are plain HTML/CSS/JS.
 
-**Core Philosophy:** Independent, transparent, fact-checked rankings. No hype - just data.
+**The 5 Benchmarks:**
+1. **TRSbench** — Overall AI capability composite (7 pillars, 18 sources)
+2. **TRScode** — Coding ability (5 pillars, 8 sources)
+3. **TRUscore** — Truthfulness / neutrality / factuality (4 pillars, 7 sources)
+4. **TRFcast** — Forecasting and trading performance (5 pillars, 4 platforms)
+5. **TRAgents** — Autonomous agent performance (6 pillars, 11 sources)
+
+**Philosophy:** Independent, transparent, fact-checked. No hype. No sponsors. No ideology. Truth is verifiable or it isn't truth.
 
 ---
 
-## WEEKLY PRODUCTION WORKFLOW
+## ARCHITECTURE — HOW EVERYTHING CONNECTS
 
-### PHASE 1: Research & Data (Monday-Tuesday)
+```
+Your Mac (~/trainingrun-site)
+    ↓ git push
+GitHub (solosevn/trainingrun-site)
+    ↓ auto-deploy (~1 min)
+GitHub Pages → trainingrun.ai
+```
 
-**1. Gather Current Scores**
-- LMSYS Arena: https://huggingface.co/spaces/lmarena-ai/chatbot-arena/ (Elo ratings, human preference)
-- SWE-Bench: https://www.swebench.com/ (coding benchmarks)
-- ARC Prize: https://arcprize.org/ (reasoning/AGI benchmarks)
+- **Cowork/Claude** edits files in the repo, pushes to GitHub, site is live in ~1 minute
+- **DDPs** (Python scrapers) run on your Mac via cron, update JSON files, push to GitHub
+- **GitHub is the single source of truth** — every file lives there and is served from there
+- **Your Mac's ~/trainingrun-site clone is a full backup** — git is distributed, your local copy is complete
+- **The Cowork outputs folder is a scratch pad only** — never use it for project files
 
-**2. Calculate TRS (Training Run Score)**
-TRS is a weighted composite (V2.4):
-- Safety: 21%
-- Reasoning: 20%
-- Coding: 20%
-- Human Preference: 18%
-- Knowledge: 8%
-- Efficiency: 7%
-- Usage Adoption: 6%
+---
 
-**2b. Calculate TRFcast (Training Run Forecast)**
-TRFcast is a weighted composite of 9 sub-metrics from 4 independent platforms, measuring AI forecasting and financial intelligence.
+## COMPLETE FILE INVENTORY
 
-**5 Pillars:**
+### Python Files (The Data Pipeline)
+
+| File | Purpose |
+|------|---------|
+| `daily_runner.py` | **Master orchestrator.** Runs all 5 agents in sequence. Use `python3 daily_runner.py` to run all. Use `--dry-run` to scrape without pushing. Use `--score trs` to run one agent. All 5 agents are currently ENABLED. |
+| `agent_trs.py` | TRSbench scraper. Scrapes 18 sources across 7 pillars. Updates `trs-data.json`. Pushes to GitHub. Sends Telegram notification. |
+| `agent_trscode.py` | TRScode scraper. Scrapes 8 sources across 5 pillars. Updates `trscode-data.json`. Pushes to GitHub. |
+| `agent_truscore.py` | TRUscore scraper. Scrapes 7 sources across 4 pillars. Updates `truscore-data.json`. Pushes to GitHub. |
+| `agent_trfcast.py` | TRFcast scraper. Scrapes 4 live platforms across 5 pillars. Updates `trf-data.json`. Pushes to GitHub. |
+| `agent_tragents.py` | TRAgents scraper. Scrapes 11 sources across 6 pillars. Updates `tragent-data.json`. Pushes to GitHub. |
+| `model_names.py` | Shared utility. Canonical model name mapping and normalization used by all agents. Do not edit without understanding all 5 agents. |
+| `scripts/trs_scrapers.py` | Supporting scraper functions for TRS (older, used by agent_trs.py). |
+| `scripts/trs_orchestrator.py` | Score normalization and checksum logic for TRS (older). |
+| `scripts/test_scrapers.py` | Test suite for validating scrapers. Run to verify a scraper is working. |
+
+**Agent dependencies (must be installed on your Mac):**
+```
+pip3 install playwright python-telegram-bot beautifulsoup4 requests
+python3 -m playwright install chromium
+```
+
+**Agent env vars (set in your Mac shell profile):**
+```
+TELEGRAM_TOKEN     — BotFather token for notifications
+TELEGRAM_CHAT_ID   — Your numeric Telegram chat ID
+REPO_PATH          — Path to repo (defaults to ~/trainingrun-site)
+```
+
+### JSON Files (The Live Data)
+
+| File | Powers | Updated By |
+|------|--------|-----------|
+| `trs-data.json` | TRSbench leaderboard pages | `agent_trs.py` |
+| `trscode-data.json` | TRScode leaderboard pages | `agent_trscode.py` |
+| `truscore-data.json` | TRUscore leaderboard pages | `agent_truscore.py` |
+| `trf-data.json` | TRFcast leaderboard pages | `agent_trfcast.py` |
+| `tragent-data.json` | TRAgents leaderboard pages | `agent_tragents.py` |
+| `status.json` | Site health/status indicator | Pipeline |
+
+**JSON structure (all files follow same pattern):**
+- `formula_version` — version string
+- `weights` — pillar weights object
+- `dates[]` — array of date strings
+- `models[]` — array of model objects, each with daily scores and pillar breakdowns
+- `checksum` — SHA-256 hash for data integrity verification (displayed on score pages)
+
+### HTML Files (The Website Pages)
+
+**Homepage:**
+| File | URL | Notes |
+|------|-----|-------|
+| `index.html` | trainingrun.ai/ | The v2 homepage. Shows all 5 benchmark scores. Interactive model cards with trend chart modal. This IS v2.html — they are the same. Do not change index.html without understanding the v2 data architecture. |
+| `index-v1.html` | (not linked) | The old homepage. Kept as backup. Do not delete. |
+| `v2.html` | trainingrun.ai/v2 | Same as index.html. Original v2 design file. |
+
+**Score/Leaderboard Pages:**
+| File | URL | Notes |
+|------|-----|-------|
+| `scores.html` | trainingrun.ai/scores | TRSbench full leaderboard |
+| `tragents.html` | trainingrun.ai/tragents | TRAgents leaderboard |
+| `tragents-scores.html` | trainingrun.ai/tragents-scores | TRAgents detailed scores |
+| `trscode.html` | trainingrun.ai/trscode | TRScode leaderboard |
+| `trscode-scores.html` | trainingrun.ai/trscode-scores | TRScode detailed scores |
+| `truscore.html` | trainingrun.ai/truscore | **TRUscore methodology page** (also serves as the score page for TRUscore) |
+| `truscore-scores.html` | trainingrun.ai/truscore-scores | TRUscore detailed scores |
+| `trfcast.html` | trainingrun.ai/trfcast | TRFcast leaderboard |
+| `trfcast-scores.html` | trainingrun.ai/trfcast-scores | TRFcast detailed scores |
+
+**Methodology Pages (all 5 have been updated — see standards below):**
+| File | URL | Notes |
+|------|-----|-------|
+| `trsmethodology.html` | trainingrun.ai/trsmethodology | TRSbench methodology. Has TOC sidebar. Reference page for nav/style standards. |
+| `tragents-methodology.html` | trainingrun.ai/tragents-methodology | TRAgents methodology. Has TOC sidebar. |
+| `trscode-methodology.html` | trainingrun.ai/trscode-methodology | TRScode methodology. Has TOC sidebar. |
+| `truscore.html` | trainingrun.ai/truscore | TRUscore methodology (doubles as score page). Has TOC sidebar. |
+| `trfcast-methodology.html` | trainingrun.ai/trfcast-methodology | TRFcast methodology. Has TOC sidebar. |
+
+**Other Pages:**
+| File | URL | Notes |
+|------|-----|-------|
+| `about.html` | trainingrun.ai/about | About page |
+| `churn.html` | trainingrun.ai/churn | Model churn tracker |
+| `deep-thought.html` | trainingrun.ai/deep-thought | Deep analysis page |
+| `frontier.html` | trainingrun.ai/frontier | Frontier models page |
+| `gigaburn.html` | trainingrun.ai/gigaburn | Energy/power tracking |
+| `global-race.html` | trainingrun.ai/global-race | Global AI race tracker |
+| `mission-control.html` | trainingrun.ai/mission-control | Mission control dashboard |
+| `news.html` | trainingrun.ai/news | AI news page |
+| `sources.html` | trainingrun.ai/sources | All data sources listed |
+| `specialists.html` | trainingrun.ai/specialists | Specialist models page |
+
+### Shared Asset Files
+
+| File | Purpose |
+|------|---------|
+| `styles.css` | **Global stylesheet for the entire site.** All nav, back button, TOC sidebar, and shared component styles live here. Edit with care — changes affect every page. |
+| `nav-v2.js` | Navigation JavaScript for v2 pages. |
+| `CNAME` | GitHub Pages custom domain config. Contains `trainingrun.ai`. Do NOT edit. |
+| `PRODUCTION_BIBLE.md` | This file. Update it every session. |
+
+---
+
+## DESIGN STANDARDS (DO NOT DEVIATE)
+
+These standards were established through multiple sessions and apply to ALL pages. Any new page or edit must follow these exactly.
+
+### Navigation Bar Standard (ALL pages)
+```html
+<nav>
+    <a href="/" class="logo">Training Run</a>
+    <ul class="nav-links">
+        <li><a href="/about">About</a></li>
+    </ul>
+</nav>
+```
+- Logo is plain text "Training Run" — NO badge, NO hexagon, NO SVG icon
+- Only ONE link in the nav: "About" pointing to /about
+- No other links (no Verify Sources, no The Show, no Contact)
+- Nav style comes from styles.css
+
+### Back Button Standard (ALL non-homepage pages)
+```html
+<a href="#" onclick="history.back(); return false;" class="back-btn">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back
+</a>
+```
+- Uses class `back-btn` (NOT `back-button`)
+- Style comes from styles.css (fixed position, top: 80px, left: 24px)
+- Goes OUTSIDE and AFTER the `<nav>` element, before the page content
+
+### TOC Sidebar Standard (ALL methodology pages)
+All 5 methodology pages have an "On This Page" fixed sidebar. Style is in styles.css.
+```html
+<aside class="toc-sidebar">
+    <div class="toc-header">On This Page</div>
+    <ul class="toc-list">
+        <li><a class="toc-link" href="#section-id">Section Name</a></li>
+        <li class="toc-divider"></li>
+        <li><a class="toc-link" href="#section-id">Section Name</a></li>
+    </ul>
+</aside>
+```
+- Goes AFTER the back-btn, BEFORE the main content wrapper
+- Hides automatically on screens ≤1100px (responsive CSS in styles.css)
+- Main content wrapper needs `margin-left: 240px` at ≥1101px (added per-page)
+- Each section being linked to needs an `id` attribute on the heading or section element
+
+### Methodology Page H1 Color Standard
+- Benchmark prefix (TRS, TRU, TRF, TRAgents): `color:#00d4ff` (cyan)
+- Suffix and "Methodology" word: `color:#ffffff` (white)
+- Example: `<span style="color:#00d4ff">TRS</span><span style="color:#ffffff">bench</span> <span style="color:#ffffff">Methodology</span>`
+- NO gradient, NO `-webkit-text-fill-color`, NO `background-clip:text` on h1
+
+### Color Palette
+```
+Cyan:       #00d4ff  (primary accent, links, highlights)
+White:      #ffffff  (headings, primary text)
+Dark BG:    #0a0a1a  (page background)
+Darker BG:  #050510  (body background)
+Muted text: #a0a0b0
+Border:     rgba(0,212,255,0.15) subtle / rgba(0,212,255,0.3) accent
+```
+
+---
+
+## THE DDP PIPELINE — HOW TO RUN IT
+
+### Running Manually
+```bash
+cd ~/trainingrun-site
+
+# Run all 5 agents (live — scrapes and pushes to GitHub):
+python3 daily_runner.py
+
+# Dry run (scrapes and calculates but does NOT push):
+python3 daily_runner.py --dry-run
+
+# Run just one agent:
+python3 daily_runner.py --score trs
+python3 daily_runner.py --score trscode
+python3 daily_runner.py --score truscore
+python3 daily_runner.py --score trfcast
+python3 daily_runner.py --score tragents
+
+# Check the log after a cron run:
+tail -f ~/trainingrun-site/ddp.log
+```
+
+### Cron Setup (Mac — run once in Terminal to install)
+**Test run at 8 PM:**
+```bash
+(crontab -l 2>/dev/null; echo "0 20 * * * cd ~/trainingrun-site && python3 daily_runner.py >> ~/trainingrun-site/ddp.log 2>&1") | crontab -
+```
+
+**Daily morning run at 6 AM Central:**
+```bash
+(crontab -l 2>/dev/null; echo "0 6 * * * cd ~/trainingrun-site && python3 daily_runner.py >> ~/trainingrun-site/ddp.log 2>&1") | crontab -
+```
+
+**View current cron jobs:**
+```bash
+crontab -l
+```
+
+**Remove all cron jobs (to start fresh):**
+```bash
+crontab -r
+```
+
+### What Each Agent Does (sequence)
+1. Launches Playwright browser (headless Chromium)
+2. Scrapes each benchmark source URL
+3. Parses scores using BeautifulSoup
+4. Normalizes scores 0-100 (top model = 100, others proportional)
+5. Computes weighted composite score
+6. Generates SHA-256 checksum
+7. Writes updated JSON file
+8. `git add → git commit → git push` to GitHub
+9. Sends Telegram notification (if token configured)
+10. Site updates live within ~1 minute
+
+---
+
+## THE 5 BENCHMARK FORMULAS
+
+### TRSbench (agent_trs.py → trs-data.json)
+7 pillars, 18 sources. Qualification: 4+ pillars with non-null scores.
+- Safety: 21% (HELM Safety + AIR-Bench)
+- Reasoning: 20% (ARC-AGI-2 + LiveBench + HELM Capabilities)
+- Coding: 20% (SWE-bench + EvalPlus + LiveCodeBench + SWE-rebench)
+- Human Preference: 18% (Arena Overall + Arena Text + AlpacaEval)
+- Knowledge: 8% (MMLU-Pro + HELM MMLU + SimpleQA)
+- Efficiency: 7% (Artificial Analysis + PricePerToken)
+- Usage: 6% (OpenRouter Rankings)
+
+### TRScode (agent_trscode.py → trscode-data.json)
+5 pillars, 8 sources.
+- Real-World Issue Resolution: 30% (SWE-bench 17% + SWE-rebench 13%)
+- Code Generation: 25% (LiveCodeBench 15% + BigCodeBench 10%)
+- Agentic Coding: 20% (Terminal-Bench Hard 12% + SWE-bench Pro 8%)
+- Scientific & Specialized: 15% (SciCode 15%)
+- Human Preference: 10% (Chatbot Arena Code Elo 10%)
+
+### TRUscore (agent_truscore.py → truscore-data.json)
+4 pillars, 7 sources.
+- Factuality: 40% (SimpleQA 20% + NewsGuard AI Monitor 20%)
+- Neutrality: 30% (TrackingAI Political Compass 25% + Anthropic Paired Prompts 5%)
+- Hallucination: 20% (Vectara Leaderboard 15% + Artificial Analysis Omniscience 5%)
+- Calibration: 10% (SimpleQA Not Attempted Rate 10%)
+
+### TRFcast (agent_trfcast.py → trf-data.json)
+5 pillars, 4 platforms, 9 sub-metrics.
 - Forecasting Accuracy: 30% (ForecastBench baseline 20% + tournament 10%)
 - Trading Performance: 25% (Rallies.ai returns 15% + Alpha Arena returns 10%)
-- Prediction Calibration: 20% (ForecastBench difficulty-adjusted calibration)
+- Prediction Calibration: 20% (ForecastBench calibration 20%)
 - Financial Reasoning: 15% (FinanceArena QA 8% + comparative ELO 7%)
 - Market Intelligence: 10% (Alpha Arena Sharpe 5% + Rallies win rate 5%)
 
-**Formula:**
-```
-TRFcast = ForecastBench_Baseline (20%) + ForecastBench_Tournament (10%)
-        + Rallies_Returns (15%) + AlphaArena_Returns (10%)
-        + ForecastBench_Calibration (20%)
-        + FinanceArena_QA (8%) + FinanceArena_Compare (7%)
-        + AlphaArena_Sharpe (5%) + Rallies_WinRate (5%)
-```
-
-**Scoring:** Each model scored 0-100 per sub-metric (top performer = 100, others proportional). Weighted sum = final daily TRFcast score.
-
-**Data Sources:**
-- ForecastBench: https://forecastbench.org (baseline Brier, tournament, calibration)
-- Rallies.ai: https://rallies.ai (portfolio returns, win rate)
-- nof1.ai Alpha Arena: https://nof1.ai (returns, Sharpe ratio)
-- FinanceArena: https://huggingface.co/spaces/TheFinAI/FinanceArena (QA accuracy, ELO)
-
-**19 Models Tracked:** Grok 4.20, O3, Gemini 2.5 Pro, Claude 3.5 Sonnet, GPT-4.1, Claude 3.7 Sonnet, Grok 3, DeepSeek R1, DeepSeek V3, Gemini 2.0 Flash, GPT-4o, Llama 4 Maverick, Llama 3.3 70B, Mistral Large, Claude 3.5 Haiku, Gemini 2.5 Flash, GPT-4.1 mini, Grok 3 mini, GPT-4.1 nano
-
-**Data File:** trf-data.json (auto-fetched by trfcast.html and index.html)
-- Structure: formula_version, weights, dates[], models[] with daily scores and pillar breakdowns
-- Updated daily with latest platform data
-
-**3. Track Week-over-Week Changes**
-- Note which models moved up/down
-- Identify "Rookie of the Week" (biggest mover)
-- Track any new model entries
-
-**4. Gather News Stories**
-Look for 3 major AI stories of the week:
-- Company news (earnings, crashes, acquisitions)
-- Policy/regulation (tariffs, laws, government action)
-- Model releases/announcements
-
-**5. Jobs Data**
-Track AI job market:
-- Jobs eliminated (with AI as contributing factor)
-- Jobs created (AI-related positions)
-- Net change
+### TRAgents (agent_tragents.py → tragent-data.json)
+6 pillars, 11 sources. Qualification: 3+ pillars with non-null scores.
+- Task Completion: 25% (GAIA 8% + SWE-bench Verified 7% + tau-bench 5% + OSWorld 5%)
+- Cost Efficiency: 20% (ARC-AGI-2 12% + Artificial Analysis 8%)
+- Tool Reliability: 20% (MCP Atlas 12% + Galileo Agent Leaderboard 8%)
+- Safety & Security: 15% (MASK Benchmark 15%)
+- Accessibility: 10% (Ollama Library 10%)
+- Multi-Model Efficiency: 10% (OpenRouter Rankings 10%)
 
 ---
 
-### PHASE 2: Scriptwriting (Tuesday-Wednesday)
+## HOMEPAGE (index.html / v2.html) — KEY FEATURES
 
-**Show Structure (36 Scenes):**
+The homepage uses a sophisticated v2 data architecture. Key things to know before touching it:
 
-| Scene | Avatar | Content |
-|-------|--------|---------|
-| 1-3 | Kennedy | Cold open, intro |
-| 4A-4C | Frank | Co-host intro |
-| 5-8 | Frank | Scoreboard rundown |
-| 9 | Kennedy | Intro for Scout |
-| 10-11 | Scout | Rookie of the Week |
-| 12 | Kennedy | Intro for Dev |
-| 13-16 | Dev | Category Leaders |
-| 17-18 | Kennedy | Daily Download (news) |
-| 19 | Kennedy | Intro for Dr. Arc |
-| 20-21 | Dr. Arc | Frontier/ARC-AGI |
-| 22 | Kennedy | Intro for Harper |
-| 23-24 | Harper | Jobs/Human Factor |
-| 25 | Kennedy | Intro for Atlas |
-| 26-27 | Atlas | Global AI Race |
-| 28 | Kennedy | Intro for Volt |
-| 29-30 | Volt | Power/Megawatts |
-| 31 | Kennedy | Intro for Ace |
-| 32-33 | Ace | Predictions |
-| 34 | Frank | Sign-off |
-| 35 | Kennedy | Sign-off |
-| 36 | Frank | Final sign-off |
-
-**Avatar Roster:**
-- **Kennedy** - Main host (human-style avatar)
-- **Frank** - Co-host, close-up Pixar style
-- **Scout** - Rookie segment
-- **Dev** - Category Leaders/Coding
-- **Dr. Arc** - Frontier/Reasoning
-- **Harper** - Jobs/Human Factor
-- **Atlas** - Global Race
-- **Volt** - Power consumption
-- **Ace** - Predictions
-
-**Script Style Guide:**
-- Short sentences. Punchy delivery.
-- Numbers spoken naturally ("seventy-five point nine percent")
-- No hype words - just facts
-- Each avatar has distinct personality/voice
+- Loads all 5 JSON files on page load
+- Shows model cards with scores across all 5 benchmarks
+- Each card has a modal with tabs: Overview, Performance Trend, Breakdown, Sources
+- The **Performance Trend tab** has a custom Chart.js chart with:
+  - Big white hero score at top that updates on hover/scrub
+  - Floating tooltip following cursor/finger
+  - Glow line effect (shadowBlur)
+  - Gradient fill under the line
+  - Touch support for mobile scrubbing
+  - Board label at bottom in cyan/white
+- The trend chart is built by `_buildV2TrendChart()` function in index.html's JS
+- Data is stored in `V2_DATA` and `V2_BOARD_LABEL_HTML` objects
 
 ---
 
-### PHASE 3: Video Production (Wednesday-Thursday)
+## GITHUB REPO SAFETY
 
-**1. HeyGen Avatar Generation**
-- Platform: https://heygen.com
-- Create video for each scene
-- Use consistent avatar settings
-- Export as MP4
+**Is it safe?** Yes. Here's the full picture:
 
-**2. Premiere Pro Assembly**
-- Import all HeyGen clips
-- Add B-roll for news segments
-- Add scoreboard graphics
-- Add lower thirds
-- Add music/sound design
+**What you have (3 copies of everything):**
+1. GitHub servers (in the cloud)
+2. Your Mac at `~/trainingrun-site` (local clone — this IS a full backup)
+3. Cowork VM while sessions are active
 
-**3. Graphics Needed Each Week**
-- Scoreboard graphic (top 10 models with TRS scores)
-- Individual model cards
-- News story B-roll
-- Lower thirds for each avatar
-- End screen with trainingrun.ai
+**Real risks and how to handle them:**
+- Account hack → **Enable 2FA on github.com immediately if not done**
+- Accidental `git push --force` → would overwrite remote but local copy survives
+- Mac crashes → GitHub copy survives
+- GitHub goes down → your Mac copy survives; you can re-push when it's back
 
-**4. Thumbnail Creation**
-- 1280x720 pixels
-- High contrast, readable text
-- Include week number
-- Highlight biggest story
-
-**Export Settings (Premiere Pro):**
-- Format: H.264
-- Preset: YouTube 1080p Full HD
-- Bitrate: 16 Mbps (VBR 2-pass)
-- Audio: AAC 320kbps
-- Check: "Use Maximum Render Quality"
-
----
-
-### PHASE 4: Website Update (Thursday)
-
-**GitHub Repository:** solosevn/trainingrun-site
-
-**Files to Update:**
-
-1. **scores.html** - Update TRS scores
-   - Find each model's trs-score span
-   - Update the score value
-   - Update the change indicator (+/- amount)
-   - Update the "Week of [DATE]" text
-
-2. **index.html** - Update if needed
-   - "Watch Now" button links to latest YouTube video
-   - Date badge is now dynamic (auto-updates)
-
-**How to Edit via GitHub:**
-1. Go to: https://github.com/solosevn/trainingrun-site
-2. Click on file to edit (scores.html or index.html)
-3. Click pencil icon (Edit)
-4. Make changes
-5. Click "Commit changes"
-6. Site auto-deploys in 1-2 minutes
-
-**Current YouTube Link Location:**
-- File: index.html
-- Line ~161: href="https://www.youtube.com/watch?v=VIDEO_ID"
-- Update VIDEO_ID each week
-
----
-
-### PHASE 5: Publish (Thursday)
-
-**1. Upload to YouTube**
-- Title format: "[Headline] | AI Scoreboard Week [X]"
-- Description: Include timestamps, sources, links
-- Tags: AI, artificial intelligence, GPT, Claude, Gemini, etc.
-- Thumbnail: Custom 1280x720
-
-**2. Update Website**
-- Add new YouTube link to "Watch Now" button
-- Verify scores page is current
-
-**3. Promote**
-- Social media posts
-- Newsletter if applicable
-
----
-
-## WEBSITE STRUCTURE
-
-trainingrun.ai/
-- index.html (Homepage - live TRS + TRFcast scores)
-- scores.html (TRS Scoreboard)
-- trfcast.html (TRFcast tracker - chart, leaderboard, 5 pillars)
-- trsmethodology.html (How we calculate TRS)
-- about.html (About page)
-- trf-data.json (TRFcast daily scores for 19 models)
-- styles.css (Styling)
-- CNAME (Domain config)
-
-**Key Website Features:**
-- Dynamic date on homepage (JavaScript auto-updates)
-- Responsive design
-- Dark theme with cyan/orange accents
-- Links to data sources (LMSYS, ARC Prize, SWE-Bench)
-
----
-
-## CURRENT TRS SCORES (Week 4 - January 26, 2026)
-
-| Rank | Model | Company | TRS | Change |
-|------|-------|---------|-----|--------|
-| 1 | Gemini 3 Pro | Google | 95.4 | +0.1 |
-| 2 | Grok 4.1 | xAI | 94.8 | +0.3 |
-| 3 | Claude Opus 4.5 | Anthropic | 94.3 | +0.2 |
-| 4 | GPT-5.1 | OpenAI | 93.2 | -0.2 |
-| 5 | Gemini 3 Flash | Google | 93.0 | +0.4 |
-| 6 | Ernie 5.0 | Baidu | 91.8 | +1.8 |
-| 7 | Claude Sonnet 4.5 | Anthropic | 90.9 | +0.2 |
-| 8 | DeepSeek V3.2 | DeepSeek | 89.7 | +0.5 |
-| 9 | Qwen 3 Max | Alibaba | 88.5 | +0.2 |
-| 10 | Llama 4 Maverick | Meta | 86.2 | -0.2 |
-
----
-
-## DATA SOURCES
-
-**Primary Benchmarks:**
-- LMSYS Chatbot Arena: https://huggingface.co/spaces/lmarena-ai/chatbot-arena/
-- SWE-Bench Verified: https://www.swebench.com/
-- ARC-AGI-2: https://arcprize.org/
-
-**Secondary Sources:**
-- Company earnings reports
-- Official model announcements
-- Verified news sources (Bloomberg, Reuters, TechCrunch)
-
----
-
-## BRAND GUIDELINES
-
-**Colors:**
-- Primary: Cyan (#00D4FF)
-- Accent: Orange (#FF6400)
-- Background: Dark navy (#0A1420)
-- Text: White (#FFFFFF)
-
-**Fonts:**
-- Headlines: Inter (bold/black weight)
-- Body: Inter (regular)
-
-**Tone:**
-- Authoritative but accessible
-- Data-driven, not hype-driven
-- Slight wit, never sarcastic
-- "Your weekly AI conditioning"
-
----
-
-## QUICK START FOR NEW WEEK
-
-When starting a new week, tell Claude:
-
-"Let's start Training Run Week [X]. Pull up the Production Bible at:
-https://github.com/solosevn/trainingrun-site/blob/main/PRODUCTION_BIBLE.md
-
-I need to:
-1. Research current benchmark scores
-2. Write scripts for all segments  
-3. Update the website with new scores
-4. Add the new YouTube link when ready"
-
----
-
-## TROUBLESHOOTING
-
-**Website not updating after GitHub commit:**
-- GitHub Pages cache takes 1-5 minutes
-- Try hard refresh: Ctrl+Shift+R
-- Try adding ?v=2 to URL to bust cache
-
-**HeyGen avatar issues:**
-- Keep scripts under 60 seconds per scene
-- Avoid complex words that might mispronounce
-- Use phonetic spelling if needed
-
-**Score discrepancies:**
-- Always cite primary source
-- Note date of benchmark data
-- If sources conflict, use most recent
-
----
-
-## GENERATING GRAPHICS (Terminal/Python)
-
-The simplest way to create graphics (thumbnails, title cards, end cards) is to run Python directly in Mac Terminal.
-
-**Requirements:** Python 3 with Pillow (`pip3 install Pillow`)
-
-**TikTok Title Card (1080x1920):**
+**For external drive backup**, run this anytime on your Mac:
 ```bash
-cd ~/Desktop && python3 << 'EOF'
-from PIL import Image, ImageDraw, ImageFont
-
-img = Image.new('RGB', (1080, 1920), (10, 20, 40))
-draw = ImageDraw.Draw(img)
-
-try:
-    font_huge = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 120)
-    font_large = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 48)
-    font_medium = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 36)
-    font_small = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
-except:
-    font_huge = font_large = font_medium = font_small = ImageFont.load_default()
-
-CYAN = (0, 212, 255)
-WHITE = (255, 255, 255)
-ORANGE = (255, 100, 0)
-GREY = (180, 180, 180)
-
-draw.rounded_rectangle([(380, 500), (700, 550)], radius=25, outline=CYAN, width=2)
-draw.text((540, 525), "DATE HERE", font=font_small, fill=CYAN, anchor='mm')
-draw.text((540, 700), "Training", font=font_huge, fill=CYAN, anchor='mm')
-draw.text((540, 830), "Run", font=font_huge, fill=CYAN, anchor='mm')
-draw.text((540, 950), "YOUR WEEKLY AI CONDITIONING", font=font_medium, fill=GREY, anchor='mm')
-draw.text((540, 1100), "WEEK X", font=font_large, fill=ORANGE, anchor='mm')
-draw.text((540, 1300), "AI SCOREBOARD", font=font_large, fill=WHITE, anchor='mm')
-draw.text((540, 1450), "Headline 1", font=font_medium, fill=CYAN, anchor='mm')
-draw.text((540, 1510), "Headline 2", font=font_medium, fill=CYAN, anchor='mm')
-draw.text((540, 1570), "Headline 3", font=font_medium, fill=CYAN, anchor='mm')
-
-img.save("tiktok_title.png")
-print("Saved to Desktop: tiktok_title.png")
-EOF
+cp -r ~/trainingrun-site /Volumes/YOUR_DRIVE_NAME/trainingrun-backup-$(date +%Y%m%d)
 ```
 
-**TikTok End Card (1080x1920):**
+**Or clone to external drive directly:**
 ```bash
-cd ~/Desktop && python3 << 'EOF'
-from PIL import Image, ImageDraw, ImageFont
-
-img = Image.new('RGB', (1080, 1920), (10, 20, 40))
-draw = ImageDraw.Draw(img)
-
-try:
-    font_huge = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 100)
-    font_large = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 60)
-except:
-    font_huge = font_large = ImageFont.load_default()
-
-CYAN = (0, 212, 255)
-WHITE = (255, 255, 255)
-
-draw.text((540, 860), "trainingrun.ai", font=font_huge, fill=CYAN, anchor='mm')
-draw.text((540, 1000), "FULL EPISODE EVERY THURSDAY", font=font_large, fill=WHITE, anchor='mm')
-
-img.save("tiktok_endcard.png")
-print("Saved to Desktop: tiktok_endcard.png")
-EOF
+git clone ~/trainingrun-site /Volumes/YOUR_DRIVE_NAME/trainingrun-site
 ```
-
-**Scoreboard Graphic (1920x1080):**
-```bash
-cd ~/Desktop && python3 << 'EOF'
-from PIL import Image, ImageDraw, ImageFont
-
-img = Image.new('RGB', (1920, 1080), (10, 20, 32))
-draw = ImageDraw.Draw(img)
-
-try:
-    font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 72)
-    font_subtitle = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
-    font_rank = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 32)
-    font_model = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 32)
-    font_company = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 22)
-    font_score = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 42)
-    font_change = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
-except:
-    font_title = font_subtitle = font_rank = font_model = font_company = font_score = font_change = ImageFont.load_default()
-
-CYAN = (0, 212, 255)
-WHITE = (255, 255, 255)
-GREEN = (0, 230, 118)
-RED = (255, 82, 82)
-GOLD = (255, 193, 7)
-GREY = (120, 120, 120)
-ROW_BG = (18, 30, 42)
-
-TOP1_HIGHLIGHT = (70, 50, 20)
-TOP2_HIGHLIGHT = (45, 50, 55)
-TOP3_HIGHLIGHT = (50, 40, 30)
-
-draw.text((80, 40), "TRAINING RUN", font=font_subtitle, fill=CYAN)
-draw.text((80, 80), "THE SCOREBOARD", font=font_title, fill=WHITE)
-draw.text((80, 170), "Week of DATE HERE", font=font_subtitle, fill=CYAN)
-
-models = [
-    (1, "Model Name", "Company", 95.4, +0.2),
-    (2, "Model Name", "Company", 94.8, +0.2),
-    (3, "Model Name", "Company", 94.3, +0.2),
-    (4, "Model Name", "Company", 93.2, -0.2),
-    (5, "Model Name", "Company", 93.0, +0.2),
-    (6, "Model Name", "Company", 91.8, +0.6),
-    (7, "Model Name", "Company", 90.9, +0.2),
-]
-
-y_start = 230
-row_height = 100
-
-for i, (rank, model, company, score, change) in enumerate(models):
-    y = y_start + i * row_height
-
-    if rank == 1:
-        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=TOP1_HIGHLIGHT)
-    elif rank == 2:
-        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=TOP2_HIGHLIGHT)
-    elif rank == 3:
-        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=TOP3_HIGHLIGHT)
-    else:
-        draw.rounded_rectangle([(60, y), (1860, y + 85)], radius=8, fill=ROW_BG)
-
-    rank_colors = {1: GOLD, 2: (160, 160, 160), 3: (205, 127, 50)}
-    box_color = rank_colors.get(rank, (50, 65, 80))
-    draw.rounded_rectangle([(90, y + 18), (145, y + 68)], radius=10, fill=box_color)
-    draw.text((117, y + 43), str(rank), font=font_rank, fill=(10, 20, 32) if rank <= 3 else WHITE, anchor='mm')
-
-    draw.text((175, y + 25), model, font=font_model, fill=WHITE)
-    draw.text((175, y + 58), company, font=font_company, fill=GREY)
-
-    draw.text((1500, y + 43), f"{score}", font=font_score, fill=WHITE, anchor='mm')
-
-    if change > 0:
-        change_color = GREEN
-        change_text = f"+{change}"
-        arrow_x = 1650
-        arrow_y = y + 43
-        draw.polygon([(arrow_x, arrow_y - 12), (arrow_x - 10, arrow_y + 8), (arrow_x + 10, arrow_y + 8)], fill=GREEN)
-    elif change < 0:
-        change_color = RED
-        change_text = str(change)
-        arrow_x = 1650
-        arrow_y = y + 43
-        draw.polygon([(arrow_x, arrow_y + 12), (arrow_x - 10, arrow_y - 8), (arrow_x + 10, arrow_y - 8)], fill=RED)
-    else:
-        change_color = GREY
-        change_text = "0.0"
-        arrow_x = 1650
-        arrow_y = y + 43
-        draw.ellipse([(arrow_x - 6, arrow_y - 6), (arrow_x + 6, arrow_y + 6)], fill=GREY)
-
-    draw.text((1780, y + 43), change_text, font=font_change, fill=change_color, anchor='mm')
-
-img.save("scoreboard.png")
-print("Saved to Desktop: scoreboard.png")
-EOF
-```
-
-**How to use:**
-1. Open Terminal on Mac
-2. 2. Copy entire code block
-   3. 3. Paste into Terminal and press Enter
-      4. 4. Image saves to Desktop
-        
-         5. ---
-        
-         6. ## VERSION HISTORY
-
-- **v2.6** (February 12, 2026) - Added TRFcast methodology (5 pillars, 9 sub-metrics, 4 platforms), updated website structure with trfcast.html and trf-data.json
-- **v2.4** (February 9, 2026) - Updated TRS weights
-- **v1.0** (January 30, 2026) - Initial production bible created after Week 4
 
 ---
 
-*Last updated: February 12, 2026*
+## HOW TO START A NEW SESSION WITH CLAUDE
+
+Copy and paste this at the start of every new Cowork session:
+
+---
+*"Read the Production Bible at ~/trainingrun-site/PRODUCTION_BIBLE.md before doing anything. The repo is at /sessions/[session-id]/trainingrun-site — check the actual path. Do not create any new files without consulting the Bible first. Here's what I want to work on today: [YOUR TASK]"*
+
+---
+
+The session-id in the path changes every session. The easiest way to find the repo:
+```bash
+find /sessions -name "PRODUCTION_BIBLE.md" 2>/dev/null
+```
+
+---
+
+## VERSION HISTORY
+
+- **v3.0** (February 2026) — Complete rewrite. Full file inventory, design standards, DDP pipeline docs, benchmark formulas, GitHub safety, session startup guide. Reflects all work through February 2026.
+- **v2.6** (February 12, 2026) — Added TRFcast methodology
+- **v2.4** (February 9, 2026) — Updated TRS weights
+- **v1.0** (January 30, 2026) — Initial bible
+
+---
+
+## RECENT WORK COMPLETED (February 2026)
+
+- **Homepage:** Shipped v2.html as new index.html. Interactive model cards with 5-benchmark modal, trend chart with scrub/hover, touch support for mobile.
+- **Trend chart redesign:** White hero score, floating tooltip, glow line, gradient fill, board label at bottom (cyan TRS + white bench).
+- **Nav cleanup:** All pages standardized — plain "Training Run" text logo, only "About" in nav, no other links.
+- **Back button standardized:** All pages use `.back-btn` class from styles.css, fixed position.
+- **Methodology pages (all 5):** H1 colors standardized (cyan prefix + white suffix/Methodology). H1 gradient bug fixed on trscode.
+- **TOC sidebar:** "On This Page" sidebar added to all 5 methodology pages. CSS in styles.css. Hides on mobile.
+- **Old homepage saved** as index-v1.html.
+- **DDP pipeline:** All 5 agents enabled in daily_runner.py. Cron setup documented above.
