@@ -4,7 +4,7 @@
     "trscode": {
       "name": "TRScode DDP",
       "label": "Coding Leaderboard",
-      "emoji": "\ud83d\udcbb",
+      "emoji": "💻",
       "enabled": true,
       "last_run": "2026-02-23T10:31:53",
       "last_run_date": "2026-02-23",
@@ -49,7 +49,7 @@
     "trfcast": {
       "name": "TRFcast DDP",
       "label": "Forecast Leaderboard",
-      "emoji": "\ud83d\udd2e",
+      "emoji": "🔮",
       "enabled": true,
       "last_run": "2026-02-23T10:58:41",
       "last_run_date": "2026-02-23",
@@ -94,7 +94,7 @@
     "truscore": {
       "name": "TRUscore DDP",
       "label": "Truth & Neutrality",
-      "emoji": "\u00f0\u009f\u008e\u00af",
+      "emoji": "🎯",
       "enabled": true,
       "last_run": "2026-02-23T10:49:12",
       "last_run_date": "2026-02-23",
@@ -139,7 +139,7 @@
     "tragents": {
       "name": "TRAgents DDP",
       "label": "Agents Leaderboard",
-      "emoji": "\ud83e\udd16",
+      "emoji": "🤖",
       "enabled": true,
       "last_run": "2026-02-23T13:04:20",
       "last_run_date": "2026-02-23",
@@ -184,7 +184,7 @@
     "trsbench": {
       "name": "TRSbench DDP",
       "label": "Overall Rankings",
-      "emoji": "\u00f0\u009f\u008f\u0086",
+      "emoji": "🏆",
       "enabled": true,
       "last_run": "2026-02-23T10:30:32",
       "last_run_date": "2026-02-23",

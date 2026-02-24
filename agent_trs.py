@@ -1108,7 +1108,7 @@ def write_status(status: str, ranked: list, source_summary: list,
         sdata["agents"]["trsbench"] = {
             "name":             "TRSbench DDP",
             "label":            "Overall Rankings",
-            "emoji":            "ð",
+            "emoji":            "🏆",
             "enabled":          True,
             "last_run":         now_iso,
             "last_run_date":    TODAY,
@@ -1348,7 +1348,7 @@ def main():
         f"  {m['rank']}. {m['name']}  {today_score(m):.1f}"
         for m in ranked[:5]
     )
-    notify(f"ð <b>TRSbench Top 5 â {TODAY}</b>\n{top5_lines}")
+    notify(f"🏆 <b>TRSbench Top 5 â {TODAY}</b>\n{top5_lines}")
 
     # ââ Checksum ââ
     data["checksum"] = generate_checksum(data)
