@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-TR Web Manager Agent
-====================
+TR Web Manager Agent v2.0
+=========================
 A local AI agent that manages trainingrun.ai via Telegram + Ollama.
 
 - Communicates with David via Telegram
-- Uses local Ollama model (llama3.1:8b recommended)
+- Uses local Ollama model (qwen2.5-coder:32b for reliable code edits)
 - Has persistent memory via brain.md
 - Full write access with Telegram approval gates
-- Manages DDPs, files, and GitHub for the site
+- Manages DDPs, files, backups, and GitHub for the site
 
 Setup: See README_AGENT.md
 Run:   python3 agent.py
@@ -23,6 +23,7 @@ import subprocess
 import requests
 import datetime
 import re
+import shutil
 import threading
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -33,13 +34,17 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 TELEGRAM_TOKEN   = os.getenv("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-OLLAMA_MODEL     = os.getenv("TR_AGENT_MODEL", "llama3.1:8b")
+OLLAMA_MODEL     = os.getenv("TR_AGENT_MODEL", "qwen2.5-coder:32b")
 OLLAMA_BASE_URL  = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 REPO_PATH        = os.getenv("TR_REPO_PATH", str(Path.home() / "trainingrun-site"))
 BRAIN_FILE       = os.path.join(os.path.dirname(__file__), "brain.md")
 MEMORY_FILE      = os.path.join(os.path.dirname(__file__), "memory_log.jsonl")
 ACTIVITY_FILE    = os.path.join(REPO_PATH, "agent_activity.json")
+BACKUP_DIR       = os.path.join(REPO_PATH, "backups")
 BRIDGE_PORT      = 7432
+
+# Full Python path — required for cron compatibility
+PYTHON_PATH      = "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
 
 # ─────────────────────────────────────────────
 # BRIDGE SERVER — serves agent_activity.json
@@ -52,10 +57,13 @@ TOOL_ROOM_MAP = {
     "run_ddp":       "ddp_room",
     "read_file":     "office",
     "write_file":    "office",
+    "edit_file":     "office",
+    "backup_file":   "office",
     "git_push":      "office",
     "list_files":    "office",
     "remember":      "office",
     "read_log":      "ddp_room",
+    "site_health":   "ddp_room",
 }
 
 def write_activity(action: str, location: str = "office", status: str = "active"):
@@ -73,7 +81,7 @@ def write_activity(action: str, location: str = "office", status: str = "active"
 
     activity = {
         "status":       status,
-        "agent":        "tr_manager",
+        "agent":        "web_manager",
         "location":     location,
         "action":       action,
         "last_actions": last_actions,
@@ -123,16 +131,19 @@ def start_bridge():
 def tg_send(text: str):
     """Send a message to David via Telegram."""
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": text,
-        "parse_mode": "HTML"
-    }
-    try:
-        resp = requests.post(url, json=payload, timeout=10)
-        resp.raise_for_status()
-    except Exception as e:
-        print(f"[Telegram send error] {e}")
+    # Split long messages (Telegram limit is 4096 chars)
+    chunks = [text[i:i+3900] for i in range(0, len(text), 3900)]
+    for chunk in chunks:
+        payload = {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": chunk,
+            "parse_mode": "HTML"
+        }
+        try:
+            resp = requests.post(url, json=payload, timeout=10)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"[Telegram send error] {e}")
 
 
 def tg_get_updates(offset: int) -> list:
@@ -232,8 +243,25 @@ TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "edit_file",
+            "description": "Make a surgical edit to a file — find specific text and replace it. Much safer than write_file because it only changes what needs changing. REQUIRES DAVID'S APPROVAL.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Relative path from repo root"},
+                    "find": {"type": "string", "description": "Exact text to find in the file (must match exactly)"},
+                    "replace": {"type": "string", "description": "Text to replace it with"},
+                    "description": {"type": "string", "description": "Plain English description of what this change does"}
+                },
+                "required": ["path", "find", "replace", "description"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "write_file",
-            "description": "Write or edit a file in the repo. REQUIRES DAVID'S APPROVAL before executing. Always explain what you're changing and why.",
+            "description": "Write an entire file in the repo. Use edit_file instead for small changes. Only use write_file for creating new files or complete rewrites. REQUIRES DAVID'S APPROVAL.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -248,8 +276,22 @@ TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "backup_file",
+            "description": "Create a timestamped backup of a file before making changes. Backups go to ~/trainingrun-site/backups/. Use this BEFORE any risky edit.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Relative path from repo root to the file to back up"}
+                },
+                "required": ["path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "git_push",
-            "description": "Stage specific files, commit with a message, and push to GitHub. REQUIRES DAVID'S APPROVAL.",
+            "description": "Stage specific files, commit with a message, pull --rebase, and push to GitHub. REQUIRES DAVID'S APPROVAL.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -274,7 +316,7 @@ TOOLS = [
                 "properties": {
                     "target": {
                         "type": "string",
-                        "description": "Which DDP to run: 'all', 'trsbench', 'trscode', 'truscore', 'trfcast', or 'tragents'"
+                        "description": "Which DDP to run: 'all', 'trs', 'trscode', 'truscore', 'trfcast', or 'tragents'"
                     }
                 },
                 "required": ["target"]
@@ -303,6 +345,14 @@ TOOLS = [
             "description": "Read the DDP run log to check for errors or recent activity.",
             "parameters": {"type": "object", "properties": {}}
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "site_health",
+            "description": "Run a quick health check — verifies all 5 JSON data files exist, checks status.json for failures, confirms last push time in index.html, and reports any issues.",
+            "parameters": {"type": "object", "properties": {}}
+        }
     }
 ]
 
@@ -324,11 +374,20 @@ def execute_tool(name: str, args: dict) -> str:
             for key, agent in agents.items():
                 emoji = agent.get("emoji", "•")
                 status = agent.get("status", "unknown")
-                last_date = agent.get("last_run_date", "never")
+                last_run = agent.get("last_run", "never")
+                top_model = agent.get("top_model", "—")
                 top_score = agent.get("top_score")
+                sources_hit = agent.get("sources_hit", "?")
+                sources_total = agent.get("sources_total", "?")
+                models_qual = agent.get("models_qualified", "?")
                 score_str = f"{top_score:.1f}" if top_score else "—"
                 icon = "✅" if status == "success" else ("❌" if status == "failed" else "⚫")
-                lines.append(f"{icon} {emoji} {key}: {status} | last: {last_date} | top: {score_str}")
+                lines.append(
+                    f"{icon} {emoji} <b>{key}</b>\n"
+                    f"   Last: {last_run}\n"
+                    f"   Sources: {sources_hit}/{sources_total} | Models: {models_qual}\n"
+                    f"   #1: {top_model} ({score_str})"
+                )
             return "\n".join(lines)
         except FileNotFoundError:
             return "status.json not found in repo."
@@ -355,7 +414,7 @@ def execute_tool(name: str, args: dict) -> str:
         try:
             files = []
             for root, dirs, filenames in os.walk(target):
-                dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'node_modules']
+                dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ('node_modules', 'backups')]
                 for fname in filenames:
                     if not fname.startswith('.'):
                         rel = os.path.relpath(os.path.join(root, fname), REPO_PATH)
@@ -364,8 +423,32 @@ def execute_tool(name: str, args: dict) -> str:
         except Exception as e:
             return f"Error listing files: {e}"
 
-    elif name == "write_file":
+    elif name == "edit_file":
+        # SURGICAL EDIT — find and replace specific text
         # This is a WRITE operation — caller must handle approval gate
+        path = args.get("path", "")
+        find_text = args.get("find", "")
+        replace_text = args.get("replace", "")
+        full_path = os.path.join(REPO_PATH, path)
+        try:
+            with open(full_path, "r") as f:
+                content = f.read()
+            if find_text not in content:
+                return f"❌ Could not find the specified text in {path}. No changes made."
+            count = content.count(find_text)
+            if count > 1:
+                return f"⚠️ Found {count} matches in {path}. Please provide more specific text to match exactly one location."
+            new_content = content.replace(find_text, replace_text, 1)
+            with open(full_path, "w") as f:
+                f.write(new_content)
+            return f"✅ Edited {path}: replaced {len(find_text)} chars with {len(replace_text)} chars."
+        except FileNotFoundError:
+            return f"File not found: {path}"
+        except Exception as e:
+            return f"Error editing {path}: {e}"
+
+    elif name == "write_file":
+        # Full file write — caller must handle approval gate
         path = args.get("path", "")
         content = args.get("content", "")
         full_path = os.path.join(REPO_PATH, path)
@@ -377,9 +460,27 @@ def execute_tool(name: str, args: dict) -> str:
         except Exception as e:
             return f"Error writing {path}: {e}"
 
+    elif name == "backup_file":
+        path = args.get("path", "")
+        full_path = os.path.join(REPO_PATH, path)
+        try:
+            if not os.path.exists(full_path):
+                return f"❌ File not found: {path}"
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = os.path.basename(path)
+            name_part, ext = os.path.splitext(filename)
+            backup_name = f"{name_part}_{timestamp}{ext}"
+            backup_path = os.path.join(BACKUP_DIR, backup_name)
+            shutil.copy2(full_path, backup_path)
+            size = os.path.getsize(backup_path)
+            return f"✅ Backed up: {path} → backups/{backup_name} ({size:,} bytes)"
+        except Exception as e:
+            return f"Error backing up {path}: {e}"
+
     elif name == "git_push":
         files = args.get("files", [])
-        message = args.get("message", "Update from TR Manager")
+        message = args.get("message", "Update from Web Manager")
         try:
             # Stage files
             for f in files:
@@ -396,7 +497,17 @@ def execute_tool(name: str, args: dict) -> str:
                 cwd=REPO_PATH, capture_output=True, text=True
             )
             if result.returncode != 0:
+                if "nothing to commit" in result.stdout + result.stderr:
+                    return "ℹ️ Nothing to commit — files unchanged."
                 return f"❌ git commit failed: {result.stderr}"
+
+            # Pull rebase BEFORE push (CRITICAL — Production Bible rule)
+            result = subprocess.run(
+                ["git", "pull", "--rebase"],
+                cwd=REPO_PATH, capture_output=True, text=True
+            )
+            if result.returncode != 0:
+                return f"⚠️ git pull --rebase failed: {result.stderr}\nCommit is saved locally. Try manual push."
 
             # Push
             result = subprocess.run(
@@ -406,25 +517,25 @@ def execute_tool(name: str, args: dict) -> str:
             if result.returncode != 0:
                 return f"❌ git push failed: {result.stderr}"
 
-            return f"✅ Pushed to GitHub. Files: {', '.join(files)}\nCommit: {message}"
+            return f"✅ Pushed to GitHub.\nFiles: {', '.join(files)}\nCommit: {message}"
         except Exception as e:
             return f"Error during git push: {e}"
 
     elif name == "run_ddp":
         target = args.get("target", "all")
-        cmd = ["python3", "daily_runner.py"]
+        cmd = [PYTHON_PATH, "daily_runner.py"]
         if target != "all":
             cmd += ["--score", target]
         try:
             result = subprocess.run(
-                cmd, cwd=REPO_PATH, capture_output=True, text=True, timeout=600
+                cmd, cwd=REPO_PATH, capture_output=True, text=True, timeout=900
             )
             output = result.stdout[-2000:] if len(result.stdout) > 2000 else result.stdout
             if result.returncode != 0:
                 return f"❌ DDP run failed:\n{result.stderr[-1000:]}"
             return f"✅ DDP run complete ({target}):\n{output}"
         except subprocess.TimeoutExpired:
-            return "⏱ DDP run timed out after 10 minutes."
+            return "⏱ DDP run timed out after 15 minutes."
         except Exception as e:
             return f"Error running DDP: {e}"
 
@@ -448,6 +559,74 @@ def execute_tool(name: str, args: dict) -> str:
         except Exception as e:
             return f"Error reading log: {e}"
 
+    elif name == "site_health":
+        issues = []
+        checks_passed = 0
+
+        # Check all 5 data JSON files exist
+        data_files = {
+            "trs-data.json": "TRSbench",
+            "trscode-data.json": "TRScode",
+            "truscore-data.json": "TRUscore",
+            "trf-data.json": "TRFcast",
+            "tragent-data.json": "TRAgents",
+        }
+        for fname, label in data_files.items():
+            fpath = os.path.join(REPO_PATH, fname)
+            if os.path.exists(fpath):
+                checks_passed += 1
+            else:
+                issues.append(f"❌ Missing: {fname} ({label})")
+
+        # Check status.json for failures
+        status_path = os.path.join(REPO_PATH, "status.json")
+        try:
+            with open(status_path) as f:
+                sdata = json.load(f)
+            for key, agent in sdata.get("agents", {}).items():
+                if agent.get("status") == "failed":
+                    issues.append(f"❌ {key} last run FAILED: {agent.get('error', 'unknown')}")
+                elif agent.get("status") == "success":
+                    checks_passed += 1
+                # Check if data is stale (more than 36 hours old)
+                last_run = agent.get("last_run", "")
+                if last_run:
+                    try:
+                        lr = datetime.datetime.fromisoformat(last_run)
+                        age = datetime.datetime.now() - lr
+                        if age.total_seconds() > 36 * 3600:
+                            issues.append(f"⚠️ {key} data is stale ({age.days}d {age.seconds//3600}h old)")
+                    except Exception:
+                        pass
+        except Exception as e:
+            issues.append(f"❌ Cannot read status.json: {e}")
+
+        # Check index.html push timestamp
+        index_path = os.path.join(REPO_PATH, "index.html")
+        try:
+            with open(index_path, "r") as f:
+                idx_content = f.read()
+            m = re.search(r"var LAST_PUSH_TIME\s*=\s*'([^']*)'", idx_content)
+            if m:
+                checks_passed += 1
+                push_time = m.group(1)
+            else:
+                issues.append("⚠️ LAST_PUSH_TIME not found in index.html")
+                push_time = "unknown"
+        except Exception:
+            issues.append("❌ Cannot read index.html")
+            push_time = "unknown"
+
+        # Build report
+        if issues:
+            report = f"🔍 Site Health: {checks_passed} OK, {len(issues)} issues\n\n"
+            report += "\n".join(issues)
+            report += f"\n\nLast push: {push_time}"
+        else:
+            report = f"✅ Site Health: All {checks_passed} checks passed!\nLast push: {push_time}"
+
+        return report
+
     return f"Unknown tool: {name}"
 
 
@@ -455,7 +634,7 @@ def execute_tool(name: str, args: dict) -> str:
 # WRITE-PROTECTED TOOLS (require approval)
 # ─────────────────────────────────────────────
 
-PROTECTED_TOOLS = {"write_file", "git_push", "run_ddp"}
+PROTECTED_TOOLS = {"write_file", "edit_file", "git_push", "run_ddp"}
 
 
 # ─────────────────────────────────────────────
@@ -472,7 +651,7 @@ def ollama_chat(messages: list) -> dict:
         "stream": False
     }
     try:
-        resp = requests.post(url, json=payload, timeout=120)
+        resp = requests.post(url, json=payload, timeout=300)
         resp.raise_for_status()
         return resp.json()
     except requests.exceptions.ConnectionError:
@@ -483,10 +662,11 @@ def ollama_chat(messages: list) -> dict:
 
 def build_system_prompt() -> str:
     brain = load_brain()
-    return f"""You are TR Manager — the AI web manager for trainingrun.ai. You run locally on David's MacBook Pro M4 via Ollama.
+    return f"""You are the TR Web Manager — the AI web manager for trainingrun.ai. You run locally on David's MacBook Pro M4 via Ollama (qwen2.5-coder:32b).
 
-Your personality: Direct, reliable, no-BS. You know this site inside out. You take your job seriously.
-Your role: Manage the site, monitor DDPs, handle GitHub, support David's requests.
+Your personality: Direct, reliable, no-BS. You know this site inside out. You take your job seriously. You are David's most trusted employee.
+
+Your role: Manage the site, monitor DDPs, handle GitHub, make code edits, run backups, support David's requests.
 
 Here is your complete memory and knowledge base:
 
@@ -494,27 +674,34 @@ Here is your complete memory and knowledge base:
 
 ---
 
-COMMAND REFERENCE — match David's message to the correct tool:
+TOOL SELECTION GUIDE — match David's message to the correct tool:
 
 | David says | You do |
 |---|---|
 | "status" / "check status" / "how are the DDPs" | call check_status |
+| "health" / "site health" / "anything broken" | call site_health |
 | "read [file]" / "show me [file]" | call read_file |
 | "list files" / "what files" | call list_files |
 | "check the log" / "show log" | call read_log |
 | "remember [x]" | call remember |
-| "edit [file]" / "change [file]" / "update [file]" | call write_file (needs YES) |
+| "back up [file]" / "backup [file]" | call backup_file |
+| "change [X] to [Y] in [file]" | call backup_file FIRST, then edit_file (needs YES) |
+| "edit [file]" / "change [file]" / "fix [file]" | call backup_file FIRST, then edit_file (needs YES) |
+| "create [file]" / "write [file]" | call write_file (needs YES) |
 | "push" / "push to github" | call git_push (needs YES) |
 | "run [DDP name]" / "run the DDPs" | call run_ddp (needs YES) |
 
 CRITICAL RULES — read every one:
 1. "status" ALWAYS means call check_status. Never call write_file for a status request.
-2. ONLY call write_file when David EXPLICITLY asks you to edit, create, or change a specific file.
-3. NEVER call write_file unless David named a file and asked you to change it.
-4. Keep responses short — David reads on his phone.
-5. Use emojis sparingly (✅ ❌ ⚠️).
-6. Never make up data — always use tools to get real information.
-7. Each message from David is a NEW independent request. Do not carry over tasks from previous messages.
+2. For ANY file edit, ALWAYS backup the file first using backup_file before making changes.
+3. Prefer edit_file over write_file — surgical edits are safer than full file rewrites.
+4. ONLY call write_file when creating a NEW file or when the change is so large that edit_file won't work.
+5. NEVER call write_file or edit_file unless David EXPLICITLY asks you to change something.
+6. Keep responses short — David reads on his phone.
+7. Use emojis sparingly (✅ ❌ ⚠️).
+8. Never make up data — always use tools to get real information.
+9. Each message from David is a NEW independent request. Do not carry over tasks from previous messages.
+10. When pushing to git, ALWAYS use git pull --rebase before push.
 """
 
 
@@ -529,20 +716,31 @@ def request_approval(tool_name: str, args: dict) -> str:
     """Format an approval request message for Telegram."""
     global pending_approval
 
-    content = args.get('content', '')
-    preview = content[:120].replace('<', '&lt;').replace('>', '&gt;') + ('...' if len(content) > 120 else '')
-    descriptions = {
-        "write_file": (
+    if tool_name == "edit_file":
+        find_preview = args.get('find', '')[:80]
+        replace_preview = args.get('replace', '')[:80]
+        desc = (
+            f"Edit file: <b>{args.get('path')}</b>\n"
+            f"Reason: {args.get('description', '—')}\n"
+            f"Find: <code>{find_preview}</code>\n"
+            f"Replace: <code>{replace_preview}</code>"
+        )
+    elif tool_name == "write_file":
+        content = args.get('content', '')
+        preview = content[:120].replace('<', '&lt;').replace('>', '&gt;') + ('...' if len(content) > 120 else '')
+        desc = (
             f"Write file: <b>{args.get('path')}</b>\n"
             f"Size: <b>{len(content)} chars</b>\n"
             f"Reason: {args.get('description', '—')}\n"
             f"Preview: <code>{preview}</code>"
-        ),
-        "git_push": f"Push to GitHub:\nFiles: {', '.join(args.get('files', []))}\nCommit: {args.get('message', '')}",
-        "run_ddp": f"Run DDP: <b>{args.get('target', 'all')}</b>"
-    }
+        )
+    elif tool_name == "git_push":
+        desc = f"Push to GitHub:\nFiles: {', '.join(args.get('files', []))}\nCommit: {args.get('message', '')}"
+    elif tool_name == "run_ddp":
+        desc = f"Run DDP: <b>{args.get('target', 'all')}</b>"
+    else:
+        desc = f"Execute: {tool_name}"
 
-    desc = descriptions.get(tool_name, f"Execute: {tool_name}")
     pending_approval = {"tool": tool_name, "args": args}
 
     return f"🔐 <b>APPROVAL NEEDED</b>\n\n{desc}\n\nReply <b>YES</b> to approve or <b>NO</b> to cancel."
@@ -574,8 +772,15 @@ def keyword_intercept(text: str):
              "what's the status", "whats the status", "show status", "s"):
         return ("check_status", {})
 
+    # HEALTH CHECK
+    if t in ("health", "site health", "check health", "anything broken",
+             "health check", "is the site ok", "site ok"):
+        return ("site_health", {})
+
     # LOG
-    if any(k in t for k in ("log", "show log", "check log", "ddp log", "what happened")):
+    if any(k in t for k in ("show log", "check log", "ddp log", "read log")):
+        return ("read_log", {})
+    if t == "log":
         return ("read_log", {})
 
     # LIST FILES
@@ -583,7 +788,7 @@ def keyword_intercept(text: str):
         return ("list_files", {})
 
     # READ BRAIN
-    if any(k in t for k in ("brain", "show brain", "read brain", "memory")):
+    if any(k in t for k in ("brain", "show brain", "read brain", "memory", "show memory")):
         return ("read_file", {"path": "web_agent/brain.md"})
 
     return None  # Let Ollama handle it
@@ -597,10 +802,11 @@ def run():
     global pending_approval
 
     print("=" * 50)
-    print("  TR Web Manager — Starting Up")
+    print("  TR Web Manager v2.0 — Starting Up")
     print(f"  Model: {OLLAMA_MODEL}")
     print(f"  Repo:  {REPO_PATH}")
     print(f"  Brain: {BRAIN_FILE}")
+    print(f"  Backups: {BACKUP_DIR}")
     print("=" * 50)
 
     # Validate config
@@ -615,6 +821,9 @@ def run():
         print(f"   Set TR_REPO_PATH env var if your repo is in a different location.")
         sys.exit(1)
 
+    # Create backup directory
+    os.makedirs(BACKUP_DIR, exist_ok=True)
+
     # Start the HQ bridge server
     start_bridge()
 
@@ -622,13 +831,12 @@ def run():
     write_activity("Online and ready", location="office", status="idle")
 
     # Announce startup
-    tg_send("🟢 <b>TR Manager online.</b>\nReady for your instructions. Type <code>status</code> to check the DDPs.")
+    tg_send("🟢 <b>Web Manager v2.0 online.</b>\nModel: qwen2.5-coder:32b\nReady for your instructions.\n\n<code>status</code> — check DDPs\n<code>health</code> — site health check\n<code>log</code> — view DDP log")
     print("✅ Startup message sent to Telegram. Polling for messages...")
 
     conversation_history = []
 
     # Skip all old Telegram messages on startup — only process NEW ones
-    # This prevents replaying previous conversations after a restart
     print("[Startup] Skipping old Telegram messages...")
     old_updates = tg_get_updates(0)
     if old_updates:
@@ -664,13 +872,17 @@ def run():
                         args = pending_approval["args"]
                         pending_approval = None
                         tg_send(f"✅ Approved. Executing {tool}...")
+                        location = TOOL_ROOM_MAP.get(tool, "office")
+                        write_activity(f"Executing: {tool}", location=location, status="active")
                         result = execute_tool(tool, args)
+                        write_activity(f"Done: {tool}", location="office", status="idle")
                         print(f"[Tool: {tool}] {result[:200]}")
-                        tg_send(result[:3000])
+                        tg_send(result)
                         continue
 
                     elif is_rejection(text):
                         pending_approval = None
+                        write_activity("Approval cancelled", location="office", status="idle")
                         tg_send("❌ Cancelled. What else can I help with?")
                         continue
 
@@ -688,10 +900,11 @@ def run():
                     write_activity(f"Running: {tool_name}", location=location, status="active")
                     result = execute_tool(tool_name, tool_args)
                     write_activity(f"Done: {tool_name}", location="office", status="idle")
-                    tg_send(result[:3000])
+                    tg_send(result)
                     continue  # Skip Ollama entirely
 
                 # ── NORMAL MESSAGE HANDLING — send to Ollama ──
+                write_activity("Thinking...", location="office", status="active")
                 conversation_history.append({"role": "user", "content": text})
 
                 messages = [
@@ -704,6 +917,7 @@ def run():
                 if "error" in response:
                     error_msg = f"⚠️ Agent error: {response['error']}"
                     tg_send(error_msg)
+                    write_activity("Error", location="office", status="idle")
                     print(f"[Ollama error] {response['error']}")
                     continue
 
@@ -728,23 +942,20 @@ def run():
                             tg_send(approval_msg)
                             break  # Wait for approval before doing anything else
                         else:
-                            # Safe tool — execute immediately and send result directly
+                            # Safe tool — execute immediately
                             location = TOOL_ROOM_MAP.get(tool_name, "office")
                             write_activity(f"Running: {tool_name}", location=location, status="active")
                             result = execute_tool(tool_name, tool_args)
                             write_activity(f"Done: {tool_name}", location="office", status="idle")
                             print(f"[Tool result] {result[:200]}")
 
-                            # Send tool result straight to Telegram — no second LLM call needed
-                            tg_send(result[:3000])
-
-                            # Keep conversation history updated
+                            tg_send(result)
                             conversation_history.append({"role": "assistant", "content": f"[Called {tool_name}] {result[:500]}"})
-
 
                 elif assistant_content:
                     # Plain text response
-                    tg_send(assistant_content[:3000])
+                    write_activity("Responded", location="office", status="idle")
+                    tg_send(assistant_content)
                     conversation_history.append({"role": "assistant", "content": assistant_content})
 
                 # Trim conversation history to prevent token bloat
@@ -752,8 +963,9 @@ def run():
                     conversation_history = conversation_history[-20:]
 
         except KeyboardInterrupt:
-            print("\n\n[Shutting down TR Manager]")
-            tg_send("🔴 TR Manager going offline.")
+            print("\n\n[Shutting down Web Manager]")
+            write_activity("Offline", location="office", status="offline")
+            tg_send("🔴 Web Manager going offline.")
             break
         except Exception as e:
             print(f"[Main loop error] {e}")
