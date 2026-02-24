@@ -1,6 +1,6 @@
 {
   "formula_version": "2.4",
-  "checksum": "1d6716e13213d9ef89b4f11b197b5b8cd790fb0bfc7c395639362eff8ce978ae",
+  "checksum": "a2dc046cb7fa1efd0c22067550284d5497a051e160510c3a16b912317bf51f33",
   "weights": {
     "safety": 0.21,
     "reasoning": 0.2,
@@ -66,7 +66,8 @@
     "2026-02-20",
     "2026-02-21",
     "2026-02-22",
-    "2026-02-23"
+    "2026-02-23",
+    "2026-02-24"
   ],
   "models": [
     {
@@ -129,13 +130,14 @@
         98.92,
         87.76,
         68.08,
-        68.29
+        68.29,
+        68.26
       ],
       "category_count": 4,
       "pillar_scores": {
         "reasoning": 69.2,
         "coding": 97.7,
-        "efficiency": 39.4,
+        "efficiency": 39.2,
         "usage_adoption": 89.8
       }
     },
@@ -198,6 +200,7 @@
         95.8,
         96.71,
         92.25,
+        67.59,
         67.59,
         67.59
       ],
@@ -268,6 +271,7 @@
         96.48,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -332,13 +336,14 @@
         95.03,
         85.53,
         60.16,
-        60.78
+        60.78,
+        60.54
       ],
       "category_count": 3,
       "pillar_scores": {
         "reasoning": 72.9,
         "knowledge": 99.1,
-        "efficiency": 45.3
+        "efficiency": 43.9
       }
     },
     {
@@ -401,19 +406,20 @@
         94.19,
         63.65,
         44.04,
-        44.27
+        44.27,
+        44.24
       ],
       "category_count": 3,
       "pillar_scores": {
         "reasoning": 49.9,
-        "efficiency": 28.8,
+        "efficiency": 28.7,
         "usage_adoption": 93.9
       }
     },
     {
       "name": "Claude Sonnet 4.5",
       "company": "Anthropic",
-      "rank": 39,
+      "rank": 38,
       "scores": [
         89.2,
         89,
@@ -469,6 +475,7 @@
         94.92,
         93.08,
         69.39,
+        52.6,
         52.6,
         52.6
       ],
@@ -539,6 +546,7 @@
         92.55,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -601,6 +609,7 @@
         70,
         91.78,
         91.88,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -667,13 +676,14 @@
         90.97,
         72.87,
         59.68,
-        60.04
+        60.04,
+        59.92
       ],
       "category_count": 3,
       "pillar_scores": {
         "coding": 79.6,
         "knowledge": 97.5,
-        "efficiency": 23.5
+        "efficiency": 22.8
       }
     },
     {
@@ -734,6 +744,7 @@
         null,
         90.38,
         90.12,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -799,6 +810,7 @@
         93.83,
         89.47,
         84.72,
+        61.51,
         61.51,
         61.51
       ],
@@ -867,6 +879,7 @@
         88.91,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -930,6 +943,7 @@
         90.91,
         88.36,
         89.83,
+        62.29,
         62.29,
         62.29
       ],
@@ -1001,6 +1015,7 @@
         87.82,
         85.31,
         64.66,
+        64.66,
         64.66
       ],
       "category_count": 3,
@@ -1070,6 +1085,7 @@
         87.29,
         75.98,
         55.47,
+        55.47,
         55.47
       ],
       "category_count": 1,
@@ -1137,6 +1153,7 @@
         86.75,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -1199,6 +1216,7 @@
         null,
         89.29,
         86.22,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1264,6 +1282,7 @@
         90.68,
         85.68,
         86.02,
+        67.3,
         67.3,
         67.3
       ],
@@ -1333,6 +1352,7 @@
         85.15,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -1395,6 +1415,7 @@
         90.77,
         89.73,
         84.61,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1461,6 +1482,7 @@
         84.08,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -1523,6 +1545,7 @@
         null,
         88.05,
         83.54,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1589,6 +1612,7 @@
         83.01,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "category_count": 0
@@ -1651,6 +1675,7 @@
         null,
         87.04,
         null,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -1716,6 +1741,7 @@
         null,
         null,
         null,
+        58.21,
         58.21,
         58.21
       ],
@@ -1785,6 +1811,7 @@
         null,
         null,
         46.67,
+        46.67,
         46.67
       ],
       "category_count": 2,
@@ -1852,6 +1879,7 @@
         null,
         null,
         null,
+        71.09,
         71.09,
         71.09
       ],
@@ -1921,6 +1949,7 @@
         null,
         null,
         75.98,
+        75.98,
         75.98
       ],
       "category_count": 2,
@@ -1932,7 +1961,7 @@
     {
       "name": "Command R Plus",
       "company": "Cohere",
-      "rank": 37,
+      "rank": 36,
       "scores": [
         null,
         null,
@@ -1988,6 +2017,7 @@
         null,
         null,
         null,
+        52.65,
         52.65,
         52.65
       ],
@@ -2056,6 +2086,7 @@
         null,
         null,
         null,
+        44.75,
         44.75,
         44.75
       ],
@@ -2126,6 +2157,7 @@
         null,
         null,
         60.47,
+        60.47,
         60.47
       ],
       "category_count": 2,
@@ -2193,6 +2225,7 @@
         null,
         null,
         null,
+        43.34,
         43.34,
         43.34
       ],
@@ -2262,12 +2295,13 @@
         null,
         null,
         27.02,
-        27.31
+        27.31,
+        27.26
       ],
       "category_count": 2,
       "pillar_scores": {
         "reasoning": 31.3,
-        "efficiency": 44.7
+        "efficiency": 44.4
       }
     },
     {
@@ -2329,6 +2363,7 @@
         null,
         null,
         null,
+        63.05,
         63.05,
         63.05
       ],
@@ -2397,6 +2432,7 @@
         null,
         null,
         null,
+        71.14,
         71.14,
         71.14
       ],
@@ -2468,13 +2504,14 @@
         null,
         null,
         75.45,
-        75.7
+        75.7,
+        75.59
       ],
       "category_count": 3,
       "pillar_scores": {
         "safety": 98.7,
         "reasoning": 100.0,
-        "efficiency": 44.7
+        "efficiency": 43.9
       }
     },
     {
@@ -2537,12 +2574,13 @@
         null,
         null,
         10.02,
-        10.57
+        10.57,
+        10.53
       ],
       "category_count": 2,
       "pillar_scores": {
         "knowledge": 6.7,
-        "efficiency": 21.2
+        "efficiency": 21.1
       }
     },
     {
@@ -2604,6 +2642,7 @@
         null,
         null,
         null,
+        63.44,
         63.44,
         63.44
       ],
@@ -2673,6 +2712,7 @@
         null,
         null,
         59.09,
+        59.09,
         59.09
       ],
       "category_count": 2,
@@ -2741,6 +2781,7 @@
         null,
         null,
         60.05,
+        60.05,
         60.05
       ],
       "category_count": 4,
@@ -2754,7 +2795,7 @@
     {
       "name": "Kimi K2.5",
       "company": "Moonshot AI",
-      "rank": 49,
+      "rank": 50,
       "scores": [
         null,
         null,
@@ -2811,13 +2852,14 @@
         null,
         null,
         39.83,
-        39.95
+        39.95,
+        39.73
       ],
       "category_count": 4,
       "pillar_scores": {
         "reasoning": 11.8,
         "coding": 71.6,
-        "efficiency": 22.9,
+        "efficiency": 21.1,
         "usage_adoption": 100.0
       }
     },
@@ -2881,6 +2923,7 @@
         null,
         null,
         67.95,
+        67.95,
         67.95
       ],
       "category_count": 3,
@@ -2893,7 +2936,7 @@
     {
       "name": "Llama 4 Maverick",
       "company": "Meta",
-      "rank": 34,
+      "rank": 39,
       "scores": [
         null,
         null,
@@ -2950,11 +2993,12 @@
         null,
         null,
         53.0,
-        54.62
+        54.62,
+        50.83
       ],
       "category_count": 1,
       "pillar_scores": {
-        "efficiency": 73.5
+        "efficiency": 68.4
       }
     },
     {
@@ -3016,6 +3060,7 @@
         null,
         null,
         null,
+        45.08,
         45.08,
         45.08
       ],
@@ -3086,6 +3131,7 @@
         null,
         null,
         50.08,
+        50.08,
         50.08
       ],
       "category_count": 2,
@@ -3097,7 +3143,7 @@
     {
       "name": "OLMo 2 13B Instruct November 2024",
       "company": "AI2",
-      "rank": 36,
+      "rank": 35,
       "scores": [
         null,
         null,
@@ -3153,6 +3199,7 @@
         null,
         null,
         null,
+        53.13,
         53.13,
         53.13
       ],
@@ -3222,6 +3269,7 @@
         null,
         null,
         45.05,
+        45.05,
         45.05
       ],
       "category_count": 2,
@@ -3290,6 +3338,7 @@
         null,
         null,
         61.72,
+        61.72,
         61.72
       ],
       "category_count": 2,
@@ -3301,7 +3350,7 @@
     {
       "name": "Palmyra Med",
       "company": "Google",
-      "rank": 35,
+      "rank": 34,
       "scores": [
         null,
         null,
@@ -3357,6 +3406,7 @@
         null,
         null,
         null,
+        53.18,
         53.18,
         53.18
       ],
@@ -3426,6 +3476,7 @@
         null,
         null,
         69.48,
+        69.48,
         69.48
       ],
       "category_count": 2,
@@ -3493,6 +3544,7 @@
         null,
         null,
         null,
+        64.18,
         64.18,
         64.18
       ],
@@ -3563,6 +3615,7 @@
         null,
         null,
         61.37,
+        61.37,
         61.37
       ],
       "category_count": 2,
@@ -3631,6 +3684,7 @@
         null,
         null,
         68.45,
+        68.45,
         68.45
       ],
       "category_count": 2,
@@ -3642,7 +3696,7 @@
     {
       "name": "gemma-1.1-2b-it",
       "company": "Google",
-      "rank": 50,
+      "rank": 49,
       "scores": [
         null,
         null,
@@ -3698,6 +3752,7 @@
         null,
         null,
         null,
+        39.76,
         39.76,
         39.76
       ],
@@ -3767,7 +3822,8 @@
         null,
         null,
         74.15,
-        74.33
+        74.33,
+        74.03
       ],
       "category_count": 5,
       "pillar_scores": {
@@ -3775,7 +3831,7 @@
         "reasoning": 94.0,
         "coding": 40.2,
         "human_preference": 96.7,
-        "efficiency": 66.7
+        "efficiency": 62.7
       }
     },
     {
@@ -3838,12 +3894,13 @@
         null,
         null,
         57.55,
-        57.65
+        57.65,
+        57.48
       ],
       "category_count": 2,
       "pillar_scores": {
         "human_preference": 96.9,
-        "efficiency": 13.0
+        "efficiency": 12.2
       }
     },
     {
@@ -3906,12 +3963,13 @@
         null,
         null,
         59.33,
-        59.43
+        59.43,
+        59.26
       ],
       "category_count": 2,
       "pillar_scores": {
         "human_preference": 100.0,
-        "efficiency": 13.0
+        "efficiency": 12.2
       }
     },
     {
@@ -3974,18 +4032,19 @@
         null,
         null,
         55.14,
-        55.22
+        55.22,
+        55.05
       ],
       "category_count": 2,
       "pillar_scores": {
-        "human_preference": 93.6,
-        "efficiency": 10.4
+        "human_preference": 93.5,
+        "efficiency": 9.8
       }
     },
     {
       "name": "molmo-2-8b",
       "company": "AI2",
-      "rank": 31,
+      "rank": 30,
       "scores": [
         null,
         null,
@@ -4042,12 +4101,13 @@
         null,
         null,
         56.42,
-        56.52
+        56.52,
+        56.39
       ],
       "category_count": 2,
       "pillar_scores": {
         "human_preference": 94.9,
-        "efficiency": 13.0
+        "efficiency": 12.2
       }
     },
     {
@@ -4109,6 +4169,7 @@
         null,
         null,
         null,
+        46.47,
         46.47,
         46.47
       ],
@@ -4179,6 +4240,7 @@
         null,
         null,
         64.84,
+        64.84,
         64.84
       ],
       "category_count": 2,
@@ -4247,7 +4309,8 @@
         null,
         null,
         47.74,
-        47.74
+        47.74,
+        47.73
       ],
       "category_count": 5,
       "pillar_scores": {
@@ -4255,13 +4318,13 @@
         "reasoning": 3.0,
         "human_preference": 96.3,
         "knowledge": 16.0,
-        "efficiency": 2.4
+        "efficiency": 2.2
       }
     },
     {
       "name": "o4-mini",
       "company": "OpenAI",
-      "rank": 38,
+      "rank": 37,
       "scores": [
         null,
         null,
@@ -4318,19 +4381,20 @@
         null,
         null,
         52.64,
-        52.65
+        52.65,
+        52.63
       ],
       "category_count": 3,
       "pillar_scores": {
         "safety": 94.3,
         "reasoning": 52.6,
-        "efficiency": 2.4
+        "efficiency": 2.2
       }
     },
     {
       "name": "olmo-3-32b-think",
       "company": "AI2",
-      "rank": 30,
+      "rank": 31,
       "scores": [
         null,
         null,
@@ -4387,12 +4451,13 @@
         null,
         null,
         56.41,
-        56.55
+        56.55,
+        56.36
       ],
       "category_count": 2,
       "pillar_scores": {
-        "human_preference": 93.2,
-        "efficiency": 17.3
+        "human_preference": 93.3,
+        "efficiency": 16.3
       }
     },
     {
@@ -4455,12 +4520,13 @@
         null,
         null,
         57.66,
-        57.8
+        57.8,
+        57.57
       ],
       "category_count": 2,
       "pillar_scores": {
         "human_preference": 95.4,
-        "efficiency": 17.3
+        "efficiency": 16.3
       }
     }
   ],
@@ -4526,5 +4592,5 @@
       "company": "Google"
     }
   ],
-  "run_at": "1:04 PM CST"
+  "run_at": "7:52 AM CST"
 }
