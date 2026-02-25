@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-TR Web Manager Agent v2.0
-=========================
-A local AI agent that manages trainingrun.ai via Telegram + Ollama.
+TRSitekeeper v1.1
+=================
+The AI gatekeeper for trainingrun.ai — powered by Claude Sonnet 4.6.
 
-- Communicates with David via Telegram
-- Uses local Ollama model (qwen2.5-coder:14b for reliable code edits)
+- Communicates with David via Telegram (text + screenshots)
+- Uses Anthropic Claude API for fast, intelligent responses
 - Has persistent memory via brain.md
 - Full write access with Telegram approval gates
-- Manages DDPs, files, backups, and GitHub for the site
+- Manages DDPs, files, GitHub, and site health
+- Accepts screenshots: "fix this" + photo = instant diagnosis + fix
+- Multi-step tool chains: Claude can read a file, then propose an edit
 
-Setup: See README_AGENT.md
 Run:   python3 agent.py
 Stop:  Ctrl+C
 """
@@ -24,18 +25,20 @@ import requests
 import datetime
 import re
 import shutil
+import base64
 import threading
+import traceback
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # ─────────────────────────────────────────────
-# CONFIG — edit these or set as env vars
+# CONFIG
 # ─────────────────────────────────────────────
 
 TELEGRAM_TOKEN   = os.getenv("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-OLLAMA_MODEL     = os.getenv("TR_AGENT_MODEL", "qwen2.5-coder:14b")
-OLLAMA_BASE_URL  = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+CLAUDE_MODEL     = "claude-sonnet-4-6"
 REPO_PATH        = os.getenv("TR_REPO_PATH", str(Path.home() / "trainingrun-site"))
 BRAIN_FILE       = os.path.join(os.path.dirname(__file__), "brain.md")
 MEMORY_FILE      = os.path.join(os.path.dirname(__file__), "memory_log.jsonl")
@@ -43,15 +46,13 @@ ACTIVITY_FILE    = os.path.join(REPO_PATH, "agent_activity.json")
 BACKUP_DIR       = os.path.join(REPO_PATH, "backups")
 BRIDGE_PORT      = 7432
 
-# Full Python path — required for cron compatibility
+# Full Python path for DDP runs (macOS Playwright needs this)
 PYTHON_PATH      = "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
 
 # ─────────────────────────────────────────────
-# BRIDGE SERVER — serves agent_activity.json
-# to hq.html running locally on David's Mac
+# BRIDGE SERVER
 # ─────────────────────────────────────────────
 
-# Maps tool names → HQ room location
 TOOL_ROOM_MAP = {
     "check_status":  "ddp_room",
     "run_ddp":       "ddp_room",
@@ -59,15 +60,15 @@ TOOL_ROOM_MAP = {
     "write_file":    "office",
     "edit_file":     "office",
     "backup_file":   "office",
+    "site_health":   "ddp_room",
     "git_push":      "office",
     "list_files":    "office",
     "remember":      "office",
     "read_log":      "ddp_room",
-    "site_health":   "ddp_room",
 }
 
+
 def write_activity(action: str, location: str = "office", status: str = "active"):
-    """Write current agent state to agent_activity.json for the HQ bridge."""
     try:
         with open(ACTIVITY_FILE) as f:
             existing = json.load(f)
@@ -81,7 +82,7 @@ def write_activity(action: str, location: str = "office", status: str = "active"
 
     activity = {
         "status":       status,
-        "agent":        "web_manager",
+        "agent":        "trsitekeeper",
         "location":     location,
         "action":       action,
         "last_actions": last_actions,
@@ -95,7 +96,6 @@ def write_activity(action: str, location: str = "office", status: str = "active"
 
 
 class BridgeHandler(BaseHTTPRequestHandler):
-    """Serves agent_activity.json to hq.html with CORS headers."""
     def do_GET(self):
         try:
             with open(ACTIVITY_FILE) as f:
@@ -110,11 +110,10 @@ class BridgeHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def log_message(self, format, *args):
-        pass  # Suppress server logs
+        pass
 
 
 def start_bridge():
-    """Start the local bridge server in a background thread."""
     try:
         server = HTTPServer(("localhost", BRIDGE_PORT), BridgeHandler)
         t = threading.Thread(target=server.serve_forever, daemon=True)
@@ -129,11 +128,22 @@ def start_bridge():
 # ─────────────────────────────────────────────
 
 def tg_send(text: str):
-    """Send a message to David via Telegram."""
+    """Send a message to David via Telegram. Auto-splits. Falls back to plain text."""
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    # Split long messages (Telegram limit is 4096 chars)
-    chunks = [text[i:i+3900] for i in range(0, len(text), 3900)]
+
+    MAX_LEN = 3900
+    chunks = []
+    while len(text) > MAX_LEN:
+        split_at = text.rfind("\n", 0, MAX_LEN)
+        if split_at < MAX_LEN // 2:
+            split_at = MAX_LEN
+        chunks.append(text[:split_at])
+        text = text[split_at:].lstrip("\n")
+    chunks.append(text)
+
     for chunk in chunks:
+        if not chunk.strip():
+            continue
         payload = {
             "chat_id": TELEGRAM_CHAT_ID,
             "text": chunk,
@@ -141,13 +151,17 @@ def tg_send(text: str):
         }
         try:
             resp = requests.post(url, json=payload, timeout=10)
-            resp.raise_for_status()
+            if not resp.ok:
+                print(f"[Telegram] HTML failed ({resp.status_code}), retrying plain...")
+                payload.pop("parse_mode")
+                resp2 = requests.post(url, json=payload, timeout=10)
+                if not resp2.ok:
+                    print(f"[Telegram send error] {resp2.status_code}: {resp2.text[:200]}")
         except Exception as e:
             print(f"[Telegram send error] {e}")
 
 
 def tg_get_updates(offset: int) -> list:
-    """Poll Telegram for new messages."""
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getUpdates"
     params = {"offset": offset, "timeout": 30, "limit": 10}
     try:
@@ -159,29 +173,40 @@ def tg_get_updates(offset: int) -> list:
         return []
 
 
+def tg_download_photo(file_id: str) -> bytes:
+    try:
+        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getFile"
+        resp = requests.get(url, params={"file_id": file_id}, timeout=10)
+        resp.raise_for_status()
+        file_path = resp.json().get("result", {}).get("file_path", "")
+        if not file_path:
+            return b""
+        download_url = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_path}"
+        resp = requests.get(download_url, timeout=30)
+        resp.raise_for_status()
+        return resp.content
+    except Exception as e:
+        print(f"[Telegram photo download error] {e}")
+        return b""
+
+
 # ─────────────────────────────────────────────
 # MEMORY / BRAIN
 # ─────────────────────────────────────────────
 
 def load_brain() -> str:
-    """Load the brain.md file — the agent's persistent memory."""
     try:
         with open(BRAIN_FILE, "r") as f:
             return f.read()
     except FileNotFoundError:
-        return "No brain file found. Operating with default knowledge only."
+        return "No brain file found."
 
 
 def append_memory(key: str, value: str):
-    """Append a new memory to the memory log and brain.md."""
-    timestamp = datetime.datetime.now().strftime("%b %Y")
+    timestamp = datetime.datetime.now().strftime("%b %d, %Y")
     entry = {"timestamp": timestamp, "key": key, "value": value}
-
-    # Append to structured log
     with open(MEMORY_FILE, "a") as f:
         f.write(json.dumps(entry) + "\n")
-
-    # Also append to brain.md memory section
     try:
         with open(BRAIN_FILE, "r") as f:
             content = f.read()
@@ -195,164 +220,118 @@ def append_memory(key: str, value: str):
 
 
 # ─────────────────────────────────────────────
-# TOOLS — what the agent can do
+# TOOLS — Anthropic API format
 # ─────────────────────────────────────────────
 
-TOOLS = [
+CLAUDE_TOOLS = [
     {
-        "type": "function",
-        "function": {
-            "name": "check_status",
-            "description": "Check the live status of all 5 DDPs by reading status.json. Returns each DDP's last run time, status (success/failed/disabled), and top score.",
-            "parameters": {"type": "object", "properties": {}}
+        "name": "check_status",
+        "description": "Check the live status of all 5 DDPs by reading status.json.",
+        "input_schema": {"type": "object", "properties": {}}
+    },
+    {
+        "name": "read_file",
+        "description": "Read any file in the trainingrun-site repo. Use this to inspect code before making edits.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Relative path from repo root"}
+            },
+            "required": ["path"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "read_file",
-            "description": "Read the contents of any file in the trainingrun-site repo. Use this to check code, HTML, configs, or logs.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "path": {
-                        "type": "string",
-                        "description": "Relative path from repo root, e.g. 'status.json' or 'agent_trs.py' or 'web_agent/brain.md'"
-                    }
-                },
-                "required": ["path"]
+        "name": "list_files",
+        "description": "List all files in the repo or a subdirectory.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "subdir": {"type": "string", "description": "Optional subdirectory. Leave empty for root."}
             }
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "list_files",
-            "description": "List all files in the trainingrun-site repo or a subdirectory.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "subdir": {
-                        "type": "string",
-                        "description": "Optional subdirectory to list. Leave empty for repo root."
-                    }
-                }
-            }
+        "name": "edit_file",
+        "description": "Surgically edit a file by finding and replacing specific text. Auto-backs up first. REQUIRES APPROVAL.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Relative path from repo root"},
+                "find": {"type": "string", "description": "Exact text to find"},
+                "replace": {"type": "string", "description": "Text to replace it with"},
+                "description": {"type": "string", "description": "What this change does"}
+            },
+            "required": ["path", "find", "replace", "description"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "edit_file",
-            "description": "Make a surgical edit to a file — find specific text and replace it. Much safer than write_file because it only changes what needs changing. REQUIRES DAVID'S APPROVAL.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "path": {"type": "string", "description": "Relative path from repo root"},
-                    "find": {"type": "string", "description": "Exact text to find in the file (must match exactly)"},
-                    "replace": {"type": "string", "description": "Text to replace it with"},
-                    "description": {"type": "string", "description": "Plain English description of what this change does"}
-                },
-                "required": ["path", "find", "replace", "description"]
-            }
+        "name": "write_file",
+        "description": "Write an entire file. Use edit_file for small changes. REQUIRES APPROVAL.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Relative path from repo root"},
+                "content": {"type": "string", "description": "Full file content"},
+                "description": {"type": "string", "description": "What this change does"}
+            },
+            "required": ["path", "content", "description"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "write_file",
-            "description": "Write an entire file in the repo. Use edit_file instead for small changes. Only use write_file for creating new files or complete rewrites. REQUIRES DAVID'S APPROVAL.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "path": {"type": "string", "description": "Relative path from repo root"},
-                    "content": {"type": "string", "description": "Full new content of the file"},
-                    "description": {"type": "string", "description": "Plain English description of what this change does"}
-                },
-                "required": ["path", "content", "description"]
-            }
+        "name": "backup_file",
+        "description": "Create a timestamped backup before editing.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Relative path to back up"}
+            },
+            "required": ["path"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "backup_file",
-            "description": "Create a timestamped backup of a file before making changes. Backups go to ~/trainingrun-site/backups/. Use this BEFORE any risky edit.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "path": {"type": "string", "description": "Relative path from repo root to the file to back up"}
-                },
-                "required": ["path"]
-            }
+        "name": "site_health",
+        "description": "Comprehensive health check: data files, status.json, HTML pages, stale data detection.",
+        "input_schema": {"type": "object", "properties": {}}
+    },
+    {
+        "name": "git_push",
+        "description": "Stage files, commit, pull --rebase, push to GitHub. REQUIRES APPROVAL.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "files": {"type": "array", "items": {"type": "string"}, "description": "Files to stage"},
+                "message": {"type": "string", "description": "Commit message"}
+            },
+            "required": ["files", "message"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "git_push",
-            "description": "Stage specific files, commit with a message, pull --rebase, and push to GitHub. REQUIRES DAVID'S APPROVAL.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "files": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "List of file paths (relative to repo root) to stage and commit"
-                    },
-                    "message": {"type": "string", "description": "Git commit message"}
-                },
-                "required": ["files", "message"]
-            }
+        "name": "run_ddp",
+        "description": "Trigger one or all DDPs. REQUIRES APPROVAL.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "target": {"type": "string", "description": "'all', 'trsbench', 'trscode', 'truscore', 'trfcast', or 'tragents'"}
+            },
+            "required": ["target"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "run_ddp",
-            "description": "Manually trigger one or all DDPs via daily_runner.py. REQUIRES DAVID'S APPROVAL.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "target": {
-                        "type": "string",
-                        "description": "Which DDP to run: 'all', 'trs', 'trscode', 'truscore', 'trfcast', or 'tragents'"
-                    }
-                },
-                "required": ["target"]
-            }
+        "name": "remember",
+        "description": "Save something to persistent memory.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "key": {"type": "string", "description": "Short label"},
+                "value": {"type": "string", "description": "What to remember"}
+            },
+            "required": ["key", "value"]
         }
     },
     {
-        "type": "function",
-        "function": {
-            "name": "remember",
-            "description": "Save something David told me to persistent memory so I never forget it.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "key": {"type": "string", "description": "Short label for what was learned"},
-                    "value": {"type": "string", "description": "What was learned"}
-                },
-                "required": ["key", "value"]
-            }
-        }
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "read_log",
-            "description": "Read the DDP run log to check for errors or recent activity.",
-            "parameters": {"type": "object", "properties": {}}
-        }
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "site_health",
-            "description": "Run a quick health check — verifies all 5 JSON data files exist, checks status.json for failures, confirms last push time in index.html, and reports any issues.",
-            "parameters": {"type": "object", "properties": {}}
-        }
+        "name": "read_log",
+        "description": "Read the DDP run log for errors or recent activity.",
+        "input_schema": {"type": "object", "properties": {}}
     }
 ]
 
@@ -362,7 +341,6 @@ TOOLS = [
 # ─────────────────────────────────────────────
 
 def execute_tool(name: str, args: dict) -> str:
-    """Execute a tool and return its result as a string."""
 
     if name == "check_status":
         status_path = os.path.join(REPO_PATH, "status.json")
@@ -370,27 +348,17 @@ def execute_tool(name: str, args: dict) -> str:
             with open(status_path) as f:
                 data = json.load(f)
             agents = data.get("agents", {})
-            lines = [f"📊 Mission Control — {data.get('last_updated', 'unknown')}\n"]
+            lines = ["Mission Control Status\n"]
             for key, agent in agents.items():
-                emoji = agent.get("emoji", "•")
                 status = agent.get("status", "unknown")
-                last_run = agent.get("last_run", "never")
-                top_model = agent.get("top_model", "—")
+                last_date = agent.get("last_run_date", "never")
                 top_score = agent.get("top_score")
-                sources_hit = agent.get("sources_hit", "?")
-                sources_total = agent.get("sources_total", "?")
-                models_qual = agent.get("models_qualified", "?")
-                score_str = f"{top_score:.1f}" if top_score else "—"
-                icon = "✅" if status == "success" else ("❌" if status == "failed" else "⚫")
-                lines.append(
-                    f"{icon} {emoji} <b>{key}</b>\n"
-                    f"   Last: {last_run}\n"
-                    f"   Sources: {sources_hit}/{sources_total} | Models: {models_qual}\n"
-                    f"   #1: {top_model} ({score_str})"
-                )
+                score_str = f"{top_score:.1f}" if top_score else "--"
+                icon = "OK" if status == "success" else ("FAIL" if status == "failed" else "OFF")
+                lines.append(f"[{icon}] {key}: {status} | last: {last_date} | top: {score_str}")
             return "\n".join(lines)
         except FileNotFoundError:
-            return "status.json not found in repo."
+            return "status.json not found."
         except Exception as e:
             return f"Error reading status.json: {e}"
 
@@ -400,9 +368,9 @@ def execute_tool(name: str, args: dict) -> str:
         try:
             with open(full_path, "r") as f:
                 content = f.read()
-            if len(content) > 3000:
-                content = content[:3000] + f"\n\n[... truncated — {len(content)} total chars]"
-            return f"📄 {path}:\n\n{content}"
+            if len(content) > 8000:
+                content = content[:8000] + f"\n\n[... truncated -- {len(content)} total chars]"
+            return f"File: {path}\n\n{content}"
         except FileNotFoundError:
             return f"File not found: {path}"
         except Exception as e:
@@ -419,44 +387,46 @@ def execute_tool(name: str, args: dict) -> str:
                     if not fname.startswith('.'):
                         rel = os.path.relpath(os.path.join(root, fname), REPO_PATH)
                         files.append(rel)
-            return f"📁 Files in {'repo root' if not subdir else subdir}:\n" + "\n".join(sorted(files))
+            return f"Files in {'repo root' if not subdir else subdir}:\n" + "\n".join(sorted(files))
         except Exception as e:
             return f"Error listing files: {e}"
 
     elif name == "edit_file":
-        # SURGICAL EDIT — find and replace specific text
-        # This is a WRITE operation — caller must handle approval gate
         path = args.get("path", "")
         find_text = args.get("find", "")
         replace_text = args.get("replace", "")
         full_path = os.path.join(REPO_PATH, path)
+
+        backup_result = execute_tool("backup_file", {"path": path})
+        print(f"[Edit] {backup_result}")
+
         try:
             with open(full_path, "r") as f:
                 content = f.read()
             if find_text not in content:
-                return f"❌ Could not find the specified text in {path}. No changes made."
+                return f"EDIT FAILED: Text not found in {path}. No changes made. Backup saved."
             count = content.count(find_text)
-            if count > 1:
-                return f"⚠️ Found {count} matches in {path}. Please provide more specific text to match exactly one location."
             new_content = content.replace(find_text, replace_text, 1)
             with open(full_path, "w") as f:
                 f.write(new_content)
-            return f"✅ Edited {path}: replaced {len(find_text)} chars with {len(replace_text)} chars."
+            return f"EDITED: {path} (matched {count}x, replaced 1st). Backup saved."
         except FileNotFoundError:
             return f"File not found: {path}"
         except Exception as e:
             return f"Error editing {path}: {e}"
 
     elif name == "write_file":
-        # Full file write — caller must handle approval gate
         path = args.get("path", "")
         content = args.get("content", "")
         full_path = os.path.join(REPO_PATH, path)
+        if os.path.exists(full_path):
+            backup_result = execute_tool("backup_file", {"path": path})
+            print(f"[Write] {backup_result}")
         try:
-            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+            os.makedirs(os.path.dirname(full_path) if os.path.dirname(full_path) else REPO_PATH, exist_ok=True)
             with open(full_path, "w") as f:
                 f.write(content)
-            return f"✅ Written: {path} ({len(content)} chars)"
+            return f"Written: {path} ({len(content)} chars)"
         except Exception as e:
             return f"Error writing {path}: {e}"
 
@@ -465,61 +435,87 @@ def execute_tool(name: str, args: dict) -> str:
         full_path = os.path.join(REPO_PATH, path)
         try:
             if not os.path.exists(full_path):
-                return f"❌ File not found: {path}"
+                return f"No file to backup: {path}"
             os.makedirs(BACKUP_DIR, exist_ok=True)
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = os.path.basename(path)
-            name_part, ext = os.path.splitext(filename)
-            backup_name = f"{name_part}_{timestamp}{ext}"
-            backup_path = os.path.join(BACKUP_DIR, backup_name)
+            safe_name = path.replace("/", "_").replace("\\", "_")
+            backup_path = os.path.join(BACKUP_DIR, f"{safe_name}.{timestamp}.bak")
             shutil.copy2(full_path, backup_path)
-            size = os.path.getsize(backup_path)
-            return f"✅ Backed up: {path} → backups/{backup_name} ({size:,} bytes)"
+            return f"Backed up: {path} -> backups/{safe_name}.{timestamp}.bak"
         except Exception as e:
-            return f"Error backing up {path}: {e}"
+            return f"Backup error: {e}"
+
+    elif name == "site_health":
+        issues = []
+        checks = 0
+
+        data_files = [
+            "trs-data.json", "trscode-data.json", "truscore-data.json",
+            "trf-data.json", "tragent-data.json", "status.json"
+        ]
+        for df in data_files:
+            checks += 1
+            fp = os.path.join(REPO_PATH, df)
+            if not os.path.exists(fp):
+                issues.append(f"MISSING: {df}")
+            else:
+                try:
+                    with open(fp) as f:
+                        json.load(f)
+                except json.JSONDecodeError:
+                    issues.append(f"INVALID JSON: {df}")
+
+        checks += 1
+        status_path = os.path.join(REPO_PATH, "status.json")
+        try:
+            with open(status_path) as f:
+                status_data = json.load(f)
+            agents = status_data.get("agents", {})
+            today = datetime.date.today().isoformat()
+            for name_key, agent in agents.items():
+                last_date = agent.get("last_run_date", "")
+                if last_date != today:
+                    issues.append(f"STALE: {name_key} last ran {last_date}")
+                if agent.get("status") == "failed":
+                    issues.append(f"FAILED: {name_key}")
+        except Exception as e:
+            issues.append(f"Cannot read status.json: {e}")
+
+        html_pages = [
+            "index.html", "mission-control.html", "hq.html",
+            "scores.html", "truscore.html", "trscode.html",
+            "trfcast.html", "tragents.html"
+        ]
+        for hp in html_pages:
+            checks += 1
+            if not os.path.exists(os.path.join(REPO_PATH, hp)):
+                issues.append(f"MISSING PAGE: {hp}")
+
+        if issues:
+            return f"Health Check: {len(issues)} issues ({checks} checks)\n\n" + "\n".join(issues)
+        else:
+            return f"Health Check: ALL CLEAR ({checks} checks passed)"
 
     elif name == "git_push":
         files = args.get("files", [])
-        message = args.get("message", "Update from Web Manager")
+        message = args.get("message", "Update from TRSitekeeper")
         try:
-            # Stage files
             for f in files:
-                result = subprocess.run(
-                    ["git", "add", f],
-                    cwd=REPO_PATH, capture_output=True, text=True
-                )
+                result = subprocess.run(["git", "add", f], cwd=REPO_PATH, capture_output=True, text=True)
                 if result.returncode != 0:
-                    return f"❌ git add failed for {f}: {result.stderr}"
-
-            # Commit
-            result = subprocess.run(
-                ["git", "commit", "-m", message],
-                cwd=REPO_PATH, capture_output=True, text=True
-            )
+                    return f"git add failed for {f}: {result.stderr}"
+            result = subprocess.run(["git", "commit", "-m", message], cwd=REPO_PATH, capture_output=True, text=True)
             if result.returncode != 0:
-                if "nothing to commit" in result.stdout + result.stderr:
-                    return "ℹ️ Nothing to commit — files unchanged."
-                return f"❌ git commit failed: {result.stderr}"
-
-            # Pull rebase BEFORE push (CRITICAL — Production Bible rule)
-            result = subprocess.run(
-                ["git", "pull", "--rebase"],
-                cwd=REPO_PATH, capture_output=True, text=True
-            )
+                return f"git commit failed: {result.stderr}"
+            result = subprocess.run(["git", "pull", "--rebase"], cwd=REPO_PATH, capture_output=True, text=True, timeout=60)
             if result.returncode != 0:
-                return f"⚠️ git pull --rebase failed: {result.stderr}\nCommit is saved locally. Try manual push."
-
-            # Push
-            result = subprocess.run(
-                ["git", "push"],
-                cwd=REPO_PATH, capture_output=True, text=True
-            )
+                return f"git pull --rebase failed: {result.stderr}"
+            result = subprocess.run(["git", "push"], cwd=REPO_PATH, capture_output=True, text=True, timeout=60)
             if result.returncode != 0:
-                return f"❌ git push failed: {result.stderr}"
-
-            return f"✅ Pushed to GitHub.\nFiles: {', '.join(files)}\nCommit: {message}"
+                return f"git push failed: {result.stderr}"
+            return f"Pushed to GitHub.\nFiles: {', '.join(files)}\nCommit: {message}"
         except Exception as e:
-            return f"Error during git push: {e}"
+            return f"Git error: {e}"
 
     elif name == "run_ddp":
         target = args.get("target", "all")
@@ -527,15 +523,13 @@ def execute_tool(name: str, args: dict) -> str:
         if target != "all":
             cmd += ["--score", target]
         try:
-            result = subprocess.run(
-                cmd, cwd=REPO_PATH, capture_output=True, text=True, timeout=900
-            )
+            result = subprocess.run(cmd, cwd=REPO_PATH, capture_output=True, text=True, timeout=900)
             output = result.stdout[-2000:] if len(result.stdout) > 2000 else result.stdout
             if result.returncode != 0:
-                return f"❌ DDP run failed:\n{result.stderr[-1000:]}"
-            return f"✅ DDP run complete ({target}):\n{output}"
+                return f"DDP run failed:\n{result.stderr[-1000:]}"
+            return f"DDP run complete ({target}):\n{output}"
         except subprocess.TimeoutExpired:
-            return "⏱ DDP run timed out after 15 minutes."
+            return "DDP run timed out after 15 minutes."
         except Exception as e:
             return f"Error running DDP: {e}"
 
@@ -543,130 +537,69 @@ def execute_tool(name: str, args: dict) -> str:
         key = args.get("key", "note")
         value = args.get("value", "")
         append_memory(key, value)
-        return f"✅ Remembered: {key} → {value}"
+        return f"Remembered: {key} -> {value}"
 
     elif name == "read_log":
         log_path = os.path.join(REPO_PATH, "ddp.log")
         try:
             with open(log_path, "r") as f:
                 content = f.read()
-            # Last 3000 chars
             if len(content) > 3000:
                 content = "...\n" + content[-3000:]
-            return f"📋 DDP Log (recent):\n\n{content}"
+            return f"DDP Log (recent):\n\n{content}"
         except FileNotFoundError:
-            return "ddp.log not found. Has the cron run yet?"
+            return "ddp.log not found."
         except Exception as e:
             return f"Error reading log: {e}"
-
-    elif name == "site_health":
-        issues = []
-        checks_passed = 0
-
-        # Check all 5 data JSON files exist
-        data_files = {
-            "trs-data.json": "TRSbench",
-            "trscode-data.json": "TRScode",
-            "truscore-data.json": "TRUscore",
-            "trf-data.json": "TRFcast",
-            "tragent-data.json": "TRAgents",
-        }
-        for fname, label in data_files.items():
-            fpath = os.path.join(REPO_PATH, fname)
-            if os.path.exists(fpath):
-                checks_passed += 1
-            else:
-                issues.append(f"❌ Missing: {fname} ({label})")
-
-        # Check status.json for failures
-        status_path = os.path.join(REPO_PATH, "status.json")
-        try:
-            with open(status_path) as f:
-                sdata = json.load(f)
-            for key, agent in sdata.get("agents", {}).items():
-                if agent.get("status") == "failed":
-                    issues.append(f"❌ {key} last run FAILED: {agent.get('error', 'unknown')}")
-                elif agent.get("status") == "success":
-                    checks_passed += 1
-                # Check if data is stale (more than 36 hours old)
-                last_run = agent.get("last_run", "")
-                if last_run:
-                    try:
-                        lr = datetime.datetime.fromisoformat(last_run)
-                        age = datetime.datetime.now() - lr
-                        if age.total_seconds() > 36 * 3600:
-                            issues.append(f"⚠️ {key} data is stale ({age.days}d {age.seconds//3600}h old)")
-                    except Exception:
-                        pass
-        except Exception as e:
-            issues.append(f"❌ Cannot read status.json: {e}")
-
-        # Check index.html push timestamp
-        index_path = os.path.join(REPO_PATH, "index.html")
-        try:
-            with open(index_path, "r") as f:
-                idx_content = f.read()
-            m = re.search(r"var LAST_PUSH_TIME\s*=\s*'([^']*)'", idx_content)
-            if m:
-                checks_passed += 1
-                push_time = m.group(1)
-            else:
-                issues.append("⚠️ LAST_PUSH_TIME not found in index.html")
-                push_time = "unknown"
-        except Exception:
-            issues.append("❌ Cannot read index.html")
-            push_time = "unknown"
-
-        # Build report
-        if issues:
-            report = f"🔍 Site Health: {checks_passed} OK, {len(issues)} issues\n\n"
-            report += "\n".join(issues)
-            report += f"\n\nLast push: {push_time}"
-        else:
-            report = f"✅ Site Health: All {checks_passed} checks passed!\nLast push: {push_time}"
-
-        return report
 
     return f"Unknown tool: {name}"
 
 
 # ─────────────────────────────────────────────
-# WRITE-PROTECTED TOOLS (require approval)
+# WRITE-PROTECTED TOOLS
 # ─────────────────────────────────────────────
 
 PROTECTED_TOOLS = {"write_file", "edit_file", "git_push", "run_ddp"}
 
 
 # ─────────────────────────────────────────────
-# OLLAMA INTERFACE
+# CLAUDE API INTERFACE
 # ─────────────────────────────────────────────
 
-def ollama_chat(messages: list) -> dict:
-    """Send messages to Ollama and get a response with optional tool calls."""
-    url = f"{OLLAMA_BASE_URL}/api/chat"
+def claude_chat(messages: list, system_prompt: str) -> dict:
+    url = "https://api.anthropic.com/v1/messages"
+    headers = {
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+    }
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": CLAUDE_MODEL,
+        "max_tokens": 4096,
+        "system": system_prompt,
         "messages": messages,
-        "tools": TOOLS,
-        "stream": False
+        "tools": CLAUDE_TOOLS
     }
     try:
-        resp = requests.post(url, json=payload, timeout=300)
-        resp.raise_for_status()
+        resp = requests.post(url, headers=headers, json=payload, timeout=60)
+        if not resp.ok:
+            return {"error": f"API error {resp.status_code}: {resp.text[:300]}"}
         return resp.json()
-    except requests.exceptions.ConnectionError:
-        return {"error": "Cannot connect to Ollama. Is it running? Try: ollama serve"}
+    except requests.exceptions.Timeout:
+        return {"error": "Claude API timed out after 60 seconds."}
     except Exception as e:
         return {"error": str(e)}
 
 
 def build_system_prompt() -> str:
     brain = load_brain()
-    return f"""You are the TR Web Manager — the AI web manager for trainingrun.ai. You run locally on David's MacBook Pro M4 via Ollama (qwen2.5-coder:14b).
+    return f"""You are TRSitekeeper — the AI gatekeeper for trainingrun.ai. You run on David's MacBook Pro M4, powered by Claude Sonnet 4.6.
 
-Your personality: Direct, reliable, no-BS. You know this site inside out. You take your job seriously. You are David's most trusted employee.
+Your personality: Direct, sharp, reliable. You know this site inside out. You take your job seriously. You are the keeper of this site.
 
-Your role: Manage the site, monitor DDPs, handle GitHub, make code edits, run backups, support David's requests.
+Your role: Guard and manage the site, monitor DDPs, handle GitHub, make surgical code fixes, support David's requests. When David sends a screenshot, analyze the visual issue and propose the exact code fix.
+
+BACKUP-FIRST WORKFLOW: Before ANY file edit, ALWAYS call backup_file first. Then use edit_file for surgical changes (preferred) or write_file for full rewrites.
 
 Here is your complete memory and knowledge base:
 
@@ -674,76 +607,48 @@ Here is your complete memory and knowledge base:
 
 ---
 
-TOOL SELECTION GUIDE — match David's message to the correct tool:
-
-| David says | You do |
-|---|---|
-| "status" / "check status" / "how are the DDPs" | call check_status |
-| "health" / "site health" / "anything broken" | call site_health |
-| "read [file]" / "show me [file]" | call read_file |
-| "list files" / "what files" | call list_files |
-| "check the log" / "show log" | call read_log |
-| "remember [x]" | call remember |
-| "back up [file]" / "backup [file]" | call backup_file |
-| "change [X] to [Y] in [file]" | call backup_file FIRST, then edit_file (needs YES) |
-| "edit [file]" / "change [file]" / "fix [file]" | call backup_file FIRST, then edit_file (needs YES) |
-| "create [file]" / "write [file]" | call write_file (needs YES) |
-| "push" / "push to github" | call git_push (needs YES) |
-| "run [DDP name]" / "run the DDPs" | call run_ddp (needs YES) |
-
-CRITICAL RULES — read every one:
-1. "status" ALWAYS means call check_status. Never call write_file for a status request.
-2. For ANY file edit, ALWAYS backup the file first using backup_file before making changes.
-3. Prefer edit_file over write_file — surgical edits are safer than full file rewrites.
-4. ONLY call write_file when creating a NEW file or when the change is so large that edit_file won't work.
-5. NEVER call write_file or edit_file unless David EXPLICITLY asks you to change something.
-6. Keep responses short — David reads on his phone.
-7. Use emojis sparingly (✅ ❌ ⚠️).
-8. Never make up data — always use tools to get real information.
-9. Each message from David is a NEW independent request. Do not carry over tasks from previous messages.
-10. When pushing to git, ALWAYS use git pull --rebase before push.
+RULES:
+1. "status" = call check_status. Never touch files for a status check.
+2. Only edit files when David explicitly asks for a change.
+3. ALWAYS backup before editing. No exceptions.
+4. Prefer edit_file (surgical find/replace) over write_file (full overwrite).
+5. Keep responses SHORT — David reads on his phone.
+6. Never make up data. Always use tools for real info.
+7. Each message is a NEW request. Don't carry over context from old messages.
+8. When David sends a screenshot, analyze it carefully. Identify the exact file and code that needs changing. Propose a specific fix.
+9. For protected operations (edit, write, push, run DDPs), always explain what you'll do and wait for approval.
 """
 
 
 # ─────────────────────────────────────────────
-# APPROVAL GATE STATE
+# APPROVAL GATE
 # ─────────────────────────────────────────────
 
-pending_approval = None  # {"tool": str, "args": dict, "description": str}
+pending_approval = None
 
 
 def request_approval(tool_name: str, args: dict) -> str:
-    """Format an approval request message for Telegram."""
     global pending_approval
 
-    if tool_name == "edit_file":
-        find_preview = args.get('find', '')[:80]
-        replace_preview = args.get('replace', '')[:80]
-        desc = (
-            f"Edit file: <b>{args.get('path')}</b>\n"
-            f"Reason: {args.get('description', '—')}\n"
-            f"Find: <code>{find_preview}</code>\n"
-            f"Replace: <code>{replace_preview}</code>"
-        )
-    elif tool_name == "write_file":
-        content = args.get('content', '')
-        preview = content[:120].replace('<', '&lt;').replace('>', '&gt;') + ('...' if len(content) > 120 else '')
-        desc = (
-            f"Write file: <b>{args.get('path')}</b>\n"
-            f"Size: <b>{len(content)} chars</b>\n"
-            f"Reason: {args.get('description', '—')}\n"
-            f"Preview: <code>{preview}</code>"
-        )
-    elif tool_name == "git_push":
-        desc = f"Push to GitHub:\nFiles: {', '.join(args.get('files', []))}\nCommit: {args.get('message', '')}"
-    elif tool_name == "run_ddp":
-        desc = f"Run DDP: <b>{args.get('target', 'all')}</b>"
-    else:
-        desc = f"Execute: {tool_name}"
+    descriptions = {
+        "edit_file": (
+            f"Edit: {args.get('path')}\n"
+            f"Find: {args.get('find', '')[:100]}\n"
+            f"Replace: {args.get('replace', '')[:100]}\n"
+            f"Why: {args.get('description', '--')}"
+        ),
+        "write_file": (
+            f"Write: {args.get('path')}\n"
+            f"Size: {len(args.get('content', ''))} chars\n"
+            f"Why: {args.get('description', '--')}"
+        ),
+        "git_push": f"Push to GitHub:\nFiles: {', '.join(args.get('files', []))}\nCommit: {args.get('message', '')}",
+        "run_ddp": f"Run DDP: {args.get('target', 'all')}"
+    }
 
+    desc = descriptions.get(tool_name, f"Execute: {tool_name}")
     pending_approval = {"tool": tool_name, "args": args}
-
-    return f"🔐 <b>APPROVAL NEEDED</b>\n\n{desc}\n\nReply <b>YES</b> to approve or <b>NO</b> to cancel."
+    return f"APPROVAL NEEDED\n\n{desc}\n\nReply YES to approve or NO to cancel."
 
 
 def is_approval(text: str) -> bool:
@@ -755,154 +660,176 @@ def is_rejection(text: str) -> bool:
 
 
 # ─────────────────────────────────────────────
-# TOOL CALL PARSER — fallback for models that
-# output tool calls as JSON text instead of
-# structured tool_calls (common with Qwen models)
-# ─────────────────────────────────────────────
-
-def parse_tool_calls_from_text(text: str) -> list:
-    """
-    Try to extract tool calls from raw text output.
-    Qwen models sometimes output JSON like:
-      {"name": "backup_file", "arguments": {"path": "index.html"}}
-    or wrapped in ```json blocks, or as multiple calls.
-    Returns a list of tool call dicts compatible with Ollama format, or empty list.
-    """
-    tool_names = {t["function"]["name"] for t in TOOLS}
-    calls = []
-
-    # Try to find JSON objects in the text
-    # Pattern 1: {"name": "tool_name", "arguments": {...}}
-    json_pattern = re.finditer(r'\{[^{}]*"name"\s*:\s*"(\w+)"[^{}]*"arguments"\s*:\s*(\{[^{}]*\})[^{}]*\}', text)
-    for match in json_pattern:
-        try:
-            name = match.group(1)
-            args_str = match.group(2)
-            if name in tool_names:
-                args = json.loads(args_str)
-                calls.append({"function": {"name": name, "arguments": args}})
-        except (json.JSONDecodeError, IndexError):
-            continue
-
-    # Pattern 2: Look for function call format from Qwen
-    # <tool_call>{"name": "...", "arguments": {...}}</tool_call>
-    tool_call_pattern = re.finditer(r'<tool_call>\s*(\{.*?\})\s*</tool_call>', text, re.DOTALL)
-    for match in tool_call_pattern:
-        try:
-            data = json.loads(match.group(1))
-            name = data.get("name", "")
-            args = data.get("arguments", {})
-            if name in tool_names:
-                calls.append({"function": {"name": name, "arguments": args}})
-        except json.JSONDecodeError:
-            continue
-
-    # Pattern 3: Simple {"tool": "name", ...} or just the tool name with args
-    if not calls:
-        for tool_def in TOOLS:
-            tname = tool_def["function"]["name"]
-            if f'"{tname}"' in text:
-                # Try to parse the whole text as JSON
-                try:
-                    # Remove markdown code blocks if present
-                    clean = re.sub(r'```json\s*', '', text)
-                    clean = re.sub(r'```\s*', '', clean)
-                    clean = clean.strip()
-                    data = json.loads(clean)
-                    name = data.get("name", data.get("function", {}).get("name", ""))
-                    args = data.get("arguments", data.get("parameters", {}))
-                    if name in tool_names:
-                        calls.append({"function": {"name": name, "arguments": args}})
-                        break
-                except json.JSONDecodeError:
-                    continue
-
-    return calls
-
-
-# ─────────────────────────────────────────────
-# KEYWORD INTERCEPT — handle common commands
-# directly in Python, never send to Ollama.
-# This prevents the model hallucinating wrong tools.
+# KEYWORD INTERCEPT — instant, no API call
 # ─────────────────────────────────────────────
 
 def keyword_intercept(text: str):
-    """
-    Check if text matches a known command pattern.
-    Returns (tool_name, args) if matched, or None if Ollama should handle it.
-    """
     t = text.strip().lower()
 
-    # STATUS
     if t in ("status", "check status", "ddp status", "how are the ddps",
              "what's the status", "whats the status", "show status", "s"):
         return ("check_status", {})
 
-    # HEALTH CHECK
-    if t in ("health", "site health", "check health", "anything broken",
-             "health check", "is the site ok", "site ok"):
+    if t in ("health", "health check", "site health", "check health"):
         return ("site_health", {})
 
-    # LOG
-    if any(k in t for k in ("show log", "check log", "ddp log", "read log")):
-        return ("read_log", {})
-    if t == "log":
+    if any(k in t for k in ("show log", "check log", "ddp log")):
         return ("read_log", {})
 
-    # LIST FILES
+    if t in ("log",):
+        return ("read_log", {})
+
     if any(k in t for k in ("list files", "what files", "show files", "ls")):
         return ("list_files", {})
 
-    # READ BRAIN
-    if any(k in t for k in ("brain", "show brain", "read brain", "memory", "show memory")):
+    if any(k in t for k in ("brain", "show brain", "read brain", "memory")):
         return ("read_file", {"path": "web_agent/brain.md"})
 
-    return None  # Let Ollama handle it
+    return None
 
 
 # ─────────────────────────────────────────────
 # MAIN AGENT LOOP
 # ─────────────────────────────────────────────
 
+def handle_claude_response(response, conversation_history):
+    """
+    Process Claude's response. Handles text, tool calls, and multi-step tool chains.
+    Returns when: (a) Claude sends final text, (b) a protected tool needs approval,
+    or (c) an error occurs.
+    """
+    global pending_approval
+
+    MAX_TOOL_LOOPS = 10  # Safety limit to prevent infinite loops
+
+    for loop_count in range(MAX_TOOL_LOOPS):
+
+        if "error" in response:
+            tg_send(f"Agent error: {response['error']}")
+            write_activity("Error", location="office", status="idle")
+            print(f"[Claude error] {response['error']}")
+            return
+
+        stop_reason = response.get("stop_reason", "")
+        content_blocks = response.get("content", [])
+
+        text_parts = []
+        tool_uses = []
+
+        for block in content_blocks:
+            if block.get("type") == "text":
+                text_parts.append(block.get("text", ""))
+            elif block.get("type") == "tool_use":
+                tool_uses.append(block)
+
+        # ── NO TOOL CALLS — just text response, we're done ──
+        if not tool_uses:
+            if text_parts:
+                tg_send("\n".join(text_parts))
+            conversation_history.append({"role": "assistant", "content": content_blocks})
+            write_activity("Ready", location="office", status="idle")
+            return
+
+        # ── TOOL CALLS — execute and possibly continue ──
+        # Store assistant message with tool_use blocks
+        conversation_history.append({"role": "assistant", "content": content_blocks})
+
+        # Send any text that came before the tool calls
+        if text_parts:
+            combined = "\n".join(text_parts)
+            if combined.strip():
+                tg_send(combined)
+
+        # Process each tool call
+        tool_results = []
+        hit_protected = False
+
+        for tu in tool_uses:
+            tool_name = tu.get("name", "")
+            tool_input = tu.get("input", {})
+            tool_use_id = tu.get("id", "")
+
+            print(f"[Tool call] {tool_name}({json.dumps(tool_input)[:100]})")
+
+            if tool_name in PROTECTED_TOOLS:
+                # Need approval — pause here
+                location = TOOL_ROOM_MAP.get(tool_name, "office")
+                write_activity(f"Awaiting approval: {tool_name}", location=location, status="waiting")
+                approval_msg = request_approval(tool_name, tool_input)
+                pending_approval["tool_use_id"] = tool_use_id
+                pending_approval["content_blocks"] = content_blocks
+                tg_send(approval_msg)
+                hit_protected = True
+                break
+            else:
+                # Safe tool — execute immediately
+                location = TOOL_ROOM_MAP.get(tool_name, "office")
+                write_activity(f"Running: {tool_name}", location=location, status="active")
+                result = execute_tool(tool_name, tool_input)
+                write_activity(f"Done: {tool_name}", location="office", status="idle")
+                print(f"[Tool result] {result[:200]}")
+
+                tool_results.append({
+                    "type": "tool_result",
+                    "tool_use_id": tool_use_id,
+                    "content": result[:8000]
+                })
+
+        if hit_protected:
+            # We're paused waiting for approval. Don't continue the loop.
+            return
+
+        if tool_results:
+            # Feed tool results back to Claude for continuation
+            conversation_history.append({"role": "user", "content": tool_results})
+
+            print(f"[Loop {loop_count + 1}] Sending {len(tool_results)} tool result(s) back to Claude...")
+            write_activity("Thinking...", location="office", status="active")
+            response = claude_chat(conversation_history[-20:], build_system_prompt())
+            # Loop continues — Claude may respond with more tool calls or final text
+        else:
+            # No results to send back, we're done
+            write_activity("Ready", location="office", status="idle")
+            return
+
+    # Safety: hit max loops
+    tg_send("Stopped after too many tool steps. Let me know if you need more.")
+    write_activity("Ready", location="office", status="idle")
+
+
 def run():
     global pending_approval
 
     print("=" * 50)
-    print("  TR Web Manager v2.0 — Starting Up")
-    print(f"  Model: {OLLAMA_MODEL}")
+    print("  TRSitekeeper v1.1")
+    print(f"  Model: {CLAUDE_MODEL}")
     print(f"  Repo:  {REPO_PATH}")
     print(f"  Brain: {BRAIN_FILE}")
-    print(f"  Backups: {BACKUP_DIR}")
     print("=" * 50)
 
-    # Validate config
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        print("❌ ERROR: TELEGRAM_TOKEN and TELEGRAM_CHAT_ID must be set.")
-        print("   export TELEGRAM_TOKEN='your_token'")
-        print("   export TELEGRAM_CHAT_ID='your_chat_id'")
+        print("ERROR: TELEGRAM_TOKEN and TELEGRAM_CHAT_ID must be set.")
+        sys.exit(1)
+
+    if not ANTHROPIC_API_KEY:
+        print("ERROR: ANTHROPIC_API_KEY must be set.")
+        print("  Get your key at https://console.anthropic.com")
+        print("  export ANTHROPIC_API_KEY='sk-ant-...'")
         sys.exit(1)
 
     if not os.path.exists(REPO_PATH):
-        print(f"❌ ERROR: Repo not found at {REPO_PATH}")
-        print(f"   Set TR_REPO_PATH env var if your repo is in a different location.")
+        print(f"ERROR: Repo not found at {REPO_PATH}")
         sys.exit(1)
 
-    # Create backup directory
-    os.makedirs(BACKUP_DIR, exist_ok=True)
-
-    # Start the HQ bridge server
     start_bridge()
-
-    # Set initial idle state
     write_activity("Online and ready", location="office", status="idle")
 
-    # Announce startup
-    tg_send("🟢 <b>Web Manager v2.0 online.</b>\nModel: qwen2.5-coder:14b\nReady for your instructions.\n\n<code>status</code> — check DDPs\n<code>health</code> — site health check\n<code>log</code> — view DDP log")
-    print("✅ Startup message sent to Telegram. Polling for messages...")
+    tg_send("TRSitekeeper v1.1 online.\nPowered by Claude Sonnet 4.6\nType 'status' to check DDPs.")
+    print("Startup message sent. Polling...")
 
     conversation_history = []
 
-    # Skip all old Telegram messages on startup — only process NEW ones
+    # Skip old messages
     print("[Startup] Skipping old Telegram messages...")
     old_updates = tg_get_updates(0)
     if old_updates:
@@ -910,7 +837,6 @@ def run():
         print(f"[Startup] Skipped {len(old_updates)} old messages. Offset: {offset}")
     else:
         offset = 0
-    print("[Startup] Ready for new messages.")
 
     while True:
         try:
@@ -920,130 +846,119 @@ def run():
                 offset = update["update_id"] + 1
                 message = update.get("message", {})
                 text = message.get("text", "").strip()
+                caption = message.get("caption", "").strip()
                 chat_id = str(message.get("chat", {}).get("id", ""))
 
-                # Only respond to David's chat
                 if chat_id != str(TELEGRAM_CHAT_ID):
                     continue
 
-                if not text:
+                # ── HANDLE PHOTOS ──
+                photo = message.get("photo")
+                image_data = None
+                if photo:
+                    best_photo = photo[-1]
+                    file_id = best_photo.get("file_id", "")
+                    print(f"[David] Screenshot" + (f" with caption: {caption}" if caption else ""))
+                    image_bytes = tg_download_photo(file_id)
+                    if image_bytes:
+                        image_data = base64.b64encode(image_bytes).decode("utf-8")
+                        print(f"[Photo] Downloaded {len(image_bytes)} bytes")
+                    else:
+                        tg_send("Couldn't download that image. Try again.")
+                        continue
+                    if not text:
+                        text = caption if caption else "What do you see in this screenshot? Any issues?"
+
+                if not text and not image_data:
                     continue
 
                 print(f"\n[David] {text}")
 
-                # ── APPROVAL GATE HANDLING ──
+                # ── APPROVAL GATE ──
                 if pending_approval:
                     if is_approval(text):
                         tool = pending_approval["tool"]
                         args = pending_approval["args"]
+                        tool_use_id = pending_approval.get("tool_use_id", "")
                         pending_approval = None
-                        tg_send(f"✅ Approved. Executing {tool}...")
-                        location = TOOL_ROOM_MAP.get(tool, "office")
-                        write_activity(f"Executing: {tool}", location=location, status="active")
+                        tg_send(f"Approved. Executing {tool}...")
+                        write_activity(f"Executing: {tool}", location=TOOL_ROOM_MAP.get(tool, "office"), status="active")
                         result = execute_tool(tool, args)
                         write_activity(f"Done: {tool}", location="office", status="idle")
                         print(f"[Tool: {tool}] {result[:200]}")
                         tg_send(result)
+
+                        # Feed result back to Claude so it can continue (e.g., propose git push after edit)
+                        if tool_use_id:
+                            conversation_history.append({
+                                "role": "user",
+                                "content": [{
+                                    "type": "tool_result",
+                                    "tool_use_id": tool_use_id,
+                                    "content": result[:4000]
+                                }]
+                            })
+                            # Let Claude continue
+                            write_activity("Thinking...", location="office", status="active")
+                            response = claude_chat(conversation_history[-20:], build_system_prompt())
+                            handle_claude_response(response, conversation_history)
                         continue
 
                     elif is_rejection(text):
                         pending_approval = None
-                        write_activity("Approval cancelled", location="office", status="idle")
-                        tg_send("❌ Cancelled. What else can I help with?")
+                        tg_send("Cancelled.")
                         continue
 
                     else:
-                        # Unclear — re-ask
-                        tg_send("⚠️ Still waiting on approval. Reply <b>YES</b> or <b>NO</b>.")
+                        tg_send("Waiting on approval. Reply YES or NO.")
                         continue
 
-                # ── KEYWORD INTERCEPT — handle common commands without Ollama ──
-                intercept = keyword_intercept(text)
-                if intercept:
-                    tool_name, tool_args = intercept
-                    print(f"[Intercept] {tool_name} matched for: '{text}'")
-                    location = TOOL_ROOM_MAP.get(tool_name, "office")
-                    write_activity(f"Running: {tool_name}", location=location, status="active")
-                    result = execute_tool(tool_name, tool_args)
-                    write_activity(f"Done: {tool_name}", location="office", status="idle")
-                    tg_send(result)
-                    continue  # Skip Ollama entirely
+                # ── KEYWORD INTERCEPT ──
+                if not image_data:
+                    intercept = keyword_intercept(text)
+                    if intercept:
+                        tool_name, tool_args = intercept
+                        print(f"[Intercept] {tool_name}")
+                        location = TOOL_ROOM_MAP.get(tool_name, "office")
+                        write_activity(f"Running: {tool_name}", location=location, status="active")
+                        result = execute_tool(tool_name, tool_args)
+                        write_activity(f"Done: {tool_name}", location="office", status="idle")
+                        tg_send(result)
+                        continue
 
-                # ── NORMAL MESSAGE HANDLING — send to Ollama ──
-                write_activity("Thinking...", location="office", status="active")
-                conversation_history.append({"role": "user", "content": text})
+                # ── BUILD MESSAGE FOR CLAUDE ──
+                user_content = []
+                if image_data:
+                    user_content.append({
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": "image/jpeg",
+                            "data": image_data
+                        }
+                    })
+                user_content.append({"type": "text", "text": text})
 
-                messages = [
-                    {"role": "system", "content": build_system_prompt()}
-                ] + conversation_history[-10:]
+                conversation_history.append({"role": "user", "content": user_content})
 
-                tg_send("⏳ Thinking...")
-                response = ollama_chat(messages)
+                write_activity(f"Thinking: {text[:40]}", location="office", status="active")
+                response = claude_chat(conversation_history[-20:], build_system_prompt())
 
-                if "error" in response:
-                    error_msg = f"⚠️ Agent error: {response['error']}"
-                    tg_send(error_msg)
-                    write_activity("Error", location="office", status="idle")
-                    print(f"[Ollama error] {response['error']}")
-                    continue
+                # Process response with multi-step tool chain support
+                handle_claude_response(response, conversation_history)
 
-                msg = response.get("message", {})
-                tool_calls = msg.get("tool_calls", [])
-                assistant_content = msg.get("content", "")
-
-                # ── FALLBACK: Parse tool calls from text output ──
-                # Some Ollama models (esp. Qwen) output tool calls as JSON text
-                # instead of structured tool_calls. Detect and parse them.
-                if not tool_calls and assistant_content:
-                    parsed_calls = parse_tool_calls_from_text(assistant_content)
-                    if parsed_calls:
-                        tool_calls = parsed_calls
-                        assistant_content = ""  # Don't send raw JSON to Telegram
-
-                # ── HANDLE TOOL CALLS ──
-                if tool_calls:
-                    for call in tool_calls:
-                        fn = call.get("function", {})
-                        tool_name = fn.get("name", "")
-                        tool_args = fn.get("arguments", {})
-
-                        print(f"[Tool call] {tool_name}({json.dumps(tool_args)[:100]})")
-
-                        if tool_name in PROTECTED_TOOLS:
-                            # Need approval — send request and pause
-                            location = TOOL_ROOM_MAP.get(tool_name, "office")
-                            write_activity(f"Waiting for approval: {tool_name}", location=location, status="waiting")
-                            approval_msg = request_approval(tool_name, tool_args)
-                            tg_send(approval_msg)
-                            break  # Wait for approval before doing anything else
-                        else:
-                            # Safe tool — execute immediately
-                            location = TOOL_ROOM_MAP.get(tool_name, "office")
-                            write_activity(f"Running: {tool_name}", location=location, status="active")
-                            result = execute_tool(tool_name, tool_args)
-                            write_activity(f"Done: {tool_name}", location="office", status="idle")
-                            print(f"[Tool result] {result[:200]}")
-
-                            tg_send(result)
-                            conversation_history.append({"role": "assistant", "content": f"[Called {tool_name}] {result[:500]}"})
-
-                elif assistant_content:
-                    # Plain text response
-                    write_activity("Responded", location="office", status="idle")
-                    tg_send(assistant_content)
-                    conversation_history.append({"role": "assistant", "content": assistant_content})
-
-                # Trim conversation history to prevent token bloat
-                if len(conversation_history) > 20:
-                    conversation_history = conversation_history[-20:]
+                # Trim history
+                if len(conversation_history) > 30:
+                    conversation_history = conversation_history[-30:]
 
         except KeyboardInterrupt:
-            print("\n\n[Shutting down Web Manager]")
+            print("\n[Shutting down TRSitekeeper]")
+            tg_send("TRSitekeeper going offline.")
             write_activity("Offline", location="office", status="offline")
-            tg_send("🔴 Web Manager going offline.")
             break
         except Exception as e:
             print(f"[Main loop error] {e}")
+            traceback.print_exc()
             time.sleep(5)
 
 
