@@ -1,18 +1,18 @@
 {
-  "last_updated": "2026-02-24T07:59:46",
+  "last_updated": "2026-02-25T04:02:59",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-02-24T07:42:51",
-      "last_run_date": "2026-02-24",
+      "last_run": "2026-02-25T04:02:59",
+      "last_run_date": "2026-02-25",
       "status": "success",
-      "duration_seconds": 169,
+      "duration_seconds": 177,
       "sources_total": 8,
       "sources_hit": 6,
-      "models_qualified": 37,
+      "models_qualified": 38,
       "top_model": "Claude Opus 4.6",
       "top_score": 74.83,
       "top5": [
@@ -39,11 +39,11 @@
         {
           "rank": 5,
           "name": "GLM-5",
-          "score": 46.91
+          "score": 46.89
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-02-25T05:00:00",
+      "next_run": "2026-02-26T05:00:00",
       "error": null
     },
     "trfcast": {
