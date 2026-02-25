@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-25T04:11:45",
+  "last_updated": "2026-02-25T04:14:20",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -96,12 +96,12 @@
       "label": "Truth & Neutrality",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-02-24T07:55:42",
-      "last_run_date": "2026-02-24",
+      "last_run": "2026-02-25T04:14:20",
+      "last_run_date": "2026-02-25",
       "status": "success",
-      "duration_seconds": 210,
+      "duration_seconds": 151,
       "sources_total": 7,
-      "sources_hit": 4,
+      "sources_hit": 5,
       "models_qualified": 13,
       "top_model": "Grok 4 Fast",
       "top_score": 97.84,
@@ -133,7 +133,7 @@
         }
       ],
       "leaderboard_url": "/truscore-scores.html",
-      "next_run": "2026-02-25T05:00:00",
+      "next_run": "2026-02-26T05:00:00",
       "error": null
     },
     "tragents": {
