@@ -721,10 +721,10 @@ loadStatus(); loadScout(); setInterval(function(){ loadStatus(); loadScout(); },
         if (!res.ok) throw new Error("No briefing yet");
         const data = await res.json();
 
-        const stories      = data.top_10 || [];
+        const stories      = data.top_stories || [];
         const briefDate    = data.brief_date || (data.generated_at || "").slice(0,10) || "—";
-        const totalScraped = data.total_scraped || 0;
-        const totalPassed  = data.total_passed_filter || stories.length;
+        const totalScraped = (data.stats && data.stats.total_scraped) || 0;
+        const totalPassed  = (data.stats && data.stats.passed_filter) || stories.length;
         const today        = new Date().toISOString().slice(0,10);
         const isFresh      = briefDate === today;
         const isSeen       = isScoutSeen(briefDate);
@@ -749,9 +749,9 @@ loadStatus(); loadScout(); setInterval(function(){ loadStatus(); loadScout(); },
               <div class="story-body">
                 <a class="story-title" href="${s.url||'#'}" target="_blank" rel="noopener">${s.title||'Untitled'}</a>
                 <div class="story-meta">
-                  <span class="story-badge ${scoutBadgeClass(s.ai_verification)}">${scoutBadgeLabel(s.ai_verification)}</span>
+                  <span class="story-badge ${scoutBadgeClass(s.ai_verdict)}">${scoutBadgeLabel(s.ai_verdict)}</span>
                   <span class="story-source">${s.source||''}</span>
-                  ${s.category?`<span class="story-cat">${s.category}</span>`:''}
+                  ${s.category_label?`<span class="story-cat">${s.category_label}</span>`:''}
                 </div>
               </div>
               <div class="story-score">${s.truth_score!=null?Math.round(s.truth_score):'—'}</div>
@@ -759,7 +759,7 @@ loadStatus(); loadScout(); setInterval(function(){ loadStatus(); loadScout(); },
           : `<div class="no-brief">No stories yet — brief generates at 5:30 AM CST</div>`;
 
         const narrativeHTML = data.narrative
-          ? `<div class="scout-narrative"><strong>Scout's Summary</strong>${data.narrative}</div>`
+          ? `<div class="scout-narrative"><strong>Scout's Summary</strong>${data.narrative_brief}</div>`
           : "";
 
         wrap.innerHTML = `
