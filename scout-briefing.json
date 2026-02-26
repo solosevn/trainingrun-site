@@ -1,0 +1,289 @@
+{
+  "date": "2026-02-26",
+  "generated_at": "2026-02-26T05:31:59.875006",
+  "version": "2.0",
+  "filter": "TrainingRun Truth Filter v2.0",
+  "top_stories": [
+    {
+      "rank": 1,
+      "title": "LongCLI-Bench: A Preliminary Benchmark and Study for Long-horizon Agentic Programming in Command-Line Interfaces",
+      "url": "https://huggingface.co/papers/2602.14337",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 56,
+      "source_credibility": 38,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 8,
+      "relevance_score": 10,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline references a specific paper on Hugging Face Papers, which suggests a factual and verifiable claim."
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline specifically describes a preliminary benchmark and study in AI, which is plausible and aligns with ongoing research on Hugging Face Papers, a reputable source."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "title": "DREAM: Deep Research Evaluation with Agentic Metrics",
+      "url": "https://huggingface.co/papers/2602.18940",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 56,
+      "source_credibility": 38,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 8,
+      "relevance_score": 10,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 7,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline refers to a specific research paper on Hugging Face Papers, which suggests a factual and verifiable claim."
+        },
+        "grok": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 7,
+          "reason": "The headline mentions a potential AI paper but lacks a summary or verifiable details, making it impossible to confirm its accuracy or existence based on the provided information."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "title": "TAPE: Tool-Guided Adaptive Planning and Constrained Execution in Language Model Agents",
+      "url": "https://huggingface.co/papers/2602.19633",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 54,
+      "source_credibility": 38,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 0,
+      "relevance_score": 16,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 9,
+          "reason": "Paper title on a reputable platform (Hugging Face Papers) suggests a specific, technical contribution to AI research"
+        },
+        "grok": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 8,
+          "reason": "The headline mentions a specific paper from a reputable source like Hugging Face, but the absence of a summary or details makes it unverifiable and potentially lacking context."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "title": "Mbed-TLS / mbedtls",
+      "url": "https://github.com/Mbed-TLS/mbedtls",
+      "source": "GitHub Trending All",
+      "summary": "An open source, portable, easy to use, readable and flexible TLS library, and reference implementation of the PSA Cryptography API. Releases are on a varying cadence, typically around 3 - 6 months between releases.",
+      "tr_category": "open_vs_closed",
+      "category_label": "Open vs Closed",
+      "truth_score": 53,
+      "source_credibility": 40,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 8,
+      "relevance_score": 5,
+      "matched_verticals": [],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 9,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The description of mbedtls as an open source, portable TLS library with specific release cadence is consistent with publicly available information on GitHub."
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 9,
+          "reason": "The summary provides specific, factual details about the mbed TLS library that align with its known open-source status, features, and release patterns, making it verifiable through official GitHub sources."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "title": "Qwen 3.5 122b/35b/27b/397b \ud83d\udcca benchmark comparison WEBSITE with More models like GPT 5.2, GPT OSS, etc",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1re4uoh/qwen_35_122b35b27b397b_benchmark_comparison/",
+      "source": "r/LocalLLaMA",
+      "summary": "Full comparison for GPT-5.2, Claude 4.5 Opus, Gemini-3 Pro, Qwen3-Max-Thinking, K2.5-1T-A32B, Qwen3.5-397B, GPT-5-mini, GPT-OSS-120B, Qwen3-235B, Qwen3.5-122B, Qwen3.5-27B, and Qwen3.5-35B. \u200bIncludes all verified scores and head-to-head infographics here: \ud83d\udc49 [https://compareqwen35.tiiny.site](https://compareqwen35.tiiny.site) For test i also made the website with 122B --&gt; [https://9r4n4y.github.io/files-Compare/](https://9r4n4y.github.io/files-Compare/) \ud83d\udc46\ud83d\udc46\ud83d\udc46",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 51,
+      "source_credibility": 15,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 16,
+      "relevance_score": 20,
+      "matched_verticals": [
+        "trsbench",
+        "open_vs_closed"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The article provides specific benchmark comparison data and links to a website with verified scores, indicating a factual and detailed analysis."
+        },
+        "grok": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 8,
+          "reason": "The headline and summary mention unreleased models like GPT-5.2 and provide links from unofficial sources, making the claims vague and unverifiable in the current AI landscape."
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "title": "Mercury: Ultra-Fast Language Models Based on Diffusion",
+      "url": "https://arxiv.org/abs/2506.17298",
+      "source": "Lobste.rs",
+      "summary": "Machine learning researchers have been locked in the autoregressive bottleneck for years. A recent paper argues that instead, diffusion models can perform at scale on discrete data. The researchers trained two coding models named Mercury Coder Mini and Small. The Mini model reached a staggering 1109 tokens per second on H100 GPUs, with the Small model achieving 737. These models eclipsed competing efficient state-of-the-art models in throughput by factors of up to ten, while retaining their abil",
+      "tr_category": "gigaburn",
+      "category_label": "Compute & Power",
+      "truth_score": 50,
+      "source_credibility": 25,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 12,
+      "relevance_score": 13,
+      "matched_verticals": [
+        "gigaburn"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "Specific results from a paper on Lobste.rs, a reputable platform for sharing research papers"
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The summary provides specific details about a paper on diffusion models for language tasks, including model names, performance metrics, and comparisons, which align with ongoing AI research and are plausible for verification through academic sources."
+        }
+      }
+    },
+    {
+      "rank": 7,
+      "title": "See and Fix the Flaws: Enabling VLMs and Diffusion Models to Comprehend Visual Artifacts via Agentic Data Synthesis",
+      "url": "https://huggingface.co/papers/2602.20951",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 52,
+      "source_credibility": 38,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 4,
+      "relevance_score": 10,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 6,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The paper title appears to be a specific and technical description of an AI research topic, suggesting a genuine academic publication."
+        },
+        "grok": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 6,
+          "reason": "The headline is specific and plausible in the AI field, but without a summary or verifiable details from the source, it lacks sufficient evidence to confirm its accuracy."
+        }
+      }
+    }
+  ],
+  "narrative_brief": "**Morning Briefing: Top 7 AI Stories**\n\nAs we dive into the latest developments in AI, here's what you need to know:\n\n1. **LongCLI-Bench**: Researchers have released a preliminary benchmark for long-horizon agentic programming in command-line interfaces (CLI). The LongCLI-Bench aims to evaluate the performance of language models on complex tasks. This study is relevant to those tracking advancements in agents and benchmarks.\n\n2. **DREAM**: A new paper, DREAM, proposes using agentic metrics to evaluate deep research evaluation. The authors argue that traditional metrics may not capture the full potential of AI systems. This work has implications for the development of more effective evaluation methods for agents.\n\n3. **TAPE**: Researchers have introduced TAPE, a tool-guided adaptive planning and constrained execution framework for language model agents. TAPE aims to improve the efficiency and effectiveness of language models in complex tasks. This innovation is relevant to those tracking advancements in agents and benchmarks.\n\n4. **Mbed-TLS**: An open-source TLS library, Mbed-TLS, has been released on GitHub. The library provides a portable, easy-to-use, and flexible implementation of the PSA Cryptography API. This development is notable for those interested in open-source models and their applications.\n\n5. **Qwen 3.5 Benchmark Comparison**: A Reddit post has compiled benchmark comparison results for various language models, including GPT-5.2, Claude 4.5 Opus, and Qwen 3.5. The comparison includes verified scores and head-to-head infographics. This data is relevant to those tracking advancements in benchmarks.\n\n6. **Mercury**: Researchers have proposed using diffusion models to overcome the autoregressive bottleneck in language modeling. They trained two coding models, Mercury Coder Mini and Small, which achieved impressive results. This development has implications for the compute and power requirements of AI systems.\n\n7. **See and Fix the Flaws**: A new paper proposes using agentic data synthesis to enable visual language models (VLMs) and diffusion models to comprehend visual artifacts. The authors argue that this approach can improve the robustness and reliability of AI systems. This work has implications for the development of more effective agents.\n\nNote: Cross-confirmation is not available for all stories, but they are all based on credible sources such as Hugging Face Papers or GitHub Trending All.",
+  "stats": {
+    "total_scraped": 360,
+    "passed_filter": 7,
+    "rejected": 353,
+    "avg_truth_score": 29.2,
+    "categories": {
+      "general": 182,
+      "tragents": 53,
+      "trsbench": 24,
+      "trfcast": 8,
+      "trscode": 26,
+      "open_vs_closed": 33,
+      "gigaburn": 16,
+      "truscore": 13,
+      "churn": 1,
+      "gari": 4
+    },
+    "sources": {
+      "Hugging Face Papers": 46,
+      "GitHub Trending Python": 19,
+      "GitHub Trending All": 22,
+      "r/MachineLearning": 33,
+      "r/LocalLLaMA": 38,
+      "r/artificial": 32,
+      "r/singularity": 32,
+      "Hacker News": 22,
+      "Lobste.rs": 26,
+      "YouTube: Two Minute Papers": 5,
+      "YouTube: Yannic Kilcher": 5,
+      "Import AI": 5,
+      "YouTube: AI Explained": 5,
+      "YouTube: Matthew Berman": 6,
+      "YouTube: Fireship": 5,
+      "TechCrunch": 14,
+      "VentureBeat": 7,
+      "Ars Technica": 8,
+      "The Verge": 14,
+      "MIT Tech Review": 6,
+      "Wired": 10
+    },
+    "sources_active": 21
+  },
+  "filter_methodology": {
+    "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
+    "cross_confirmation_weight": "0-20 pts (1 source = 8, 2+ = 15, 3+ = 20)",
+    "substance_score_weight": "-10 to +20 pts (hype=-8 each, substance=+4 each)",
+    "relevance_weight": "0-20 pts (keyword match to TrainingRun verticals)",
+    "min_truth_score": 50,
+    "diversity_rules": "Max 3 per category, max 2 per source"
+  }
+}
