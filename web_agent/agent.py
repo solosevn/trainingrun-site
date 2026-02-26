@@ -564,6 +564,17 @@ def execute_tool(name: str, args: dict) -> str:
 # WRITE-PROTECTED TOOLS
 # ─────────────────────────────────────────────
 
+
+# PID LOCK — one instance only
+import fcntl as _f, atexit as _ax
+_PID = os.path.expanduser("~/trainingrun-site/web_agent/.sitekeeper.pid")
+try:
+    _pfh = open(_PID, "w"); _f.flock(_pfh, _f.LOCK_EX | _f.LOCK_NB)
+    _pfh.write(str(os.getpid())); _pfh.flush()
+    _ax.register(lambda: os.remove(_PID) if os.path.exists(_PID) else None)
+except IOError:
+    print("[PID] Already running. Exiting."); import sys; sys.exit(0)
+
 PROTECTED_TOOLS = {"run_ddp"}
 
 
