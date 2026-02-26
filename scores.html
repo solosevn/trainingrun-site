@@ -215,8 +215,7 @@ function App({DATES,MODELS,EVENTS}){
   const displayChange=hpAbsIdx!==null?computeChange(hpAbsIdx):computeChange(latestAbsIdx);
 
   // Dynamic rank: recalculate at hovered day
-  const displayRanks=hpAbsIdx!==null?getRankAtDay(MODELS,hpAbsIdx):getRankAtDay(MODELS,latestAbsIdx);
-  const displayRank=displayRanks[sel];
+  const displayRank=MODELS[sel].rank;
   const latestRanks=getRankAtDay(MODELS,latestAbsIdx);
   const prevRanks=getRankAtDay(MODELS,latestAbsIdx-1);
 
