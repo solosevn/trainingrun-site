@@ -295,7 +295,7 @@ CLAUDE_TOOLS = [
     },
     {
         "name": "git_push",
-        "description": "Stage files, commit, pull --rebase, push to GitHub. REQUIRES APPROVAL.",
+        "description": "Stage files, commit, pull --rebase, push to GitHub. Always includes agent_activity.json. REQUIRES APPROVAL.",
         "input_schema": {
             "type": "object",
             "properties": {
@@ -499,6 +499,11 @@ def execute_tool(name: str, args: dict) -> str:
     elif name == "git_push":
         files = args.get("files", [])
         message = args.get("message", "Update from TRSitekeeper")
+
+        # Always include agent_activity.json (changes with every action)
+        if "agent_activity.json" not in files:
+            files.append("agent_activity.json")
+
         try:
             for f in files:
                 result = subprocess.run(["git", "add", f], cwd=REPO_PATH, capture_output=True, text=True)
@@ -559,7 +564,7 @@ def execute_tool(name: str, args: dict) -> str:
 # WRITE-PROTECTED TOOLS
 # ─────────────────────────────────────────────
 
-PROTECTED_TOOLS = {"write_file", "edit_file", "git_push", "run_ddp"}
+PROTECTED_TOOLS = {"run_ddp"}
 
 
 # ─────────────────────────────────────────────
@@ -580,15 +585,34 @@ def claude_chat(messages: list, system_prompt: str) -> dict:
         "messages": messages,
         "tools": CLAUDE_TOOLS
     }
-    try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=60)
-        if not resp.ok:
-            return {"error": f"API error {resp.status_code}: {resp.text[:300]}"}
-        return resp.json()
-    except requests.exceptions.Timeout:
-        return {"error": "Claude API timed out after 60 seconds."}
-    except Exception as e:
-        return {"error": str(e)}
+    MAX_RETRIES = 3
+    RETRY_DELAYS = [15, 30, 60]  # seconds between retries
+
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            resp = requests.post(url, headers=headers, json=payload, timeout=60)
+
+            if resp.status_code == 429:
+                if attempt < MAX_RETRIES:
+                    wait = RETRY_DELAYS[attempt]
+                    print(f"[Claude] Rate limited (429). Waiting {wait}s — retry {attempt + 1}/{MAX_RETRIES}...")
+                    tg_send(f"⏳ Rate limit hit. Waiting {wait}s then retrying ({attempt + 1}/{MAX_RETRIES})...")
+                    time.sleep(wait)
+                    continue
+                else:
+                    tg_send("❌ Rate limit exceeded after 3 retries. Try again in a minute.")
+                    return {"error": "Rate limit exceeded after 3 retries. Try again in a minute."}
+
+            if not resp.ok:
+                return {"error": f"API error {resp.status_code}: {resp.text[:300]}"}
+            return resp.json()
+
+        except requests.exceptions.Timeout:
+            return {"error": "Claude API timed out after 60 seconds."}
+        except Exception as e:
+            return {"error": str(e)}
+
+    return {"error": "Rate limit exceeded after retries."}
 
 
 def build_system_prompt() -> str:
@@ -617,6 +641,7 @@ RULES:
 7. Each message is a NEW request. Don't carry over context from old messages.
 8. When David sends a screenshot, analyze it carefully. Identify the exact file and code that needs changing. Propose a specific fix.
 9. For protected operations (edit, write, push, run DDPs), always explain what you'll do and wait for approval.
+10. When pushing to git, always include agent_activity.json in the staged files.
 """
 
 
@@ -695,12 +720,12 @@ def keyword_intercept(text: str):
 def handle_claude_response(response, conversation_history):
     """
     Process Claude's response. Handles text, tool calls, and multi-step tool chains.
-    Returns when: (a) Claude sends final text, (b) a protected tool needs approval,
+    Loops until: (a) Claude sends final text, (b) a protected tool needs approval,
     or (c) an error occurs.
     """
     global pending_approval
 
-    MAX_TOOL_LOOPS = 10  # Safety limit to prevent infinite loops
+    MAX_TOOL_LOOPS = 10
 
     for loop_count in range(MAX_TOOL_LOOPS):
 
@@ -710,7 +735,6 @@ def handle_claude_response(response, conversation_history):
             print(f"[Claude error] {response['error']}")
             return
 
-        stop_reason = response.get("stop_reason", "")
         content_blocks = response.get("content", [])
 
         text_parts = []
@@ -722,7 +746,7 @@ def handle_claude_response(response, conversation_history):
             elif block.get("type") == "tool_use":
                 tool_uses.append(block)
 
-        # ── NO TOOL CALLS — just text response, we're done ──
+        # ── NO TOOL CALLS — just text, we're done ──
         if not tool_uses:
             if text_parts:
                 tg_send("\n".join(text_parts))
@@ -730,17 +754,14 @@ def handle_claude_response(response, conversation_history):
             write_activity("Ready", location="office", status="idle")
             return
 
-        # ── TOOL CALLS — execute and possibly continue ──
-        # Store assistant message with tool_use blocks
+        # ── TOOL CALLS — execute and continue ──
         conversation_history.append({"role": "assistant", "content": content_blocks})
 
-        # Send any text that came before the tool calls
         if text_parts:
             combined = "\n".join(text_parts)
             if combined.strip():
                 tg_send(combined)
 
-        # Process each tool call
         tool_results = []
         hit_protected = False
 
@@ -752,7 +773,6 @@ def handle_claude_response(response, conversation_history):
             print(f"[Tool call] {tool_name}({json.dumps(tool_input)[:100]})")
 
             if tool_name in PROTECTED_TOOLS:
-                # Need approval — pause here
                 location = TOOL_ROOM_MAP.get(tool_name, "office")
                 write_activity(f"Awaiting approval: {tool_name}", location=location, status="waiting")
                 approval_msg = request_approval(tool_name, tool_input)
@@ -762,7 +782,6 @@ def handle_claude_response(response, conversation_history):
                 hit_protected = True
                 break
             else:
-                # Safe tool — execute immediately
                 location = TOOL_ROOM_MAP.get(tool_name, "office")
                 write_activity(f"Running: {tool_name}", location=location, status="active")
                 result = execute_tool(tool_name, tool_input)
@@ -776,23 +795,17 @@ def handle_claude_response(response, conversation_history):
                 })
 
         if hit_protected:
-            # We're paused waiting for approval. Don't continue the loop.
             return
 
         if tool_results:
-            # Feed tool results back to Claude for continuation
             conversation_history.append({"role": "user", "content": tool_results})
-
             print(f"[Loop {loop_count + 1}] Sending {len(tool_results)} tool result(s) back to Claude...")
             write_activity("Thinking...", location="office", status="active")
             response = claude_chat(conversation_history[-20:], build_system_prompt())
-            # Loop continues — Claude may respond with more tool calls or final text
         else:
-            # No results to send back, we're done
             write_activity("Ready", location="office", status="idle")
             return
 
-    # Safety: hit max loops
     tg_send("Stopped after too many tool steps. Let me know if you need more.")
     write_activity("Ready", location="office", status="idle")
 
@@ -829,7 +842,6 @@ def run():
 
     conversation_history = []
 
-    # Skip old messages
     print("[Startup] Skipping old Telegram messages...")
     old_updates = tg_get_updates(0)
     if old_updates:
@@ -888,7 +900,7 @@ def run():
                         print(f"[Tool: {tool}] {result[:200]}")
                         tg_send(result)
 
-                        # Feed result back to Claude so it can continue (e.g., propose git push after edit)
+                        # Feed result back to Claude so it can continue
                         if tool_use_id:
                             conversation_history.append({
                                 "role": "user",
@@ -898,7 +910,6 @@ def run():
                                     "content": result[:4000]
                                 }]
                             })
-                            # Let Claude continue
                             write_activity("Thinking...", location="office", status="active")
                             response = claude_chat(conversation_history[-20:], build_system_prompt())
                             handle_claude_response(response, conversation_history)
@@ -943,11 +954,8 @@ def run():
 
                 write_activity(f"Thinking: {text[:40]}", location="office", status="active")
                 response = claude_chat(conversation_history[-20:], build_system_prompt())
-
-                # Process response with multi-step tool chain support
                 handle_claude_response(response, conversation_history)
 
-                # Trim history
                 if len(conversation_history) > 30:
                     conversation_history = conversation_history[-30:]
 
