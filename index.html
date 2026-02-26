@@ -1261,11 +1261,8 @@ function openV2Modal(modelName, ddp){
   // Medal glow
   modal.classList.remove('glow-gold','glow-silver','glow-bronze');
   if(curData){
-    const sorted = curData.models
-      .filter(m => getLatestScore(m) !== null)
-      .sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
-    const rank = sorted.findIndex(m => m.name === modelName) + 1;
-    if(rank===1)      modal.classList.add('glow-gold');
+    const rank=model&&model.rank||0;
+if(rank===1)      modal.classList.add('glow-gold');
     else if(rank===2) modal.classList.add('glow-silver');
     else if(rank===3) modal.classList.add('glow-bronze');
   }
@@ -1277,15 +1274,7 @@ function openV2Modal(modelName, ddp){
     const bData = _ddpData[bid];
     let rank = 0, delta = null;
     if(bData){
-      const sorted = bData.models
-        .filter(m => getLatestScore(m) !== null)
-        .sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
-      const idx = sorted.findIndex(m => m.name === modelName);
-      if(idx >= 0){
-        rank  = idx + 1;
-        const orig = bData.models.find(m => m.name === modelName);
-        if(orig) delta = getChange(orig);
-      }
+      const bModel=bData.models.find(m=>m.name===modelName);if(bModel&&bModel.rank){rank=bModel.rank;}
     }
     const rankCls      = rank===1?'rank-gold':rank===2?'rank-silver':rank===3?'rank-bronze':'';
     const rankColor    = rank===1?'#ffd700':rank===2?'#c8c8dc':rank===3?'#cd7f32':rank>0?'rgba(255,255,255,0.82)':'rgba(255,255,255,0.85)';
