@@ -123,6 +123,11 @@ body {
   font-size:9.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
   color:rgba(255,255,255,0.3); margin-bottom:9px; cursor:pointer; user-select:none;
 }
+.sb-section-header.prominent {
+  font-size:12px; letter-spacing:1px; color:#ffffff;
+  text-shadow:0 0 10px rgba(255,255,255,0.7),0 0 22px rgba(255,255,255,0.35);
+}
+.lab-divider { height:1px; background:rgba(255,255,255,0.1); margin:6px 4px; }
 .sb-chevron { font-size:8px; color:rgba(255,255,255,0.2); transition:transform .15s; }
 .rank-toggle { display:flex; background:rgba(255,255,255,0.04); border-radius:6px; padding:2px; }
 .rtab { flex:1; text-align:center; padding:5px 0; font-size:11px; font-weight:600; color:rgba(255,255,255,0.35); border-radius:5px; cursor:pointer; }
@@ -435,14 +440,14 @@ body.compact .lb-table tbody tr { height:40px; }
       </div>
 
       <div class="sb-section" id="pillarSection">
-        <div class="sb-section-header" id="pillarHeader">Pillars <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header prominent" id="pillarHeader">Pillars <span class="sb-chevron">▾</span></div>
         <div class="pillar-list" id="pillarList">
           <!-- populated dynamically by buildPillarSidebar() -->
         </div>
       </div>
 
       <div class="sb-section">
-        <div class="sb-section-header">Filter by Lab <span class="sb-chevron">▾</span></div>
+        <div class="sb-section-header prominent">Filter by Lab <span class="sb-chevron">▾</span></div>
         <div class="lab-list" id="labList">
           <!-- populated by JS -->
         </div>
@@ -1020,17 +1025,24 @@ Promise.all([
 
 // ══ BUILD LAB FILTER ═════════════════════════════════
 function buildLabFilter(models){
-  const labs = [...new Set(models.map(m=>m.company).filter(Boolean))].sort();
+  const TOP_LABS = ['Google','xAI','Anthropic','DeepSeek','OpenAI','Meta'];
+  const allLabs = [...new Set(models.map(m=>m.company).filter(Boolean))];
+  const topPresent = TOP_LABS.filter(l => allLabs.includes(l));
+  const rest = allLabs.filter(l => !TOP_LABS.includes(l)).sort();
   const list = document.getElementById('labList');
-  list.innerHTML = `<div class="lab-item active" onclick="filterByLab('All Labs',this)">
-    <div class="radio on"></div> All Labs
-  </div>` + labs.map(lab => {
+  const makeItem = lab => {
     const lc = labColor(lab);
     return `<div class="lab-item" onclick="filterByLab('${lab}',this)">
       <div class="radio"></div>
       <div class="lab-dot" style="background:${lc.dot}"></div> ${lab}
     </div>`;
-  }).join('');
+  };
+  list.innerHTML = `<div class="lab-item active" onclick="filterByLab('All Labs',this)">
+    <div class="radio on"></div> All Labs
+  </div>`
+    + topPresent.map(makeItem).join('')
+    + `<div class="lab-divider"></div>`
+    + rest.map(makeItem).join('');
 }
 
 // ══ FILTER HANDLERS ══════════════════════════════════
