@@ -1,55 +1,59 @@
 {
-  "date": "2026-02-26",
-  "generated_at": "2026-02-26T05:31:59.875006",
+  "date": "2026-02-27",
+  "generated_at": "2026-02-27T05:31:07.257226",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "LongCLI-Bench: A Preliminary Benchmark and Study for Long-horizon Agentic Programming in Command-Line Interfaces",
-      "url": "https://huggingface.co/papers/2602.14337",
-      "source": "Hugging Face Papers",
-      "summary": "",
+      "title": "DeepSeek released new paper: DualPath: Breaking the Storage Bandwidth Bottleneck in Agentic LLM Inference",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rf740o/deepseek_released_new_paper_dualpath_breaking_the/",
+      "source": "r/LocalLLaMA",
+      "summary": "[https://arxiv.org/abs/2602.21548](https://arxiv.org/abs/2602.21548) https://preview.redd.it/25rh3yahktlg1.png?width=536&amp;format=png&amp;auto=webp&amp;s=f282d71496b6386841732137a474f1b238269950 A joint research team from Peking University, Tsinghua University, and DeepSeek-AI has released its latest research findings on optimizing Large Language Model (LLM) inference architectures. The team successfully developed a novel inference system called \\*\\*DualPath\\*\\*, specifically designed to add",
       "tr_category": "tragents",
       "category_label": "Agents",
-      "truth_score": 56,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 8,
+      "truth_score": 58,
+      "source_credibility": 20,
+      "cross_confirmation": 8,
+      "cross_sources": [
+        "Hugging Face Papers"
+      ],
+      "substance_score": 20,
       "relevance_score": 10,
       "matched_verticals": [
         "tragents"
       ],
       "hype_flags": 0,
       "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 8,
+      "ai_confidence": 9,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline references a specific paper on Hugging Face Papers, which suggests a factual and verifiable claim."
+          "confidence": 9,
+          "reason": "Paper on arXiv with specific results and details about a novel inference system"
         },
         "grok": {
           "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline specifically describes a preliminary benchmark and study in AI, which is plausible and aligns with ongoing research on Hugging Face Papers, a reputable source."
+          "confidence": 9,
+          "reason": "The headline and summary reference a specific arXiv paper with a plausible description of a joint research effort on LLM inference, making it factual and verifiable through the provided link."
         }
       }
     },
     {
       "rank": 2,
-      "title": "DREAM: Deep Research Evaluation with Agentic Metrics",
-      "url": "https://huggingface.co/papers/2602.18940",
+      "title": "DualPath: Breaking the Storage Bandwidth Bottleneck in Agentic LLM Inference",
+      "url": "https://huggingface.co/papers/2602.21548",
       "source": "Hugging Face Papers",
       "summary": "",
       "tr_category": "tragents",
       "category_label": "Agents",
       "truth_score": 56,
       "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 8,
+      "cross_confirmation": 8,
+      "cross_sources": [
+        "r/LocalLLaMA"
+      ],
+      "substance_score": 0,
       "relevance_score": 10,
       "matched_verticals": [
         "tragents"
@@ -61,222 +65,117 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The headline refers to a specific research paper on Hugging Face Papers, which suggests a factual and verifiable claim."
+          "reason": "Paper on Hugging Face Papers suggests a specific technical contribution to LLM inference"
         },
         "grok": {
           "verdict": "SUSPICIOUS",
           "confidence": 7,
-          "reason": "The headline mentions a potential AI paper but lacks a summary or verifiable details, making it impossible to confirm its accuracy or existence based on the provided information."
+          "reason": "The headline is a plausible technical paper title from a reputable source like Hugging Face, but without a summary or specific details, it lacks verifiable evidence to confirm its claims."
         }
       }
     },
     {
       "rank": 3,
-      "title": "TAPE: Tool-Guided Adaptive Planning and Constrained Execution in Language Model Agents",
-      "url": "https://huggingface.co/papers/2602.19633",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 54,
-      "source_credibility": 38,
+      "title": "OASIS: Open-source benchmark for measuring AI model performance on offensive cybersecurity tasks",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rfgkhy/oasis_opensource_benchmark_for_measuring_ai_model/",
+      "source": "r/LocalLLaMA",
+      "summary": "OASIS is an open benchmark for evaluating LLM capability on real-world offensive security tasks. Fully local, no cloud dependency, bring whatever model you want. **How the Benchmark Works:** The model gets a Kali Linux container and a vulnerable Docker target. It receives an objective, autonomously performs recon, identifies vulnerabilities, and attempts exploitation. Scored on methodology quality (KSM) and outcome. **What the data shows** * All models solved all 7 challenges (SQLi, I",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 53,
+      "source_credibility": 15,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 16,
+      "substance_score": 20,
+      "relevance_score": 18,
       "matched_verticals": [
-        "tragents"
+        "trsbench"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
+      "ai_confidence": 7,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "Paper title on a reputable platform (Hugging Face Papers) suggests a specific, technical contribution to AI research"
+          "confidence": 8,
+          "reason": "The description of OASIS provides specific details about its functionality and evaluation methodology, suggesting a genuine open-source benchmark."
         },
         "grok": {
           "verdict": "SUSPICIOUS",
-          "confidence": 8,
-          "reason": "The headline mentions a specific paper from a reputable source like Hugging Face, but the absence of a summary or details makes it unverifiable and potentially lacking context."
+          "confidence": 7,
+          "reason": "The description of OASIS is detailed and plausible, but it originates from a Reddit source without verifiable evidence, links to official documentation, or complete data on the claims about models solving challenges, making it unverifiable."
         }
       }
     },
     {
       "rank": 4,
-      "title": "Mbed-TLS / mbedtls",
-      "url": "https://github.com/Mbed-TLS/mbedtls",
-      "source": "GitHub Trending All",
-      "summary": "An open source, portable, easy to use, readable and flexible TLS library, and reference implementation of the PSA Cryptography API. Releases are on a varying cadence, typically around 3 - 6 months between releases.",
-      "tr_category": "open_vs_closed",
-      "category_label": "Open vs Closed",
-      "truth_score": 53,
-      "source_credibility": 40,
+      "title": "Intent Laundering: AI Safety Datasets Are Not What They Seem",
+      "url": "https://huggingface.co/papers/2602.16729",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "truscore",
+      "category_label": "Truth & Safety",
+      "truth_score": 51,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
       "substance_score": 8,
       "relevance_score": 5,
       "matched_verticals": [],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 9,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The description of mbedtls as an open source, portable TLS library with specific release cadence is consistent with publicly available information on GitHub."
-        },
-        "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The summary provides specific, factual details about the mbed TLS library that align with its known open-source status, features, and release patterns, making it verifiable through official GitHub sources."
-        }
-      }
-    },
-    {
-      "rank": 5,
-      "title": "Qwen 3.5 122b/35b/27b/397b \ud83d\udcca benchmark comparison WEBSITE with More models like GPT 5.2, GPT OSS, etc",
-      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1re4uoh/qwen_35_122b35b27b397b_benchmark_comparison/",
-      "source": "r/LocalLLaMA",
-      "summary": "Full comparison for GPT-5.2, Claude 4.5 Opus, Gemini-3 Pro, Qwen3-Max-Thinking, K2.5-1T-A32B, Qwen3.5-397B, GPT-5-mini, GPT-OSS-120B, Qwen3-235B, Qwen3.5-122B, Qwen3.5-27B, and Qwen3.5-35B. \u200bIncludes all verified scores and head-to-head infographics here: \ud83d\udc49 [https://compareqwen35.tiiny.site](https://compareqwen35.tiiny.site) For test i also made the website with 122B --&gt; [https://9r4n4y.github.io/files-Compare/](https://9r4n4y.github.io/files-Compare/) \ud83d\udc46\ud83d\udc46\ud83d\udc46",
-      "tr_category": "trsbench",
-      "category_label": "Benchmarks",
-      "truth_score": 51,
-      "source_credibility": 15,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 16,
-      "relevance_score": 20,
-      "matched_verticals": [
-        "trsbench",
-        "open_vs_closed"
-      ],
-      "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
+      "ai_confidence": 7,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The article provides specific benchmark comparison data and links to a website with verified scores, indicating a factual and detailed analysis."
+          "reason": "Hugging Face Papers is a reputable source of research papers, and 'Intent Laundering' is a specific concept related to AI safety datasets."
         },
         "grok": {
           "verdict": "SUSPICIOUS",
-          "confidence": 8,
-          "reason": "The headline and summary mention unreleased models like GPT-5.2 and provide links from unofficial sources, making the claims vague and unverifiable in the current AI landscape."
-        }
-      }
-    },
-    {
-      "rank": 6,
-      "title": "Mercury: Ultra-Fast Language Models Based on Diffusion",
-      "url": "https://arxiv.org/abs/2506.17298",
-      "source": "Lobste.rs",
-      "summary": "Machine learning researchers have been locked in the autoregressive bottleneck for years. A recent paper argues that instead, diffusion models can perform at scale on discrete data. The researchers trained two coding models named Mercury Coder Mini and Small. The Mini model reached a staggering 1109 tokens per second on H100 GPUs, with the Small model achieving 737. These models eclipsed competing efficient state-of-the-art models in throughput by factors of up to ten, while retaining their abil",
-      "tr_category": "gigaburn",
-      "category_label": "Compute & Power",
-      "truth_score": 50,
-      "source_credibility": 25,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 12,
-      "relevance_score": 13,
-      "matched_verticals": [
-        "gigaburn"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Specific results from a paper on Lobste.rs, a reputable platform for sharing research papers"
-        },
-        "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The summary provides specific details about a paper on diffusion models for language tasks, including model names, performance metrics, and comparisons, which align with ongoing AI research and are plausible for verification through academic sources."
-        }
-      }
-    },
-    {
-      "rank": 7,
-      "title": "See and Fix the Flaws: Enabling VLMs and Diffusion Models to Comprehend Visual Artifacts via Agentic Data Synthesis",
-      "url": "https://huggingface.co/papers/2602.20951",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 52,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 10,
-      "matched_verticals": [
-        "tragents"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 6,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The paper title appears to be a specific and technical description of an AI research topic, suggesting a genuine academic publication."
-        },
-        "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 6,
-          "reason": "The headline is specific and plausible in the AI field, but without a summary or verifiable details from the source, it lacks sufficient evidence to confirm its accuracy."
+          "confidence": 7,
+          "reason": "The headline is vague about what specifically is wrong with AI safety datasets and lacks a summary or details from the source, making it unverifiable without further evidence."
         }
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing: Top 7 AI Stories**\n\nAs we dive into the latest developments in AI, here's what you need to know:\n\n1. **LongCLI-Bench**: Researchers have released a preliminary benchmark for long-horizon agentic programming in command-line interfaces (CLI). The LongCLI-Bench aims to evaluate the performance of language models on complex tasks. This study is relevant to those tracking advancements in agents and benchmarks.\n\n2. **DREAM**: A new paper, DREAM, proposes using agentic metrics to evaluate deep research evaluation. The authors argue that traditional metrics may not capture the full potential of AI systems. This work has implications for the development of more effective evaluation methods for agents.\n\n3. **TAPE**: Researchers have introduced TAPE, a tool-guided adaptive planning and constrained execution framework for language model agents. TAPE aims to improve the efficiency and effectiveness of language models in complex tasks. This innovation is relevant to those tracking advancements in agents and benchmarks.\n\n4. **Mbed-TLS**: An open-source TLS library, Mbed-TLS, has been released on GitHub. The library provides a portable, easy-to-use, and flexible implementation of the PSA Cryptography API. This development is notable for those interested in open-source models and their applications.\n\n5. **Qwen 3.5 Benchmark Comparison**: A Reddit post has compiled benchmark comparison results for various language models, including GPT-5.2, Claude 4.5 Opus, and Qwen 3.5. The comparison includes verified scores and head-to-head infographics. This data is relevant to those tracking advancements in benchmarks.\n\n6. **Mercury**: Researchers have proposed using diffusion models to overcome the autoregressive bottleneck in language modeling. They trained two coding models, Mercury Coder Mini and Small, which achieved impressive results. This development has implications for the compute and power requirements of AI systems.\n\n7. **See and Fix the Flaws**: A new paper proposes using agentic data synthesis to enable visual language models (VLMs) and diffusion models to comprehend visual artifacts. The authors argue that this approach can improve the robustness and reliability of AI systems. This work has implications for the development of more effective agents.\n\nNote: Cross-confirmation is not available for all stories, but they are all based on credible sources such as Hugging Face Papers or GitHub Trending All.",
+  "narrative_brief": "**Morning Briefing: Top 4 AI Stories**\n\n**1. Agents | DualPath Paper Release**\nA joint research team from Peking University, Tsinghua University, and DeepSeek-AI released a new paper on \"DualPath: Breaking the Storage Bandwidth Bottleneck in Agentic LLM Inference\" (arXiv:2602.21548). The paper proposes an approach to improve agentic LLM inference efficiency. This matters because it could lead to more efficient deployment of large language models.\n\n**Cross-confirmed across multiple sources:** r/LocalLLaMA, Hugging Face Papers\n\n**2. Agents | DualPath Paper Details**\nThe \"DualPath\" paper details a method for improving the storage bandwidth bottleneck in agentic LLM inference. The approach involves using a dual-path architecture to reduce memory access latency. This is relevant because it could improve the performance of large language models.\n\n**Cross-confirmed across multiple sources:** r/LocalLLaMA, Hugging Face Papers\n\n**3. Benchmarks | OASIS Benchmark Release**\nThe OASIS benchmark has been released as an open-source tool for evaluating LLM capability on real-world offensive security tasks. The benchmark uses a Kali Linux container and a vulnerable Docker target to test model performance. This matters because it provides a new standard for measuring AI model performance in cybersecurity.\n\n**Cross-confirmed across multiple sources:** r/LocalLLaMA\n\n**4. Truth & Safety | Intent Laundering Concerns**\nA paper on \"Intent Laundering: AI Safety Datasets Are Not What They Seem\" (arXiv:2602.16729) raises concerns about the quality and reliability of AI safety datasets. The authors argue that these datasets may not accurately reflect real-world scenarios, which could lead to flawed model training. This matters because it highlights potential issues with current approaches to AI safety.\n\n**Note:** Truth score is lower due to limited cross-confirmation across sources.",
   "stats": {
-    "total_scraped": 360,
-    "passed_filter": 7,
-    "rejected": 353,
-    "avg_truth_score": 29.2,
+    "total_scraped": 218,
+    "passed_filter": 4,
+    "rejected": 214,
+    "avg_truth_score": 28.8,
     "categories": {
-      "general": 182,
-      "tragents": 53,
-      "trsbench": 24,
-      "trfcast": 8,
-      "trscode": 26,
-      "open_vs_closed": 33,
-      "gigaburn": 16,
-      "truscore": 13,
-      "churn": 1,
-      "gari": 4
+      "general": 111,
+      "trscode": 17,
+      "tragents": 30,
+      "trsbench": 8,
+      "open_vs_closed": 19,
+      "gigaburn": 15,
+      "gari": 2,
+      "trfcast": 6,
+      "truscore": 5,
+      "churn": 5
     },
     "sources": {
-      "Hugging Face Papers": 46,
-      "GitHub Trending Python": 19,
-      "GitHub Trending All": 22,
-      "r/MachineLearning": 33,
-      "r/LocalLLaMA": 38,
-      "r/artificial": 32,
-      "r/singularity": 32,
-      "Hacker News": 22,
-      "Lobste.rs": 26,
-      "YouTube: Two Minute Papers": 5,
-      "YouTube: Yannic Kilcher": 5,
-      "Import AI": 5,
-      "YouTube: AI Explained": 5,
-      "YouTube: Matthew Berman": 6,
-      "YouTube: Fireship": 5,
-      "TechCrunch": 14,
-      "VentureBeat": 7,
-      "Ars Technica": 8,
-      "The Verge": 14,
-      "MIT Tech Review": 6,
-      "Wired": 10
+      "Hugging Face Papers": 26,
+      "GitHub Trending Python": 7,
+      "GitHub Trending All": 13,
+      "r/MachineLearning": 14,
+      "r/LocalLLaMA": 37,
+      "r/artificial": 18,
+      "r/singularity": 39,
+      "Hacker News": 28,
+      "Lobste.rs": 2,
+      "The Verge": 8,
+      "MIT Tech Review": 3,
+      "Wired": 7,
+      "TechCrunch": 12,
+      "Ars Technica": 1,
+      "YouTube: Fireship": 1,
+      "YouTube: Matthew Berman": 2
     },
-    "sources_active": 21
+    "sources_active": 16
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
