@@ -378,8 +378,165 @@ find /sessions -name "PRODUCTION_BIBLE.md" 2>/dev/null
 
 ---
 
+## DAILY ARTICLE WORKFLOW
+
+This is the step-by-step process for publishing a new daily article (day-002, day-003, etc.). The goal: you hand Claude an MD file + optional images → live article in ~5 minutes.
+
+### What You Give Claude
+
+1. **Article MD file** — the article content (e.g. `day-002.md`). Structure it like this:
+```
+# HEADLINE
+## Deck (subtitle)
+**Kicker:** RESEARCH WATCH
+**Tags:** #AI #Benchmarks #Tag3
+**Paper:** Full citation line
+**Authors:** Author A, Author B, Author C
+**Institutions:** University X, Lab Y
+**Paper URL:** https://arxiv.org/abs/XXXX.XXXXX
+**Date:** February 28, 2026
+
+[ARTICLE BODY — paragraphs, can include callout boxes, stats, pull quotes. See formatting notes below.]
+```
+
+2. **Images** (optional) — one or two images to include. Name them anything; Claude will rename/place them correctly.
+
+### Article Body Formatting (in the MD file)
+
+Use these markers in the body and Claude will convert them to the right HTML:
+
+- Normal paragraphs → `<p>` tags
+- `CALLOUT: text` → styled callout box (cyan left border)
+- `STATS: label1: value1 | label2: value2 | label3: value3` → 3-column stats row
+- `HIGHLIGHT: text` → highlight box (amber/gold accent)
+- `PULLQUOTE: text` → pull quote (centered, large italic)
+- `FIGURE: filename.jpg | Caption text` → article figure with caption
+
+### What Claude Does (the workflow)
+
+**Step 1 — Clone the repo**
+```bash
+cd /tmp && git clone https://[PAT]@github.com/solosevn/trainingrun-site.git tr-site
+```
+Always clone fresh. Don't reuse stale clones.
+
+**Step 2 — Determine the next article number**
+```bash
+ls /tmp/tr-site/day-*.html | sort | tail -1
+```
+If last is `day-001.html`, next is `day-002`. Zero-pad to 3 digits always.
+
+**Step 3 — Copy day-template.html and fill placeholders**
+```bash
+cp /tmp/tr-site/day-template.html /tmp/tr-site/day-NNN.html
+```
+Then replace all `{{PLACEHOLDER}}` variables (see list below).
+
+**Step 4 — Handle images**
+- Rename user-provided images: `paper002-fig1.jpg`, `paper002-fig2.jpg`, etc.
+- Copy to: `/tmp/tr-site/assets/news/`
+- Update `{{ARTICLE_BODY_HTML}}` to reference correct paths: `assets/news/paper002-fig1.jpg`
+
+**Step 5 — Commit and push**
+```bash
+cd /tmp/tr-site
+git config user.email "solosevn@gmail.com"
+git config user.name "David Solomon"
+git add day-NNN.html assets/news/paperNNN-fig*.jpg
+git commit -m "Publish day-NNN: [short headline]"
+git push origin main
+```
+Uses git's SOCKS proxy (port 1080) — this is why it works when HTTP requests don't.
+
+**Step 6 — Verify**
+Check https://trainingrun.ai/day-NNN.html after ~1 minute for GitHub Pages to deploy.
+
+### Template Placeholder Reference
+
+| Placeholder | Value |
+|---|---|
+| `{{ARTICLE_NUMBER}}` | `002`, `003`, etc. (3 digits, zero-padded) |
+| `{{META_TITLE}}` | Short title for browser tab (60 chars max) |
+| `{{META_DESCRIPTION}}` | 1-sentence SEO description (150 chars max) |
+| `{{DATE_UPPER}}` | Uppercase date: `FEBRUARY 28, 2026` |
+| `{{DATE_LONG}}` | Long date: `February 28, 2026` |
+| `{{KICKER}}` | Section label: `RESEARCH WATCH` or `ANALYSIS` |
+| `{{HEADLINE_HTML}}` | Headline HTML — can use `<span class="cyan">` for cyan words |
+| `{{DECK}}` | Subtitle/deck sentence |
+| `{{TAGS_HTML}}` | Tags as: `<span class="tag">#AI</span> <span class="tag">#Benchmarks</span>` |
+| `{{ARTICLE_BODY_HTML}}` | Full article HTML (paragraphs, callouts, figures, etc.) |
+| `{{PAPER_TITLE}}` | Full paper title |
+| `{{PAPER_URL}}` | Full paper URL (arxiv or journal) |
+| `{{PAPER_CITATION}}` | Full citation: Author et al., Journal/Conference, Year |
+| `{{PAPER_AUTHORS}}` | Comma-separated author names |
+| `{{PAPER_INSTITUTIONS}}` | Comma-separated institutions |
+| `{{PAPER_URL_SHORT}}` | Short URL display: `arxiv.org/abs/XXXX.XXXXX` |
+| `{{EMAIL_SUBJECT_ENCODED}}` | URL-encoded email subject for share link |
+| `{{EMAIL_BODY_ENCODED}}` | URL-encoded email body for share link |
+| `{{PREV_URL}}` | Previous article: `day-001.html` |
+| `{{PREV_LABEL}}` | Previous article label: `Day 001` |
+
+### Article Body HTML Snippets
+
+**Standard paragraph:**
+```html
+<p>Your paragraph text here.</p>
+```
+
+**Callout box:**
+```html
+<div class="callout"><strong>KEY FINDING:</strong> The text of your callout goes here.</div>
+```
+
+**Stats row (3 columns):**
+```html
+<div class="stats-row">
+  <div class="stat-item"><span class="stat-value">87.3%</span><span class="stat-label">Accuracy</span></div>
+  <div class="stat-item"><span class="stat-value">2.4×</span><span class="stat-label">Faster</span></div>
+  <div class="stat-item"><span class="stat-value">41%</span><span class="stat-label">Less Compute</span></div>
+</div>
+```
+
+**Highlight box:**
+```html
+<div class="highlight-box"><p>Your highlighted insight here.</p></div>
+```
+
+**Pull quote:**
+```html
+<blockquote class="pull-quote">"The quoted text goes here."</blockquote>
+```
+
+**Article figure:**
+```html
+<figure class="article-figure">
+  <img src="assets/news/paper002-fig1.jpg" alt="Description">
+  <figcaption>Figure 1: Caption text here.</figcaption>
+</figure>
+```
+
+**Section header:**
+```html
+<h2>Section Title</h2>
+```
+
+### GitHub PAT (Personal Access Token)
+
+The PAT is embedded in the git clone URL. Current PAT: **expires March 1, 2026 — RENEW NOW**.
+
+To renew: go to github.com → Settings → Developer settings → Personal access tokens → Generate new token. Scope needed: `repo` (full). Update this Bible with the new PAT after generating it.
+
+Current PAT: **EXPIRED** — generate a new one and store it securely (not in this file).
+
+### Updating news.html
+
+After publishing a new article, update the news.html article listing. Find the article list section and add a new entry at the top following the existing pattern.
+
+---
+
 ## VERSION HISTORY
 
+- **v3.1** (February 27, 2026) — Added Daily Article Workflow section. Added day-template.html to repo. Committed image assets (signature.png, paper001-fig1.jpg).
 - **v3.0** (February 2026) — Complete rewrite. Full file inventory, design standards, DDP pipeline docs, benchmark formulas, GitHub safety, session startup guide. Reflects all work through February 2026.
 - **v2.6** (February 12, 2026) — Added TRFcast methodology
 - **v2.4** (February 9, 2026) — Updated TRS weights
