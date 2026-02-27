@@ -9,68 +9,233 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-darker:#050510;--bg-dark:#080818;--bg-card:rgba(20,20,40,0.85);
-      --cyan:#00d4ff;--amber:#f59e0b;--red:#ef4444;
-      --text-primary:#f0f0ff;--text-secondary:#a0a0c0;--text-muted:#606080;
-      --border:rgba(255,255,255,0.08);--border-accent:rgba(0,212,255,0.25);
+      --bg-darker:   #050510;
+      --bg-dark:     #080818;
+      --bg-card:     rgba(20,20,40,0.85);
+      --cyan:        #00d4ff;
+      --amber:       #f59e0b;
+      --red:         #ef4444;
+      --text-primary:   #f0f0ff;
+      --text-secondary: #a0a0c0;
+      --text-muted:     #606080;
+      --border:         rgba(255,255,255,0.08);
+      --border-accent:  rgba(0,212,255,0.25);
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg-darker);color:var(--text-primary);min-height:100vh;line-height:1.6;}
-    .site-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(5,5,16,0.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);}
-    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-    .nav-logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--cyan),#0088aa);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;}
-    .nav-logo-text{font-size:15px;font-weight:700;color:var(--text-primary);}
-    .nav-logo-text span{color:var(--cyan);}
-    .nav-back{font-size:13px;color:var(--text-secondary);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:20px;transition:all 0.2s;}
-    .nav-back:hover{color:var(--cyan);border-color:var(--border-accent);}
-    .masthead{text-align:center;padding:56px 40px 40px;border-bottom:1px solid var(--border);}
-    .masthead-label{font-size:10px;font-weight:700;letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase;margin-bottom:16px;}
-    .masthead-title{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-0.03em;background:linear-gradient(135deg,#fff 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
-    .masthead-sub{font-size:15px;color:var(--text-secondary);max-width:520px;margin:0 auto;}
-    .filter-bar{display:flex;align-items:center;gap:10px;padding:24px 40px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
-    .filter-label{font-size:12px;color:var(--text-muted);font-weight:600;letter-spacing:0.05em;margin-right:4px;}
-    .filter-chip{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-secondary);transition:all 0.2s;letter-spacing:0.02em;}
-    .filter-chip.active,.filter-chip:hover{background:rgba(0,212,255,0.1);border-color:var(--border-accent);color:var(--cyan);}
-    .paper-count{margin-left:auto;font-size:12px;color:var(--text-muted);}
-    .papers-container{max-width:900px;margin:0 auto;padding:40px 40px 80px;}
-    .paper-card{display:block;text-decoration:none;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:16px;transition:all 0.25s;position:relative;overflow:hidden;}
-    .paper-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity 0.25s;}
-    .paper-card:hover{border-color:var(--border-accent);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,212,255,0.08);}
-    .paper-card:hover::before{opacity:1;}
-    .paper-meta{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-    .paper-badge{font-size:10px;font-weight:800;letter-spacing:0.15em;color:var(--bg-darker);background:var(--cyan);padding:3px 10px;border-radius:4px;text-transform:uppercase;}
-    .paper-date{font-size:12px;color:var(--text-muted);font-weight:500;}
-    .paper-tag{font-size:11px;font-weight:600;letter-spacing:0.05em;color:var(--amber);background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);padding:2px 8px;border-radius:4px;}
-    .paper-new{font-size:10px;font-weight:800;letter-spacing:0.1em;color:#fff;background:var(--red);padding:2px 8px;border-radius:4px;text-transform:uppercase;}
-    .paper-title{font-size:20px;font-weight:800;letter-spacing:-0.02em;color:var(--text-primary);margin-bottom:10px;line-height:1.3;}
-    .paper-desc{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:18px;}
-    .paper-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-    .paper-stats{display:flex;gap:20px;}
-    .paper-stat{font-size:12px;color:var(--text-muted);}
-    .paper-stat strong{color:var(--cyan);font-weight:700;}
-    .paper-cta{font-size:13px;font-weight:700;color:var(--cyan);display:flex;align-items:center;gap:6px;transition:gap 0.2s;}
-    .paper-card:hover .paper-cta{gap:10px;}
-    .coming-soon-card{background:rgba(255,255,255,0.02);border:1px dashed var(--border);border-radius:16px;padding:24px 32px;margin-bottom:16px;display:flex;align-items:center;gap:20px;opacity:0.5;}
-    .coming-badge{font-size:10px;font-weight:800;letter-spacing:0.15em;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:4px;text-transform:uppercase;white-space:nowrap;}
-    .coming-text{font-size:14px;color:var(--text-muted);font-style:italic;}
-    .site-footer{text-align:center;padding:32px 40px;border-top:1px solid var(--border);font-size:13px;color:var(--text-muted);}
-    .site-footer a{color:var(--cyan);text-decoration:none;}
-    @media(max-width:600px){.site-nav{padding:0 20px;}.masthead{padding:40px 20px 28px;}.filter-bar{padding:16px 20px;}.papers-container{padding:24px 20px 60px;}.paper-card{padding:20px;}.paper-title{font-size:17px;}}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-darker);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px;
+      background: rgba(5,5,16,0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-mark {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--cyan), #0088aa);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #fff;
+    }
+    .nav-logo-text { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .nav-logo-text span { color: var(--cyan); }
+    .nav-back {
+      font-size: 13px; color: var(--text-secondary);
+      text-decoration: none; padding: 6px 14px;
+      border: 1px solid var(--border); border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .nav-back:hover { color: var(--cyan); border-color: var(--border-accent); }
+
+    /* ── MASTHEAD ── */
+    .masthead {
+      text-align: center;
+      padding: 56px 40px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .masthead-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--cyan); text-transform: uppercase; margin-bottom: 16px;
+    }
+    .masthead-title {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 900; letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .masthead-sub {
+      font-size: 15px; color: var(--text-secondary); max-width: 520px; margin: 0 auto;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 24px 40px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .filter-label { font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; margin-right: 4px; }
+    .filter-chip {
+      padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: 1px solid var(--border); background: transparent;
+      color: var(--text-secondary); transition: all 0.2s; letter-spacing: 0.02em;
+    }
+    .filter-chip.active, .filter-chip:hover {
+      background: rgba(0,212,255,0.1); border-color: var(--border-accent); color: var(--cyan);
+    }
+    .paper-count {
+      margin-left: auto; font-size: 12px; color: var(--text-muted);
+    }
+
+    /* ── PAPER GRID ── */
+    .papers-container {
+      max-width: 900px; margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    .paper-card {
+      display: block; text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .paper-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .paper-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.08);
+    }
+    .paper-card:hover::before { opacity: 1; }
+
+    .paper-meta {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .paper-badge {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.15em;
+      color: var(--bg-darker); background: var(--cyan);
+      padding: 3px 10px; border-radius: 4px; text-transform: uppercase;
+    }
+    .paper-date {
+      font-size: 12px; color: var(--text-muted); font-weight: 500;
+    }
+    .paper-tag {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+      color: var(--amber); background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.2);
+      padding: 2px 8px; border-radius: 4px;
+    }
+    .paper-new {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+      color: #fff; background: var(--red);
+      padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+    }
+
+    .paper-title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      color: var(--text-primary); margin-bottom: 10px; line-height: 1.3;
+    }
+    .paper-desc {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .paper-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .paper-stats {
+      display: flex; gap: 20px;
+    }
+    .paper-stat {
+      font-size: 12px; color: var(--text-muted);
+    }
+    .paper-stat strong { color: var(--cyan); font-weight: 700; }
+    .paper-cta {
+      font-size: 13px; font-weight: 700; color: var(--cyan);
+      display: flex; align-items: center; gap: 6px;
+      transition: gap 0.2s;
+    }
+    .paper-card:hover .paper-cta { gap: 10px; }
+
+    /* ── COMING SOON ── */
+    .coming-soon-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 20px;
+      opacity: 0.5;
+    }
+    .coming-badge {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.15em;
+      color: var(--text-muted); background: rgba(255,255,255,0.05);
+      padding: 3px 10px; border-radius: 4px; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .coming-text { font-size: 14px; color: var(--text-muted); font-style: italic; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      text-align: center;
+      padding: 32px 40px;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--text-muted);
+    }
+    .site-footer a { color: var(--cyan); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 20px; }
+      .masthead { padding: 40px 20px 28px; }
+      .filter-bar { padding: 16px 20px; }
+      .papers-container { padding: 24px 20px 60px; }
+      .paper-card { padding: 20px; }
+      .paper-title { font-size: 17px; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- NAV -->
   <nav class="site-nav">
     <a href="index.html" class="nav-logo">
-      <div class="nav-logo-mark">TR</div>
-      <div class="nav-logo-text">Training<span>Run</span>.AI</div>
+        <div class="nav-logo-text">Training<span>Run</span>.AI</div>
     </a>
     <a href="index.html" class="nav-back">← Back to Leaderboard</a>
   </nav>
+
+  <!-- MASTHEAD -->
   <div class="masthead">
     <div class="masthead-label">🗞️ &nbsp; TrainingRun.AI</div>
     <h1 class="masthead-title">Daily Intelligence Briefing</h1>
     <p class="masthead-sub">Paper-by-paper breakdowns of the research that actually matters — written for builders, not academics.</p>
   </div>
+
+  <!-- FILTER BAR -->
   <div class="filter-bar">
     <span class="filter-label">FILTER:</span>
     <button class="filter-chip active">All</button>
@@ -80,7 +245,11 @@
     <button class="filter-chip">Safety</button>
     <span class="paper-count">1 paper published</span>
   </div>
+
+  <!-- PAPERS -->
   <div class="papers-container">
+
+    <!-- PAPER 001 -->
     <a href="day-001.html" class="paper-card">
       <div class="paper-meta">
         <span class="paper-badge">Paper 001</span>
@@ -89,27 +258,36 @@
         <span class="paper-new">New</span>
       </div>
       <div class="paper-title">DeepSeek Just Solved the #1 Hidden Bottleneck Killing AI Agents</div>
-      <div class="paper-desc">Your AI agent is slow and expensive — and it’s not the model’s fault. DeepSeek’s DualPath paper quietly fixes the storage bandwidth bottleneck that’s been capping every agent deployment. Here’s what changed and why it matters for your stack.</div>
+      <div class="paper-desc">
+        Your AI agent is slow and expensive — and it's not the model's fault. DeepSeek's DualPath paper quietly fixes the storage bandwidth bottleneck that's been quietly capping every agent deployment. Here's what changed and why it matters for your stack.
+      </div>
       <div class="paper-footer">
         <div class="paper-stats">
-          <div class="paper-stat"><strong>1.96×</strong> throughput</div>
-          <div class="paper-stat"><strong>&lt;4s</strong> TTFT</div>
-          <div class="paper-stat"><strong>150+</strong> concurrent agents</div>
+          <div class="paper-stat"><strong>1.96×</strong> throughput gain</div>
+          <div class="paper-stat"><strong>&lt;4s</strong> time-to-first-token</div>
+          <div class="paper-stat"><strong>150+</strong> agents concurrent</div>
         </div>
         <div class="paper-cta">Read Briefing →</div>
       </div>
     </a>
+
+    <!-- COMING SOON PLACEHOLDERS -->
     <div class="coming-soon-card">
       <span class="coming-badge">Paper 002</span>
       <span class="coming-text">Next briefing coming soon — follow <a href="https://x.com/aitrainingrun" style="color:var(--cyan);">@aitrainingrun</a> to get notified.</span>
     </div>
+
     <div class="coming-soon-card">
       <span class="coming-badge">Paper 003</span>
       <span class="coming-text">More research breakdowns on the way.</span>
     </div>
+
   </div>
+
+  <!-- FOOTER -->
   <footer class="site-footer">
     © 2026 TrainingRun.AI &nbsp;·&nbsp; <a href="index.html">Leaderboard</a> &nbsp;·&nbsp; Independent AI Research
   </footer>
+
 </body>
 </html>
