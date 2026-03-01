@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-01T04:02:53",
+  "last_updated": "2026-03-01T04:03:48",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -51,10 +51,10 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-02-28T04:03:42",
-      "last_run_date": "2026-02-28",
+      "last_run": "2026-03-01T04:03:48",
+      "last_run_date": "2026-03-01",
       "status": "success",
-      "duration_seconds": 45,
+      "duration_seconds": 52,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 11,
@@ -73,13 +73,13 @@
         },
         {
           "rank": 3,
-          "name": "O3",
-          "score": 60.28
+          "name": "GPT-5.1",
+          "score": 60.25
         },
         {
           "rank": 4,
-          "name": "GPT-5.1",
-          "score": 60.25
+          "name": "O3",
+          "score": 59.94
         },
         {
           "rank": 5,
@@ -88,7 +88,7 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-03-01T05:00:00",
+      "next_run": "2026-03-02T05:00:00",
       "error": null
     },
     "truscore": {
