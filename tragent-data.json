@@ -36,13 +36,14 @@
     "2026-02-25",
     "2026-02-26",
     "2026-02-27",
-    "2026-02-28"
+    "2026-02-28",
+    "2026-03-01"
   ],
   "models": [
     {
       "name": "Claude Opus 4.6",
       "company": "Anthropic",
-      "rank": 7,
+      "rank": 5,
       "scores": [
         null,
         null,
@@ -71,16 +72,15 @@
         59.77,
         60.23,
         55.75,
-        58.9
+        58.9,
+        44.77
       ],
       "pillar_scores": {
-        "task_completion": 75.6,
-        "cost_efficiency": 67.92,
-        "tool_reliability": 40.9,
-        "safety_security": 25.0,
-        "multi_model": 86
+        "task_completion": 76.8,
+        "cost_efficiency": 8.6,
+        "tool_reliability": 40.9
       },
-      "source_count": 5
+      "source_count": 3
     },
     {
       "name": "Grok 4.20",
@@ -114,6 +114,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -122,7 +123,7 @@
     {
       "name": "GPT-5.2",
       "company": "OpenAI",
-      "rank": 3,
+      "rank": 1,
       "scores": [
         79.34,
         78.93,
@@ -151,11 +152,12 @@
         73.09,
         66.65,
         73.09,
-        67.03
+        67.03,
+        63.31
       ],
       "pillar_scores": {
         "task_completion": 72.8,
-        "cost_efficiency": 66.28,
+        "cost_efficiency": 54.2,
         "tool_reliability": 60.57
       },
       "source_count": 3
@@ -163,7 +165,7 @@
     {
       "name": "Gemini 3 Pro",
       "company": "Google",
-      "rank": 6,
+      "rank": 2,
       "scores": [
         75.18,
         75.53,
@@ -192,15 +194,15 @@
         38.2,
         60.89,
         69.99,
-        61.44
+        61.44,
+        53.62
       ],
       "pillar_scores": {
-        "task_completion": 85.4,
-        "cost_efficiency": 54.0,
-        "tool_reliability": 43.0,
-        "safety_security": 56.0
+        "task_completion": 69.6,
+        "cost_efficiency": 33.15,
+        "tool_reliability": 54.1
       },
-      "source_count": 4
+      "source_count": 3
     },
     {
       "name": "DeepSeek V3.2",
@@ -234,20 +236,16 @@
         69.89,
         58.31,
         74.35,
-        62.31
+        62.31,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 80.4,
-        "cost_efficiency": 4.0,
-        "accessibility": 100.0,
-        "multi_model": 96
-      },
-      "source_count": 4
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Claude Sonnet 4.5",
       "company": "Anthropic",
-      "rank": 12,
+      "rank": 4,
       "scores": [
         68.58,
         69.08,
@@ -276,16 +274,15 @@
         46.87,
         50.78,
         43.91,
-        48.36
+        48.36,
+        47.87
       ],
       "pillar_scores": {
-        "task_completion": 71.4,
-        "cost_efficiency": 13.6,
-        "tool_reliability": 55.0,
-        "safety_security": 25.0,
-        "multi_model": 82
+        "task_completion": 84.7,
+        "cost_efficiency": 5.9,
+        "tool_reliability": 43.8
       },
-      "source_count": 5
+      "source_count": 3
     },
     {
       "name": "Llama 4.05B",
@@ -319,6 +316,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -327,7 +325,7 @@
     {
       "name": "Qwen3",
       "company": "Alibaba",
-      "rank": 4,
+      "rank": 3,
       "scores": [
         null,
         null,
@@ -356,15 +354,15 @@
         73.58,
         63.16,
         58.02,
-        64.22
+        64.22,
+        50.42
       ],
       "pillar_scores": {
         "task_completion": 82.2,
-        "cost_efficiency": 35.09,
-        "tool_reliability": 53.0,
-        "accessibility": 100.0
+        "cost_efficiency": 49.12,
+        "tool_reliability": 12.0
       },
-      "source_count": 4
+      "source_count": 3
     },
     {
       "name": "GLM-5",
@@ -398,15 +396,11 @@
         79.44,
         79.44,
         79.67,
-        79.67
+        79.67,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 72.8,
-        "cost_efficiency": 71.93,
-        "accessibility": 100.0,
-        "multi_model": 92
-      },
-      "source_count": 4
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Mistral Large",
@@ -440,14 +434,11 @@
         37.56,
         37.56,
         37.56,
-        37.56
+        37.56,
+        null
       ],
-      "pillar_scores": {
-        "cost_efficiency": 0.0,
-        "safety_security": 46.0,
-        "accessibility": 100.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "MiniMax M2",
@@ -481,6 +472,7 @@
         72.7,
         72.7,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -513,6 +505,7 @@
         84.11,
         0.0,
         0.0,
+        null,
         null,
         null,
         null,
@@ -555,6 +548,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -592,14 +586,11 @@
         32.43,
         32.43,
         32.43,
-        32.43
+        32.43,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 30.3,
-        "cost_efficiency": 1.3,
-        "accessibility": 100.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Llama 4.08B",
@@ -633,6 +624,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -641,7 +633,7 @@
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 16,
+      "rank": 7,
       "scores": [
         null,
         null,
@@ -670,15 +662,15 @@
         25.04,
         28.79,
         19.84,
-        38.75
+        38.75,
+        14.4
       ],
       "pillar_scores": {
         "task_completion": 32.73,
-        "cost_efficiency": 33.33,
-        "tool_reliability": 47.0,
-        "safety_security": 45.0
+        "cost_efficiency": 2.5,
+        "tool_reliability": 3.4
       },
-      "source_count": 4
+      "source_count": 3
     },
     {
       "name": "Mistral Large 3",
@@ -707,6 +699,7 @@
         null,
         0.0,
         0.0,
+        null,
         null,
         null,
         null,
@@ -749,15 +742,11 @@
         78.51,
         78.51,
         78.51,
-        78.51
+        78.51,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 75.8,
-        "cost_efficiency": 61.4,
-        "accessibility": 100.0,
-        "multi_model": 98
-      },
-      "source_count": 4
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Kimi K2.5",
@@ -791,16 +780,11 @@
         59.81,
         61.09,
         59.06,
-        58.81
+        58.81,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 64.3,
-        "cost_efficiency": 38.35,
-        "safety_security": 30.0,
-        "accessibility": 100.0,
-        "multi_model": 88
-      },
-      "source_count": 5
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "MiniMax M2.5",
@@ -834,14 +818,11 @@
         54.42,
         54.42,
         54.42,
-        54.42
+        54.42,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 75.8,
-        "cost_efficiency": 4.9,
-        "multi_model": 100
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Claude Opus 4.5",
@@ -875,6 +856,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -883,7 +865,7 @@
     {
       "name": "GPT-5",
       "company": "OpenAI",
-      "rank": 9,
+      "rank": 6,
       "scores": [
         67.67,
         67.75,
@@ -912,22 +894,22 @@
         57.86,
         49.54,
         56.13,
-        58.62
+        58.62,
+        36.66
       ],
       "pillar_scores": {
-        "task_completion": 62.8,
-        "cost_efficiency": 94.74,
-        "tool_reliability": 44.54,
-        "safety_security": 20.0,
-        "multi_model": 62
+        "task_completion": 56.2,
+        "cost_efficiency": 4.4,
+        "tool_reliability": 44.5
       },
-      "source_count": 5
+      "source_count": 3
     },
     {
       "name": "ARChitects",
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -992,6 +974,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1002,6 +985,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1066,6 +1050,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1076,6 +1061,7 @@
       "company": "Anthropic",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1140,6 +1126,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1150,6 +1137,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1214,6 +1202,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1224,6 +1213,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1288,6 +1278,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1324,6 +1315,7 @@
         27.76,
         27.76,
         27.76,
+        null,
         null,
         null
       ],
@@ -1362,14 +1354,11 @@
         28.41,
         26.44,
         32.08,
-        37.62
+        37.62,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 53.0,
-        "cost_efficiency": 0.0,
-        "tool_reliability": 56.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "GPT-4o",
@@ -1403,6 +1392,7 @@
         10.53,
         10.53,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1413,6 +1403,7 @@
       "company": "xAI",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1477,6 +1468,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1487,6 +1479,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1551,6 +1544,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1561,6 +1555,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1625,6 +1620,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1635,6 +1631,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1699,6 +1696,7 @@
         38.72,
         38.72,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1709,6 +1707,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1773,6 +1772,7 @@
         21.46,
         20.88,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1809,6 +1809,7 @@
         13.2,
         11.85,
         11.85,
+        null,
         null,
         null
       ],
@@ -1847,20 +1848,18 @@
         51.75,
         51.75,
         51.75,
-        51.75
+        51.75,
+        null
       ],
-      "pillar_scores": {
-        "cost_efficiency": 47.37,
-        "tool_reliability": 32.0,
-        "accessibility": 100.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Magistral Small",
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1925,6 +1924,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -1935,6 +1935,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -1999,6 +2000,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2009,6 +2011,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2073,6 +2076,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2083,6 +2087,7 @@
       "company": "Alibaba",
       "rank": 12,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2147,6 +2152,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2157,6 +2163,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2221,6 +2228,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2231,6 +2239,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2295,6 +2304,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2305,6 +2315,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2369,14 +2380,11 @@
         46.09,
         46.09,
         46.09,
-        46.09
+        46.09,
+        null
       ],
-      "pillar_scores": {
-        "task_completion": 29.39,
-        "tool_reliability": 40.0,
-        "accessibility": 100.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Devstral 2",
@@ -2409,6 +2417,7 @@
         56.67,
         56.67,
         54.76,
+        null,
         null,
         null
       ],
@@ -2447,6 +2456,7 @@
         54.21,
         54.21,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2457,6 +2467,7 @@
       "company": "Zhipu AI",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2521,20 +2532,18 @@
         37.1,
         37.1,
         40.93,
-        43.27
+        43.27,
+        null
       ],
-      "pillar_scores": {
-        "cost_efficiency": 42.11,
-        "safety_security": 7.0,
-        "accessibility": 100.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "grok-4-0709",
       "company": "xAI",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2599,6 +2608,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2609,6 +2619,7 @@
       "company": "Mistral",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2673,20 +2684,18 @@
         40.93,
         40.93,
         40.93,
-        40.93
+        40.93,
+        null
       ],
-      "pillar_scores": {
-        "cost_efficiency": 26.32,
-        "tool_reliability": 26.0,
-        "accessibility": 100.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "nova-lite-v1",
       "company": "Amazon",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2751,6 +2760,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2761,6 +2771,7 @@
       "company": "OpenAI",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2825,6 +2836,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2835,6 +2847,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2899,6 +2912,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2909,6 +2923,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -2973,6 +2988,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -2983,6 +2999,7 @@
       "company": "Anthropic",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3047,6 +3064,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3057,6 +3075,7 @@
       "company": "Moonshot AI",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3121,6 +3140,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3131,6 +3151,7 @@
       "company": "Alibaba",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3195,6 +3216,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3205,6 +3227,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3269,6 +3292,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3279,6 +3303,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3343,6 +3368,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3353,6 +3379,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3417,6 +3444,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3427,6 +3455,7 @@
       "company": "TII",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3491,6 +3520,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3501,6 +3531,7 @@
       "company": "Google",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3565,6 +3596,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3575,6 +3607,7 @@
       "company": "IBM",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3639,6 +3672,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3649,6 +3683,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3713,6 +3748,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3723,6 +3759,7 @@
       "company": "PrimeIntellect",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3787,6 +3824,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3797,6 +3835,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3861,6 +3900,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3871,6 +3911,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -3935,6 +3976,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -3945,6 +3987,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4009,6 +4052,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4019,6 +4063,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4083,6 +4128,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4093,6 +4139,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4157,6 +4204,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4167,6 +4215,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4231,6 +4280,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4268,20 +4318,18 @@
         27.11,
         27.11,
         27.11,
-        27.11
+        27.11,
+        null
       ],
-      "pillar_scores": {
-        "cost_efficiency": 24.56,
-        "tool_reliability": 20.0,
-        "safety_security": 40.0
-      },
-      "source_count": 3
+      "pillar_scores": {},
+      "source_count": 0
     },
     {
       "name": "Llama Nemotron Super 49B v1.5",
       "company": "Meta",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4346,6 +4394,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4356,6 +4405,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4420,6 +4470,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4430,6 +4481,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4494,6 +4546,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4504,6 +4557,7 @@
       "company": "Amazon",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4568,6 +4622,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4578,6 +4633,7 @@
       "company": "Amazon",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4642,6 +4698,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4652,6 +4709,7 @@
       "company": "AI2",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4716,6 +4774,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4726,6 +4785,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4790,6 +4850,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4800,6 +4861,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4864,6 +4926,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4874,6 +4937,7 @@
       "company": "Cohere",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -4938,6 +5002,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4975,6 +5040,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       "pillar_scores": {},
@@ -4985,6 +5051,7 @@
       "company": "Mistral",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -5051,6 +5118,7 @@
         null,
         null,
         null,
+        null,
         57.89
       ],
       "pillar_scores": {},
@@ -5061,6 +5129,7 @@
       "company": "Unknown",
       "rank": 999,
       "scores": [
+        null,
         null,
         null,
         null,
@@ -5112,6 +5181,6 @@
       "company": "Alibaba"
     }
   ],
-  "checksum": "12715a989c1a1f8a6c63bf7f3e769e378dd9286e628ba53c48098ee82db77208",
-  "run_at": "4:20 AM CST"
+  "checksum": "a96cacb4bca74a851c7af3683abc5c6b2fd03082859b5aebd85da4360c746da4",
+  "run_at": "4:18 AM CST"
 }
