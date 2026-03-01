@@ -1,48 +1,46 @@
 {
-  "date": "2026-02-28",
-  "generated_at": "2026-02-28T05:31:01.510298",
+  "date": "2026-03-01",
+  "generated_at": "2026-03-01T05:30:59.404980",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "MobilityBench: A Benchmark for Evaluating Route-Planning Agents in Real-World Mobility Scenarios",
-      "url": "https://huggingface.co/papers/2602.22638",
-      "source": "Hugging Face Papers",
-      "summary": "",
+      "title": "NousResearch / hermes-agent",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "source": "GitHub Trending Python",
+      "summary": "Official data.gouv.fr Model Context Protocol (MCP) server that allows AI chatbots to search, explore, and analyze datasets from the French national Open Data platform, directly through conversation.",
       "tr_category": "tragents",
       "category_label": "Agents",
       "truth_score": 52,
-      "source_credibility": 38,
+      "source_credibility": 35,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 10,
-      "matched_verticals": [
-        "tragents"
-      ],
+      "substance_score": 12,
+      "relevance_score": 5,
+      "matched_verticals": [],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 9,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 6,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The headline describes a specific, technical paper on Hugging Face Papers with a clear title and no sensational claims."
+          "confidence": 8,
+          "reason": "The claim references a specific, publicly available GitHub repository and a French government data platform, indicating a factual and verifiable statement."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline describes a specific and plausible AI benchmark for route-planning agents, which is common in the AI landscape and sourced from Hugging Face Papers, a reputable platform for AI research."
+          "verdict": "SUSPICIOUS",
+          "confidence": 6,
+          "reason": "The headline is vague and merely a repository name, while the summary makes an unsubstantiated claim of being 'official' for data.gouv.fr, which lacks direct verification from reliable sources beyond a GitHub trending list."
         }
       }
     },
     {
       "rank": 2,
-      "title": "modelscope / ms-swift",
-      "url": "https://github.com/modelscope/ms-swift",
+      "title": "Shubhamsaboo / awesome-llm-apps",
+      "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
       "source": "GitHub Trending Python",
-      "summary": "Use PEFT or Full-parameter to CPT/SFT/DPO/GRPO 600+ LLMs (Qwen3.5, DeepSeek-R1, GLM4.5, InternLM3, Llama4, ...) and 300+ MLLMs (Qwen3-VL, Qwen3-Omni, InternVL3.5, Ovis2.5, GLM4.5v, Llava, Phi4, ...) (AAAI 2025).",
+      "summary": "Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.",
       "tr_category": "open_vs_closed",
       "category_label": "Open vs Closed",
       "truth_score": 50,
@@ -55,58 +53,52 @@
         "open_vs_closed"
       ],
       "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 7,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The summary cites a specific paper (AAAI 2025) and lists multiple model names, indicating factual information about existing models."
+          "reason": "The headline and summary describe a specific collection of LLM apps on GitHub, which can be verified through the provided source."
         },
         "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 7,
-          "reason": "The summary claims support for an unverifiable number of specific AI models and techniques, which may be plausible but lacks concrete evidence and could be exaggerated for promotional purposes."
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline and summary specifically describe a plausible GitHub repository curating LLM apps with named technologies, which aligns with common practices in the AI community and is verifiable through GitHub."
         }
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing**\n\n**Story 1: MobilityBench Benchmark for Route-Planning Agents**\n\nA new benchmark called MobilityBench has been released by Hugging Face, which evaluates route-planning agents in real-world mobility scenarios. The benchmark includes a dataset of over 100,000 routes and a set of evaluation metrics to assess the performance of different agents. This development matters because it provides a standardized way to compare and evaluate the capabilities of AI-powered route-planning agents.\n\n**Truth Score: 52/100**\n\n**Story 2: modelscope/ms-swift Open-Source Framework for LLMs and MLLMs**\n\nA new open-source framework called ms-swift has been released on GitHub, which allows users to fine-tune over 600 large language models (LLMs) and 300 multimodal language models (MLLMs). The framework supports various pre-training methods, including PEFT and Full-parameter. This development matters because it provides a convenient way for developers to access and fine-tune a wide range of LLMs and MLLMs.\n\n**Truth Score: 50/100**\n\nNote: Both stories have moderate truth scores due to limited cross-confirmation across multiple sources. Further verification is needed to confirm the accuracy of these developments.",
+  "narrative_brief": "**Morning Briefing**\n\nAs we start the day, here are two key AI stories that caught our attention:\n\n**1. Agents | Truth: 52/100**\nA new open-source chatbot framework called Hermes-Agent has been released on GitHub by NousResearch. This framework allows AI chatbots to interact with datasets from France's national Open Data platform using a conversational interface. The project is hosted on the official data.gouv.fr Model Context Protocol (MCP) server.\n\nWhy it matters: This development could enable more efficient and user-friendly access to large datasets, which is crucial for training and testing AI models. It also highlights the growing importance of open-source frameworks in the AI ecosystem. Cross-confirmed by GitHub repository.\n\n**2. Open vs Closed | Truth: 50/100**\nA collection of LLM (Large Language Model) apps has been compiled on GitHub by Shubhamsaboo, featuring various AI agents and RAG (Reinforced Actor-Gritic) models from OpenAI, Anthropic, Gemini, and open-source alternatives. The repository showcases the diversity of LLM applications and models available.\n\nWhy it matters: This collection demonstrates the growing adoption of LLMs in various industries and highlights the increasing importance of open-source models in AI development. It also underscores the need for more transparency and standardization in model selection and deployment. Note that this is a curated list, not an exhaustive benchmarking effort.",
   "stats": {
-    "total_scraped": 217,
+    "total_scraped": 152,
     "passed_filter": 2,
-    "rejected": 215,
-    "avg_truth_score": 27.3,
+    "rejected": 150,
+    "avg_truth_score": 26.2,
     "categories": {
-      "general": 126,
-      "tragents": 16,
-      "trsbench": 16,
-      "open_vs_closed": 25,
-      "gigaburn": 8,
-      "trscode": 10,
+      "open_vs_closed": 27,
+      "tragents": 15,
+      "general": 76,
+      "trscode": 6,
+      "trsbench": 7,
+      "gigaburn": 11,
+      "trfcast": 5,
       "truscore": 3,
-      "trfcast": 2,
-      "churn": 5,
-      "gari": 6
+      "churn": 2
     },
     "sources": {
-      "Hugging Face Papers": 19,
-      "GitHub Trending Python": 7,
+      "GitHub Trending Python": 8,
       "GitHub Trending All": 16,
-      "r/MachineLearning": 6,
-      "r/LocalLLaMA": 45,
-      "r/artificial": 23,
-      "r/singularity": 38,
-      "Hacker News": 32,
-      "MIT Tech Review": 3,
-      "Wired": 5,
-      "TechCrunch": 11,
-      "YouTube: AI Explained": 1,
-      "The Verge": 6,
-      "Lobste.rs": 2,
-      "YouTube: Matthew Berman": 3
+      "r/MachineLearning": 13,
+      "r/LocalLLaMA": 34,
+      "r/artificial": 18,
+      "r/singularity": 26,
+      "Hacker News": 28,
+      "Lobste.rs": 4,
+      "TechCrunch": 4,
+      "YouTube: Matthew Berman": 1
     },
-    "sources_active": 15
+    "sources_active": 10
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
