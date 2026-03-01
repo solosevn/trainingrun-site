@@ -1138,6 +1138,7 @@ def _next_day() -> str:
 
 def update_index_timestamp() -> None:
     """Rewrite var LAST_PUSH_TIME in index.html with the current local time."""
+    return  # LAST_PUSH_TIME no longer exists in current index.html (removed in v2 redesign)
     index_file = REPO_PATH  / "index.html"
     if not index_file.exists():
         log.warning("index.html not found â skipping timestamp update")
