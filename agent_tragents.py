@@ -914,6 +914,7 @@ def _next_day() -> str:
 
 def update_index_timestamp() -> None:
     """Rewrite var LAST_PUSH_TIME in index.html with the current local time."""
+    return  # LAST_PUSH_TIME no longer exists in current index.html (removed in v2 redesign)
     index_file = REPO_PATH / "index.html"
     if not index_file.exists():
         log.warning("index.html not found — skipping timestamp update")
@@ -943,7 +944,7 @@ def update_index_timestamp() -> None:
 
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "tragent-data.json", "status.json", "index.html"],
+        subprocess.run(["git", "add", "tragent-data.json", "status.json"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)
@@ -953,10 +954,18 @@ def git_push(commit_msg: str) -> bool:
                 return True
             log.error(f"Commit failed:\n{r.stderr}")
             return False
-        subprocess.run(["git", "pull", "--rebase"], cwd=REPO_PATH, capture_output=True)
+        # Stash any dirty files so rebase can proceed
+        subprocess.run(["git", "stash", "--include-untracked"], cwd=REPO_PATH, capture_output=True)
+        pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"],
+                              cwd=REPO_PATH, capture_output=True, text=True)
+        if pull.returncode != 0:
+            log.warning(f"pull --rebase failed: {pull.stderr}")
+            subprocess.run(["git", "rebase", "--abort"], cwd=REPO_PATH, capture_output=True)
+            subprocess.run(["git", "pull", "origin", "main"], cwd=REPO_PATH, capture_output=True)
         subprocess.run(["git", "push"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         log.info("✅ Pushed to GitHub")
+        subprocess.run(["git", "stash", "pop"], cwd=REPO_PATH, capture_output=True)
         return True
     except subprocess.CalledProcessError as e:
         log.error(f"Git error: {e.stderr}")
