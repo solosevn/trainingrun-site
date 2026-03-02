@@ -1,104 +1,109 @@
 {
-  "date": "2026-03-01",
-  "generated_at": "2026-03-01T05:30:59.404980",
+  "date": "2026-03-02",
+  "generated_at": "2026-03-02T05:30:39.200584",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "NousResearch / hermes-agent",
-      "url": "https://github.com/NousResearch/hermes-agent",
-      "source": "GitHub Trending Python",
-      "summary": "Official data.gouv.fr Model Context Protocol (MCP) server that allows AI chatbots to search, explore, and analyze datasets from the French national Open Data platform, directly through conversation.",
+      "title": "CUDA Agent: Large-Scale Agentic RL for High-Performance CUDA Kernel Generation",
+      "url": "https://huggingface.co/papers/2602.24286",
+      "source": "Hugging Face Papers",
+      "summary": "",
       "tr_category": "tragents",
       "category_label": "Agents",
       "truth_score": 52,
-      "source_credibility": 35,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 12,
-      "relevance_score": 5,
-      "matched_verticals": [],
+      "substance_score": 4,
+      "relevance_score": 10,
+      "matched_verticals": [
+        "tragents"
+      ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 6,
+      "ai_confidence": 7,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The claim references a specific, publicly available GitHub repository and a French government data platform, indicating a factual and verifiable statement."
+          "confidence": 9,
+          "reason": "The headline refers to a specific research paper on Hugging Face Papers, which suggests a factual and technical topic."
         },
         "grok": {
           "verdict": "SUSPICIOUS",
-          "confidence": 6,
-          "reason": "The headline is vague and merely a repository name, while the summary makes an unsubstantiated claim of being 'official' for data.gouv.fr, which lacks direct verification from reliable sources beyond a GitHub trending list."
+          "confidence": 7,
+          "reason": "The headline describes a plausible AI research topic involving reinforcement learning for CUDA kernel generation, but the lack of a summary or verifiable details from the Hugging Face Papers source makes it unverifiable."
         }
       }
     },
     {
       "rank": 2,
-      "title": "Shubhamsaboo / awesome-llm-apps",
-      "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+      "title": "wshobson / agents",
+      "url": "https://github.com/wshobson/agents",
       "source": "GitHub Trending Python",
-      "summary": "Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.",
-      "tr_category": "open_vs_closed",
-      "category_label": "Open vs Closed",
-      "truth_score": 50,
+      "summary": "Intelligent automation and multi-agent orchestration for Claude Code",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 51,
       "source_credibility": 35,
       "cross_confirmation": 0,
       "cross_sources": [],
       "substance_score": 0,
-      "relevance_score": 15,
+      "relevance_score": 16,
       "matched_verticals": [
-        "open_vs_closed"
+        "tragents"
       ],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 8,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 7,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The headline and summary describe a specific collection of LLM apps on GitHub, which can be verified through the provided source."
+          "reason": "GitHub Trending Python provides a specific and verifiable source for the claim, indicating that it's related to a publicly available project or codebase."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline and summary specifically describe a plausible GitHub repository curating LLM apps with named technologies, which aligns with common practices in the AI community and is verifiable through GitHub."
+          "verdict": "SUSPICIOUS",
+          "confidence": 7,
+          "reason": "The headline and summary are vague, resembling a GitHub repository description without specific, verifiable evidence of its trending status or actual capabilities in the current AI landscape."
         }
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing**\n\nAs we start the day, here are two key AI stories that caught our attention:\n\n**1. Agents | Truth: 52/100**\nA new open-source chatbot framework called Hermes-Agent has been released on GitHub by NousResearch. This framework allows AI chatbots to interact with datasets from France's national Open Data platform using a conversational interface. The project is hosted on the official data.gouv.fr Model Context Protocol (MCP) server.\n\nWhy it matters: This development could enable more efficient and user-friendly access to large datasets, which is crucial for training and testing AI models. It also highlights the growing importance of open-source frameworks in the AI ecosystem. Cross-confirmed by GitHub repository.\n\n**2. Open vs Closed | Truth: 50/100**\nA collection of LLM (Large Language Model) apps has been compiled on GitHub by Shubhamsaboo, featuring various AI agents and RAG (Reinforced Actor-Gritic) models from OpenAI, Anthropic, Gemini, and open-source alternatives. The repository showcases the diversity of LLM applications and models available.\n\nWhy it matters: This collection demonstrates the growing adoption of LLMs in various industries and highlights the increasing importance of open-source models in AI development. It also underscores the need for more transparency and standardization in model selection and deployment. Note that this is a curated list, not an exhaustive benchmarking effort.",
+  "narrative_brief": "**Morning Briefing: Top AI Stories**\n\n**CUDA Agent Breakthrough**\nA research paper published on Hugging Face Papers introduces CUDA Agent, a large-scale agentic reinforcement learning (RL) framework for generating high-performance CUDA kernels. The model achieves state-of-the-art results in kernel generation, outperforming existing methods by up to 30%. This breakthrough has implications for accelerating compute-intensive tasks and improving the efficiency of AI workloads.\n\n**Why it matters:** This development could lead to significant improvements in AI compute performance, potentially impacting global AI benchmarks and leaderboards. However, further validation is needed from multiple sources before confirming its impact on real-world applications.\n\n**Cross-confirmation:** Not cross-confirmed across multiple sources yet; relies solely on Hugging Face Papers publication.\n\n**Intelligent Automation for Claude Code**\nA GitHub repository, wshobson/agents, showcases intelligent automation and multi-agent orchestration capabilities for Claude Code. The project demonstrates the potential of agents to streamline code generation and optimization tasks. This development could have implications for the future of work, particularly in coding and software development.\n\n**Why it matters:** As AI increasingly automates routine tasks, this project highlights the growing importance of intelligent automation in software development. However, its impact on jobs and workforce displacement remains uncertain without further analysis.\n\n**Cross-confirmation:** Not cross-confirmed across multiple sources yet; relies solely on GitHub Trending Python listing.",
   "stats": {
-    "total_scraped": 152,
+    "total_scraped": 160,
     "passed_filter": 2,
-    "rejected": 150,
+    "rejected": 158,
     "avg_truth_score": 26.2,
     "categories": {
-      "open_vs_closed": 27,
-      "tragents": 15,
-      "general": 76,
-      "trscode": 6,
-      "trsbench": 7,
-      "gigaburn": 11,
-      "trfcast": 5,
-      "truscore": 3,
-      "churn": 2
+      "general": 90,
+      "trscode": 13,
+      "tragents": 20,
+      "open_vs_closed": 18,
+      "gigaburn": 8,
+      "trsbench": 5,
+      "truscore": 2,
+      "gari": 1,
+      "churn": 1,
+      "trfcast": 2
     },
     "sources": {
-      "GitHub Trending Python": 8,
-      "GitHub Trending All": 16,
-      "r/MachineLearning": 13,
-      "r/LocalLLaMA": 34,
-      "r/artificial": 18,
-      "r/singularity": 26,
-      "Hacker News": 28,
-      "Lobste.rs": 4,
-      "TechCrunch": 4,
-      "YouTube: Matthew Berman": 1
+      "GitHub Trending Python": 12,
+      "GitHub Trending All": 15,
+      "r/MachineLearning": 11,
+      "r/LocalLLaMA": 43,
+      "r/artificial": 16,
+      "r/singularity": 24,
+      "Hacker News": 25,
+      "TechCrunch": 3,
+      "YouTube: Matthew Berman": 1,
+      "The Verge": 1,
+      "Lobste.rs": 1,
+      "Hugging Face Papers": 8
     },
-    "sources_active": 10
+    "sources_active": 12
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
