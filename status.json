@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-02T04:13:55",
+  "last_updated": "2026-03-02T04:19:27",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
@@ -141,44 +141,44 @@
       "label": "Agents Leaderboard",
       "emoji": "\ud83e\udd16",
       "enabled": true,
-      "last_run": "2026-03-01T04:18:41",
-      "last_run_date": "2026-03-01",
+      "last_run": "2026-03-02T04:19:27",
+      "last_run_date": "2026-03-02",
       "status": "success",
-      "duration_seconds": 309,
+      "duration_seconds": 329,
       "sources_total": 22,
       "sources_hit": 6,
-      "models_qualified": 7,
-      "top_model": "GPT-5.2",
-      "top_score": 63.31,
+      "models_qualified": 20,
+      "top_model": "GLM-5",
+      "top_score": 78.13,
       "top5": [
         {
           "rank": 1,
-          "name": "GPT-5.2",
-          "score": 63.31
+          "name": "GLM-5",
+          "score": 78.13
         },
         {
           "rank": 2,
-          "name": "Gemini 3 Pro",
-          "score": 53.62
+          "name": "Gemini 3 Flash",
+          "score": 69.95
         },
         {
           "rank": 3,
-          "name": "Qwen3",
-          "score": 50.42
+          "name": "GPT-5.2",
+          "score": 67.03
         },
         {
           "rank": 4,
-          "name": "Claude Sonnet 4.5",
-          "score": 47.87
+          "name": "DeepSeek V3.2",
+          "score": 62.31
         },
         {
           "rank": 5,
-          "name": "Claude Opus 4.6",
-          "score": 44.77
+          "name": "Kimi K2.5",
+          "score": 61.59
         }
       ],
       "leaderboard_url": "/tragents-scores.html",
-      "next_run": "2026-03-02T05:00:00",
+      "next_run": "2026-03-03T05:00:00",
       "error": null
     },
     "trsbench": {
