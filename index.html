@@ -90,6 +90,22 @@ body {
   text-decoration:none;
 }
 .htab:hover { color:rgba(255,255,255,0.72); }
+    .htab.active, .htab[data-ddp].active {
+      background: rgba(0,229,255,0.08);
+      border-radius: 6px;
+    }
+    .arena-hl {
+      text-decoration: none;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(0,229,255,0.25), 0 0 4px rgba(0,229,255,0.15);
+      background: rgba(0,229,255,0.06);
+      border-radius: 6px;
+      border: 1px solid rgba(0,229,255,0.2);
+    }
+    .arena-hl:hover {
+      background: rgba(0,229,255,0.12);
+      box-shadow: 0 0 18px rgba(0,229,255,0.35), 0 0 6px rgba(0,229,255,0.2);
+    }
 .htab.active { color:#00e5ff; border-bottom-color:#00e5ff; text-shadow:0 0 10px rgba(0,229,255,0.3); }
 .htab.active::after {
   content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px;
@@ -410,14 +426,14 @@ body.compact .lb-table tbody tr { height:40px; }
 <!-- ══ MAIN NAV TABS ═════════════════════════════ -->
 <div class="h-nav">
   <div class="htabs">
-    <div class="htab" style="cursor:default;opacity:0.45">
-      <span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>Arena</span> <span class="tpill" style="background:rgba(255,80,80,0.1);color:rgba(255,140,140,0.85);border:1px dashed rgba(255,100,100,0.35)">(Soon)</span>
-    </div>
-    <div class="htab active" data-ddp="trsbench" onclick="setDDP('trsbench')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>bench</span> <span class="tpill">(Overall)</span></div>
+        <div class="htab active" data-ddp="trsbench" onclick="setDDP('trsbench')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>bench</span> <span class="tpill">(Overall)</span></div>
     <div class="htab" data-ddp="truscore" onclick="setDDP('truscore')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRU</span>score</span> <span class="tpill">(Truth)</span></div>
     <div class="htab" data-ddp="trscode" onclick="setDDP('trscode')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRS</span>code</span> <span class="tpill">(Coding)</span></div>
     <div class="htab" data-ddp="trfcast" onclick="setDDP('trfcast')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TRF</span>cast</span> <span class="tpill">(Prediction)</span></div>
     <div class="htab" data-ddp="tragents" onclick="setDDP('tragents')"><span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TR</span><span style="color:#f87171">Agents</span></span> <span class="tpill">(Agents)</span></div>
+      <a href="https://tsarena.ai" target="_blank" class="htab arena-hl">
+        <span style="font-size:15px;white-space:nowrap"><span style="color:#00e5ff">TS</span> Arena</span> <span class="tpill" style="background:rgba(0,229,255,0.12);color:#00e5ff;border:1px solid rgba(0,229,255,0.3)">AI &amp; Safety</span>
+      </a>
   </div>
   <div class="hnav-right">
     <a href="sources.html">Verify Sources</a><span class="hnav-pipe">|</span>
