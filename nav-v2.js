@@ -11,12 +11,12 @@ const basename = window.location.pathname.split('/').pop() || 'index.html';
 function isActive(keys){ return keys.some(k => basename === k); }
 const tabs = [
   { label:'Overview',   pill:'',          href:'v2.html',              keys:['v2.html','index.html'] },
-  { label:'TRS Arena',  pill:'Soon',      href:'#',                    keys:['__never__'], soon:true },
   { label:'TRSbench',   pill:'Overall',   href:'scores.html',          keys:['scores.html'] },
   { label:'TRUscore',   pill:'Truth',     href:'truscore-scores.html', keys:['truscore-scores.html'] },
   { label:'TRScode',    pill:'Coding',    href:'trscode.html',         keys:['trscode.html','trscode-scores.html'] },
   { label:'TRFcast',    pill:'Prediction',href:'trfcast.html',         keys:['trfcast.html','trfcast-scores.html'] },
   { label:'TRAgents',   pill:'Agents',    href:'tragents-scores.html', keys:['tragents-scores.html'] },
+   { label:'TS Arena',    pill:'AI & Safety', href:'https://tsarena.ai', keys:['__never__'], highlight:true, external:true },
 ];
 
 // ── Lab logos + fallback colors ───────────────────────────────────────────────
@@ -124,9 +124,11 @@ const dateStr = months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
 
 const tabsHTML = tabs.map(t => {
   const active = !t.soon && isActive(t.keys) ? 'trv2-active' : '';
-  const dimStyle = t.soon ? 'style="color:rgba(255,255,255,0.2);cursor:default"' : '';
-  const pillHTML = t.pill ? `<span class="trv2-pill"${t.soon?' style="background:rgba(139,92,246,0.1);color:rgba(139,92,246,0.45);border:1px dashed rgba(139,92,246,0.25)"':''}>${t.pill}</span>` : '';
-  return `<a href="${t.href}" class="trv2-htab ${active}" ${dimStyle}>${t.label}${pillHTML}</a>`;
+  const dimStyle = t.soon ? 'style="color:rgba(255,255,255,0.2);cursor:default"' : (t.highlight ? 'style="color:#00e5ff;text-shadow:0 0 12px rgba(0,229,255,0.4)"' : '');
+  const pillHTML = t.pill ? `<span class="trv2-pill"${t.highlight?' style="background:rgba(0,255,255,0.15);color:#00e5ff"':(t.soon?' style="background:rgba(139,92,246,0.1);color:rgba(139,92,246,0.4)"':'' )}>${t.pill}</span>` : '';
+  const ext = t.external ? ' target="_blank"' : '';
+  const hlClass = t.highlight ? ' trv2-arena-hl' : '';
+  return `<a href="${t.href}" class="trv2-tab ${active}${hlClass}" ${dimStyle}${ext}>${t.label} ${pillHTML}</a>`;
 }).join('');
 
 const shell = `
