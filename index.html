@@ -637,14 +637,15 @@ const DDP_CONFIG = {
   },
   truscore: {
     title: '<span class="hl">TRU</span>score — Truth Rankings',
-    sub: 'Weighted composite · 4 pillars · 7 verified sources · Independent &amp; transparent',
-    file: 'truscore-data.json', totalPillars: 4, sourceCount: 7,
+    sub: 'Weighted composite · 5 pillars · 9 verified sources · Independent &amp; transparent',
+    file: 'truscore-data.json', totalPillars: 5, sourceCount: 9,
     methLink: 'truscore.html',
     pillars: [
-      { key:'factuality',    label:'Factuality',    icon:'✅', pct:'40%', compact:false },
-      { key:'neutrality',    label:'Neutrality',    icon:'⚖️', pct:'30%', compact:false },
-      { key:'hallucination', label:'Hallucination', icon:'👻', pct:'20%', compact:false },
-      { key:'calibration',   label:'Calibration',   icon:'🎯', pct:'10%', compact:true  },
+      { key:'truthfulness',     label:'Truthfulness',      icon:'✅', pct:'35%', compact:false },
+      { key:'hallucination',    label:'Confabulation',     icon:'🧠', pct:'20%', compact:false },
+      { key:'reasoning',        label:'Reasoning',         icon:'🔬', pct:'20%', compact:false },
+      { key:'neutrality',       label:'Neutrality',        icon:'⚖️', pct:'15%', compact:false },
+      { key:'response_quality', label:'Response Quality',  icon:'🎯', pct:'10%', compact:true  },
     ],
   },
   trscode: {
