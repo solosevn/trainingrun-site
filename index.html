@@ -723,9 +723,9 @@ function isFreshToday(model){
 function getCoverage(model){
   if(currentDDP === 'trsbench'){
     if(isFreshToday(model)) return model.category_count || 0;
-    return Object.keys(model.pillar_scores || {}).length;
+    return Object.values(model.pillar_scores || {}).filter(v => v != null && v > 0).length;
   }
-  return Object.keys(model.pillar_scores || {}).length;
+  return Object.values(model.pillar_scores || {}).filter(v => v != null && v > 0).length;
 }
 
 function getChange(model){
