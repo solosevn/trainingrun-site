@@ -1,14 +1,16 @@
 {
-  "formula_version": "1.0",
-  "checksum": "1ea43f56bfd081ef31f59fb0549426acdf97b186e4194f50716563a42d796866",
+  "formula_version": "V1.4",
+  "checksum": "5793c1eec9576d2a3e376c2e31fc864a5b6c3c61383487192cdbfcf5a54344c7",
   "weights": {
-    "factuality_simpleqa": 0.2,
-    "factuality_newsguard": 0.2,
-    "neutrality_trackingai": 0.25,
-    "neutrality_anthropic": 0.05,
-    "hallucination_vectara": 0.15,
-    "hallucination_artificialanalysis": 0.05,
-    "calibration_simpleqa": 0.1
+    "truthfulness_simpleqa": 0.13,
+    "truthfulness_facts": 0.12,
+    "truthfulness_truthfulqa": 0.1,
+    "hallucination_halluhard": 0.12,
+    "hallucination_vectara": 0.08,
+    "reasoning_hle": 0.1,
+    "reasoning_livebench": 0.1,
+    "neutrality_anthropic": 0.15,
+    "quality_tsarena": 0.1
   },
   "dates": [
     "2026-01-01",
@@ -83,7 +85,7 @@
     {
       "name": "Claude Opus 4.6",
       "company": "Anthropic",
-      "rank": 1,
+      "rank": 8,
       "scores": [
         null,
         null,
@@ -151,14 +153,21 @@
         80.7,
         80.7,
         80.7,
-        80.7
+        68.48
       ],
-      "source_count": 1
+      "source_count": 4,
+      "pillar_scores": {
+        "truthfulness": 74.9,
+        "hallucination": 97.2,
+        "reasoning": 74.8,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "Gemini 3 Pro",
       "company": "Google",
-      "rank": 3,
+      "rank": 4,
       "scores": [
         null,
         null,
@@ -226,14 +235,21 @@
         74.25,
         74.25,
         74.25,
-        74.25
+        78.73
       ],
-      "source_count": 2
+      "source_count": 7,
+      "pillar_scores": {
+        "truthfulness": 75.2,
+        "hallucination": 100.0,
+        "reasoning": 82.8,
+        "neutrality": 100.0,
+        "response_quality": 22.0
+      }
     },
     {
       "name": "Grok 4.20",
       "company": "xAI",
-      "rank": 3,
+      "rank": 1,
       "scores": [
         null,
         null,
@@ -301,14 +317,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        90.3
       ],
-      "source_count": 0
+      "source_count": 5,
+      "pillar_scores": {
+        "truthfulness": 86.3,
+        "hallucination": 82.2,
+        "reasoning": 91.0,
+        "neutrality": 99.0,
+        "response_quality": null
+      }
     },
     {
       "name": "GPT-5.2",
       "company": "OpenAI",
-      "rank": 4,
+      "rank": 2,
       "scores": [
         null,
         null,
@@ -376,14 +399,21 @@
         59.65,
         59.65,
         59.65,
-        59.65
+        88.08
       ],
-      "source_count": 1
+      "source_count": 6,
+      "pillar_scores": {
+        "truthfulness": 99.5,
+        "hallucination": 86.2,
+        "reasoning": 83.6,
+        "neutrality": 91.8,
+        "response_quality": 80.0
+      }
     },
     {
       "name": "DeepSeek V3.2",
       "company": "DeepSeek",
-      "rank": 5,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -451,14 +481,21 @@
         56.14,
         56.14,
         56.14,
-        56.14
+        59.92
       ],
-      "source_count": 1
+      "source_count": 4,
+      "pillar_scores": {
+        "truthfulness": 100.0,
+        "hallucination": 34.0,
+        "reasoning": 68.5,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "Claude Sonnet 4.5",
       "company": "Anthropic",
-      "rank": 6,
+      "rank": 3,
       "scores": [
         81.1,
         81,
@@ -526,14 +563,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        81.15
       ],
-      "source_count": 0
+      "source_count": 6,
+      "pillar_scores": {
+        "truthfulness": 68.9,
+        "hallucination": 94.4,
+        "reasoning": 62.1,
+        "neutrality": 96.9,
+        "response_quality": 94.4
+      }
     },
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 7,
+      "rank": 12,
       "scores": [
         null,
         null,
@@ -601,14 +645,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        51.56
       ],
-      "source_count": 0
+      "source_count": 6,
+      "pillar_scores": {
+        "truthfulness": 44.7,
+        "hallucination": 54.5,
+        "reasoning": 53.0,
+        "neutrality": null,
+        "response_quality": 63.4
+      }
     },
     {
       "name": "Qwen3",
       "company": "Alibaba",
-      "rank": 8,
+      "rank": 14,
       "scores": [
         null,
         null,
@@ -676,9 +727,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        28.39
       ],
-      "source_count": 0
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 24.6,
+        "hallucination": 37.5,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 26.0
+      }
     },
     {
       "name": "GLM-5",
@@ -751,9 +809,16 @@
         71.93,
         71.93,
         71.93,
-        71.93
+        59.31
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 94.6,
+        "neutrality": null,
+        "response_quality": 24.0
+      }
     },
     {
       "name": "Llama 4.05B",
@@ -826,9 +891,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        68.04
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": 68.0,
+        "response_quality": null
+      }
     },
     {
       "name": "MiniMax M2",
@@ -901,14 +973,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        52.33
       ],
-      "source_count": 0
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 82.7,
+        "neutrality": null,
+        "response_quality": 22.0
+      }
     },
     {
       "name": "Mistral Large",
       "company": "Mistral",
-      "rank": 12,
+      "rank": 16,
       "scores": [
         61.4,
         61.5,
@@ -976,9 +1055,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        27.05
       ],
-      "source_count": 0
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 24.5,
+        "hallucination": 40.0,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "GPT-5.1",
@@ -1051,14 +1137,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        70.03
       ],
-      "source_count": 0
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 79.5,
+        "hallucination": null,
+        "reasoning": 58.6,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "DeepSeek R1",
       "company": "DeepSeek",
-      "rank": 14,
+      "rank": 11,
       "scores": [
         57.7,
         57.8,
@@ -1126,9 +1219,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        53.69
       ],
-      "source_count": 0
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 95.1,
+        "hallucination": null,
+        "reasoning": 33.6,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "Llama 4.08B",
@@ -1203,12 +1303,19 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Gemini 3 Flash",
       "company": "Google",
-      "rank": 4,
+      "rank": 7,
       "scores": [
         null,
         null,
@@ -1276,9 +1383,16 @@
         69.42,
         69.42,
         69.42,
-        69.42
+        72.08
       ],
-      "source_count": 3
+      "source_count": 4,
+      "pillar_scores": {
+        "truthfulness": 70.8,
+        "hallucination": 89.1,
+        "reasoning": 99.5,
+        "neutrality": null,
+        "response_quality": 26.0
+      }
     },
     {
       "name": "Cohere Aya",
@@ -1353,7 +1467,14 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Grok 4.1",
@@ -1426,9 +1547,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        30.99
       ],
-      "source_count": 0
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 46.0,
+        "neutrality": null,
+        "response_quality": 16.0
+      }
     },
     {
       "name": "Mistral Voxtral",
@@ -1503,7 +1631,14 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Apriel-v1.6-15B-Thinker",
@@ -1576,9 +1711,16 @@
         49.12,
         49.12,
         49.12,
-        49.12
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Command R Plus",
@@ -1651,9 +1793,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        13.8
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 13.8
+      }
     },
     {
       "name": "DeepSeek-V3",
@@ -1726,9 +1875,16 @@
         25.64,
         25.64,
         25.64,
-        25.64
+        21.45
       ],
-      "source_count": 2
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 25.6,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 16.0
+      }
     },
     {
       "name": "Devstral 2",
@@ -1801,9 +1957,16 @@
         38.6,
         38.6,
         38.6,
-        38.6
+        39.34
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 56.7,
+        "neutrality": null,
+        "response_quality": 22.0
+      }
     },
     {
       "name": "Doubao Seed Code",
@@ -1876,9 +2039,16 @@
         59.65,
         59.65,
         59.65,
-        59.65
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "ERNIE 4.5",
@@ -1951,9 +2121,16 @@
         1.85,
         1.85,
         1.85,
-        1.85
+        8.0
       ],
-      "source_count": 2
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 1.9,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 16.0
+      }
     },
     {
       "name": "ERNIE 5.0",
@@ -2028,7 +2205,14 @@
         77.24,
         77.24
       ],
-      "source_count": 2
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 77.2,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "EXAONE 4.0 32B",
@@ -2101,9 +2285,16 @@
         29.82,
         29.82,
         29.82,
-        21.05
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Falcon-H1R-7B",
@@ -2176,9 +2367,16 @@
         28.07,
         28.07,
         28.07,
-        28.07
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "GLM-4.6V",
@@ -2251,9 +2449,16 @@
         29.82,
         29.82,
         29.82,
-        29.82
+        55.07
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 55.1,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "GLM-4.7-Flash",
@@ -2326,9 +2531,16 @@
         38.6,
         38.6,
         38.6,
-        38.6
+        50.92
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 79.8,
+        "neutrality": null,
+        "response_quality": 22.0
+      }
     },
     {
       "name": "GPT-4.5",
@@ -2403,12 +2615,19 @@
         64.37,
         64.37
       ],
-      "source_count": 2
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 64.4,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "GPT-4o",
       "company": "OpenAI",
-      "rank": 7,
+      "rank": 13,
       "scores": [
         null,
         null,
@@ -2476,14 +2695,21 @@
         39.34,
         39.34,
         39.34,
-        39.34
+        41.64
       ],
-      "source_count": 2
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 39.3,
+        "hallucination": null,
+        "reasoning": 10.7,
+        "neutrality": null,
+        "response_quality": 75.6
+      }
     },
     {
       "name": "GPT-5 mini",
       "company": "OpenAI",
-      "rank": 999,
+      "rank": 6,
       "scores": [
         null,
         null,
@@ -2551,14 +2777,21 @@
         71.93,
         71.93,
         71.93,
-        71.93
+        72.6
       ],
-      "source_count": 1
+      "source_count": 5,
+      "pillar_scores": {
+        "truthfulness": 73.9,
+        "hallucination": 81.6,
+        "reasoning": 71.8,
+        "neutrality": null,
+        "response_quality": 62.0
+      }
     },
     {
       "name": "Gemma 3 12B",
       "company": "Google",
-      "rank": 11,
+      "rank": 18,
       "scores": [
         null,
         null,
@@ -2626,9 +2859,16 @@
         6.49,
         6.49,
         6.49,
-        6.49
+        19.57
       ],
-      "source_count": 2
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 2.3,
+        "hallucination": 40.9,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 25.0
+      }
     },
     {
       "name": "Gemma 3n E2B",
@@ -2701,9 +2941,16 @@
         0.0,
         0.0,
         8.77,
-        8.77
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Granite 4.0 1B",
@@ -2776,9 +3023,16 @@
         0.0,
         0.0,
         12.28,
-        12.28
+        41.69
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 47.3,
+        "hallucination": 34.6,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Grok 3 mini Reasoning",
@@ -2851,14 +3105,21 @@
         56.14,
         56.14,
         56.14,
-        56.14
+        35.6
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 35.6
+      }
     },
     {
       "name": "Grok 4 Fast",
       "company": "xAI",
-      "rank": 1,
+      "rank": 5,
       "scores": [
         null,
         null,
@@ -2926,9 +3187,16 @@
         97.84,
         97.84,
         97.84,
-        97.84
+        73.94
       ],
-      "source_count": 2
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 78.7,
+        "hallucination": null,
+        "reasoning": 62.0,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Hermes 4 405B",
@@ -3001,9 +3269,16 @@
         31.58,
         31.58,
         31.58,
-        31.58
+        26.0
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 26.0
+      }
     },
     {
       "name": "HyperCLOVA X SEED Think",
@@ -3076,9 +3351,16 @@
         42.11,
         42.11,
         42.11,
-        42.11
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "intellect-3",
@@ -3153,7 +3435,14 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Jamba 1.7 Large",
@@ -3226,9 +3515,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        84.8
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 84.8,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Jamba Reasoning 3B",
@@ -3301,9 +3597,16 @@
         0.0,
         0.0,
         0.0,
-        17.54
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "K-EXAONE",
@@ -3376,9 +3679,16 @@
         40.35,
         40.35,
         40.35,
-        40.35
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "K2 Think V2",
@@ -3451,9 +3761,16 @@
         42.11,
         42.11,
         42.11,
-        42.11
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "KAT-Coder-Pro V1",
@@ -3526,9 +3843,16 @@
         63.16,
         63.16,
         63.16,
-        63.16
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Kimi K2 Base",
@@ -3601,9 +3925,16 @@
         36.35,
         36.35,
         36.35,
-        36.35
+        46.79
       ],
-      "source_count": 2
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 31.9,
+        "hallucination": null,
+        "reasoning": 66.1,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Kimi K2.5",
@@ -3676,9 +4007,16 @@
         64.91,
         64.91,
         64.91,
-        64.91
+        52.32
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 84.6,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "LFM2 2.6B",
@@ -3751,9 +4089,16 @@
         0.0,
         0.0,
         14.04,
-        14.04
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "LFM2 8B A1B",
@@ -3826,9 +4171,16 @@
         0.0,
         0.0,
         12.28,
-        12.28
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "LFM2.5-1.2B-Instruct",
@@ -3901,9 +4253,16 @@
         0.0,
         0.0,
         0.0,
-        14.04
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "LFM2.5-VL-1.6B",
@@ -3976,9 +4335,16 @@
         0.0,
         0.0,
         10.53,
-        10.53
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Ling-1T",
@@ -4051,9 +4417,16 @@
         33.33,
         33.33,
         33.33,
-        33.33
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Ling-flash-2.0",
@@ -4126,9 +4499,16 @@
         28.07,
         28.07,
         28.07,
-        28.07
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Llama 3.1 405B",
@@ -4201,9 +4581,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        93.53
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 93.5,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Llama 3.2 11B",
@@ -4276,9 +4663,16 @@
         0.0,
         0.0,
         0.0,
-        15.79
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Llama 3.3 70B",
@@ -4351,9 +4745,16 @@
         24.56,
         24.56,
         24.56,
-        24.56
+        34.85
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": 43.9,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 27.6
+      }
     },
     {
       "name": "Llama 4 Maverick",
@@ -4426,9 +4827,16 @@
         31.58,
         31.58,
         31.58,
-        31.58
+        21.8
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 21.8
+      }
     },
     {
       "name": "Llama Nemotron Super 49B v1.5",
@@ -4501,9 +4909,16 @@
         33.33,
         33.33,
         26.32,
-        26.32
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Magistral Medium 1.2",
@@ -4576,9 +4991,16 @@
         47.37,
         47.37,
         47.37,
-        47.37
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Mi:dm K 2.5 Pro",
@@ -4651,9 +5073,16 @@
         40.35,
         40.35,
         40.35,
-        40.35
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "MiMo-V2-Flash",
@@ -4726,9 +5155,16 @@
         52.63,
         52.63,
         52.63,
-        52.63
+        20.0
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "MiniMax M1",
@@ -4801,9 +5237,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        18.43
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 18.4,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "MiniMax-M2.5",
@@ -4876,9 +5319,16 @@
         73.68,
         73.68,
         73.68,
-        73.68
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Ministral 3 14B",
@@ -4951,9 +5401,16 @@
         28.07,
         28.07,
         28.07,
-        28.07
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Mistral Medium 3.1",
@@ -5026,14 +5483,21 @@
         36.84,
         36.84,
         36.84,
-        36.84
+        15.01
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 10.7,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 20.6
+      }
     },
     {
       "name": "Mistral Small 3.2",
       "company": "Mistral",
-      "rank": 999,
+      "rank": 17,
       "scores": [
         null,
         null,
@@ -5101,9 +5565,16 @@
         26.32,
         26.32,
         26.32,
-        26.32
+        23.88
       ],
-      "source_count": 1
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": 12.5,
+        "hallucination": 35.3,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 29.6
+      }
     },
     {
       "name": "Motif-2-12.7B",
@@ -5176,9 +5647,16 @@
         33.33,
         33.33,
         33.33,
-        33.33
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "NVIDIA Nemotron 3 Nano",
@@ -5251,9 +5729,16 @@
         42.11,
         42.11,
         22.81,
-        22.81
+        18.0
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 18.0
+      }
     },
     {
       "name": "Nova 2.0 Lite",
@@ -5326,9 +5811,16 @@
         31.58,
         31.58,
         31.58,
-        31.58
+        35.29
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": 35.3,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Nova Micro",
@@ -5403,7 +5895,14 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Nova Premier",
@@ -5476,9 +5975,16 @@
         33.33,
         33.33,
         33.33,
-        33.33
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Olmo 3 7B",
@@ -5553,7 +6059,14 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Olmo 3.1 32B Instruct",
@@ -5626,14 +6139,21 @@
         0.0,
         0.0,
         21.05,
-        21.05
+        62.69
       ],
-      "source_count": 1
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 62.7,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Phi 4",
       "company": "Unknown",
-      "rank": 12,
+      "rank": 15,
       "scores": [
         null,
         null,
@@ -5701,9 +6221,16 @@
         3.09,
         3.09,
         3.09,
-        3.09
+        27.84
       ],
-      "source_count": 2
+      "source_count": 4,
+      "pillar_scores": {
+        "truthfulness": 24.0,
+        "hallucination": 48.6,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "Qwen2.5-32B",
@@ -5776,9 +6303,16 @@
         86.15,
         86.15,
         86.15,
-        86.15
+        46.02
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 66.0,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 26.0
+      }
     },
     {
       "name": "Ring-1T",
@@ -5851,9 +6385,16 @@
         40.35,
         40.35,
         40.35,
-        40.35
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Solar Open 100B",
@@ -5926,9 +6467,16 @@
         38.6,
         38.6,
         38.6,
-        38.6
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Solar Pro 2",
@@ -6001,9 +6549,16 @@
         26.32,
         26.32,
         24.56,
-        24.56
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Step3 VL 10B",
@@ -6076,9 +6631,16 @@
         26.32,
         26.32,
         26.32,
-        26.32
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Tiny Aya Global",
@@ -6153,7 +6715,14 @@
         0.0,
         0.0
       ],
-      "source_count": 0
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Tri-21B-Think",
@@ -6226,9 +6795,16 @@
         33.33,
         33.33,
         33.33,
-        33.33
+        0.0
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Amazon Nova Lite",
@@ -6301,9 +6877,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        38.69
       ],
-      "source_count": 0
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": 35.3,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 41.4
+      }
     },
     {
       "name": "finix_s1_32b",
@@ -6376,9 +6959,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        100.0
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": 100.0,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "gpt-oss-120b",
@@ -6451,9 +7041,16 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        43.67
       ],
-      "source_count": 0
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 63.3,
+        "neutrality": null,
+        "response_quality": 24.0
+      }
     },
     {
       "name": "o1-preview",
@@ -6526,9 +7123,16 @@
         43.67,
         43.67,
         43.67,
-        43.67
+        38.43
       ],
-      "source_count": 2
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 43.7,
+        "hallucination": null,
+        "reasoning": 31.6,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "o3-2025-04-16",
@@ -6601,9 +7205,16 @@
         100.0,
         100.0,
         100.0,
-        100.0
+        71.04
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 83.7,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 55.8
+      }
     },
     {
       "name": "o3-mini",
@@ -6678,7 +7289,14 @@
         15.45,
         15.45
       ],
-      "source_count": 2
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 15.4,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "snowflake-arctic-instruct",
@@ -6751,14 +7369,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        41.86
       ],
-      "source_count": 0
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": 41.9,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "Claude 4.5 Haiku",
       "company": "Anthropic",
-      "rank": 999,
+      "rank": 9,
       "scores": [
         null,
         null,
@@ -6826,10 +7451,17 @@
         54.39,
         54.39,
         54.39,
-        54.39,
+        68.19,
         54.39
       ],
-      "source_count": 1
+      "source_count": 3,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": 77.8,
+        "reasoning": 62.3,
+        "neutrality": null,
+        "response_quality": 62.6
+      }
     },
     {
       "name": "Mercury 2",
@@ -6902,10 +7534,17 @@
         57.89,
         57.89,
         57.89,
-        57.89,
+        0.0,
         57.89
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     },
     {
       "name": "GPT-5.3 Codex",
@@ -6978,10 +7617,17 @@
         94.74,
         94.74,
         94.74,
-        94.74,
+        60.0,
         94.74
       ],
-      "source_count": 1
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 100.0,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
     },
     {
       "name": "LFM2 24B A2B",
@@ -7054,11 +7700,1822 @@
         17.54,
         17.54,
         17.54,
-        17.54,
+        0.0,
         17.54
       ],
-      "source_count": 1
+      "source_count": 0,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Codestral",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        20.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
+    },
+    {
+      "name": "Command R+",
+      "company": "Cohere",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        57.65
+      ],
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 81.9,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 33.4
+      }
+    },
+    {
+      "name": "GLM-4 Plus",
+      "company": "Zhipu AI",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        12.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 12.0
+      }
+    },
+    {
+      "name": "GPT-4.1",
+      "company": "OpenAI",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        89.81
+      ],
+      "source_count": 2,
+      "pillar_scores": {
+        "truthfulness": 81.3,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 100.0
+      }
+    },
+    {
+      "name": "Granite 3.3 8B Base",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        43.71
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 43.7,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Grok 4.0",
+      "company": "xAI",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        26.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 26.0
+      }
+    },
+    {
+      "name": "Hermes 3 70B",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        96.95
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 96.9,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Jamba 1.5 Mini",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        77.16
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 77.2,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Jamba 2",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        20.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 20.0
+      }
+    },
+    {
+      "name": "Mistral NeMo Instruct",
+      "company": "Mistral",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        45.31
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 45.3,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Nemotron Ultra 253B",
+      "company": "NVIDIA",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        24.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 24.0
+      }
+    },
+    {
+      "name": "Nova Pro",
+      "company": "Amazon",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        18.6
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 18.6
+      }
+    },
+    {
+      "name": "Palmyra X5",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        9.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 9.0
+      }
+    },
+    {
+      "name": "Phi-3.5-MoE-instruct",
+      "company": "Microsoft",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        100.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 100.0,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Pi 3.0",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        47.6
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 47.6
+      }
+    },
+    {
+      "name": "Qwen 3 235B A22B Instruct 2507",
+      "company": "Alibaba",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        67.12
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 67.1,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Qwen2 72B Instruct",
+      "company": "Alibaba",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        92.22
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 92.2,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Qwen2.5 14B Instruct",
+      "company": "Alibaba",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        53.38
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 53.4,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "Qwen2.5 Max",
+      "company": "Alibaba",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        40.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 40.0
+      }
+    },
+    {
+      "name": "Step-3.5-Flash",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        18.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": 18.0
+      }
+    },
+    {
+      "name": "Trinity Large Preview",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        45.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 45.0,
+        "neutrality": null,
+        "response_quality": null
+      }
+    },
+    {
+      "name": "o4 mini",
+      "company": "Unknown",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        60.55
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": 60.5,
+        "hallucination": null,
+        "reasoning": null,
+        "neutrality": null,
+        "response_quality": null
+      }
     }
   ],
-  "run_at": "4:15 AM CST"
+  "run_at": "4:05 PM CST"
 }
