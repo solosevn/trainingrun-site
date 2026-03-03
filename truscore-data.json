@@ -1,6 +1,6 @@
 {
   "formula_version": "V1.4",
-  "checksum": "5793c1eec9576d2a3e376c2e31fc864a5b6c3c61383487192cdbfcf5a54344c7",
+  "checksum": "24e8f7581db3bd23b86661a9e9fff3bb2427ad0a544e5d93921cf59c2e095fd2",
   "weights": {
     "truthfulness_simpleqa": 0.13,
     "truthfulness_facts": 0.12,
@@ -3023,11 +3023,11 @@
         0.0,
         0.0,
         12.28,
-        41.69
+        42.52
       ],
       "source_count": 2,
       "pillar_scores": {
-        "truthfulness": 47.3,
+        "truthfulness": 48.8,
         "hallucination": 34.6,
         "reasoning": null,
         "neutrality": null,
@@ -3515,11 +3515,11 @@
         0.0,
         0.0,
         0.0,
-        84.8
+        87.47
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 84.8,
+        "truthfulness": 87.5,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -4581,11 +4581,11 @@
         0.0,
         0.0,
         0.0,
-        93.53
+        96.47
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 93.5,
+        "truthfulness": 96.5,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -6139,11 +6139,11 @@
         0.0,
         0.0,
         21.05,
-        62.69
+        64.67
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 62.7,
+        "truthfulness": 64.7,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -6221,11 +6221,11 @@
         3.09,
         3.09,
         3.09,
-        27.84
+        28.23
       ],
       "source_count": 4,
       "pillar_scores": {
-        "truthfulness": 24.0,
+        "truthfulness": 24.7,
         "hallucination": 48.6,
         "reasoning": null,
         "neutrality": null,
@@ -6303,11 +6303,11 @@
         86.15,
         86.15,
         86.15,
-        46.02
+        47.06
       ],
       "source_count": 2,
       "pillar_scores": {
-        "truthfulness": 66.0,
+        "truthfulness": 68.1,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -7865,11 +7865,11 @@
         null,
         null,
         null,
-        57.65
+        58.94
       ],
       "source_count": 2,
       "pillar_scores": {
-        "truthfulness": 81.9,
+        "truthfulness": 84.5,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -8111,11 +8111,11 @@
         null,
         null,
         null,
-        43.71
+        45.09
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 43.7,
+        "truthfulness": 45.1,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -8275,11 +8275,11 @@
         null,
         null,
         null,
-        96.95
+        100.0
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 96.9,
+        "truthfulness": 100.0,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -8357,11 +8357,11 @@
         null,
         null,
         null,
-        77.16
+        79.59
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 77.2,
+        "truthfulness": 79.6,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -8521,11 +8521,11 @@
         null,
         null,
         null,
-        45.31
+        46.74
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 45.3,
+        "truthfulness": 46.7,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -8849,11 +8849,11 @@
         null,
         null,
         null,
-        100.0
+        51.01
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 100.0,
+        "truthfulness": 51.0,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -9013,13 +9013,13 @@
         null,
         null,
         null,
-        67.12
+        53.61
       ],
       "source_count": 1,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 67.1,
+        "reasoning": 53.6,
         "neutrality": null,
         "response_quality": null
       }
@@ -9095,11 +9095,11 @@
         null,
         null,
         null,
-        92.22
+        95.12
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 92.2,
+        "truthfulness": 95.1,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -9177,11 +9177,11 @@
         null,
         null,
         null,
-        53.38
+        43.21
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 53.4,
+        "truthfulness": 43.2,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -9505,17 +9505,17 @@
         null,
         null,
         null,
-        60.55
+        59.94
       ],
-      "source_count": 1,
+      "source_count": 2,
       "pillar_scores": {
         "truthfulness": 60.5,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
-        "response_quality": null
+        "response_quality": 59.2
       }
     }
   ],
-  "run_at": "4:05 PM CST"
+  "run_at": "4:55 PM CST"
 }
