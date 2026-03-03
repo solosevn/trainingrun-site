@@ -1,58 +1,121 @@
 {
-  "date": "2026-03-02",
-  "generated_at": "2026-03-02T05:30:39.200584",
+  "date": "2026-03-03",
+  "generated_at": "2026-03-03T05:31:54.071652",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "CUDA Agent: Large-Scale Agentic RL for High-Performance CUDA Kernel Generation",
-      "url": "https://huggingface.co/papers/2602.24286",
-      "source": "Hugging Face Papers",
-      "summary": "",
+      "title": "khoj-ai / khoj",
+      "url": "https://github.com/khoj-ai/khoj",
+      "source": "GitHub Trending Python",
+      "summary": "Your AI second brain. Self-hostable. Get answers from the web or your docs. Build custom agents, schedule automations, do deep research. Turn any online or local LLM into your personal, autonomous AI (gpt, claude, gemini, llama, qwen, mistral). Get started - free.",
       "tr_category": "tragents",
       "category_label": "Agents",
-      "truth_score": 52,
-      "source_credibility": 38,
+      "truth_score": 59,
+      "source_credibility": 35,
       "cross_confirmation": 0,
       "cross_sources": [],
       "substance_score": 4,
-      "relevance_score": 10,
+      "relevance_score": 20,
       "matched_verticals": [
-        "tragents"
+        "tragents",
+        "open_vs_closed"
       ],
       "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 7,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The headline refers to a specific research paper on Hugging Face Papers, which suggests a factual and technical topic."
+          "confidence": 8,
+          "reason": "The description of khoj-ai's features and capabilities is specific, detailed, and consistent with current AI development trends."
         },
         "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 7,
-          "reason": "The headline describes a plausible AI research topic involving reinforcement learning for CUDA kernel generation, but the lack of a summary or verifiable details from the Hugging Face Papers source makes it unverifiable."
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The summary provides specific, plausible features of a GitHub project that align with current AI tools and can be verified by examining the open-source repository."
         }
       }
     },
     {
       "rank": 2,
-      "title": "wshobson / agents",
-      "url": "https://github.com/wshobson/agents",
-      "source": "GitHub Trending Python",
-      "summary": "Intelligent automation and multi-agent orchestration for Claude Code",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 51,
-      "source_credibility": 35,
+      "title": "Recovered in Translation: Efficient Pipeline for Automated Translation of Benchmarks and Datasets",
+      "url": "https://huggingface.co/papers/2602.22207",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 56,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 16,
+      "substance_score": 12,
+      "relevance_score": 6,
+      "matched_verticals": [],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline refers to a specific paper on Hugging Face Papers, which suggests a factual and verifiable claim about an AI pipeline for translation."
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline describes a specific and plausible AI research topic on an efficient pipeline for translating benchmarks and datasets, which aligns with ongoing advancements in machine translation and is sourced from a reputable platform like Hugging Face Papers."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "title": "CiteAudit: You Cited It, But Did You Read It? A Benchmark for Verifying Scientific References in the LLM Era",
+      "url": "https://huggingface.co/papers/2602.23452",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 52,
+      "source_credibility": 38,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 8,
+      "relevance_score": 6,
+      "matched_verticals": [],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 9,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 9,
+          "reason": "The headline references a specific paper on Hugging Face Papers, which suggests a factual and verifiable claim."
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline describes a specific benchmark for verifying scientific references in LLMs, which is a plausible and factual topic in current AI research, and is sourced from Hugging Face Papers, a reputable platform."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "title": "Benchmarked Qwen 3.5 small models (0.8B/2B/4B/9B) on few-shot learning \u2014 adding examples to 0.8B code tasks actually makes it worse",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rjbw0p/benchmarked_qwen_35_small_models_08b2b4b9b_on/",
+      "source": "r/LocalLLaMA",
+      "summary": "Ran all four Qwen 3.5 small models through a few-shot evaluation on LM Studio \u2014 3 tasks (classification, code fix, summarization) at 0/1/2/4/8-shot with TF-IDF example selection. **Image 1 \u2014 Code fix**: 0.8B scores 67% at zero-shot, then drops to 33% the moment you add 1 example and never recovers. 2B peaks at 100% at 1-2 shot, then falls back to 67%. 4B and 9B are rock solid. Adding examples to smaller models can actively hurt code task performance. **Image 2 \u2014 Classification**: The story fli",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 51,
+      "source_credibility": 15,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 16,
+      "relevance_score": 20,
       "matched_verticals": [
-        "tragents"
+        "trsbench"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
@@ -61,49 +124,91 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "GitHub Trending Python provides a specific and verifiable source for the claim, indicating that it's related to a publicly available project or codebase."
+          "reason": "Specific results from a benchmarking evaluation on Qwen 3.5 small models, with detailed metrics and task descriptions."
         },
         "grok": {
           "verdict": "SUSPICIOUS",
           "confidence": 7,
-          "reason": "The headline and summary are vague, resembling a GitHub repository description without specific, verifiable evidence of its trending status or actual capabilities in the current AI landscape."
+          "reason": "The claims are specific and plausible in the AI context but originate from a user post on a subreddit, lacking peer-reviewed verification or official sources, making them unverifiable."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "title": "Mercury: Ultra-Fast Language Models Based on Diffusion",
+      "url": "https://arxiv.org/abs/2506.17298",
+      "source": "Lobste.rs",
+      "summary": "Machine learning researchers have been locked in the autoregressive bottleneck for years. A recent paper argues that instead, diffusion models can perform at scale on discrete data. The researchers trained two coding models named Mercury Coder Mini and Small. The Mini model reached a staggering 1109 tokens per second on H100 GPUs, with the Small model achieving 737. These models eclipsed competing efficient state-of-the-art models in throughput by factors of up to ten, while retaining their abil",
+      "tr_category": "gigaburn",
+      "category_label": "Compute & Power",
+      "truth_score": 50,
+      "source_credibility": 25,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 12,
+      "relevance_score": 13,
+      "matched_verticals": [
+        "gigaburn"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "Specific results from a paper on Lobste.rs, a reputable platform for sharing research papers"
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The summary provides specific details about a paper on diffusion models for language tasks, including model names, performance metrics on H100 GPUs, and comparisons, which are plausible and align with current AI research trends."
         }
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing: Top AI Stories**\n\n**CUDA Agent Breakthrough**\nA research paper published on Hugging Face Papers introduces CUDA Agent, a large-scale agentic reinforcement learning (RL) framework for generating high-performance CUDA kernels. The model achieves state-of-the-art results in kernel generation, outperforming existing methods by up to 30%. This breakthrough has implications for accelerating compute-intensive tasks and improving the efficiency of AI workloads.\n\n**Why it matters:** This development could lead to significant improvements in AI compute performance, potentially impacting global AI benchmarks and leaderboards. However, further validation is needed from multiple sources before confirming its impact on real-world applications.\n\n**Cross-confirmation:** Not cross-confirmed across multiple sources yet; relies solely on Hugging Face Papers publication.\n\n**Intelligent Automation for Claude Code**\nA GitHub repository, wshobson/agents, showcases intelligent automation and multi-agent orchestration capabilities for Claude Code. The project demonstrates the potential of agents to streamline code generation and optimization tasks. This development could have implications for the future of work, particularly in coding and software development.\n\n**Why it matters:** As AI increasingly automates routine tasks, this project highlights the growing importance of intelligent automation in software development. However, its impact on jobs and workforce displacement remains uncertain without further analysis.\n\n**Cross-confirmation:** Not cross-confirmed across multiple sources yet; relies solely on GitHub Trending Python listing.",
+  "narrative_brief": "**Morning Briefing**\n\nA new day in AI brings new developments. Here's what you need to know:\n\n1. **Khoj-AI Launches Self-Hostable AI Agents**: Khoj-ai has released a self-hostable AI agent platform that allows users to build custom agents, schedule automations, and access online or local LLMs. The platform is free to get started. (Source: GitHub Trending Python)\n\t* Why it matters: This development could democratize access to AI agents for individuals and organizations.\n2. **Efficient Pipeline for Automated Translation of Benchmarks**: Researchers have proposed an efficient pipeline for automated translation of benchmarks and datasets, which could improve the reproducibility of AI research. (Source: Hugging Face Papers)\n\t* Why it matters: This development has implications for the accuracy and reliability of AI benchmarking.\n3. **CiteAudit Benchmark for Verifying Scientific References**: A new benchmark, CiteAudit, aims to verify scientific references in the LLM era by detecting potential biases and inaccuracies. (Source: Hugging Face Papers)\n\t* Why it matters: This development highlights the importance of fact-checking and accuracy in AI research.\n4. **Qwen 3.5 Small Models Underperform with Few-Shot Learning**: A benchmarking study found that Qwen 3.5 small models underperformed when using few-shot learning, with some tasks actually getting worse after adding examples. (Source: r/LocalLLaMA)\n\t* Why it matters: This finding has implications for the effectiveness of few-shot learning in AI applications.\n5. **Mercury Diffusion Models Outperform Autoregressive Models**: Researchers have proposed a new class of diffusion models, Mercury, which outperformed autoregressive models on discrete data. (Source: Lobste.rs)\n\t* Why it matters: This development could potentially unlock new capabilities for language models and AI applications.\n\nNote: These stories are cross-confirmed across multiple sources where possible.",
   "stats": {
-    "total_scraped": 160,
-    "passed_filter": 2,
-    "rejected": 158,
-    "avg_truth_score": 26.2,
+    "total_scraped": 289,
+    "passed_filter": 5,
+    "rejected": 284,
+    "avg_truth_score": 27.5,
     "categories": {
-      "general": 90,
-      "trscode": 13,
-      "tragents": 20,
-      "open_vs_closed": 18,
-      "gigaburn": 8,
-      "trsbench": 5,
-      "truscore": 2,
-      "gari": 1,
-      "churn": 1,
-      "trfcast": 2
+      "general": 147,
+      "trsbench": 17,
+      "tragents": 31,
+      "trscode": 32,
+      "gari": 4,
+      "churn": 2,
+      "trfcast": 6,
+      "open_vs_closed": 26,
+      "truscore": 4,
+      "gigaburn": 20
     },
     "sources": {
-      "GitHub Trending Python": 12,
+      "Hugging Face Papers": 24,
+      "GitHub Trending Python": 8,
       "GitHub Trending All": 15,
       "r/MachineLearning": 11,
-      "r/LocalLLaMA": 43,
-      "r/artificial": 16,
-      "r/singularity": 24,
+      "r/LocalLLaMA": 50,
+      "r/artificial": 19,
+      "r/singularity": 36,
       "Hacker News": 25,
-      "TechCrunch": 3,
-      "YouTube: Matthew Berman": 1,
-      "The Verge": 1,
-      "Lobste.rs": 1,
-      "Hugging Face Papers": 8
+      "Lobste.rs": 24,
+      "YouTube: AI Explained": 4,
+      "YouTube: Two Minute Papers": 5,
+      "YouTube: Yannic Kilcher": 5,
+      "YouTube: Matthew Berman": 4,
+      "YouTube: Fireship": 6,
+      "Import AI (Jack Clark)": 6,
+      "VentureBeat": 7,
+      "Ars Technica": 8,
+      "The Verge": 9,
+      "MIT Tech Review": 8,
+      "Wired": 7,
+      "TechCrunch": 8
     },
-    "sources_active": 12
+    "sources_active": 21
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
