@@ -62,7 +62,7 @@
                 Unlike TRS (which measures overall capability), TRUscore measures whether a model can be trusted to tell you the truth.
                 This page documents our complete methodology with full source citations.
             </p>
-            <p class="last-updated">Last Updated: February 9, 2026</p>
+            <p class="last-updated">Last Updated: March 3, 2026</p>
         </header>
 
         <section id="why-truscore" class="method-section">
@@ -124,7 +124,7 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>SimpleQA &mdash; 20%</h4>
+                        <h4>SimpleQA &mdash; 15%</h4>
                         <p>
                             4,326 fact-seeking questions graded as Correct / Incorrect / Not Attempted. Created by OpenAI as an independent benchmark.
                             42+ models scored. Tests hard factual accuracy on short-form questions.
@@ -132,13 +132,19 @@
                         <a href="https://kaggle.com/benchmarks/openai/simpleqa" target="_blank" class="source-link">kaggle.com/benchmarks/openai/simpleqa</a>
                     </div>
                     <div class="source-item">
-                        <h4>NewsGuard AI False Claims Monitor &mdash; 20%</h4>
-                        <p>
-                            Monthly test of 11 leading chatbots against 10 real-world false claims currently circulating in the news.
-                            Each model tested 30 times with neutral, leading, and malicious prompts.
-                            Created by NewsGuard, an established media credibility organization that rates 100,000+ news sources. Completely independent.
-                        </p>
-                        <a href="https://newsguardtech.com/ai-false-claims-monitor" target="_blank" class="source-link">newsguardtech.com/ai-false-claims-monitor</a>
+                        <h4>TruthfulQA &mdash; 10%</h4>
+                        <p>817 questions designed to test whether AI models avoid common misconceptions and widely-held false beliefs. Evaluated on MC1 + MC2 formats, scores averaged. Maintained at llm-stats.com with 100+ models scored continuously. Replaced NewsGuard in V1.3 after NewsGuard discontinued their AI monitor.</p>
+                        <a href="https://llm-stats.com/benchmarks/truthfulqa" target="_blank" class="source-link">llm-stats.com/benchmarks/truthfulqa</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>LiveBench Factuality &mdash; 10%</h4>
+                        <p>Contamination-free benchmark updated monthly with new questions drawn from recent papers, news, and datasets. Cannot be memorized from training data &mdash; questions are always new. Global Average score used. 100+ models on HuggingFace.</p>
+                        <a href="https://huggingface.co/spaces/livebench/livebench" target="_blank" class="source-link">huggingface.co/spaces/livebench/livebench</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>AA-Omniscience Accuracy &mdash; 5%</h4>
+                        <p>Artificial Analysis Omniscience benchmark measures factual recall across 60+ economically relevant domains including law, medicine, finance, and science. Independently run on dedicated hardware. Cross-validates SimpleQA and TruthfulQA with a different methodology.</p>
+                        <a href="https://artificialanalysis.ai/evaluations/omniscience" target="_blank" class="source-link">artificialanalysis.ai/evaluations/omniscience</a>
                     </div>
                 </div>
             </div>
@@ -176,7 +182,7 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>Vectara Hallucination Leaderboard &mdash; 15%</h4>
+                        <h4>Vectara Hallucination Leaderboard &mdash; 12%</h4>
                         <p>
                             Hallucination percentage rates for 30+ models tested across 7,700+ articles in 7 domains
                             (news, science, medicine, legal, sports, business, education). Uses HHEM-2.3 hallucination evaluation model.
@@ -185,7 +191,7 @@
                         <a href="https://huggingface.co/spaces/vectara/leaderboard" target="_blank" class="source-link">huggingface.co/spaces/vectara/leaderboard</a>
                     </div>
                     <div class="source-item">
-                        <h4>Artificial Analysis Omniscience &mdash; 5%</h4>
+                        <h4>Artificial Analysis Omniscience Hallucination &mdash; 8%</h4>
                         <p>
                             Factual recall and hallucination rates across economically relevant domains. Independent test runs on dedicated hardware.
                             Cross-validates Vectara with different methodology.
@@ -201,7 +207,7 @@
             <div class="method-content">
                 <div class="source-citation">
                     <div class="source-item">
-                        <h4>SimpleQA &ldquo;Not Attempted&rdquo; Rate &mdash; 10%</h4>
+                        <h4>SimpleQA &ldquo;Not Attempted&rdquo; Rate &mdash; 4%</h4>
                         <p>
                             The percentage of questions each model declines to answer rather than guessing.
                             Built into the same SimpleQA benchmark used for Pillar 1, measuring a different dimension.
@@ -209,18 +215,32 @@
                         </p>
                         <a href="https://kaggle.com/benchmarks/openai/simpleqa" target="_blank" class="source-link">kaggle.com/benchmarks/openai/simpleqa (Not Attempted column)</a>
                     </div>
+                    <div class="source-item">
+                        <h4>AA-Omniscience Index Component &mdash; 3%</h4>
+                        <p>The Omniscience Index from Artificial Analysis aggregates accuracy, hallucination, and calibration into a composite score. The index component (normalized from &minus;100&ndash;+100 to 0&ndash;100 scale) measures whether models know what they don&rsquo;t know. Cross-validates SimpleQA calibration across multiple domains.</p>
+                        <a href="https://artificialanalysis.ai/evaluations/omniscience" target="_blank" class="source-link">artificialanalysis.ai/evaluations/omniscience</a>
+                    </div>
+                    <div class="source-item">
+                        <h4>MASK Honesty Score &mdash; 3%</h4>
+                        <p>Model Alignment and Self-Knowledge (MASK) benchmark tests whether AI models maintain consistent beliefs under adversarial pressure. Evaluates honesty specifically &mdash; does the model capitulate when challenged on a correct answer? 400+ questions across factual domains. Published by Scale AI and the MASK research team.</p>
+                        <a href="https://mask-benchmark.ai" target="_blank" class="source-link">mask-benchmark.ai</a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="complete-formula" class="method-section">
-            <h2>Complete TRUscore Formula</h2>
+            <h2>Complete TRUscore Formula &mdash; V1.3</h2>
             <div class="method-content">
                 <div class="formula-display">
-                    <code>TRUscore = (SimpleQA_Correct &times; 0.20) + (NewsGuard_TruthRate &times; 0.20) + (TrackingAI_Neutrality &times; 0.25) + (Anthropic_EvenHanded &times; 0.05) + (Vectara_NonHallucination &times; 0.15) + (ArtificialAnalysis_Accuracy &times; 0.05) + (SimpleQA_Calibration &times; 0.10)</code>
+                    <code>TRUscore V1.3 =
+  Factuality:    (SimpleQA &times; 0.15) + (TruthfulQA &times; 0.10) + (LiveBench &times; 0.10) + (AA_Accuracy &times; 0.05)
+  Neutrality:    (TrackingAI &times; 0.25) + (Anthropic &times; 0.05)
+  Hallucination: (Vectara &times; 0.12) + (AA_Hallucination &times; 0.08)
+  Calibration:   (SimpleQA_NA &times; 0.04) + (AA_Index &times; 0.03) + (MASK &times; 0.03)</code>
                 </div>
                 <p class="formula-note">
-                    All scores normalized 0&ndash;100 (matching TRS convention). Top-performing model on each sub-metric = 100, others proportional.
+                    All scores normalized 0&ndash;100. Hallucination rates inverted (lower rate = better score). Null sources excluded; remaining weights renormalized proportionally. Minimum 5 of 11 sub-metrics required to qualify for the leaderboard. V1.3: 11 sub-metrics across 9 unique sources.
                 </p>
             </div>
         </section>
