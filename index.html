@@ -638,7 +638,7 @@ const DDP_CONFIG = {
   truscore: {
     title: '<span class="hl">TRU</span>score — Truth Rankings',
     sub: 'Weighted composite · 5 pillars · 9 verified sources · Independent &amp; transparent',
-    file: 'truscore-data.json', totalPillars: 5, sourceCount: 9,
+    file: 'truscore-data.json', totalPillars: 5, sourceCount: 9, minSources: 3,
     methLink: 'truscore.html',
     pillars: [
       { key:'truthfulness',     label:'Truthfulness',      icon:'✅', pct:'35%', compact:false },
@@ -854,7 +854,8 @@ function renderTable(){
   const query = (document.getElementById('searchInput').value||'').toLowerCase();
 
   // Build global rank map using FRESH-FIRST ordering (same as table display)
-  const _allScored = data.models.filter(m => getLatestScore(m) !== null);
+  const _minSrc = DDP_CONFIG[currentDDP].minSources || 0;
+  const _allScored = data.models.filter(m => getLatestScore(m) !== null).filter(m => !_minSrc || (m.source_count || 0) >= _minSrc);
   const _gFresh = _allScored.filter(m => isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
   const _gStale = _allScored.filter(m => !isFreshToday(m)).sort((a,b) => (getLatestScore(b)||0)-(getLatestScore(a)||0));
   const globalRankMap = new Map();
@@ -863,6 +864,7 @@ function renderTable(){
   // Filter + sort models
   let models = data.models
     .filter(m => getLatestScore(m) !== null)
+    .filter(m => { const ms = DDP_CONFIG[currentDDP].minSources; return !ms || (m.source_count || 0) >= ms; })
     .filter(m => activeFilter.lab === 'All Labs' || m.company === activeFilter.lab)
     .filter(m => !query || m.name.toLowerCase().includes(query) || (m.company||'').toLowerCase().includes(query))
     .sort((a,b) => (getLatestScore(b)||0) - (getLatestScore(a)||0));
