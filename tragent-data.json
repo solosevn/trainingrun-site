@@ -85,7 +85,7 @@
         "task_completion": 76.8,
         "cost_efficiency": 8.6,
         "tool_reliability": 40.9,
-        "safety_security": 25.0,
+        "safety_security": 25,
         "multi_model": 90
       },
       "source_count": 5
@@ -218,7 +218,7 @@
         "task_completion": 85.4,
         "cost_efficiency": 0.8,
         "tool_reliability": 8.8,
-        "safety_security": 56.0
+        "safety_security": 56
       },
       "source_count": 4
     },
@@ -247,7 +247,7 @@
         88.96,
         88.96,
         88.96,
-        76.0,
+        76,
         81.56,
         64.41,
         77.74,
@@ -258,12 +258,12 @@
         null,
         62.31,
         78.35,
-        62.0
+        62
       ],
       "pillar_scores": {
         "task_completion": 80.4,
-        "cost_efficiency": 4.0,
-        "accessibility": 100.0,
+        "cost_efficiency": 4,
+        "accessibility": 100,
         "multi_model": 94
       },
       "source_count": 4
@@ -310,7 +310,7 @@
         "task_completion": 74.55,
         "cost_efficiency": 5.9,
         "tool_reliability": 43.8,
-        "safety_security": 25.0,
+        "safety_security": 25,
         "multi_model": 84
       },
       "source_count": 5
@@ -340,8 +340,8 @@
         null,
         null,
         86.57,
-        0.0,
-        0.0,
+        0,
+        0,
         null,
         null,
         null,
@@ -397,8 +397,8 @@
       "pillar_scores": {
         "task_completion": 82.2,
         "cost_efficiency": 28.07,
-        "tool_reliability": 53.0,
-        "accessibility": 100.0
+        "tool_reliability": 53,
+        "accessibility": 100
       },
       "source_count": 4
     },
@@ -427,8 +427,8 @@
         85.8,
         85.8,
         85.8,
-        84.0,
-        84.0,
+        84,
+        84,
         79.44,
         79.44,
         79.44,
@@ -443,13 +443,13 @@
       "pillar_scores": {
         "task_completion": 72.8,
         "cost_efficiency": 38.42,
-        "accessibility": 100.0
+        "accessibility": 100
       },
       "source_count": 3
     },
     {
       "name": "Mistral Large",
-      "company": "Mistral AI",
+      "company": "Mistral",
       "rank": 17,
       "scores": [
         null,
@@ -486,9 +486,9 @@
         37.56
       ],
       "pillar_scores": {
-        "cost_efficiency": 0.0,
-        "safety_security": 46.0,
-        "accessibility": 100.0
+        "cost_efficiency": 0,
+        "safety_security": 46,
+        "accessibility": 100
       },
       "source_count": 3
     },
@@ -558,8 +558,8 @@
         null,
         null,
         84.11,
-        0.0,
-        0.0,
+        0,
+        0,
         null,
         null,
         null,
@@ -599,8 +599,8 @@
         83.95,
         83.95,
         83.95,
-        90.0,
-        90.0,
+        90,
+        90,
         null,
         null,
         null,
@@ -656,7 +656,7 @@
       "pillar_scores": {
         "task_completion": 30.3,
         "cost_efficiency": 1.3,
-        "accessibility": 100.0
+        "accessibility": 100
       },
       "source_count": 3
     },
@@ -685,8 +685,8 @@
         null,
         null,
         82.46,
-        0.0,
-        0.0,
+        0,
+        0,
         null,
         null,
         null,
@@ -743,7 +743,7 @@
         "task_completion": 32.73,
         "cost_efficiency": 1.3,
         "tool_reliability": 3.4,
-        "safety_security": 45.0,
+        "safety_security": 45,
         "multi_model": 82
       },
       "source_count": 5
@@ -773,8 +773,8 @@
         null,
         null,
         null,
-        0.0,
-        0.0,
+        0,
+        0,
         null,
         null,
         null,
@@ -830,7 +830,7 @@
       "pillar_scores": {
         "task_completion": 75.8,
         "cost_efficiency": 33.6,
-        "accessibility": 100.0,
+        "accessibility": 100,
         "multi_model": 98
       },
       "source_count": 4
@@ -876,8 +876,8 @@
       "pillar_scores": {
         "task_completion": 64.3,
         "cost_efficiency": 38.35,
-        "safety_security": 30.0,
-        "accessibility": 100.0,
+        "safety_security": 30,
+        "accessibility": 100,
         "multi_model": 96
       },
       "source_count": 5
@@ -1010,7 +1010,7 @@
         "task_completion": 62.8,
         "cost_efficiency": 18.3,
         "tool_reliability": 44.54,
-        "safety_security": 20.0,
+        "safety_security": 20,
         "multi_model": 64
       },
       "source_count": 5
@@ -1304,7 +1304,7 @@
     },
     {
       "name": "Codex Mini",
-      "company": "Unknown",
+      "company": "OpenAI",
       "rank": 999,
       "scores": [
         null,
@@ -1505,9 +1505,9 @@
         39.58
       ],
       "pillar_scores": {
-        "task_completion": 53.0,
+        "task_completion": 53,
         "cost_efficiency": 0.4,
-        "tool_reliability": 62.0
+        "tool_reliability": 62
       },
       "source_count": 3
     },
@@ -2005,7 +2005,7 @@
     },
     {
       "name": "Magistral Medium",
-      "company": "Unknown",
+      "company": "Mistral",
       "rank": 8,
       "scores": [
         null,
@@ -2043,14 +2043,14 @@
       ],
       "pillar_scores": {
         "cost_efficiency": 47.37,
-        "tool_reliability": 32.0,
-        "accessibility": 100.0
+        "tool_reliability": 32,
+        "accessibility": 100
       },
       "source_count": 3
     },
     {
       "name": "Magistral Small",
-      "company": "Unknown",
+      "company": "Mistral",
       "rank": 999,
       "scores": [
         null,
@@ -2091,7 +2091,7 @@
     },
     {
       "name": "NVARC",
-      "company": "Unknown",
+      "company": "NVIDIA",
       "rank": 999,
       "scores": [
         null,
@@ -2621,8 +2621,8 @@
       ],
       "pillar_scores": {
         "task_completion": 29.39,
-        "tool_reliability": 40.0,
-        "accessibility": 100.0
+        "tool_reliability": 40,
+        "accessibility": 100
       },
       "source_count": 3
     },
@@ -2789,8 +2789,8 @@
       ],
       "pillar_scores": {
         "cost_efficiency": 36.84,
-        "safety_security": 7.0,
-        "accessibility": 100.0
+        "safety_security": 7,
+        "accessibility": 100
       },
       "source_count": 3
     },
@@ -2957,8 +2957,8 @@
       ],
       "pillar_scores": {
         "cost_efficiency": 26.32,
-        "tool_reliability": 26.0,
-        "accessibility": 100.0
+        "tool_reliability": 26,
+        "accessibility": 100
       },
       "source_count": 3
     },
@@ -3005,7 +3005,7 @@
     },
     {
       "name": "o1 (December 2024)",
-      "company": "Unknown",
+      "company": "OpenAI",
       "rank": 999,
       "scores": [
         null,
@@ -3128,7 +3128,7 @@
     },
     {
       "name": "o3 (2025-04-16)",
-      "company": "Unknown",
+      "company": "OpenAI",
       "rank": 999,
       "scores": [
         null,
@@ -3169,7 +3169,7 @@
     },
     {
       "name": "o3 Pro (high) (June 2025)",
-      "company": "Unknown",
+      "company": "OpenAI",
       "rank": 999,
       "scores": [
         null,
@@ -3210,7 +3210,7 @@
     },
     {
       "name": "o3 mini (Medium)",
-      "company": "Unknown",
+      "company": "OpenAI",
       "rank": 999,
       "scores": [
         null,
@@ -3332,7 +3332,7 @@
       "source_count": 0
     },
     {
-      "name": "\ud83c\udd95GPT 5.2 Codex",
+      "name": "GPT 5.2 Codex",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -3373,7 +3373,7 @@
       "source_count": 0
     },
     {
-      "name": "\ud83c\udd95Kimi K2 Thinking",
+      "name": "Kimi K2 Thinking",
       "company": "Moonshot AI",
       "rank": 999,
       "scores": [
@@ -3538,7 +3538,7 @@
     },
     {
       "name": "Apriel-v1.6-15B-Thinker",
-      "company": "Unknown",
+      "company": "ServiceNow",
       "rank": 999,
       "scores": [
         null,
@@ -3620,7 +3620,7 @@
     },
     {
       "name": "Doubao Seed Code",
-      "company": "Unknown",
+      "company": "ByteDance",
       "rank": 999,
       "scores": [
         null,
@@ -3661,7 +3661,7 @@
     },
     {
       "name": "ERNIE 4.5 300B A47B",
-      "company": "Unknown",
+      "company": "Baidu",
       "rank": 999,
       "scores": [
         null,
@@ -3702,7 +3702,7 @@
     },
     {
       "name": "ERNIE 5.0 Thinking Preview",
-      "company": "Unknown",
+      "company": "Baidu",
       "rank": 999,
       "scores": [
         null,
@@ -3743,7 +3743,7 @@
     },
     {
       "name": "EXAONE 4.0 32B",
-      "company": "Unknown",
+      "company": "LG AI Research",
       "rank": 999,
       "scores": [
         null,
@@ -4030,7 +4030,7 @@
     },
     {
       "name": "Hermes 4 405B",
-      "company": "Unknown",
+      "company": "Nous Research",
       "rank": 999,
       "scores": [
         null,
@@ -4071,7 +4071,7 @@
     },
     {
       "name": "HyperCLOVA X SEED Think",
-      "company": "Unknown",
+      "company": "Naver",
       "rank": 999,
       "scores": [
         null,
@@ -4153,7 +4153,7 @@
     },
     {
       "name": "Jamba 1.7 Large",
-      "company": "Unknown",
+      "company": "AI21",
       "rank": 999,
       "scores": [
         null,
@@ -4194,7 +4194,7 @@
     },
     {
       "name": "Jamba Reasoning 3B",
-      "company": "Unknown",
+      "company": "AI21",
       "rank": 999,
       "scores": [
         null,
@@ -4235,7 +4235,7 @@
     },
     {
       "name": "K-EXAONE",
-      "company": "Unknown",
+      "company": "LG AI Research",
       "rank": 999,
       "scores": [
         null,
@@ -4276,7 +4276,7 @@
     },
     {
       "name": "K2 Think V2",
-      "company": "Unknown",
+      "company": "Kuaishou",
       "rank": 999,
       "scores": [
         null,
@@ -4358,7 +4358,7 @@
     },
     {
       "name": "LFM2 2.6B",
-      "company": "Unknown",
+      "company": "Liquid AI",
       "rank": 999,
       "scores": [
         null,
@@ -4399,7 +4399,7 @@
     },
     {
       "name": "LFM2 8B A1B",
-      "company": "Unknown",
+      "company": "Liquid AI",
       "rank": 999,
       "scores": [
         null,
@@ -4440,7 +4440,7 @@
     },
     {
       "name": "LFM2.5-1.2B-Instruct",
-      "company": "Unknown",
+      "company": "Liquid AI",
       "rank": 999,
       "scores": [
         null,
@@ -4481,7 +4481,7 @@
     },
     {
       "name": "LFM2.5-1.2B-Thinking",
-      "company": "Unknown",
+      "company": "Liquid AI",
       "rank": 999,
       "scores": [
         null,
@@ -4522,7 +4522,7 @@
     },
     {
       "name": "LFM2.5-VL-1.6B",
-      "company": "Unknown",
+      "company": "Liquid AI",
       "rank": 999,
       "scores": [
         null,
@@ -4724,8 +4724,8 @@
       ],
       "pillar_scores": {
         "cost_efficiency": 24.56,
-        "tool_reliability": 20.0,
-        "safety_security": 40.0
+        "tool_reliability": 20,
+        "safety_security": 40
       },
       "source_count": 3
     },
@@ -4813,7 +4813,7 @@
     },
     {
       "name": "MiMo-V2-Flash",
-      "company": "Unknown",
+      "company": "Xiaomi",
       "rank": 999,
       "scores": [
         null,
@@ -4854,7 +4854,7 @@
     },
     {
       "name": "Ministral 3 14B",
-      "company": "Unknown",
+      "company": "Mistral",
       "rank": 999,
       "scores": [
         null,
@@ -5264,7 +5264,7 @@
     },
     {
       "name": "Solar Open 100B",
-      "company": "Unknown",
+      "company": "Upstage",
       "rank": 999,
       "scores": [
         null,
@@ -5305,7 +5305,7 @@
     },
     {
       "name": "Solar Pro 2",
-      "company": "Unknown",
+      "company": "Upstage",
       "rank": 999,
       "scores": [
         null,
@@ -5346,7 +5346,7 @@
     },
     {
       "name": "Step3 VL 10B",
-      "company": "Unknown",
+      "company": "StepFun",
       "rank": 999,
       "scores": [
         null,
@@ -5469,7 +5469,7 @@
     },
     {
       "name": "o3 Medium",
-      "company": "Unknown",
+      "company": "OpenAI",
       "rank": 999,
       "scores": [
         null,
@@ -5509,7 +5509,7 @@
       "source_count": 0
     },
     {
-      "name": "\ud83c\udd95Devstral small (2512)",
+      "name": "Devstral small (2512)",
       "company": "Mistral",
       "rank": 999,
       "scores": [
@@ -5545,7 +5545,7 @@
         null,
         null,
         null,
-        0.0
+        0
       ],
       "pillar_scores": {},
       "source_count": 0
@@ -5594,7 +5594,7 @@
     },
     {
       "name": "LFM2 24B A2B",
-      "company": "Unknown",
+      "company": "Liquid AI",
       "rank": 999,
       "scores": [
         null,
@@ -5652,6 +5652,6 @@
       "company": "Alibaba"
     }
   ],
-  "checksum": "a98d17b9f1e5a3474314bc3864016c2ac52fd19365bd11e0ff62cbbeea0a8e26",
+  "checksum": "4709a80c0ed3c523ab26dd9f404a0e4b4261bb6ee66e933c464b5c1adfb7e4fd",
   "run_at": "4:22 AM CST"
 }
