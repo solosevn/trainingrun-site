@@ -3,8 +3,8 @@
     "description": "TrainingRun.AI model-to-company mapping. Single source of truth for logos, colors, and branding.",
     "updated": "2026-03-04",
     "usage": "Fetched by index.html and any future TrainingRun pages. Edit this file to add models or update branding.",
-    "total_companies": 15,
-    "total_models": 66
+    "total_companies": 27,
+    "total_models": 97
   },
   "companies": {
     "OpenAI": {
@@ -81,6 +81,66 @@
       "logo": "",
       "color": "#9ca3af",
       "website": ""
+    },
+    "Liquid AI": {
+      "logo": "https://avatars.githubusercontent.com/u/164427082?s=128",
+      "color": "#00d4ff",
+      "website": "https://liquid.ai"
+    },
+    "Baidu": {
+      "logo": "https://avatars.githubusercontent.com/u/23093957?s=128",
+      "color": "#2932e1",
+      "website": "https://yiyan.baidu.com"
+    },
+    "ByteDance": {
+      "logo": "https://avatars.githubusercontent.com/u/4158466?s=128",
+      "color": "#00f5d4",
+      "website": "https://bytedance.com"
+    },
+    "AI21": {
+      "logo": "https://avatars.githubusercontent.com/u/34948491?s=128",
+      "color": "#ff6f61",
+      "website": "https://ai21.com"
+    },
+    "LG AI Research": {
+      "logo": "https://avatars.githubusercontent.com/u/81278730?s=128",
+      "color": "#a50034",
+      "website": "https://www.lgresearch.ai"
+    },
+    "Naver": {
+      "logo": "https://avatars.githubusercontent.com/u/6589568?s=128",
+      "color": "#1ec800",
+      "website": "https://clova.ai"
+    },
+    "Upstage": {
+      "logo": "https://avatars.githubusercontent.com/u/101073834?s=128",
+      "color": "#6366f1",
+      "website": "https://upstage.ai"
+    },
+    "Nous Research": {
+      "logo": "https://avatars.githubusercontent.com/u/137893735?s=128",
+      "color": "#e11d48",
+      "website": "https://nousresearch.com"
+    },
+    "StepFun": {
+      "logo": "https://avatars.githubusercontent.com/u/161477684?s=128",
+      "color": "#8b5cf6",
+      "website": "https://stepfun.com"
+    },
+    "ServiceNow": {
+      "logo": "https://avatars.githubusercontent.com/u/2830416?s=128",
+      "color": "#81b5a1",
+      "website": "https://servicenow.com"
+    },
+    "Kuaishou": {
+      "logo": "https://avatars.githubusercontent.com/u/40117675?s=128",
+      "color": "#ff4906",
+      "website": "https://kuaishou.com"
+    },
+    "NVIDIA": {
+      "logo": "https://avatars.githubusercontent.com/u/1728152?s=128",
+      "color": "#76b900",
+      "website": "https://nvidia.com"
     }
   },
   "models": {
@@ -149,7 +209,38 @@
     "minimax-2.1": "MiniMax",
     "mimo-v2-flash (non-thinking)": "Xiaomi",
     "Kwai": "Kwai",
-    "Multiple": "Multiple"
+    "Multiple": "Multiple",
+    "Codex Mini": "OpenAI",
+    "o1 (December 2024)": "OpenAI",
+    "o3 (2025-04-16)": "OpenAI",
+    "o3 Medium": "OpenAI",
+    "o3 Pro (high) (June 2025)": "OpenAI",
+    "o3 mini (Medium)": "OpenAI",
+    "Magistral Medium": "Mistral",
+    "Magistral Small": "Mistral",
+    "Ministral 3 14B": "Mistral",
+    "LFM2 2.6B": "Liquid AI",
+    "LFM2 24B A2B": "Liquid AI",
+    "LFM2 8B A1B": "Liquid AI",
+    "LFM2.5-1.2B-Instruct": "Liquid AI",
+    "LFM2.5-1.2B-Thinking": "Liquid AI",
+    "LFM2.5-VL-1.6B": "Liquid AI",
+    "ERNIE 4.5 300B A47B": "Baidu",
+    "ERNIE 5.0 Thinking Preview": "Baidu",
+    "Doubao Seed Code": "ByteDance",
+    "Jamba 1.7 Large": "AI21",
+    "Jamba Reasoning 3B": "AI21",
+    "EXAONE 4.0 32B": "LG AI Research",
+    "K-EXAONE": "LG AI Research",
+    "HyperCLOVA X SEED Think": "Naver",
+    "Solar Open 100B": "Upstage",
+    "Solar Pro 2": "Upstage",
+    "Hermes 4 405B": "Nous Research",
+    "MiMo-V2-Flash": "Xiaomi",
+    "Step3 VL 10B": "StepFun",
+    "Apriel-v1.6-15B-Thinker": "ServiceNow",
+    "K2 Think V2": "Kuaishou",
+    "NVARC": "NVIDIA"
   },
   "aliases": {
     "Kimi 2.5": "Kimi K2.5",
