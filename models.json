@@ -1,0 +1,154 @@
+{
+  "_meta": {
+    "description": "TrainingRun.AI model-to-company mapping. Single source of truth for logos, colors, and branding.",
+    "updated": "2026-03-04",
+    "usage": "Fetched by index.html and any future TrainingRun pages. Edit this file to add models or update branding.",
+    "total_companies": 15,
+    "total_models": 66
+  },
+  "companies": {
+    "OpenAI": {
+      "logo": "https://avatars.githubusercontent.com/u/14957082?s=128",
+      "color": "#10a37f",
+      "website": "https://openai.com"
+    },
+    "Anthropic": {
+      "logo": "https://avatars.githubusercontent.com/u/76263028?s=128",
+      "color": "#d4a574",
+      "website": "https://anthropic.com"
+    },
+    "Google": {
+      "logo": "https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png",
+      "color": "#4285f4",
+      "website": "https://deepmind.google"
+    },
+    "Meta": {
+      "logo": "https://avatars.githubusercontent.com/u/69631?s=128",
+      "color": "#0668E1",
+      "website": "https://ai.meta.com"
+    },
+    "xAI": {
+      "logo": "https://avatars.githubusercontent.com/u/141821688?s=128",
+      "color": "#ffffff",
+      "website": "https://x.ai"
+    },
+    "Mistral": {
+      "logo": "https://avatars.githubusercontent.com/u/132372032?s=128",
+      "color": "#f97316",
+      "website": "https://mistral.ai"
+    },
+    "DeepSeek": {
+      "logo": "https://avatars.githubusercontent.com/u/148330874?s=128",
+      "color": "#4D6BFE",
+      "website": "https://deepseek.com"
+    },
+    "Alibaba": {
+      "logo": "https://avatars.githubusercontent.com/u/141221163?s=128",
+      "color": "#7c3aed",
+      "website": "https://qwenlm.github.io"
+    },
+    "Cohere": {
+      "logo": "https://avatars.githubusercontent.com/u/54850923?s=128",
+      "color": "#39d353",
+      "website": "https://cohere.com"
+    },
+    "Zhipu AI": {
+      "logo": "https://avatars.githubusercontent.com/u/48590610?s=128",
+      "color": "#2563eb",
+      "website": "https://zhipuai.cn"
+    },
+    "Moonshot AI": {
+      "logo": "https://avatars.githubusercontent.com/u/129152888?s=128",
+      "color": "#8b5cf6",
+      "website": "https://moonshot.ai"
+    },
+    "MiniMax": {
+      "logo": "https://avatars.githubusercontent.com/u/93573998?s=128",
+      "color": "#06b6d4",
+      "website": "https://minimaxi.com"
+    },
+    "Xiaomi": {
+      "logo": "https://avatars.githubusercontent.com/u/1309360?s=128",
+      "color": "#ff6900",
+      "website": "https://xiaomi.com"
+    },
+    "Kwai": {
+      "logo": "https://avatars.githubusercontent.com/u/139524429?s=128",
+      "color": "#ff4500",
+      "website": "https://kuaishou.com"
+    },
+    "Multiple": {
+      "logo": "",
+      "color": "#9ca3af",
+      "website": ""
+    }
+  },
+  "models": {
+    "GPT-5.2": "OpenAI",
+    "GPT-4": "OpenAI",
+    "GPT-4.1 (2025-04-14)": "OpenAI",
+    "GPT-4o": "OpenAI",
+    "GPT-5-Codex": "OpenAI",
+    "GPT-5.1": "OpenAI",
+    "gpt-oss-120b": "OpenAI",
+    "o1-mini": "OpenAI",
+    "GPT 5.2 Codex": "OpenAI",
+    "GPT-5 mini": "OpenAI",
+    "OpenAI o1-preview": "OpenAI",
+    "OpenAI o3-mini-low": "OpenAI",
+    "Claude Opus 4.6": "Anthropic",
+    "Claude Sonnet 4.5": "Anthropic",
+    "Anthropic": "Anthropic",
+    "Claude3-Opus": "Anthropic",
+    "Claude3-Sonnet": "Anthropic",
+    "Claude3.5-Sonnet": "Anthropic",
+    "claude-4-5-haiku": "Anthropic",
+    "Claude 3 Haiku": "Anthropic",
+    "Gemini 3 Pro": "Google",
+    "Gemini Flash 3": "Google",
+    "gemma-3-27b-it": "Google",
+    "Llama 4.05B": "Meta",
+    "Llama 4.08B": "Meta",
+    "Llama 4.0": "Meta",
+    "Llama 4 Maverick": "Meta",
+    "Llama-3-70B-Chat": "Meta",
+    "llama3-1-405b-instruct": "Meta",
+    "llama4-maverick-17b-instruct": "Meta",
+    "Grok 4.20": "xAI",
+    "Grok 4.1": "xAI",
+    "Grok Code Fast 1": "xAI",
+    "Mistral Large": "Mistral",
+    "Mistral Voxtral": "Mistral",
+    "Mixtral-8x22B-Instruct": "Mistral",
+    "codestral-2405": "Mistral",
+    "devstral-2": "Mistral",
+    "devstral-medium-2507": "Mistral",
+    "Devstral 2": "Mistral",
+    "Devstral small (2512)": "Mistral",
+    "DeepSeek V3.2": "DeepSeek",
+    "DeepSeek R1": "DeepSeek",
+    "Deepseek-Coder-v2": "DeepSeek",
+    "DeepSeek-V3": "DeepSeek",
+    "Qwen3-Coder": "Alibaba",
+    "Qwen3": "Alibaba",
+    "Qwen 3 Coder 480B": "Alibaba",
+    "Qwen2-72B-Instruct": "Alibaba",
+    "Qwen2.5-Coder 32B Instruct": "Alibaba",
+    "Cohere Command R+": "Cohere",
+    "Cohere Aya": "Cohere",
+    "GLM-5": "Zhipu AI",
+    "GLM-4": "Zhipu AI",
+    "GLM 4.6": "Zhipu AI",
+    "GLM 4.7": "Zhipu AI",
+    "Kimi K2 Instruct": "Moonshot AI",
+    "Kimi K2.5": "Moonshot AI",
+    "MoonshotAI": "Moonshot AI",
+    "Kimi K2 Thinking": "Moonshot AI",
+    "MiniMax M2": "MiniMax",
+    "MiniMax M1": "MiniMax",
+    "minimax-2.1": "MiniMax",
+    "mimo-v2-flash (non-thinking)": "Xiaomi",
+    "Kwai": "Kwai",
+    "Multiple": "Multiple"
+  }
+}
