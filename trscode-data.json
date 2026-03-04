@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "227cb768b557b3f21f975bf8c772865ea13d912291990686f0a68baba14582e5",
+  "checksum": "367e604c91136a7eeb79823f8c9a2011668e40b337d658372dffbba94873488a",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -149,12 +149,12 @@
         74.83,
         74.83,
         74.83,
-        76.0,
-        76.0,
-        76.0,
-        76.0,
-        76.0,
-        76.0
+        76,
+        76,
+        76,
+        76,
+        76,
+        76
       ],
       "pillar_scores": {
         "issue_resolution": 96.1,
@@ -169,7 +169,7 @@
         "swe_rebench_pass1": 47.1,
         "livecodebench_pct": 71.8,
         "bigcodebench_pct": 34.8,
-        "terminalbench_hard_pct": 38.0,
+        "terminalbench_hard_pct": 38,
         "swebench_pro_pct": 45.89,
         "scicode_pct": null,
         "arena_code_elo": 1567
@@ -358,7 +358,7 @@
         "terminalbench_hard_pct": 32.6,
         "swebench_pro_pct": 34.63,
         "scicode_pct": 1.5,
-        "arena_code_elo": 1206.0
+        "arena_code_elo": 1206
       }
     },
     {
@@ -451,7 +451,7 @@
         "terminalbench_hard_pct": 44.3,
         "swebench_pro_pct": 29.94,
         "scicode_pct": null,
-        "arena_code_elo": 1339.0
+        "arena_code_elo": 1339
       }
     },
     {
@@ -537,14 +537,14 @@
       },
       "source_count": 5,
       "raw_data": {
-        "swebench_verified_pct": 70.0,
+        "swebench_verified_pct": 70,
         "swe_rebench_pass1": 37.5,
         "livecodebench_pct": null,
         "bigcodebench_pct": null,
         "terminalbench_hard_pct": 39.6,
         "swebench_pro_pct": 15.56,
         "scicode_pct": null,
-        "arena_code_elo": 1287.0
+        "arena_code_elo": 1287
       }
     },
     {
@@ -626,7 +626,7 @@
       "raw_data": {
         "swebench_verified_pct": 55.4,
         "swebench_pro_pct": 38.7,
-        "arena_code_elo": 1282.0
+        "arena_code_elo": 1282
       }
     },
     {
@@ -802,7 +802,7 @@
         "terminalbench_hard_pct": 52.4,
         "swebench_pro_pct": null,
         "scicode_pct": null,
-        "arena_code_elo": 1448.0
+        "arena_code_elo": 1448
       }
     },
     {
@@ -865,19 +865,19 @@
         null,
         null,
         50.66,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -943,7 +943,7 @@
         null,
         null,
         49.92,
-        0.0,
+        0,
         7.8,
         7.8,
         7.8,
@@ -960,7 +960,7 @@
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1223.0
+        "arena_code_elo": 1223
       }
     },
     {
@@ -1041,8 +1041,8 @@
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 75.8,
-        "terminalbench_hard_pct": 30.0,
-        "arena_code_elo": 1313.0
+        "terminalbench_hard_pct": 30,
+        "arena_code_elo": 1313
       }
     },
     {
@@ -1105,19 +1105,19 @@
         null,
         null,
         48.84,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1203,7 +1203,7 @@
         "swe_rebench_pass1": 52.9,
         "livecodebench_pct": 80.2,
         "bigcodebench_pct": 35.8,
-        "arena_code_elo": 1205.0
+        "arena_code_elo": 1205
       }
     },
     {
@@ -1266,10 +1266,10 @@
         34.95,
         34.91,
         47.75,
-        44.0,
-        44.0,
-        44.0,
-        44.0,
+        44,
+        44,
+        44,
+        44,
         36.5,
         36.5,
         36.5,
@@ -1459,7 +1459,7 @@
       "raw_data": {
         "swebench_verified_pct": 13.52,
         "terminalbench_hard_pct": 17.1,
-        "arena_code_elo": 1255.0
+        "arena_code_elo": 1255
       }
     },
     {
@@ -1522,7 +1522,7 @@
         null,
         null,
         46.13,
-        0.0,
+        0,
         3.73,
         3.73,
         3.73,
@@ -1540,7 +1540,7 @@
       "source_count": 2,
       "raw_data": {
         "swebench_pro_pct": 21.41,
-        "arena_code_elo": 1254.0
+        "arena_code_elo": 1254
       }
     },
     {
@@ -1603,19 +1603,19 @@
         null,
         null,
         45.59,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1682,12 +1682,12 @@
         null,
         45.05,
         12.66,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
+        23,
+        23,
+        23,
+        23,
+        23,
+        23,
         22.49,
         22.49,
         22.49,
@@ -1700,7 +1700,7 @@
       "raw_data": {
         "swebench_verified_pct": 54.2,
         "swebench_pro_pct": 9.67,
-        "arena_code_elo": 1357.0
+        "arena_code_elo": 1357
       }
     },
     {
@@ -1763,19 +1763,19 @@
         null,
         null,
         44.51,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1841,19 +1841,19 @@
         null,
         null,
         43.97,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1919,19 +1919,19 @@
         null,
         null,
         43.43,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
       "pillar_scores": {},
       "source_count": 0,
@@ -1939,7 +1939,7 @@
     },
     {
       "name": "Anthropic",
-      "company": "Unknown",
+      "company": "Anthropic",
       "rank": 999,
       "scores": [
         null,
@@ -2014,7 +2014,7 @@
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1308.0
+        "arena_code_elo": 1308
       }
     },
     {
@@ -2240,7 +2240,7 @@
         null,
         null,
         null,
-        15.0,
+        15,
         7.5,
         7.5,
         7.5,
@@ -2417,7 +2417,7 @@
         "terminalbench_hard_pct": 39.6,
         "swebench_pro_pct": 15.56,
         "scicode_pct": 3.1,
-        "arena_code_elo": 1286.0
+        "arena_code_elo": 1286
       }
     },
     {
@@ -2578,7 +2578,7 @@
       "source_count": 4,
       "raw_data": {
         "swe_rebench_pass1": 46.7,
-        "livecodebench_pct": 70.0,
+        "livecodebench_pct": 70,
         "bigcodebench_pct": 34.5,
         "terminalbench_hard_pct": 33.4
       }
@@ -2906,7 +2906,7 @@
       "raw_data": {
         "terminalbench_hard_pct": 11.5,
         "swebench_pro_pct": 41.78,
-        "arena_code_elo": 1394.0,
+        "arena_code_elo": 1394,
         "swebench_verified_pct": 72.8
       }
     },
@@ -2987,9 +2987,9 @@
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
-        "swebench_verified_pct": 66.0,
+        "swebench_verified_pct": 66,
         "terminalbench_hard_pct": 43.1,
-        "arena_code_elo": 1243.0
+        "arena_code_elo": 1243
       }
     },
     {
@@ -3069,7 +3069,7 @@
       "pillar_scores": {},
       "source_count": 5,
       "raw_data": {
-        "swebench_verified_pct": 26.0,
+        "swebench_verified_pct": 26,
         "swe_rebench_pass1": 43.8,
         "livecodebench_pct": 65.9,
         "terminalbench_hard_pct": 3.4,
@@ -3154,7 +3154,7 @@
       "source_count": 2,
       "raw_data": {
         "terminalbench_hard_pct": 25.8,
-        "arena_code_elo": 1141.0
+        "arena_code_elo": 1141
       }
     },
     {
@@ -3322,7 +3322,7 @@
     },
     {
       "name": "Kwai",
-      "company": "Unknown",
+      "company": "Kwai",
       "rank": 999,
       "scores": [
         null,
@@ -3397,7 +3397,7 @@
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1260.0
+        "arena_code_elo": 1260
       }
     },
     {
@@ -3559,7 +3559,7 @@
       "source_count": 2,
       "raw_data": {
         "bigcodebench_pct": 24.6,
-        "scicode_pct": 0.0
+        "scicode_pct": 0
       }
     },
     {
@@ -3639,9 +3639,9 @@
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
-        "swe_rebench_pass1": 35.0,
+        "swe_rebench_pass1": 35,
         "livecodebench_pct": 46.9,
-        "scicode_pct": 0.0
+        "scicode_pct": 0
       }
     },
     {
@@ -3721,12 +3721,12 @@
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1331.0
+        "arena_code_elo": 1331
       }
     },
     {
       "name": "Multiple",
-      "company": "Unknown",
+      "company": "Multiple",
       "rank": 999,
       "scores": [
         null,
@@ -3787,16 +3787,16 @@
         null,
         null,
         null,
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12
       ],
       "pillar_scores": {},
       "source_count": 1,
@@ -4122,7 +4122,7 @@
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
-        "swebench_verified_pct": 9.0,
+        "swebench_verified_pct": 9,
         "swe_rebench_pass1": 21.7
       }
     },
@@ -4366,7 +4366,7 @@
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1198.0
+        "arena_code_elo": 1198
       }
     },
     {
@@ -4446,8 +4446,8 @@
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
-        "bigcodebench_pct": 27.0,
-        "arena_code_elo": 1100.0
+        "bigcodebench_pct": 27,
+        "arena_code_elo": 1100
       }
     },
     {
@@ -4689,7 +4689,7 @@
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1307.0
+        "arena_code_elo": 1307
       }
     },
     {
@@ -4934,7 +4934,7 @@
       }
     },
     {
-      "name": "\ud83c\udd95GPT 5.2 Codex",
+      "name": "GPT 5.2 Codex",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -4996,10 +4996,10 @@
         null,
         null,
         null,
-        17.0,
-        17.0,
-        17.0,
-        17.0,
+        17,
+        17,
+        17,
+        17,
         16.33,
         16.33,
         16.33,
@@ -5095,7 +5095,7 @@
       }
     },
     {
-      "name": "\ud83c\udd95Kimi K2 Thinking",
+      "name": "Kimi K2 Thinking",
       "company": "Moonshot AI",
       "rank": 22,
       "scores": [
@@ -5238,7 +5238,7 @@
         null,
         null,
         null,
-        0.0,
+        0,
         12.55,
         12.55,
         12.55,
@@ -5318,16 +5318,16 @@
         null,
         null,
         null,
-        0.0,
-        30.0,
-        30.0,
-        30.0,
-        30.0,
-        30.0,
-        30.0,
-        30.0,
-        30.0,
-        30.0
+        0,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -5339,7 +5339,7 @@
       }
     },
     {
-      "name": "\ud83c\udd95Devstral small (2512)",
+      "name": "Devstral small (2512)",
       "company": "Mistral",
       "rank": 999,
       "scores": [
@@ -5401,7 +5401,7 @@
         null,
         null,
         null,
-        0.0,
+        0,
         13.17,
         13.17,
         13.17,
@@ -5419,7 +5419,7 @@
       }
     },
     {
-      "name": "\ud83e\udd47 OpenAI o3-mini-low",
+      "name": "OpenAI o3-mini-low",
       "company": "OpenAI",
       "rank": 999,
       "scores": [
@@ -5481,16 +5481,16 @@
         null,
         null,
         null,
-        0.0,
-        15.0,
-        15.0,
-        15.0,
-        15.0,
-        15.0,
-        15.0,
-        15.0,
-        15.0,
-        15.0
+        0,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15
       ],
       "pillar_scores": {},
       "source_count": 1,
