@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "876ccf2465ceb2f2ac215d1b0063496f787172dc09a3d6eb80ff749d2dc83a28",
+  "checksum": "2b1703c3ce8592db79cfe4cc9309e8489880542b8ec7d0621e1addc0820799c7",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,
@@ -2401,7 +2401,7 @@
     },
     {
       "name": "Magistral Medium",
-      "company": "Unknown",
+      "company": "Mistral",
       "rank": 999,
       "scores": [
         null,
@@ -2753,7 +2753,7 @@
     },
     {
       "name": "Phi 4 Reasoning Plus",
-      "company": "Unknown",
+      "company": "Microsoft",
       "rank": 999,
       "scores": [
         null,
