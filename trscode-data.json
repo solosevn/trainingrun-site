@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "367e604c91136a7eeb79823f8c9a2011668e40b337d658372dffbba94873488a",
+  "checksum": "ecfc3daf2dd972cc0fbabba15c4ad2168f27d545b14926c5d6990cd423a39558",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -4614,7 +4614,7 @@
     },
     {
       "name": "mimo-v2-flash (non-thinking)",
-      "company": "Unknown",
+      "company": "Xiaomi",
       "rank": 999,
       "scores": [
         null,
