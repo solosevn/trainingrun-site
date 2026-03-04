@@ -150,5 +150,9 @@
     "mimo-v2-flash (non-thinking)": "Xiaomi",
     "Kwai": "Kwai",
     "Multiple": "Multiple"
+  },
+  "aliases": {
+    "Kimi 2.5": "Kimi K2.5",
+    "Qwen 3": "Qwen3"
   }
 }
