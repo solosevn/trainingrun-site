@@ -652,6 +652,7 @@ const DDP_CONFIG = {
     title: '<span class="hl">TRS</span>code — Coding Rankings',
     sub: 'Weighted composite · 5 pillars · 8 verified sources · Independent &amp; transparent',
     file: 'trscode-data.json', totalPillars: 5, sourceCount: 8,
+        minSources: 1,
     methLink: 'trscode-methodology.html',
     pillars: [
       { key:'issue_resolution',  label:'Issue Res.',  icon:'🔧', pct:'30%', compact:false },
@@ -895,7 +896,7 @@ function renderTable(){
       const sc = sparkColor(pts7);
       const sparkSVG = buildSparklineSVG(pts7, sc);
       const covered = getCoverage(m);
-      const coverageBadge = covered > 0
+      const coverageBadge = covered >= 0
         ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>`
         : '';
       const staleRowStyle = isStale ? 'opacity:0.62;' : '';
@@ -933,7 +934,7 @@ function renderTable(){
       <td>${rankHTML}</td>
       <td><div class="m-cell">
         ${logoImg(m.company, 28)}
-        <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company} &middot; Proprietary</div></div>
+        <div><div class="m-name">${m.name}</div><div class="m-lab">${m.company}</div></div>
       </div></td>
       <td>${coverageBadge}<span class="score-val">${score.toFixed(2)}</span><span style="margin-left:9px">${chgHTML}</span>${staleScoreNote}</td>
       ${pillarCells}
@@ -1125,7 +1126,7 @@ function renderLabsTable(){
     else chgHTML = `<span class="chg dn">↓ ${Math.abs(chg).toFixed(2)}</span>`;
 
     const covered = getCoverage(lab.bestModel);
-    const covBadge = covered > 0 ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>` : '';
+    const covBadge = covered >= 0 ? `<span style="font-size:9px;color:rgba(0,229,255,0.45);margin-right:6px;font-weight:400">${covered}/${totalP}</span>` : '';
 
     let rankHTML;
     if(rank===1) rankHTML = `<div class="rank-cell"><span class="medal medal-gold">🥇</span></div>`;
