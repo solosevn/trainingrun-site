@@ -1,8 +1,8 @@
 # The Safety Arena — Full Operational Structure
 
-**Version:** Draft 3 — March 5, 2026  
-**Status:** Working document — David + Claude finalizing  
-**Purpose:** Single source of truth for every agent, process, and cadence that powers TSArena + TrainingRun.AI
+> **Version:** Draft 3 — March 5, 2026
+> **Status:** Working document — David + Claude finalizing
+> **Purpose:** Single source of truth for every agent, process, and cadence that powers TSArena + TrainingRun.AI
 
 ---
 
@@ -11,109 +11,452 @@
 ```
 trainingrun-site/
 ├── context-vault/
-│   ├── org/                              # ← Global / cross-site
-│   │   ├── SOUL.md
-│   │   ├── USER.md
-│   │   ├── HEARTBEAT.md
-│   │   ├── MEMORY.md
+│   ├── org/                                    # ← Global / cross-site
+│   │   ├── SOUL.md                             # Identity, voice, boundaries
+│   │   ├── USER.md                             # David's prefs, CST timezone, Telegram style
+│   │   ├── HEARTBEAT.md                        # Cross-site dashboard (status, reminders, health)
+│   │   ├── MEMORY.md                           # Long-term curated knowledge
 │   │   └── shared-context/
-│   │       ├── THESIS.md
-│   │       ├── SIGNALS.md
-│   │       ├── FEEDBACK-LOG.md
-│   │       ├── PRODUCTION-BIBLE.md
-│   │       ├── PROJECTS.md
-│   │       └── REASONING-CHECKLIST.md
+│   │       ├── THESIS.md                       # What we believe (truth + safety)
+│   │       ├── SIGNALS.md                      # Reference intel
+│   │       ├── FEEDBACK-LOG.md                 # Style corrections
+│   │       ├── PRODUCTION-BIBLE.md             # Production standards
+│   │       ├── PROJECTS.md                     # High-level overview of both sites
+│   │       └── REASONING-CHECKLIST.md          # 🆕 Shared truth engine — all agents reference this
+│   │
 │   ├── agents/
-│   │   ├── trainingrun/
-│   │   │   ├── trs-site-manager/ (SOUL.md)
-│   │   │   ├── content-scout/ (SOUL.md)
-│   │   │   ├── ddp-pipeline/ (SOUL.md)
-│   │   │   └── daily-news/ ✅ BUILT+TESTED
-│   │   │       ├── SOUL.md, CONFIG.md, PROCESS.md
-│   │   │       ├── CADENCE.md, RUN-LOG.md
-│   │   │       ├── LEARNING-LOG.md
-│   │   │       └── STYLE-EVOLUTION.md
-│   │   └── tsarena/ (arena-ops, battle-generator, model-manager, prompt-curator, vote-counter, site-builder)
+│   │   ├── trainingrun/                        # ── TrainingRun.AI agents ──
+│   │   │   ├── trs-site-manager/
+│   │   │   │   └── SOUL.md
+│   │   │   ├── content-scout/
+│   │   │   │   └── SOUL.md
+│   │   │   ├── ddp-pipeline/
+│   │   │   │   └── SOUL.md
+│   │   │   │
+│   │   │   └── daily-news/                     # 📰 DAILY NEWS AGENT ✅ BUILT+TESTED
+│   │   │       ├── SOUL.md                     # Mission: research, write, and stage daily articles
+│   │   │       ├── CONFIG.md                   # arXiv sources, article format, image handling
+│   │   │       ├── PROCESS.md                  # Full publish workflow with human approval gate
+│   │   │       ├── CADENCE.md                  # Daily schedule + Telegram notification triggers
+│   │   │       ├── RUN-LOG.md                  # Log of every article: paper, status, publish date
+│   │   │       ├── LEARNING-LOG.md             # Style learning from David's feedback
+│   │   │       └── STYLE-EVOLUTION.md          # Voice calibration tracking
+│   │   │
+│   │   └── tsarena/                            # ── TS Arena agents ──
+│   │       │
+│   │       ├── arena-ops/                      # 🎯 CHIEF OF OPERATIONS
+│   │       │   ├── SOUL.md                     # Mission: orchestrate all TSArena agents
+│   │       │   ├── HEARTBEAT.md                # Weekly health check across all agents
+│   │       │   ├── CADENCE.md                  # Master schedule (what runs when)
+│   │       │   └── STATUS.md                   # Current state of every system
+│   │       │
+│   │       ├── battle-generator/               # ⚔️ BATTLE GENERATION PIPELINE
+│   │       │   ├── SOUL.md                     # Mission: generate fresh battles weekly
+│   │       │   ├── CONFIG.md                   # API endpoints, rate limits, batch sizes
+│   │       │   ├── API-KEYS.md                 # Key status per provider (DO NOT COMMIT KEYS)
+│   │       │   ├── RUN-LOG.md                  # Log of every generation run
+│   │       │   ├── PAIRING-RULES.md            # How models are matched (random, round-robin, etc.)
+│   │       │   └── scripts/
+│   │       │       └── generate_battles.py     # The actual batch script
+│   │       │
+│   │       ├── model-manager/                  # 🤖 MODEL ROSTER & EXPANSION
+│   │       │   ├── SOUL.md                     # Mission: maintain and grow the model roster
+│   │       │   ├── ROSTER.md                   # Master list of all models (current + target)
+│   │       │   ├── EXPANSION-TRACKER.md        # Models to add, API access status, blockers
+│   │       │   ├── PROVIDER-MAP.md             # Which API/provider serves each model
+│   │       │   └── CHANGELOG.md                # When models were added/removed and why
+│   │       │
+│   │       ├── prompt-curator/                 # 📝 PROMPT POOL MANAGEMENT
+│   │       │   ├── SOUL.md                     # Mission: maintain quality prompt pool
+│   │       │   ├── COVERAGE-MAP.md             # Category balance tracker
+│   │       │   ├── PROMPT-BANK.md              # All prompts with categories and status
+│   │       │   ├── REVIEW-QUEUE.md             # Community submissions (future)
+│   │       │   └── RETIREMENT-LOG.md           # Prompts retired from active pool and why
+│   │       │
+│   │       ├── vote-counter/                   # 🗳️ VOTE MONITORING
+│   │       │   ├── SOUL.md                     # Mission: track votes, alert on milestones
+│   │       │   ├── SKILLS.md                   # Supabase polling, 5-vote logic, Telegram alerts
+│   │       │   └── HEARTBEAT.md                # Voting activity health
+│   │       │
+│   │       └── site-builder/                   # 🏗️ FRONTEND & PAGES
+│   │           ├── SOUL.md                     # Mission: maintain and build site pages
+│   │           ├── PAGES.md                    # Every page on tsarena.ai + status
+│   │           ├── BACKLOG.md                  # Features and pages to build
+│   │           └── DESIGN-SYSTEM.md            # Colors, fonts, components, CSS vars
+│   │
 │   └── memory/
-├── content_scout/ 🔍 v1.2.0 ✅ LIVE
-│   ├── scout.py (15 scrapers, 4-layer Truth Filter)
-│   ├── patch_mission_control.py
-│   └── scout_brain.md
-├── daily_news_agent/ 📰 v1.0 ✅ BUILT+TESTED
-│   ├── main.py (orchestrator + Telegram bot)
-│   ├── config.py, context_loader.py
-│   ├── story_selector.py (grok-3-mini)
-│   ├── article_writer.py (grok-3)
-│   ├── html_stager.py, github_publisher.py
-│   ├── telegram_handler.py, learning_logger.py
-│   ├── requirements.txt, .env.example
-│   └── com.trainingrun.daily-news.plist
-├── web_agent/, scripts/
-└── (HTML files, assets, tsarena/)
+│       ├── 2026-03-02.md                       # Daily logs with ## TrainingRun.AI and ## TS Arena
+│       ├── ...
+│       └── curated/                            # Summarized weekly/monthly takeaways
+│
+├── content_scout/                              # 🔍 CONTENT SCOUT v1.2.0 ✅ LIVE
+│   ├── scout.py                                # 15 scrapers, 4-layer Truth Filter (2084 lines)
+│   ├── patch_mission_control.py                # Patches mission-control.html with scout data
+│   └── scout_brain.md                          # Scout operational instructions
+│
+├── daily_news_agent/                           # 📰 DAILY NEWS AGENT v1.0 ✅ BUILT+TESTED
+│   ├── main.py                                 # Orchestrator + Telegram bot (@TRnewzBot)
+│   ├── config.py                               # All settings, paths, API config
+│   ├── context_loader.py                       # Reads vault files (SOUL.md, USER.md, etc.)
+│   ├── story_selector.py                       # Grok-3-mini selects best story from briefing
+│   ├── article_writer.py                       # Grok-3 writes article in David's voice
+│   ├── html_stager.py                          # Generates day-NNN.html from template
+│   ├── github_publisher.py                     # Publishes via GitHub REST API
+│   ├── telegram_handler.py                     # Sends drafts, receives approval commands
+│   ├── learning_logger.py                      # Logs runs + learns from feedback
+│   ├── requirements.txt                        # Python dependencies
+│   ├── .env.example                            # Template for credentials
+│   └── com.trainingrun.daily-news.plist        # macOS launchd service definition
+│
+├── ... (existing trainingrun files)
+│
+└── tsarena/                                    # ← The live site repo (GitHub Pages)
+    ├── index.html                              # Landing page
+    ├── vote.html                               # Arena voting page
+    ├── leaderboard.html                        # Leaderboard
+    ├── prompts.html                            # Our Prompts (transparency)
+    ├── models.html                             # ✅ Our Models (transparency) — LIVE
+    ├── charter.html                            # Charter page
+    ├── mission-control.html                    # Internal dashboard
+    ├── models.json                             # Model-to-company mapping
+    └── assets/
+        ├── logos/                              # Lab logos
+        ├── news/                               # Article images (e.g. GxyPU.jpg)
+        └── signature.png                       # David's signature for articles
 ```
 
 ---
 
-## Agent Status Summary
+## Agent Definitions
 
-| # | Agent | Status | Model |
-|---|-------|--------|-------|
-| 1 | Arena Ops | Planned | - |
-| 2 | Battle Generator | Planned | - |
-| 3 | Model Manager | Planned | - |
-| 4 | Prompt Curator | Planned | - |
-| 5 | Vote Counter | ✅ Live | Supabase |
-| 6 | Site Builder | ✅ Live | - |
-| 7 | Content Scout | ✅ Live v1.2.0 | llama3.1:8b + xAI Grok |
-| 8 | Daily News Agent | ✅ Built+Tested | xAI Grok-3 + Grok-3-mini |
+### 1. Arena Ops — Chief of Operations
+| Field | Detail |
+|---|---|
+| **Role** | Orchestrator — makes sure every other TSArena agent runs on schedule |
+| **Cadence** | Continuous / always-on awareness |
+| **Owns** | Master schedule, cross-agent health checks, status reporting |
+| **Key files** | CADENCE.md, STATUS.md, HEARTBEAT.md |
+
+**What CADENCE.md tracks:**
+- Weekly battle generation (every Sunday night)
+- Model roster review (bi-weekly)
+- Prompt pool audit (monthly)
+- Leaderboard health check (daily)
+- Vote activity monitoring (real-time)
 
 ---
 
-## 8. Daily News Agent — The Journalist ✅ BUILT+TESTED
+### 2. Battle Generator — The Engine
+| Field | Detail |
+|---|---|
+| **Role** | Generate fresh AI-vs-AI battles by calling real model APIs |
+| **Cadence** | Weekly (minimum) — target: every Sunday |
+| **Owns** | Battle generation script, API configs, run logs |
+| **Key files** | generate_battles.py, CONFIG.md, RUN-LOG.md |
 
-**Telegram:** @TRnewzBot
-**Commands:** "push it" / "edit: [notes]" / "kill it" / "status"
+**How it works:**
+1. Pull active prompts from Supabase `prompts` table
+2. Pull active models from Supabase `models` table
+3. Generate random pairings (avoid duplicates already in `battles`)
+4. For each pairing: send prompt to Model A's API → collect response
+5. Send same prompt to Model B's API → collect response
+6. Insert complete battle row into Supabase `battles` table
+7. Log the run in RUN-LOG.md (date, battles generated, errors, cost)
 
-Workflow:
+**Current state:**
+- ❌ Script does not exist yet — battles were bulk-loaded manually
+- ❌ No automated schedule
+- 🎯 **Priority: BUILD THIS FIRST**
+
+**Target output per run:** 100-200 new battles/week
+
+---
+
+### 3. Model Manager — The Roster
+| Field | Detail |
+|---|---|
+| **Role** | Maintain, expand, and track every AI model in the arena |
+| **Cadence** | Bi-weekly review, ad-hoc when new models launch |
+| **Owns** | Model roster, API access tracking, provider mapping |
+| **Key files** | ROSTER.md, EXPANSION-TRACKER.md, PROVIDER-MAP.md |
+
+**Current state:**
+- 50 models in database
+- 38 actively in battles (12 have zero battles)
+- ❌ No tracking of which API keys we have
+- ❌ No expansion pipeline
+- 🎯 **Target: 100+ models**
+
+**Models known to be missing (partial list):**
+- Grok 4.20 (xAI)
+- Gemma 3 (Google)
+- Jamba 2 (AI21)
+- Yi Lightning (01.AI)
+- Reka Core / Flash (Reka)
+- Inflection Pi (Inflection)
+- Additional Cohere models
+- Additional open-source (via Together, Fireworks, Replicate)
+
+**PROVIDER-MAP.md will track:**
+| Model | Provider | API Type | Key Status | Cost Tier |
+|---|---|---|---|---|
+| GPT-5 | OpenAI | Direct | ✅ Active | $$ |
+| Claude Opus 4.6 | Anthropic | Direct | ✅ Active | $$ |
+| Llama 4 Scout | Together AI | Inference | ✅ Active | $ |
+| Grok 4.20 | xAI | Direct | ❌ Need key | $$ |
+| ... | ... | ... | ... | ... |
+
+---
+
+### 4. Prompt Curator — The Quality Gate
+| Field | Detail |
+|---|---|
+| **Role** | Maintain prompt quality, balance categories, manage lifecycle |
+| **Cadence** | Monthly audit, ad-hoc when new prompts are written |
+| **Owns** | Prompt pool, category coverage, retirement decisions |
+| **Key files** | COVERAGE-MAP.md, PROMPT-BANK.md |
+
+**Current state:**
+- 125 prompts across 12 categories
+- 123 of 125 are used in battles (2 unused)
+- Each prompt used ~4 times on average across different matchups
+- ⚠️ Some categories are thin: child-safety (3), self-harm (3), hate-speech (5)
+
+**Category coverage (current → target):**
+| Category | Current | Target | Gap |
+|---|---|---|---|
+| Jailbreak | 18 | 25 | +7 |
+| Balanced Judgment | 15 | 20 | +5 |
+| Truthfulness | 15 | 20 | +5 |
+| Professional Refusal | 15 | 20 | +5 |
+| Medical Misinfo | 11 | 20 | +9 |
+| Harm Refusal | 10 | 20 | +10 |
+| Privacy | 10 | 15 | +5 |
+| Manipulation | 10 | 15 | +5 |
+| Financial Fraud | 10 | 15 | +5 |
+| Hate Speech | 5 | 15 | +10 |
+| Self-Harm | 3 | 10 | +7 |
+| Child Safety | 3 | 10 | +7 |
+| **TOTAL** | **125** | **205** | **+80** |
+
+---
+
+### 5. Vote Counter — The Pulse
+| Field | Detail |
+|---|---|
+| **Role** | Monitor voting activity, alert on milestones, flag anomalies |
+| **Cadence** | Real-time / continuous |
+| **Owns** | Vote tracking, Telegram alerts, mission-control updates |
+| **Key files** | SKILLS.md, HEARTBEAT.md |
+
+**Current state:**
+- ✅ Exists and functional
+- Monitors vote counts
+- Updates mission-control.html
+- Sends Telegram alerts on milestones
+
+---
+
+### 6. Site Builder — The Storefront
+| Field | Detail |
+|---|---|
+| **Role** | Build and maintain all TSArena web pages |
+| **Cadence** | As needed / sprint-based |
+| **Owns** | All HTML pages, design system, feature backlog |
+| **Key files** | PAGES.md, BACKLOG.md, DESIGN-SYSTEM.md |
+
+**Page inventory:**
+| Page | Status | Notes |
+|---|---|---|
+| index.html | ✅ Live | Landing page |
+| vote.html | ✅ Live | Arena voting — reveal card recently fixed |
+| leaderboard.html | ✅ Live | Sticky header, Vote Record, score colors |
+| prompts.html | ✅ Live | Prompt transparency page |
+| charter.html | ✅ Live | Charter page |
+| mission-control.html | ✅ Live | Internal dashboard |
+| models.html | ✅ Live | Public model roster — launched March 2026 |
+
+---
+
+### 7. Daily News Agent — The Journalist ✅ BUILT+TESTED
+| Field | Detail |
+|---|---|
+| **Role** | Research AI papers daily, write article, stage for David's approval, publish on approval |
+| **Cadence** | Daily — runs automatically, notifies David via Telegram when ready |
+| **Owns** | Article drafts, paper sourcing, image staging, publish workflow |
+| **Key files** | SOUL.md, CONFIG.md, PROCESS.md, CADENCE.md, RUN-LOG.md |
+| **Site** | TrainingRun.AI (`/day-NNN.html` + `news.html`) |
+| **Telegram** | @TRnewzBot |
+| **Commands** | "push it" / "edit: [notes]" / "kill it" / "status" |
+| **Models** | Grok-3 (writing) + Grok-3-mini (story selection) |
+
+**How it works:**
 1. Reads scout-briefing.json from Content Scout
-2. Grok-3-mini selects best story (5-filter test + vault personality)
+2. Grok-3-mini selects best story (5-filter test + vault personality match)
 3. Grok-3 writes article in David's voice (SOUL.md, USER.md, STYLE-EVOLUTION.md)
 4. Stages as day-NNN.html
 5. Sends draft to David via Telegram
-6. David approves -> publishes to GitHub + updates news.html
+6. David approves → publishes to GitHub + updates news.html
 7. Logs to RUN-LOG.md and LEARNING-LOG.md
 
-**Human approval gate:** NEVER publishes without David's "push it"
+**Human approval gate:** Article is NEVER published without David's explicit sign-off. Agent stops at step 5 and waits.
 
-## 7. Content Scout — Intelligence Gatherer ✅ LIVE v1.2.0
+**Current state:**
+- ✅ Manual process established and working (Papers 001–007 published)
+- ✅ DAILY_NEWS_PROCESS V1.0 documented
+- ✅ Image upload workflow resolved (GitHub drag-drop)
+- ✅ Execution layer built — all 12 files in `daily_news_agent/` (#127 COMPLETE)
+- ✅ All connection tests passing (Telegram, Grok API, GitHub API, Context Vault)
+- 🎯 **Next: First live run, then load as launchd service**
 
-15 scrapers | 4-layer Truth Filter | Scrapes 7AM-11PM every 30min
-Morning brief at 5:30 AM | Feeds Daily News Agent
+**Execution files (in `daily_news_agent/`):**
+- `main.py` — orchestrator + Telegram bot
+- `config.py` — settings + API config
+- `context_loader.py` — reads vault personality files
+- `story_selector.py` — Grok-3-mini story selection
+- `article_writer.py` — Grok-3 article writing
+- `html_stager.py` — HTML generation from template
+- `github_publisher.py` — GitHub REST API publishing
+- `telegram_handler.py` — Telegram approval gate
+- `learning_logger.py` — run logging + style learning
+- `requirements.txt`, `.env.example`, `com.trainingrun.daily-news.plist`
+
+**Key files on trainingrun-site:**
+- `day-template.html` — master article template
+- `news.html` — article index page
+- `assets/news/` — article images
+- `assets/signature.png` — David's signature
+
+---
+
+### 8. Content Scout — Intelligence Gatherer ✅ LIVE v1.2.0
+| Field | Detail |
+|---|---|
+| **Role** | Scrape AI news sources, verify with Truth Filter, produce daily briefing for Daily News Agent |
+| **Cadence** | Every 30 minutes, 7AM–11PM CST |
+| **Owns** | News scraping, truth verification, scout-briefing.json, mission-control patches |
+| **Key files** | scout.py, patch_mission_control.py, scout_brain.md |
+| **Models** | llama3.1:8b (local Ollama) + xAI Grok (verification) |
+| **Telegram** | @TrainingRunBot |
+
+**How it works:**
+1. 15 scrapers pull from AI news sources every 30 minutes
+2. 4-layer Truth Filter verifies each story (cross-reference, source quality, recency, Grok verification)
+3. Produces `scout-briefing.json` — the daily intelligence file
+4. Daily News Agent reads this briefing to select stories
+5. Patches mission-control.html with latest scout data
+6. Morning brief at 5:30 AM CST
+
+**Current state:**
+- ✅ Running as launchd service (`com.trainingrun.scout`)
+- ✅ 15 scrapers operational
+- ✅ 4-layer Truth Filter active
+- ✅ Feeding Daily News Agent pipeline
+- ✅ scout.py committed to GitHub (2084 lines)
+
+---
+
+## Operational Cadences
+
+| Cadence | What | Owner | Day/Time |
+|---|---|---|---|
+| **Real-time** | Vote monitoring + Telegram alerts | Vote Counter | Always on |
+| **Every 30 min** | AI news scraping + truth verification | Content Scout | 7AM–11PM CST |
+| **Daily** | Leaderboard health check (scores updating?) | Arena Ops | Morning |
+| **Daily** | Select story → write article → Telegram David for review | Daily News Agent | Morning (CST) |
+| **Daily 5:30 AM** | Morning intelligence brief | Content Scout | 5:30 AM CST |
+| **Weekly** | Generate 100-200 new battles via API calls | Battle Generator | Sunday night |
+| **Weekly** | Review battle generation logs, flag errors | Arena Ops | Monday morning |
+| **Bi-weekly** | Model roster review — new models to add? | Model Manager | 1st & 15th |
+| **Monthly** | Prompt category audit — gaps? retirements? | Prompt Curator | 1st of month |
+| **Monthly** | Full system health report | Arena Ops | 1st of month |
+| **Quarterly** | Expansion targets — model count, prompt count | Arena Ops + All | Quarter start |
+
+---
+
+## Database Schema (Supabase)
+
+### `models` table
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | Primary key |
+| name | text | Display name (e.g., "GPT-5") |
+| lab | text | Company name (e.g., "OpenAI") |
+| created_at | timestamp | When added |
+
+### `prompts` table
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | Primary key |
+| text | text | The prompt scenario |
+| category | text | Safety category |
+| is_active | boolean | In active pool or retired |
+| moderation_status | text | Review status |
+| source | text | Who wrote it |
+| tags | text | Additional tags |
+| used_count | integer | Times used in battles |
+| created_at | timestamp | When added |
+
+### `battles` table
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | Primary key |
+| battle_number | integer | Sequential ID |
+| prompt_id | uuid | FK → prompts |
+| model_a_id | uuid | FK → models |
+| model_b_id | uuid | FK → models |
+| model_a_response | text | **Pre-generated** response from Model A |
+| model_b_response | text | **Pre-generated** response from Model B |
+| votes_a | integer | Votes for A |
+| votes_b | integer | Votes for B |
+| votes_tie | integer | Tie votes |
+| total_votes | integer | Sum of all votes |
+| is_public | boolean | Visible to voters |
+| created_at | timestamp | When battle was generated |
+
+---
+
+## Current Numbers (as of March 5, 2026)
+
+| Metric | Count | Target |
+|---|---|---|
+| Models in database | 50 | 100+ |
+| Models with battles | 38 | All models |
+| Prompts | 125 | 205+ |
+| Prompt categories | 12 | 12+ (expand as needed) |
+| Total battles | 500 | 1,000+ (growing weekly) |
+| Unique model pairings used | 332 | 500+ |
+| Possible pairings (38 models) | 703 | — |
+| Battles per prompt (avg) | 4.1 | 8-10 |
+| Max battles per prompt | 9 | — |
+| Null responses | 0 | 0 (always) |
+| Daily news articles published | 7 | Daily cadence |
 
 ---
 
 ## Priority Build Order
 
-| # | Item | Status |
-|---|------|--------|
-| 4 | Build Daily News Agent | ✅ COMPLETE #127 |
-| 6 | Build models.html | ✅ DONE |
-| 10 | REASONING-CHECKLIST.md | ✅ DONE |
-| 1 | Battle generation pipeline | ❌ Not started |
-| 2 | Weekly battle schedule | ❌ Not started |
-| 3 | API key audit | ❌ Not started |
-| 5 | Add 12 missing models | ❌ Not started |
-| 7-9 | Model/prompt expansion | ❌ Not started |
+| # | Item | Agent | Effort | Impact |
+|---|---|---|---|---|
+| 1 | Build `generate_battles.py` pipeline | Battle Generator | High | 🔴 Critical |
+| 2 | Set up weekly cron/schedule for battle generation | Battle Generator + Arena Ops | Medium | 🔴 Critical |
+| 3 | Audit and document all API keys/access | Model Manager | Medium | 🔴 Critical |
+| 4 | ~~Build Daily News Agent (Telegram approval gate)~~ ✅ COMPLETE — #127 | Daily News Agent | — | ✅ Complete |
+| 5 | Add missing 12 models to battles (they exist but have 0) | Battle Generator | Low | 🟡 High |
+| 6 | ~~Build `models.html` transparency page~~ ✅ DONE | Site Builder | — | ✅ Complete |
+| 7 | Expand model roster toward 100 | Model Manager | High (ongoing) | 🟡 High |
+| 8 | Write 80 new prompts to fill category gaps | Prompt Curator | High (ongoing) | 🟡 High |
+| 9 | Document CADENCE.md with all schedules | Arena Ops | Low | 🟢 Medium |
+| 10 | Add REASONING-CHECKLIST.md to all agent SOUL.md files | All Agents | Low | 🟢 Medium |
+| 11 | Community prompt submission system (roadmap) | Prompt Curator + Site Builder | High | 🟦 Future |
+| 12 | Public prompt retirement/audit page (roadmap) | Prompt Curator + Site Builder | Medium | 🟦 Future |
 
 ---
 
-## Credentials Map
+## Philosophy (to be added to site)
 
-| Service | Used By | Location |
-|---------|---------|----------|
-| xAI API (Grok) | Scout, Daily News | plist env, .env |
-| Telegram @TrainingRunBot | Scout, Sitekeeper | plist env |
-| Telegram @TRnewzBot | Daily News Agent | .env |
-| GitHub PAT (fine-grained) | Daily News Agent | .env |
-| Ollama (local) | Scout | local, no key |
-| Supabase | TS Arena | web_agent configs |
+> **The Safety Arena operates on a principle of structured transparency.** Our prompts are curated, our battles are generated from real AI model responses, and our model roster is public. We refresh our battle pool weekly to ensure the leaderboard reflects current model performance — not a one-time snapshot. Every model faces the same challenge pool under the same conditions. This is how you build safety data you can trust.
+
+---
+
+*This document is the working blueprint. Every agent, every process, every cadence lives here until each piece has its own dedicated file in the vault.*
