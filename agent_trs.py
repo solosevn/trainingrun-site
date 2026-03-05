@@ -1180,7 +1180,7 @@ def git_push(commit_msg: str) -> bool:
             return False
         # Stash any dirty files so rebase can proceed
         subprocess.run(["git", "stash", "--include-untracked"], cwd=REPO_PATH, capture_output=True)
-        pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"],
+        pull = subprocess.run(["git", "pull", "--rebase", "-X", "theirs", "origin", "main"],
                               cwd=REPO_PATH, capture_output=True, text=True)
         if pull.returncode != 0:
             log.warning(f"pull --rebase failed: {pull.stderr}")
