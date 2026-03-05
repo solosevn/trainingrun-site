@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding Agents Just Got More Trustworthy — TrainingRun.AI Daily</title>
+<meta name="description" content="A new semi-formal reasoning method from Meta boosts AI coding agent accuracy from 78% to 93%—without ever running the code.">
+<style>
+:root {
+  --cyan: #00d4ff;
+  --cyan-dark: #0099cc;
+  --cyan-glow: rgba(0, 212, 255, 0.5);
+  --purple: #8a2be2;
+  --amber: #f59e0b;
+  --bg-dark: #0a0a1a;
+  --bg-darker: #050510;
+  --bg-card: rgba(20, 20, 40, 0.85);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+  --text-muted: #606070;
+  --border-subtle: rgba(0, 212, 255, 0.15);
+  --border-accent: rgba(0, 212, 255, 0.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg-darker); color: var(--text-primary); line-height: 1.7; min-height: 100vh; }
+.cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+/* SITE HEADER */
+.site-header { background: rgba(5, 5, 16, 0.97); border-bottom: 1px solid var(--border-subtle); padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+.site-header .brand { display: flex; flex-direction: column; }
+.site-header .brand-name { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: 800; color: var(--cyan); letter-spacing: 0.05em; text-decoration: none; text-transform: uppercase; }
+.site-header .brand-sub { font-family: 'Arial', sans-serif; font-size: 9px; font-weight: 600; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; }
+.site-header nav { display: flex; align-items: center; gap: 20px; }
+.site-header nav a { font-family: 'Arial', sans-serif; font-size: 13px; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.site-header nav a:hover { color: var(--cyan); }
+.btn-news { font-family: 'Arial', sans-serif; font-size: 13px; font-weight: 600; background: rgba(0, 212, 255, 0.12); border: 1px solid var(--border-accent); color: var(--cyan); padding: 6px 14px; border-radius: 6px; text-decoration: none; transition: background 0.2s, box-shadow 0.2s; }
+.btn-news:hover { background: rgba(0, 212, 255, 0.22); box-shadow: 0 0 12px rgba(0,212,255,0.25); }
+/* NEWSPAPER MASTHEAD */
+.masthead { background: linear-gradient(180deg, #060614 0%, #0a0a1a 100%); border-bottom: 2px solid var(--cyan); padding: 32px 0 24px; text-align: center; }
+.masthead-inner { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.masthead-label { font-family: 'Arial', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.3em; color: var(--amber); text-transform: uppercase; margin-bottom: 10px; }
+.masthead-logo { font-family: 'Arial', sans-serif; font-size: 36px; font-weight: 900; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1; text-shadow: 0 0 30px rgba(0,212,255,0.4); }
+.masthead-logo span { color: #ffffff; }
+.masthead-tagline { font-family: 'Arial', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.25em; color: var(--amber); text-transform: uppercase; margin-top: 6px; }
+.masthead-rule { display: flex; align-items: center; gap: 16px; margin: 20px 0 0; }
+.masthead-rule hr { flex: 1; border: none; border-top: 1px solid rgba(0,212,255,0.25); }
+.masthead-dateline { font-family: 'Arial', sans-serif; font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; white-space: nowrap; }
+/* ARTICLE WRAPPER */
+.article-wrap { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+/* ARTICLE HEADER */
+.article-kicker { font-family: 'Arial', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: var(--cyan); text-transform: uppercase; margin-bottom: 14px; }
+.article-headline { font-family: 'Arial', sans-serif; font-size: clamp(26px, 4vw, 42px); font-weight: 900; line-height: 1.15; color: var(--text-primary); margin-bottom: 18px; }
+.article-headline em { font-style: normal; color: var(--cyan); }
+.article-deck { font-size: 19px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; font-style: italic; border-left: 3px solid var(--cyan); padding-left: 18px; }
+.article-meta { display: flex; align-items: center; gap: 20px; padding: 16px 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); margin-bottom: 40px; flex-wrap: wrap; }
+.article-byline { font-family: 'Arial', sans-serif; font-size: 13px; font-weight: 700; color: var(--cyan); }
+.article-date { font-family: 'Arial', sans-serif; font-size: 12px; color: var(--text-muted); }
+.article-tag { font-family: 'Arial', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 4px; padding: 3px 8px; }
+/* ARTICLE BODY */
+.article-body p { font-size: 17px; line-height: 1.85; color: #d8d8e8; margin-bottom: 24px; }
+.article-body h2 { font-family: 'Arial', sans-serif; font-size: 22px; font-weight: 800; color: var(--text-primary); margin: 48px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+.article-body h2::before { content: ''; position: absolute; bottom: -1px; left: 0; width: 48px; height: 2px; background: var(--cyan); }
+.callout { background: var(--bg-card); border: 1px solid var(--border-accent); border-left: 4px solid var(--cyan); border-radius: 8px; padding: 20px 24px; margin: 32px 0; }
+.callout p { margin-bottom: 0 !important; font-size: 16px !important; color: var(--text-primary) !important; }
+.callout strong { color: var(--cyan); }
+.highlight-box { background: rgba(245, 158, 11, 0.07); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid var(--amber); border-radius: 8px; padding: 20px 24px; margin: 32px 0; }
+.highlight-box p { margin-bottom: 0 !important; font-size: 16px !important; color: #f0e0b0 !important; }
+.stats-row { display: flex; gap: 16px; margin: 32px 0; flex-wrap: wrap; }
+.stat-card { flex: 1; min-width: 140px; background: var(--bg-card); border: 1px solid var(--border-accent); border-radius: 10px; padding: 18px 20px; text-align: center; }
+.stat-value { font-family: 'Arial', sans-serif; font-size: 32px; font-weight: 900; color: var(--cyan); line-height: 1; text-shadow: 0 0 20px rgba(0,212,255,0.4); display: block; }
+.stat-label { font-family: 'Arial', sans-serif; font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.4; display: block; }
+.article-figure { margin: 40px 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden; }
+.figure-img-wrap { background: #1a1a2e; padding: 24px; display: flex; justify-content: center; }
+.figure-img-wrap img { max-width: 100%; border-radius: 6px; }
+.figure-caption { padding: 14px 20px; border-top: 1px solid var(--border-subtle); font-family: 'Arial', sans-serif; font-size: 12px; color: var(--text-muted); font-style: italic; }
+.figure-caption strong { color: var(--cyan); font-style: normal; }
+.pull-quote { margin: 40px 0; padding: 0 32px; text-align: center; position: relative; }
+.pull-quote::before { content: '\201C'; font-size: 80px; color: var(--cyan); opacity: 0.3; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-family: Georgia, serif; line-height: 1; }
+.pull-quote p { font-size: 22px !important; font-style: italic; color: var(--text-primary) !important; line-height: 1.5 !important; margin-bottom: 0 !important; position: relative; z-index: 1; }
+.pull-quote cite { display: block; font-family: 'Arial', sans-serif; font-size: 12px; color: var(--cyan); margin-top: 10px; font-style: normal; letter-spacing: 0.1em; }
+.article-cta { background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(138,43,226,0.06)); border: 1px solid var(--border-accent); border-radius: 12px; padding: 32px; margin: 48px 0 0; text-align: center; }
+.article-cta p { color: var(--text-secondary) !important; font-size: 15px !important; margin-bottom: 12px !important; }
+.cta-link { font-family: 'Arial', sans-serif; display: inline-block; background: var(--cyan); color: #000; font-weight: 700; font-size: 14px; padding: 10px 24px; border-radius: 6px; text-decoration: none; transition: box-shadow 0.2s; }
+.cta-link:hover { box-shadow: 0 0 20px rgba(0,212,255,0.5); }
+.credits { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border-subtle); }
+.credits h3 { font-family: 'Arial', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.credits p { font-family: 'Arial', sans-serif; font-size: 12px !important; line-height: 1.7 !important; color: var(--text-muted) !important; margin-bottom: 10px !important; }
+.credits a { color: var(--cyan); }
+.day-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-top: 1px solid var(--border-subtle); margin-top: 60px; }
+.day-nav a { font-family: 'Arial', sans-serif; font-size: 13px; color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+.day-nav a:hover { color: var(--cyan); }
+.day-badge { font-family: 'Arial', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.site-footer { background: #060614; border-top: 1px solid var(--border-subtle); padding: 24px 32px; text-align: center; font-family: 'Arial', sans-serif; font-size: 12px; color: var(--text-muted); }
+.site-footer a { color: var(--cyan); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <a href="https://trainingrun.ai" class="brand" style="text-decoration:none;">
+    <div class="brand-name">Training <span style="color:#fff;">Run</span></div>
+    <div class="brand-sub">Your Weekly AI Conditioning</div>
+  </a>
+  <nav>
+    <a href="https://trainingrun.ai">Leaderboard</a>
+    <a href="https://trainingrun.ai/news.html" class="btn-news">🗞️ Daily News</a>
+    <a href="https://trainingrun.ai#episode" style="background:rgba(138,43,226,0.15);border:1px solid rgba(138,43,226,0.4);color:#c084fc;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;">▶ Watch Latest Episode</a>
+  </nav>
+</header>
+
+<!-- NEWSPAPER MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-label">Daily Intelligence Briefing</div>
+    <div class="masthead-logo">Training<span>Run</span>.AI</div>
+    <div class="masthead-rule">
+      <hr>
+      <span class="masthead-dateline">MARCH 5, 2026 &nbsp;·&nbsp; PAPER 007</span>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE -->
+<main class="article-wrap">
+  <div class="article-kicker">RESEARCH WATCH</div>
+
+  <h1 class="article-headline">
+    Coding Agents Just Got Much More <span class="cyan">Trustworthy</span>
+  </h1>
+
+  <p class="article-deck">
+    A new semi-formal reasoning method from Meta pushes patch-equivalence accuracy from 78% to 93%—without ever executing a line of code.
+  </p>
+
+  <div class="article-meta">
+    <span class="article-byline">By TrainingRun.AI</span>
+    <span class="article-date">March 5, 2026</span>
+    <span class="article-tag">🧠 Agents</span>
+    <span class="article-tag">🔬 Research</span>
+    <span class="article-tag">🔒 Safety</span>
+  </div>
+
+  <div class="article-body">
+
+    <p>You've felt this frustration. You ask an AI coding agent to fix a bug, it sounds confident, you deploy — and something breaks in a way you never expected. Or worse: the agent's "fix" quietly changes behavior elsewhere in your project. A new paper from Meta just made that problem significantly harder to ignore, and gave us a practical solution.</p>
+
+    <div class="callout">
+      <p><strong>KEY FINDING:</strong> Semi-formal reasoning raises patch-equivalence accuracy from <strong>78% → 93%</strong> on real agent-generated patches — with no code execution required and no new model needed.</p>
+    </div>
+
+    <p>The paper, <em>Agentic Code Reasoning</em> (arXiv: 2603.01896), introduces a structured checklist approach that forces any LLM agent to reason about code the way a careful engineer would: list every assumption as a formal premise, trace execution paths line by line, make a claim with explicit evidence, and issue a clear yes/no conclusion — or admit uncertainty rather than guess.</p>
+
+    <figure class="article-figure">
+      <div class="figure-img-wrap">
+        <img src="assets/news/GxyPU.jpg" alt="Normal AI Guess vs Semi-Formal Checklist: 78% correct vs 93% correct">
+      </div>
+      <div class="figure-caption"><strong>Figure 1:</strong> The paper's core result — semi-formal reasoning outperforms standard chain-of-thought guessing by 15 percentage points on real-world agent-generated patches.</div>
+    </figure>
+
+    <p>The contrast with standard chain-of-thought is stark. Normal LLM reasoning produces vague, confidence-sounding answers that frequently hide bugs. The semi-formal approach produces a verifiable "certificate" — a step-by-step trace you can actually read and check. When the agent can't be certain, it says so instead of hallucinating a wrong answer.</p>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-value">93%</span>
+        <span class="stat-label">Patch equivalence on agent-generated code</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">87%</span>
+        <span class="stat-label">Code question answering accuracy</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">+12pp</span>
+        <span class="stat-label">Fault localization improvement</span>
+      </div>
+    </div>
+
+    <p>What makes this immediately practical: no new model is required. The paper includes the exact prompt templates in the appendix. Drop them into Claude, GPT, any open-weight model, or a local agent like OpenHands — and the method works today. The improvement comes entirely from how the agent is asked to reason, not from any architectural change.</p>
+
+    <div class="highlight-box">
+      <p>For practitioners building on AI-generated code, this is the most actionable safety improvement of the quarter. The "show your work" approach means you can audit the agent's reasoning before shipping — turning a black-box guess into a transparent, checkable argument.</p>
+    </div>
+
+    <blockquote class="pull-quote">
+      <p>"Instead of vague chain-of-thought guessing, the agent must list premises, trace execution, and commit to a verifiable conclusion — or admit it can't tell."</p>
+      <cite>— Ugare &amp; Chandra, Meta, 2026</cite>
+    </blockquote>
+
+    <p>The one honest limitation: semi-formal reasoning adds tokens and latency. On long, complex codebases, the trace can get expensive. The authors acknowledge this is a current constraint. But for code review, patch validation, and fault localization — where correctness matters more than speed — the tradeoff is clearly worth it.</p>
+
+    <p>At TrainingRun.AI we're already testing this method with our agent fleet and will publish results under the Task Completion and Tool Reliability pillars of the TRAgents leaderboard next week. If you want to try it yourself, the prompt templates are in the paper appendix at the link below.</p>
+
+    <!-- BOTTOM CTA -->
+    <div class="article-cta">
+      <p>Read the original paper: <em>Agentic Code Reasoning</em></p>
+      <a class="cta-link" href="https://arxiv.org/abs/2603.01896" target="_blank">Read the Full Paper →</a>
+      <p style="margin-top:16px!important;">What do you think? <a href="https://x.com/aitrainingrun" style="color:var(--cyan);">Drop a reply on X.</a> We read every one.</p>
+      <p style="margin-top:4px!important;">— <em>The TrainingRun.AI Team</em></p>
+    </div>
+
+    <!-- BYLINE -->
+    <div style="margin-top:40px;padding-top:28px;border-top:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div>
+        <img src="assets/signature.png" alt="David Solomon signature" style="height:60px;width:auto;display:block;margin-bottom:6px;opacity:0.92;">
+        <div style="font-size:14px;font-weight:600;color:var(--text-primary);">David Solomon</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;"><a href="mailto:david@trainingrun.ai" style="color:var(--text-secondary);text-decoration:none;">david@trainingrun.ai</a></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="window.print()" style="cursor:pointer;padding:9px 18px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);border-radius:8px;color:var(--cyan);font-size:13px;font-weight:600;letter-spacing:0.02em;">⬇ Export PDF</button>
+        <button onclick="window.location.href='mailto:?subject=TrainingRun%20Daily%20-%20Paper%20007&body=Check%20out%20this%20article%3A%20trainingrun.ai%2Fday-007.html'" style="cursor:pointer;padding:9px 18px;background:rgba(255,255,255,0.04);border:1px solid var(--border-subtle);border-radius:8px;color:var(--text-secondary);font-size:13px;font-weight:600;letter-spacing:0.02em;">✉ Email this</button>
+      </div>
+    </div>
+
+  </div><!-- /article-body -->
+
+  <!-- DAY NAVIGATION -->
+  <div class="day-nav">
+    <a href="day-006.html">← Day 006</a>
+    <span class="day-badge">Paper 007</span>
+    <a href="news.html">All Articles →</a>
+  </div>
+
+  <!-- CREDITS -->
+  <div class="credits">
+    <h3>Credits &amp; Original Research</h3>
+    <p>This article explains and discusses the breakthrough presented in: <strong>Agentic Code Reasoning</strong> (Ugare &amp; Chandra, arXiv, 2026)</p>
+    <p><strong>Authors:</strong> Shubham Ugare, Satish Chandra</p>
+    <p><strong>Institutions:</strong> Meta, USA</p>
+    <p>All technical innovation, figures, and performance results belong entirely to the original research team. TrainingRun.AI is translating the implications for the broader AI agent community. Full paper → <a href="https://arxiv.org/abs/2603.01896" target="_blank">arxiv.org/abs/2603.01896</a></p>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  © 2026 TrainingRun.AI &nbsp;·&nbsp; <a href="https://trainingrun.ai">Leaderboard</a> &nbsp;·&nbsp; <a href="news.html">Daily News</a> &nbsp;·&nbsp; Independent AI Research
+</footer>
+
+</body>
+</html>
