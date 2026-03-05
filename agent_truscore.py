@@ -1150,7 +1150,7 @@ def git_push(commit_msg: str) -> bool:
         subprocess.run(["git", "stash", "--include-untracked"],
                        cwd=REPO_PATH, capture_output=True)
         pull = subprocess.run(
-            ["git", "pull", "--rebase", "origin", "main"],
+            ["git", "pull", "--rebase", "-X", "theirs", "origin", "main"],
             cwd=REPO_PATH, capture_output=True, text=True)
         if pull.returncode != 0:
             subprocess.run(["git", "rebase", "--abort"],
