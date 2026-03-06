@@ -1,6 +1,6 @@
 {
   "formula_version": "V1.4",
-  "checksum": "72e346f746d1affaf6b5f884f8e0c8aa8ff56b84b6319a2ea8cd45424d79678e",
+  "checksum": "ac9765359564efa08ec44cb2c67d25d70a74283128deab32ddccd8610361d86f",
   "weights": {
     "truthfulness_simpleqa": 0.13,
     "truthfulness_facts": 0.12,
@@ -81,7 +81,8 @@
     "2026-03-02",
     "2026-03-03",
     "2026-03-04",
-    "2026-03-05"
+    "2026-03-05",
+    "2026-03-06"
   ],
   "models": [
     {
@@ -157,13 +158,14 @@
         80.7,
         68.48,
         68.56,
-        70.9
+        70.9,
+        69.23
       ],
       "source_count": 4,
       "pillar_scores": {
         "truthfulness": 74.9,
         "hallucination": 97.2,
-        "reasoning": 75.2,
+        "reasoning": 67.8,
         "neutrality": null,
         "response_quality": 30.3
       }
@@ -241,13 +243,14 @@
         74.25,
         78.73,
         78.77,
-        80.07
+        80.07,
+        79.11
       ],
       "source_count": 7,
       "pillar_scores": {
         "truthfulness": 75.2,
         "hallucination": 100.0,
-        "reasoning": 83.0,
+        "reasoning": 79.0,
         "neutrality": 100.0,
         "response_quality": 32.6
       }
@@ -325,13 +328,14 @@
         0.0,
         90.3,
         90.37,
-        90.37
+        90.37,
+        88.94
       ],
       "source_count": 5,
       "pillar_scores": {
         "truthfulness": 86.3,
         "hallucination": 82.2,
-        "reasoning": 91.3,
+        "reasoning": 87.0,
         "neutrality": 99.0,
         "response_quality": null
       }
@@ -409,13 +413,14 @@
         59.65,
         88.08,
         88.12,
-        88.46
+        88.46,
+        87.49
       ],
       "source_count": 6,
       "pillar_scores": {
         "truthfulness": 99.5,
         "hallucination": 86.2,
-        "reasoning": 83.8,
+        "reasoning": 80.5,
         "neutrality": 91.8,
         "response_quality": 82.3
       }
@@ -423,7 +428,7 @@
     {
       "name": "DeepSeek V3.2",
       "company": "DeepSeek",
-      "rank": 10,
+      "rank": 9,
       "scores": [
         null,
         null,
@@ -493,13 +498,14 @@
         56.14,
         59.92,
         60.01,
-        59.85
+        59.85,
+        58.2
       ],
       "source_count": 4,
       "pillar_scores": {
         "truthfulness": 100.0,
         "hallucination": 34.0,
-        "reasoning": 68.9,
+        "reasoning": 62.1,
         "neutrality": null,
         "response_quality": 19.3
       }
@@ -577,13 +583,14 @@
         0.0,
         81.15,
         81.2,
-        81.54
+        81.54,
+        80.53
       ],
       "source_count": 6,
       "pillar_scores": {
         "truthfulness": 68.9,
         "hallucination": 94.4,
-        "reasoning": 62.3,
+        "reasoning": 58.8,
         "neutrality": 96.9,
         "response_quality": 96.7
       }
@@ -591,7 +598,7 @@
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 12,
+      "rank": 10,
       "scores": [
         null,
         null,
@@ -661,13 +668,14 @@
         0.0,
         51.56,
         51.61,
-        52.02
+        52.02,
+        51.1
       ],
       "source_count": 6,
       "pillar_scores": {
         "truthfulness": 44.7,
         "hallucination": 54.5,
-        "reasoning": 53.2,
+        "reasoning": 50.3,
         "neutrality": null,
         "response_quality": 66.0
       }
@@ -675,7 +683,7 @@
     {
       "name": "Qwen3",
       "company": "Alibaba",
-      "rank": 16,
+      "rank": 14,
       "scores": [
         null,
         null,
@@ -745,6 +753,7 @@
         0.0,
         28.39,
         24.97,
+        25.34,
         25.34
       ],
       "source_count": 3,
@@ -829,13 +838,14 @@
         71.93,
         59.31,
         59.55,
-        61.53
+        61.53,
+        56.87
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 95.1,
+        "reasoning": 85.8,
         "neutrality": null,
         "response_quality": 28.0
       }
@@ -911,6 +921,7 @@
         0.0,
         0.0,
         0.0,
+        68.04,
         68.04,
         68.04,
         68.04
@@ -997,13 +1008,14 @@
         0.0,
         52.33,
         52.53,
-        63.68
+        63.68,
+        59.6
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 83.1,
+        "reasoning": 74.9,
         "neutrality": null,
         "response_quality": 44.3
       }
@@ -1011,7 +1023,7 @@
     {
       "name": "Mistral Large",
       "company": "Mistral",
-      "rank": 15,
+      "rank": 13,
       "scores": [
         61.4,
         61.5,
@@ -1081,6 +1093,7 @@
         0.0,
         27.05,
         27.05,
+        28.12,
         28.12
       ],
       "source_count": 3,
@@ -1165,13 +1178,14 @@
         0.0,
         70.03,
         70.17,
-        70.17
+        70.17,
+        67.54
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": 79.5,
         "hallucination": null,
-        "reasoning": 58.9,
+        "reasoning": 53.1,
         "neutrality": null,
         "response_quality": null
       }
@@ -1249,11 +1263,12 @@
         0.0,
         53.69,
         53.69,
-        57.52
+        57.52,
+        33.12
       ],
-      "source_count": 3,
+      "source_count": 2,
       "pillar_scores": {
-        "truthfulness": 95.1,
+        "truthfulness": null,
         "hallucination": null,
         "reasoning": 33.6,
         "neutrality": null,
@@ -1321,6 +1336,7 @@
         null,
         77.28,
         77.64,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1417,13 +1433,14 @@
         69.42,
         72.08,
         72.19,
-        75.74
+        75.74,
+        73.55
       ],
       "source_count": 4,
       "pillar_scores": {
         "truthfulness": 70.8,
         "hallucination": 89.1,
-        "reasoning": 100.0,
+        "reasoning": 90.2,
         "neutrality": null,
         "response_quality": 42.0
       }
@@ -1489,6 +1506,7 @@
         null,
         76.36,
         76.81,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1585,13 +1603,14 @@
         0.0,
         30.99,
         31.1,
-        38.25
+        38.25,
+        35.98
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 46.2,
+        "reasoning": 41.7,
         "neutrality": null,
         "response_quality": 30.3
       }
@@ -1657,6 +1676,7 @@
         null,
         75.47,
         75.92,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1753,6 +1773,7 @@
         49.12,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -1837,6 +1858,7 @@
         0.0,
         13.8,
         13.8,
+        13.75,
         13.75
       ],
       "source_count": 1,
@@ -1921,6 +1943,7 @@
         25.64,
         21.45,
         21.45,
+        25.64,
         25.64
       ],
       "source_count": 2,
@@ -2005,13 +2028,14 @@
         38.6,
         39.34,
         39.48,
-        41.3
+        41.3,
+        38.51
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 57.0,
+        "reasoning": 51.4,
         "neutrality": null,
         "response_quality": 25.6
       }
@@ -2087,6 +2111,7 @@
         59.65,
         59.65,
         59.65,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -2173,6 +2198,7 @@
         1.85,
         8.0,
         11.92,
+        9.46,
         9.46
       ],
       "source_count": 2,
@@ -2247,6 +2273,7 @@
         null,
         null,
         null,
+        77.24,
         77.24,
         77.24,
         77.24,
@@ -2341,6 +2368,7 @@
         29.82,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -2423,6 +2451,7 @@
         28.07,
         28.07,
         28.07,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -2509,13 +2538,14 @@
         29.82,
         55.07,
         55.35,
-        55.35
+        55.35,
+        49.91
       ],
       "source_count": 1,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 55.3,
+        "reasoning": 49.9,
         "neutrality": null,
         "response_quality": null
       }
@@ -2593,13 +2623,14 @@
         38.6,
         50.92,
         51.12,
-        52.94
+        52.94,
+        49.0
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 80.2,
+        "reasoning": 72.4,
         "neutrality": null,
         "response_quality": 25.6
       }
@@ -2677,6 +2708,7 @@
         64.37,
         64.37,
         64.37,
+        64.37,
         64.37
       ],
       "source_count": 1,
@@ -2691,7 +2723,7 @@
     {
       "name": "GPT-4o",
       "company": "OpenAI",
-      "rank": 13,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -2761,6 +2793,7 @@
         39.34,
         41.64,
         41.64,
+        44.3,
         44.3
       ],
       "source_count": 3,
@@ -2775,7 +2808,7 @@
     {
       "name": "GPT-5 mini",
       "company": "OpenAI",
-      "rank": 7,
+      "rank": 6,
       "scores": [
         null,
         null,
@@ -2845,13 +2878,14 @@
         71.93,
         72.6,
         72.67,
-        72.62
+        72.62,
+        71.4
       ],
       "source_count": 5,
       "pillar_scores": {
         "truthfulness": 73.9,
         "hallucination": 81.6,
-        "reasoning": 71.9,
+        "reasoning": 68.6,
         "neutrality": null,
         "response_quality": 61.8
       }
@@ -2859,7 +2893,7 @@
     {
       "name": "Gemma 3 12B",
       "company": "Google",
-      "rank": 18,
+      "rank": 15,
       "scores": [
         null,
         null,
@@ -2929,6 +2963,7 @@
         6.49,
         19.57,
         19.57,
+        20.91,
         20.91
       ],
       "source_count": 3,
@@ -3011,6 +3046,7 @@
         0.0,
         0.0,
         8.77,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -3097,6 +3133,7 @@
         12.28,
         42.52,
         42.52,
+        42.52,
         42.52
       ],
       "source_count": 2,
@@ -3181,6 +3218,7 @@
         56.14,
         35.6,
         35.6,
+        38.93,
         38.93
       ],
       "source_count": 1,
@@ -3265,13 +3303,14 @@
         97.84,
         73.94,
         74.03,
-        74.03
+        74.03,
+        57.17
       ],
-      "source_count": 3,
+      "source_count": 2,
       "pillar_scores": {
-        "truthfulness": 78.7,
+        "truthfulness": 58.0,
         "hallucination": null,
-        "reasoning": 62.3,
+        "reasoning": 56.2,
         "neutrality": null,
         "response_quality": null
       }
@@ -3349,6 +3388,7 @@
         31.58,
         26.0,
         26.0,
+        48.95,
         48.95
       ],
       "source_count": 1,
@@ -3433,6 +3473,7 @@
         42.11,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -3508,6 +3549,7 @@
         null,
         null,
         38.6,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -3601,6 +3643,7 @@
         0.0,
         87.47,
         87.47,
+        87.47,
         87.47
       ],
       "source_count": 1,
@@ -3679,6 +3722,7 @@
         17.54,
         17.54,
         17.54,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -3769,6 +3813,7 @@
         40.35,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -3851,6 +3896,7 @@
         42.11,
         42.11,
         42.11,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -3937,6 +3983,7 @@
         63.16,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -4021,13 +4068,14 @@
         36.35,
         46.79,
         46.93,
-        46.93
+        46.93,
+        44.1
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": 31.9,
         "hallucination": null,
-        "reasoning": 66.4,
+        "reasoning": 59.9,
         "neutrality": null,
         "response_quality": null
       }
@@ -4105,13 +4153,14 @@
         64.91,
         52.32,
         52.53,
-        54.19
+        54.19,
+        50.01
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 85.1,
+        "reasoning": 76.7,
         "neutrality": null,
         "response_quality": 23.3
       }
@@ -4187,6 +4236,7 @@
         0.0,
         0.0,
         14.04,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -4273,6 +4323,7 @@
         12.28,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -4351,6 +4402,7 @@
         14.04,
         14.04,
         14.04,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -4441,6 +4493,7 @@
         10.53,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -4523,6 +4576,7 @@
         33.33,
         33.33,
         33.33,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -4609,6 +4663,7 @@
         28.07,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -4693,11 +4748,12 @@
         0.0,
         96.47,
         96.47,
-        96.47
+        96.47,
+        0.0
       ],
-      "source_count": 1,
+      "source_count": 0,
       "pillar_scores": {
-        "truthfulness": 96.5,
+        "truthfulness": null,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -4771,6 +4827,7 @@
         15.79,
         15.79,
         15.79,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -4861,6 +4918,7 @@
         24.56,
         34.85,
         34.85,
+        35.7,
         35.7
       ],
       "source_count": 2,
@@ -4945,6 +5003,7 @@
         31.58,
         21.8,
         21.8,
+        24.48,
         24.48
       ],
       "source_count": 1,
@@ -5027,6 +5086,7 @@
         33.33,
         33.33,
         26.32,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -5113,6 +5173,7 @@
         47.37,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -5195,6 +5256,7 @@
         40.35,
         40.35,
         40.35,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -5281,6 +5343,7 @@
         52.63,
         20.0,
         20.0,
+        17.95,
         17.95
       ],
       "source_count": 1,
@@ -5363,6 +5426,7 @@
         0.0,
         0.0,
         0.0,
+        18.43,
         18.43,
         18.43,
         18.43
@@ -5449,6 +5513,7 @@
         73.68,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -5531,6 +5596,7 @@
         28.07,
         28.07,
         28.07,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -5617,6 +5683,7 @@
         36.84,
         15.01,
         12.05,
+        12.24,
         12.24
       ],
       "source_count": 2,
@@ -5701,11 +5768,12 @@
         26.32,
         23.88,
         23.88,
-        24.03
+        24.03,
+        32.39
       ],
-      "source_count": 3,
+      "source_count": 2,
       "pillar_scores": {
-        "truthfulness": 12.5,
+        "truthfulness": null,
         "hallucination": 35.3,
         "reasoning": null,
         "neutrality": null,
@@ -5783,6 +5851,7 @@
         33.33,
         33.33,
         33.33,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -5869,6 +5938,7 @@
         22.81,
         18.0,
         18.0,
+        32.63,
         32.63
       ],
       "source_count": 1,
@@ -5953,6 +6023,7 @@
         31.58,
         35.29,
         35.29,
+        35.29,
         35.29
       ],
       "source_count": 1,
@@ -6031,6 +6102,7 @@
         17.54,
         17.54,
         17.54,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -6121,6 +6193,7 @@
         33.33,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -6199,6 +6272,7 @@
         14.04,
         14.04,
         14.04,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -6289,11 +6363,12 @@
         21.05,
         64.67,
         64.67,
-        64.67
+        64.67,
+        0.0
       ],
-      "source_count": 1,
+      "source_count": 0,
       "pillar_scores": {
-        "truthfulness": 64.7,
+        "truthfulness": null,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -6303,7 +6378,7 @@
     {
       "name": "Phi 4",
       "company": "Unknown",
-      "rank": 14,
+      "rank": 12,
       "scores": [
         null,
         null,
@@ -6373,6 +6448,7 @@
         3.09,
         28.23,
         28.23,
+        29.04,
         29.04
       ],
       "source_count": 4,
@@ -6457,6 +6533,7 @@
         86.15,
         47.06,
         47.06,
+        51.54,
         51.54
       ],
       "source_count": 2,
@@ -6539,6 +6616,7 @@
         40.35,
         40.35,
         40.35,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -6625,6 +6703,7 @@
         38.6,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -6707,6 +6786,7 @@
         26.32,
         26.32,
         24.56,
+        0.0,
         0.0,
         0.0,
         0.0
@@ -6793,6 +6873,7 @@
         26.32,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -6871,6 +6952,7 @@
         8.77,
         8.77,
         8.77,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -6961,6 +7043,7 @@
         33.33,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "source_count": 0,
@@ -7045,6 +7128,7 @@
         0.0,
         38.69,
         38.69,
+        40.81,
         40.81
       ],
       "source_count": 2,
@@ -7127,6 +7211,7 @@
         0.0,
         0.0,
         0.0,
+        100.0,
         100.0,
         100.0,
         100.0
@@ -7213,13 +7298,14 @@
         0.0,
         43.67,
         43.83,
-        53.97
+        53.97,
+        50.85
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 63.7,
+        "reasoning": 57.4,
         "neutrality": null,
         "response_quality": 44.3
       }
@@ -7295,6 +7381,7 @@
         43.67,
         43.67,
         43.67,
+        38.43,
         38.43,
         38.43,
         38.43
@@ -7381,6 +7468,7 @@
         100.0,
         71.04,
         71.04,
+        72.16,
         72.16
       ],
       "source_count": 2,
@@ -7455,6 +7543,7 @@
         null,
         null,
         null,
+        15.45,
         15.45,
         15.45,
         15.45,
@@ -7549,6 +7638,7 @@
         0.0,
         41.86,
         41.86,
+        41.86,
         41.86
       ],
       "source_count": 1,
@@ -7563,7 +7653,7 @@
     {
       "name": "Claude 4.5 Haiku",
       "company": "Anthropic",
-      "rank": 9,
+      "rank": 7,
       "scores": [
         null,
         null,
@@ -7634,13 +7724,14 @@
         68.19,
         54.39,
         68.29,
-        69.56
+        69.56,
+        67.64
       ],
       "source_count": 3,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": 77.8,
-        "reasoning": 62.6,
+        "reasoning": 56.5,
         "neutrality": null,
         "response_quality": 66.7
       }
@@ -7718,6 +7809,7 @@
         57.89,
         0.0,
         57.89,
+        0.0,
         0.0,
         0.0
       ],
@@ -7804,13 +7896,14 @@
         60.0,
         94.74,
         51.43,
-        57.75
+        57.75,
+        53.68
       ],
       "source_count": 2,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 82.9,
+        "reasoning": 74.7,
         "neutrality": null,
         "response_quality": 32.6
       }
@@ -7888,6 +7981,7 @@
         17.54,
         0.0,
         17.54,
+        0.0,
         0.0,
         0.0
       ],
@@ -7973,6 +8067,7 @@
         null,
         20.0,
         20.0,
+        23.31,
         23.31
       ],
       "source_count": 1,
@@ -8057,6 +8152,7 @@
         null,
         58.94,
         58.94,
+        56.8,
         56.8
       ],
       "source_count": 2,
@@ -8141,6 +8237,7 @@
         null,
         12.0,
         12.0,
+        13.99,
         13.99
       ],
       "source_count": 1,
@@ -8223,6 +8320,7 @@
         null,
         null,
         null,
+        89.81,
         89.81,
         89.81,
         89.81
@@ -8309,6 +8407,7 @@
         null,
         45.09,
         45.09,
+        45.09,
         45.09
       ],
       "source_count": 1,
@@ -8393,6 +8492,7 @@
         null,
         26.0,
         26.0,
+        26.81,
         26.81
       ],
       "source_count": 1,
@@ -8475,6 +8575,7 @@
         null,
         null,
         null,
+        100.0,
         100.0,
         100.0,
         100.0
@@ -8561,6 +8662,7 @@
         null,
         79.59,
         79.59,
+        79.59,
         79.59
       ],
       "source_count": 1,
@@ -8645,6 +8747,7 @@
         null,
         20.0,
         20.0,
+        23.31,
         23.31
       ],
       "source_count": 1,
@@ -8727,6 +8830,7 @@
         null,
         null,
         null,
+        46.74,
         46.74,
         46.74,
         46.74
@@ -8813,6 +8917,7 @@
         null,
         24.0,
         24.0,
+        27.97,
         27.97
       ],
       "source_count": 1,
@@ -8897,6 +9002,7 @@
         null,
         18.6,
         18.6,
+        19.35,
         19.35
       ],
       "source_count": 1,
@@ -8981,6 +9087,7 @@
         null,
         9.0,
         9.0,
+        9.79,
         9.79
       ],
       "source_count": 1,
@@ -9063,6 +9170,7 @@
         null,
         null,
         null,
+        51.01,
         51.01,
         51.01,
         51.01
@@ -9149,6 +9257,7 @@
         null,
         47.6,
         47.6,
+        36.36,
         36.36
       ],
       "source_count": 1,
@@ -9233,13 +9342,14 @@
         null,
         53.61,
         53.88,
-        53.88
+        53.88,
+        48.59
       ],
       "source_count": 1,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 53.9,
+        "reasoning": 48.6,
         "neutrality": null,
         "response_quality": null
       }
@@ -9315,6 +9425,7 @@
         null,
         null,
         null,
+        95.12,
         95.12,
         95.12,
         95.12
@@ -9401,11 +9512,12 @@
         null,
         43.21,
         43.21,
-        43.21
+        43.21,
+        55.06
       ],
       "source_count": 1,
       "pillar_scores": {
-        "truthfulness": 43.2,
+        "truthfulness": 55.1,
         "hallucination": null,
         "reasoning": null,
         "neutrality": null,
@@ -9485,6 +9597,7 @@
         null,
         40.0,
         40.0,
+        16.55,
         16.55
       ],
       "source_count": 1,
@@ -9569,6 +9682,7 @@
         null,
         18.0,
         22.2,
+        16.55,
         16.55
       ],
       "source_count": 1,
@@ -9653,13 +9767,14 @@
         null,
         45.0,
         45.22,
-        45.22
+        45.22,
+        40.78
       ],
       "source_count": 1,
       "pillar_scores": {
         "truthfulness": null,
         "hallucination": null,
-        "reasoning": 45.2,
+        "reasoning": 40.8,
         "neutrality": null,
         "response_quality": null
       }
@@ -9737,6 +9852,7 @@
         null,
         59.94,
         59.94,
+        56.55,
         56.55
       ],
       "source_count": 2,
@@ -9746,6 +9862,92 @@
         "reasoning": null,
         "neutrality": null,
         "response_quality": 51.7
+      }
+    },
+    {
+      "name": "GPT-5.4 Thinking xHigh Effort",
+      "company": "OpenAI",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        100.0
+      ],
+      "source_count": 1,
+      "pillar_scores": {
+        "truthfulness": null,
+        "hallucination": null,
+        "reasoning": 100.0,
+        "neutrality": null,
+        "response_quality": null
       }
     }
   ],
