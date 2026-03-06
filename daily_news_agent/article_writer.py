@@ -10,7 +10,7 @@ from openai import OpenAI
 from config import XAI_API_KEY, GROK_API_BASE, GROK_MODEL
 
 
-def build_writing_prompt(story: dict, selection: dict, user_md: str, style_md: str) -> str:
+def build_writing_prompt(story: dict, selection: dict, user_md: str, style_md: str, learning_md: str = "", engagement_md: str = "") -> str:
     """
     Build the Grok prompt for article writing.
     Includes David's voice, style rules, and the selected story.
@@ -29,6 +29,22 @@ DAVID'S VOICE (you ARE David writing this):
 STYLE RULES (learned from past articles — follow these):
 ═══════════════════════════════════════════
 {style_md[:2000] if style_md.strip() else "No learned rules yet. Use David's natural voice: warm, direct, confident. Problem → Solution → Why it matters."}
+
+═══════════════════════════════════════════
+WHAT WORKED BEFORE (learn from past articles):
+═══════════════════════════════════════════
+{learning_md[-6000:] if learning_md.strip() else "No learning data yet — this is early."}
+
+═══════════════════════════════════════════
+AUDIENCE RESPONSE DATA (what readers actually engaged with):
+═══════════════════════════════════════════
+{engagement_md[-5000:] if engagement_md.strip() else "No engagement data yet — this is early."}
+
+USE THIS TO:
+- Match the tone/format of articles that got strong engagement
+- Avoid patterns readers didn't respond to
+- Write for the topics/angles that resonate most
+- Apply David's editorial feedback from past cycles
 
 ═══════════════════════════════════════════
 THE STORY TO WRITE ABOUT:
@@ -89,7 +105,7 @@ DATE: {today}
     return prompt
 
 
-def write_article(story: dict, selection: dict, user_md: str, style_md: str) -> dict:
+def write_article(story: dict, selection: dict, user_md: str, style_md: str, learning_md: str = "", engagement_md: str = "") -> dict:
     """
     Call Grok API to write the full article.
     Returns dict with: headline, subtitle, category, date, article_html, citation, raw_response.
@@ -98,7 +114,7 @@ def write_article(story: dict, selection: dict, user_md: str, style_md: str) -> 
         return {"error": "XAI_API_KEY not set"}
 
     client = OpenAI(api_key=XAI_API_KEY, base_url=GROK_API_BASE)
-    prompt = build_writing_prompt(story, selection, user_md, style_md)
+    prompt = build_writing_prompt(story, selection, user_md, style_md, learning_md, engagement_md)
 
     try:
         response = client.chat.completions.create(
