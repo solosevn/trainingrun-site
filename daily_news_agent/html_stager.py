@@ -319,26 +319,51 @@ def _build_figure_html(image_url: str, caption: str, paper_number: int) -> str:
 def build_news_card(article_data: dict, paper_number: int) -> str:
     """
     Build the news.html card HTML for this article.
+    Uses the SAME card structure as Papers 001-007.
     This gets inserted at the TOP of the card list.
     """
     today = datetime.date.today().strftime("%B %d, %Y")
     today = re.sub(r' 0(\d)', r' \1', today)
     filename = f"{ARTICLE_PREFIX}{paper_number:03d}.html"
+    category = article_data.get('category', 'AI Research')
+    headline = article_data.get('headline', 'Daily News')
+    subtitle = article_data.get('subtitle', '')
+
+    # Build tag spans matching the standard card format
+    tag_map = {
+        "AI Research": ["AI", "Research"],
+        "AI Policy": ["Policy", "AI Safety", "National Security"],
+        "Agents": ["Agents", "AI"],
+        "Open Source": ["Open Source", "AI"],
+        "Compute & Infrastructure": ["Compute", "Infrastructure"],
+        "Safety": ["Safety", "AI"],
+        "Training": ["Training", "AI"],
+        "Inference": ["Inference", "AI"],
+    }
+    tags = tag_map.get(category, [category])
+    tag_spans = "\n      ".join(f'<span class="paper-tag">{t}</span>' for t in tags)
 
     card = f"""
-    <!-- Paper {paper_number:03d} -->
-    <div class="paper-card">
-        <div class="paper-header">
-            <span class="article-tag">{article_data.get('category', 'AI Research')}</span>
-            <span class="paper-date">{today}</span>
-        </div>
-        <h3><a href="{filename}">Paper {paper_number:03d}: {article_data.get('headline', 'Daily News')}</a></h3>
-        <p class="paper-summary">{article_data.get('subtitle', '')}</p>
-        <a href="{filename}" class="read-more">Read Article \u2192</a>
-    </div>"""
-
+  <!-- PAPER {paper_number:03d} -->
+  <a href="{filename}" class="paper-card">
+    <div class="paper-meta">
+      <span class="paper-badge">Paper {paper_number:03d}</span>
+      <span class="paper-date">{today}</span>
+      {tag_spans}
+      <span class="paper-new">New</span>
+    </div>
+    <div class="paper-title">{headline}</div>
+    <div class="paper-desc">
+      {subtitle}
+    </div>
+    <div class="paper-footer">
+      <div class="paper-stats">
+        <div class="paper-stat">{category}</div>
+      </div>
+      <span class="paper-cta">Read Briefing \u2192</span>
+    </div>
+  </a>"""
     return card
-
 
 def _build_article_html(article_data: dict, paper_number: int, date_str: str) -> str:
     """
