@@ -156,3 +156,18 @@ Each published article gets one entry. Logged at Step 14 of PROCESS.md (after pu
 ---
 
 *Last updated: March 5, 2026*
+
+---
+
+## Paper 008 | March 06, 2026 | Pentagon Labels Anthropic a Supply-Chain Risk in AI Oversight Battle
+
+| Field | Value |
+|---|---|
+| **Source** | https://www.theverge.com/ai-artificial-intelligence/890347/pentagon-anthropic-supply-chain-risk |
+| **Category** | AI Policy |
+| **Status** | Published ✅ |
+| **Process** | Agent — autonomous cycle |
+| **Cycle Time** | 4.5 minutes |
+| **Edit Requests** | 1 |
+| **First-Pass Approval** | No — 1 edit(s) requested |
+| **Published** | 2026-03-06 06:57 AM CST |
