@@ -436,6 +436,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if text.lower() in ("run", "/run", "go", "start"):
         if agent.state == AgentState.IDLE:
             logger.info("Manual trigger received — starting workflow")
+            agent.state = AgentState.SELECTING  # Lock state immediately to prevent race
+            # Mark today as processed so handle_scout_check won't double-trigger
+            last_file = STAGING_DIR / ".last_processed_date"
+            last_file.write_text(datetime.date.today().isoformat())
             bot = context.bot
             asyncio.create_task(run_workflow(bot))
         else:
