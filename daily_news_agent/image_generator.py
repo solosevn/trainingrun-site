@@ -20,7 +20,7 @@ from config import XAI_API_KEY, GROK_API_BASE, GITHUB_TOKEN, GITHUB_API_BASE, RE
 logger = logging.getLogger("DailyNewsAgent.ImageGen")
 
 # -- Image generation model --
-GROK_IMAGE_MODEL = "grok-2-image"
+GROK_IMAGE_MODEL = "grok-imagine-image"
 
 
 def build_image_prompt(headline: str, subtitle: str, category: str, article_summary: str = "") -> str:
