@@ -61,6 +61,7 @@ VAULT_FILES = {
     "style_md":       "context-vault/agents/trainingrun/daily-news/STYLE-EVOLUTION.md",
     "run_log_md":     "context-vault/agents/trainingrun/daily-news/RUN-LOG.md",
     "learning_md":    "context-vault/agents/trainingrun/daily-news/LEARNING-LOG.md",
+    "engagement_md":  "context-vault/agents/trainingrun/daily-news/ENGAGEMENT-LOG.md",
 }
 
 # ──────────────────────────────────────────────────────────
