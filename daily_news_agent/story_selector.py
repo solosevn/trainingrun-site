@@ -9,7 +9,7 @@ from openai import OpenAI
 from config import XAI_API_KEY, GROK_API_BASE, GROK_FAST_MODEL
 
 
-def build_selection_prompt(stories: list, user_md: str, style_md: str, reasoning_md: str) -> str:
+def build_selection_prompt(stories: list, user_md: str, style_md: str, reasoning_md: str, learning_md: str = "", run_log_md: str = "") -> str:
     """
     Build the Grok prompt for story selection.
     Includes David's 5-filter test, style evolution rules, and story data.
@@ -63,6 +63,22 @@ Also consider:
 REASONING DISCIPLINE:
 ═══════════════════════════════════════════
 {reasoning_md[:1000]}
+═══════════════════════════════════════════
+YESTERDAY'S PERFORMANCE (learn from this):
+═══════════════════════════════════════════
+{learning_md[-8000:] if learning_md.strip() else "No learning data yet — this is early."}
+
+═══════════════════════════════════════════
+RECENT RUN HISTORY (last 5 cycles):
+═══════════════════════════════════════════
+{run_log_md[-4000:] if run_log_md.strip() else "No run history yet — this is early."}
+
+USE THIS HISTORY TO:
+- Avoid categories/angles that underperformed recently
+- Prefer story types that got strong audience response
+- Notice if a topic was covered recently (don't repeat within 3 days)
+- Apply any patterns David flagged in feedback
+
 
 ═══════════════════════════════════════════
 OUTPUT FORMAT (follow exactly):
@@ -77,7 +93,7 @@ RUNNER_UP: [story number] — [title] — [one line why it was close]
     return prompt
 
 
-def select_story(stories: list, user_md: str, style_md: str, reasoning_md: str) -> dict:
+def select_story(stories: list, user_md: str, style_md: str, reasoning_md: str, learning_md: str = "", run_log_md: str = "") -> dict:
     """
     Call Grok API to select the best story.
     Returns dict with: story_index, title, url, category, reasoning, runner_up.
@@ -89,7 +105,7 @@ def select_story(stories: list, user_md: str, style_md: str, reasoning_md: str) 
         return {"error": "XAI_API_KEY not set"}
 
     client = OpenAI(api_key=XAI_API_KEY, base_url=GROK_API_BASE)
-    prompt = build_selection_prompt(stories, user_md, style_md, reasoning_md)
+    prompt = build_selection_prompt(stories, user_md, style_md, reasoning_md, learning_md, run_log_md)
 
     try:
         response = client.chat.completions.create(
