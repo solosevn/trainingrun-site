@@ -1,6 +1,6 @@
 # CONFIG — TRS Site Manager (TRSitekeeper)
 
-> **Version:** 1.0 — March 6, 2026
+> **Version:** 1.1 — March 6, 2026
 > **Purpose:** Technical configuration, execution environment, tools, and thresholds
 
 ---
@@ -33,6 +33,31 @@
 | Main site page | `index.html` |
 | Vault (this dir) | `context-vault/agents/trainingrun/trs-site-manager/` |
 | DDP Pipeline vault | `context-vault/agents/trainingrun/trs-site-manager/ddp-pipeline/` |
+
+---
+
+## Vault Loading Protocol
+
+**CRITICAL: This vault is operational, not decorative.**
+
+On every agent startup:
+1. Load all 9 vault files from `context-vault/agents/trainingrun/trs-site-manager/`
+2. Parse SOUL.md for mission alignment and David's principles
+3. Parse CONFIG.md for current environment state
+4. Parse PROCESS.md for operational procedures
+5. Parse CADENCE.md for today's audit focus
+6. Parse STYLE-EVOLUTION.md for active design rules
+7. Check RUN-LOG.md for recent entries — know what happened last
+8. Check LEARNING-LOG.md for known issues — don't repeat mistakes
+9. Check CAPABILITIES.md for current vs. planned capabilities
+10. Check TASK-LOG.md for active tasks
+
+On every session end:
+1. Append to RUN-LOG.md — what was done this session
+2. Update LEARNING-LOG.md if a new lesson was learned
+3. Promote rules in STYLE-EVOLUTION.md if confidence changed
+
+This is not optional. An agent that doesn't read its own memory is just a stateless script.
 
 ---
 
@@ -93,6 +118,7 @@
 - Git commit + push
 - Daily audit cycles
 - Sending findings/suggestions to David via Telegram
+- Reading and writing vault files (RUN-LOG, LEARNING-LOG, STYLE-EVOLUTION)
 
 ### Ask David First
 - Running DDP agents (triggers data refresh)
@@ -100,6 +126,7 @@
 - Structural changes (adding/removing pages)
 - Any irreversible action
 - Changes to agent.py itself
+- Anything that changes how data is presented to the public (David's name is on it)
 
 ---
 
@@ -118,7 +145,7 @@
 
 ## Backup Protocol
 
-Every file edit triggers: `backup_file(filename)` → saves to `backups/` directory with timestamp. No exceptions.
+Every file edit triggers: `backup_file(filename)` → saves to `backups/` directory with timestamp. No exceptions. Military discipline — no shortcuts.
 
 ---
 
