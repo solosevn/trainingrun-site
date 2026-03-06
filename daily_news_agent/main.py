@@ -385,6 +385,35 @@ async def do_publish(bot: Bot):
         edit_notes=agent.edit_notes,
     )
 
+
+    # ─── NEW: Write feedback for Content Scout learning loop ──────
+    try:
+        scout_feedback = {
+            "selected_story_title": agent.selection.get("headline", ""),
+            "selected_source": agent.selection.get("source", ""),
+            "selected_truth_score": agent.selection.get("truth_score", 0),
+            "selected_category": agent.article.get("category", "general"),
+            "selected_rank": agent.selection.get("rank", 1),
+            "rejected_stories": [
+                {
+                    "title": s.get("title", ""),
+                    "source": s.get("source", ""),
+                    "truth_score": s.get("truth_score", 0)
+                }
+                for s in getattr(agent, "stories", [])
+                if s.get("title") != agent.selection.get("headline", "")
+            ][:5],
+            "paper_number": agent.paper_number,
+            "date": datetime.datetime.now().strftime("%Y-%m-%d")
+        }
+        feedback_path = os.path.join(os.path.dirname(SCOUT_BRIEFING_PATH), "scout-feedback.json")
+        with open(feedback_path, "w", encoding="utf-8") as fb:
+            json.dump(scout_feedback, fb, indent=2)
+        logger.info(f"[DailyNews] Wrote scout-feedback.json for Paper {agent.paper_number:03d}")
+    except Exception as e:
+        logger.warning(f"[DailyNews] Failed to write scout feedback (non-critical): {e}")
+    # ─── END NEW ──────────────────────────────────────────────────
+
     log_result = commit_logs(run_log, learning_log, agent.paper_number)
     for step in log_result.get("steps", []):
         logger.info(step)
