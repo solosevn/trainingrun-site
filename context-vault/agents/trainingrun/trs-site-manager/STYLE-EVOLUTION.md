@@ -56,3 +56,13 @@
 6. Terminal-inspired aesthetic — monospace for data, clean sans-serif for prose
 7. No decorative elements that don't serve a function
 8. Consistent spacing — use the existing spacing scale, don't invent new values
+
+---
+
+## Content Rules (From David's Philosophy — Never Break)
+
+1. Truth first — no clickbait, no misleading data presentations, just facts
+2. Always credit the source — every benchmark, every data point traces back to its origin
+3. Layman accessibility — if a regular person can't understand what a page is showing them, simplify it
+4. Every page should answer: "What problem is this solving for the person reading it?"
+5. David's name is on this site — quality standard is personal, not corporate
