@@ -150,6 +150,8 @@ async def run_workflow(bot: Bot, dry_run: bool = False):
             user_md=agent.context.get("user_md", ""),
             style_md=agent.context.get("style_md", ""),
             reasoning_md=agent.context.get("reasoning_md", ""),
+            learning_md=agent.context.get("learning_md", ""),
+            run_log_md=agent.context.get("run_log_md", ""),
         )
         agent.phase_times["selection"] = (time.time() - phase_start) / 60
 
@@ -172,6 +174,8 @@ async def run_workflow(bot: Bot, dry_run: bool = False):
             selection=agent.selection,
             user_md=agent.context.get("user_md", ""),
             style_md=agent.context.get("style_md", ""),
+            learning_md=agent.context.get("learning_md", ""),
+            engagement_md=agent.context.get("engagement_md", ""),
         )
         agent.phase_times["writing"] = (time.time() - phase_start) / 60
 
