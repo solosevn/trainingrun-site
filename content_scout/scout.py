@@ -47,6 +47,24 @@ import hashlib
 import traceback
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+# ─── NEW: Vault + Learning imports ─────────────────────────────
+try:
+    from scout_context_loader import (
+        load_all_context, get_source_weights, load_scout_feedback,
+        STALENESS_DEPRIORITIZE_DAYS, STALENESS_DROP_DAYS
+    )
+    from scout_learning_logger import (
+        log_scrape_cycle, log_briefing_result, log_selection_feedback,
+        update_source_weights, commit_logs
+    )
+    VAULT_ENABLED = True
+    logger.info("[Scout] Vault + Learning modules loaded successfully")
+except ImportError as e:
+    VAULT_ENABLED = False
+    logger.warning(f"[Scout] Vault modules not available, running in legacy mode: {e}")
+# ─── END NEW ───────────────────────────────────────────────────
+
 from urllib.parse import urlparse
 from collections import Counter
 
@@ -123,6 +141,12 @@ KNOWN_PUBLIC_DOMAINS = {
     "www.wired.com",            # Wired RSS
     "bullrich.dev",             # Possibly used in feeds
 }
+
+# ─── NEW: Vault context (loaded before each cycle) ────────────
+vault_context = {}
+source_weights = {}
+# ─── END NEW ─────────────────────────────────────────────────────────
+
 
 
 def ethical_preflight(url: str, source_name: str) -> bool:
@@ -432,6 +456,15 @@ def compute_truth_score(item: dict, all_items: list) -> dict:
     truth_score = source_score + cross_score + substance_score + relevance_score
     truth_score = max(0, min(100, truth_score))
 
+    # ─── NEW: Apply source weight from STYLE-EVOLUTION ────
+    if VAULT_ENABLED and source_weights:
+        sw_name = source
+        sw = source_weights.get(sw_name, 1.0)
+        truth_score = int(truth_score * sw)
+        truth_score = max(0, min(100, truth_score))  # Re-clamp after weight
+    # ─── END NEW ──────────────────────────────────────────────────
+
+
     # --- CLASSIFY into TrainingRun category ---
     tr_category = classify_tr_category(title, summary, matched_verticals)
 
@@ -491,6 +524,30 @@ def select_top_10(scored_items: list, min_truth_score: int = 50) -> list:
     Select the top 10 stories with diversity rules.
     """
     qualified = [item for item in scored_items if item["truth_score"] >= min_truth_score]
+
+    # ─── NEW: Staleness filter ─────────────────────────────────
+    if VAULT_ENABLED:
+        import datetime as dt_module
+        now_ts = dt_module.datetime.now()
+        fresh_items = []
+        for item in qualified:
+            pub_date_str = item.get("published") or item.get("created") or item.get("timestamp", "")
+            if pub_date_str and isinstance(pub_date_str, str):
+                try:
+                    pub_date = dt_module.datetime.fromisoformat(pub_date_str.replace("Z", "+00:00"))
+                    if pub_date.tzinfo:
+                        pub_date = pub_date.replace(tzinfo=None)
+                    age_days = (now_ts - pub_date).days
+                    if age_days > STALENESS_DROP_DAYS:
+                        continue  # Drop items older than 7 days
+                    if age_days > STALENESS_DEPRIORITIZE_DAYS:
+                        item["truth_score"] = item["truth_score"] * 0.5
+                except (ValueError, TypeError):
+                    pass
+            fresh_items.append(item)
+        qualified = fresh_items
+    # ─── END NEW ──────────────────────────────────────────────────
+
 
     if not qualified:
         qualified = sorted(scored_items, key=lambda x: x["truth_score"], reverse=True)[:10]
@@ -1956,9 +2013,12 @@ def push_briefing():
 # ─────────────────────────────────────────────
 
 def is_scrape_time() -> bool:
-    """Returns True if current hour is within scraping window (7 AM – 11 PM)."""
-    hour = datetime.datetime.now().hour
-    return SCRAPE_START_HOUR <= hour < SCRAPE_END_HOUR
+    """Returns True if current time is within scraping window (7:30 AM – 11 PM)."""
+    now = datetime.datetime.now()
+    # Start at 7:30 AM, end at 11:00 PM
+    if now.hour == SCRAPE_START_HOUR:
+        return now.minute >= 30
+    return (SCRAPE_START_HOUR + 1) <= now.hour < SCRAPE_END_HOUR
 
 
 def is_brief_time() -> bool:
@@ -2042,8 +2102,46 @@ def run():
                     save_data(data)
                     print("[Brief] Morning brief sent and published.")
 
+                    # ─── NEW: Log briefing result to LEARNING-LOG.md ───
+                    if VAULT_ENABLED:
+                        try:
+                            # Read the briefing data we just generated
+                            briefing_path = os.path.join(os.path.dirname(DATA_FILE), "scout-briefing.json")
+                            if os.path.exists(briefing_path):
+                                with open(briefing_path, "r") as bf:
+                                    briefing_data = json.load(bf)
+                                top_stories = briefing_data.get("stories", [])
+                                log_briefing_result(
+                                    top_stories=top_stories,
+                                    truth_score_range=(
+                                        min((s.get("truth_score", 0) for s in top_stories), default=0),
+                                        max((s.get("truth_score", 0) for s in top_stories), default=0)
+                                    ),
+                                    categories=list(set(s.get("tr_category", "general") for s in top_stories)),
+                                    sources=list(set(s.get("source", "unknown") for s in top_stories)),
+                                    items_dropped_by_ai=0,
+                                    ollama_status="available",
+                                    xai_status="available"
+                                )
+                                commit_logs("[Content Scout] Briefing results logged")
+                        except Exception as e:
+                            logger.warning(f"[Scout] Failed to log briefing result: {e}")
+                    # ─── END NEW ──────────────────────────────────────────
+
+
             # ── SCRAPE CYCLE (7 AM – 11 PM, every 30 min) ──
             elif is_scrape_time() and (now - last_scrape_time) >= SCRAPE_INTERVAL:
+                # ─── NEW: Load vault context ──────────────────────
+                if VAULT_ENABLED:
+                    try:
+                        vault_context = load_all_context()
+                        source_weights = get_source_weights(vault_context)
+                        logger.info(f"[Scout] Vault loaded, {len([v for v in vault_context.values() if v])} files, weights: {source_weights}")
+                    except Exception as e:
+                        logger.warning(f"[Scout] Vault load failed, using defaults: {e}")
+                        source_weights = {}
+                # ─── END NEW ──────────────────────────────────────────
+
                 print(f"\n[Scrape] Starting cycle at {datetime.datetime.now().strftime('%I:%M %p')}")
                 total = run_all_scrapers(data)
                 last_scrape_time = now
@@ -2051,6 +2149,37 @@ def run():
                 today_items = [i for i in data["items"] if i.get("date") == datetime.date.today().isoformat()]
                 research_count = len([i for i in today_items if i.get("category") == "research"])
                 print(f"[Scrape] Cycle complete. {total} new items. {len(today_items)} today ({research_count} research). {len(data['items'])} total.")
+
+                # ─── NEW: Log scrape cycle to RUN-LOG.md ──────────
+                if VAULT_ENABLED:
+                    try:
+                        log_scrape_cycle(
+                            sources_hit=len(set(i.get("source", "") for i in today_items)),
+                            items_found=total,
+                            items_after_dedup=len(today_items),
+                            items_dropped_stale=0,
+                            items_deprioritized=0,
+                            per_source={s: len([i for i in today_items if i.get("source") == s]) for s in set(i.get("source", "") for i in today_items)},
+                            errors=[]
+                        )
+                    except Exception as e:
+                        logger.warning(f"[Scout] Failed to log scrape cycle: {e}")
+                # ─── END NEW ──────────────────────────────────────────
+
+                # ─── NEW: Check for Daily News Agent feedback ─────
+                if VAULT_ENABLED:
+                    try:
+                        feedback = load_scout_feedback()
+                        if feedback:
+                            log_selection_feedback(feedback)
+                            learning_content = vault_context.get("LEARNING_LOG", "")
+                            update_source_weights(learning_content)
+                            commit_logs("[Content Scout] Feedback processed + weights updated")
+                            logger.info(f"[Scout] Processed feedback for Paper {feedback.get('paper_number', '???')}")
+                    except Exception as e:
+                        logger.warning(f"[Scout] Feedback processing failed: {e}")
+                # ─── END NEW ──────────────────────────────────────────
+
 
                 hour = datetime.datetime.now().hour
                 if hour in (11, 15, 19, 23):
