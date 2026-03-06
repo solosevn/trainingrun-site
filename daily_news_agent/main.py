@@ -394,12 +394,12 @@ async def do_publish(bot: Bot):
     # Done
     logger.info(f"═══ CYCLE COMPLETE — Paper {agent.paper_number:03d} published in {total_cycle:.1f} min ═══")
     _print_cycle_summary()
-            # Mark today as processed (prevents handle_scout_check from re-triggering)
-        last_file = STAGING_DIR / ".last_processed_date"
-        last_file.write_text(datetime.date.today().isoformat())
-        logger.info("Marked today as processed")
+    # Mark today as processed (prevents handle_scout_check from re-triggering)
+    last_file = STAGING_DIR / ".last_processed_date"
+    last_file.write_text(datetime.date.today().isoformat())
+    logger.info("Marked today as processed")
 
-        agent.state = AgentState.IDLE
+    agent.state = AgentState.IDLE
 
 
 def _print_cycle_summary():
