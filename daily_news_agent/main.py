@@ -190,6 +190,26 @@ async def run_workflow(bot: Bot, dry_run: bool = False):
         # ── Step 7: Stage HTML ──
         agent.state = AgentState.STAGING
         phase_start = time.time()
+                # -- Step 6b: Generate article image via Grok --
+        logger.info("Generating article image via Grok...")
+        from image_generator import generate_image, download_image
+        image_result = generate_image(
+            headline=agent.article.get("headline", ""),
+            subtitle=agent.article.get("subtitle", ""),
+            category=agent.article.get("category", "AI Research"),
+            article_html=agent.article.get("article_html", ""),
+        )
+        if image_result.get("error"):
+            logger.warning(f"Image generation failed (non-fatal): {image_result['error']}")
+        else:
+            agent.article["image_url"] = image_result["image_url"]
+            agent.article["image_caption"] = image_result["image_caption"]
+            logger.info("Article image generated successfully")
+
+        # Enrich article data for stager
+        agent.article["story_url"] = selected_story.get("url", "")
+        agent.article["story_title"] = selected_story.get("title", "")
+
         agent.paper_number = get_next_paper_number()
         logger.info(f"Staging as Paper {agent.paper_number:03d}...")
 
@@ -220,6 +240,17 @@ async def run_workflow(bot: Bot, dry_run: bool = False):
             article_preview=agent.article.get("article_html", ""),
             runner_up=agent.selection.get("runner_up", ""),
         )
+
+        # Send image to Telegram if available
+        if agent.article.get("image_url"):
+            try:
+                await bot.send_photo(
+                    chat_id=DAVID_CHAT_ID,
+                    photo=agent.article["image_url"],
+                    caption=f"\ud83d\udcf8 Proposed Figure 1 for Paper {agent.paper_number:03d}"
+                )
+            except Exception as img_err:
+                logger.warning(f"Could not send image to Telegram: {img_err}")
 
         logger.info("⏳ Waiting for David's response...")
         # Response handling happens in the message handler (handle_message)
@@ -311,6 +342,17 @@ async def do_publish(bot: Bot):
         logger.info(step)
 
     # ── Step 13: Send confirmation ──
+        # Commit image to GitHub if we have one
+        if agent.article.get("image_url"):
+            from image_generator import download_image, commit_image_to_github
+            image_bytes = download_image(agent.article["image_url"])
+            if image_bytes:
+                img_result = commit_image_to_github(image_bytes, agent.paper_number)
+                if img_result.get("error"):
+                    logger.warning(f"Image commit failed (non-fatal): {img_result['error']}")
+                else:
+                    logger.info(f"Image committed: {img_result['image_path']}")
+
     article_url = pub_result.get("article_url", f"https://trainingrun.ai/{agent.staged['filename']}")
     await send_publish_confirmation(bot, agent.paper_number, agent.article.get("headline", ""), article_url)
 
@@ -352,7 +394,12 @@ async def do_publish(bot: Bot):
     # Done
     logger.info(f"═══ CYCLE COMPLETE — Paper {agent.paper_number:03d} published in {total_cycle:.1f} min ═══")
     _print_cycle_summary()
-    agent.state = AgentState.IDLE
+            # Mark today as processed (prevents handle_scout_check from re-triggering)
+        last_file = STAGING_DIR / ".last_processed_date"
+        last_file.write_text(datetime.date.today().isoformat())
+        logger.info("Marked today as processed")
+
+        agent.state = AgentState.IDLE
 
 
 def _print_cycle_summary():
