@@ -1,6 +1,6 @@
 # PROCESS — TRS Site Manager (TRSitekeeper)
 
-> **Version:** 1.0 — March 6, 2026
+> **Version:** 1.1 — March 6, 2026
 > **Purpose:** How TRSitekeeper operates — reactive fixes, autonomous audits, proactive improvements
 
 ---
@@ -42,6 +42,9 @@ When David sends a screenshot:
 - Look for the matching HTML/CSS/JS code
 - Fix and deploy
 
+### Voice-to-Text Fixes
+David often uses voice-to-text via Telegram. Messages may have typos, run-on sentences, or unconventional grammar. Interpret the intent, not the literal text.
+
 ### Response Time Target
 - Simple fixes (typo, color, spacing): < 5 minutes
 - Moderate fixes (layout, data display): < 15 minutes
@@ -54,7 +57,22 @@ When David sends a screenshot:
 ### Trigger
 Daily scheduled cycle (see CADENCE.md)
 
+### The David Test
+Before checking any technical criteria, ask: **"If David were browsing this page right now, what would bother him?"** David has military-grade attention to detail, a bit of OCD about alignment and consistency, and zero tolerance for anything that looks sloppy or untrustworthy. He also has deep empathy for the end user — if something would confuse a regular person trying to understand AI, it needs to be fixed.
+
 ### Audit Checklist
+
+**Truth and Data Integrity**
+- [ ] All 5 DDP leaderboards display data (not empty, not stale)
+- [ ] Every score is accurate and traceable to its source
+- [ ] No misleading presentations — numbers mean what they appear to mean
+- [ ] Model names render correctly (no raw JSON keys, no encoding issues)
+- [ ] Scores are within expected ranges (0-100 for normalized, 0-1 for composite)
+- [ ] Rankings are sorted correctly (highest score first)
+- [ ] Qualification filters are working (models below threshold are excluded)
+- [ ] No duplicate models in any leaderboard
+- [ ] Last-updated timestamps are recent (< 48 hours for daily-run DDPs)
+- [ ] Sources and methodology are credited and accessible
 
 **Visual Quality**
 - [ ] All pages load without errors
@@ -65,15 +83,13 @@ Daily scheduled cycle (see CADENCE.md)
 - [ ] Responsive behavior — nothing breaks at common viewport sizes
 - [ ] Navigation works — all links go where they should
 - [ ] No visual artifacts — stray borders, phantom elements, z-index issues
+- [ ] At least one visual element on each page tells the story of what that page is about
 
-**Data Integrity**
-- [ ] All 5 DDP leaderboards display data (not empty, not stale)
-- [ ] Model names render correctly (no raw JSON keys, no encoding issues)
-- [ ] Scores are within expected ranges (0-100 for normalized, 0-1 for composite)
-- [ ] Rankings are sorted correctly (highest score first)
-- [ ] Qualification filters are working (models below threshold are excluded)
-- [ ] No duplicate models in any leaderboard
-- [ ] Last-updated timestamps are recent (< 48 hours for daily-run DDPs)
+**Accessibility and Clarity**
+- [ ] Can a non-technical person understand what each page is showing them?
+- [ ] Is jargon explained or avoided where possible?
+- [ ] Are methodology explanations in layman's terms?
+- [ ] Would a first-time visitor know what problem this site is trying to solve?
 
 **Structural Integrity**
 - [ ] HTML validates (no unclosed tags, no nesting errors)
@@ -109,11 +125,11 @@ After each audit:
 
 ### What I Look For
 - UX friction: Is anything confusing for a first-time visitor?
-- Missing information: Should any page have more context?
+- Missing information: Should any page have more context for regular people?
 - Visual polish: Could any element look more professional?
+- Clarity: Could anything be explained more simply?
 - Performance: Are there unnecessary resources loading?
 - Accessibility: Can the site be navigated by keyboard? Are contrast ratios adequate?
-- Competitive comparison: How does our site compare to similar benchmark platforms?
 
 ### How I Report
 - Daily Telegram summary with prioritized suggestions
