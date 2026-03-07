@@ -1323,7 +1323,7 @@ class AuditScheduler:
                 '"files_involved": ["..."]}'
             )
 
-            system_prompt = "You are an autonomous site diagnostic agent. Return ONLY valid JSON arrays. No markdown. No explanation."
+            system_prompt = "You are a JSON-only diagnostic API. You MUST respond with ONLY a raw JSON array. No tools. No preamble. No explanation. No markdown. Start your response with [ and end with ]. Nothing else."
 
             if not self.claude_chat:
                 logging.warning("Claude chat not available for diagnosis")
