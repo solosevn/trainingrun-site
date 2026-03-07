@@ -62,7 +62,7 @@ _audit_scheduler = None  # Set in run()
 # CONFIG
 # ─────────────────────────────────────────────
 
-TELEGRAM_TOKEN   = os.getenv("TELEGRAM_TOKEN", "")
+TELEGRAM_TOKEN   = os.getenv("TRSITEKEEPER_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 CLAUDE_MODEL     = "claude-sonnet-4-6"
