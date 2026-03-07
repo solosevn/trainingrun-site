@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-TRSitekeeper v1.1
+TRSitekeeper v2.0
 =================
 The AI gatekeeper for trainingrun.ai — powered by Claude Sonnet 4.6.
 
 - Communicates with David via Telegram (text + screenshots)
 - Uses Anthropic Claude API for fast, intelligent responses
-- Has persistent memory via brain.md
+- Vault-powered memory: structured 9-file context vault + local memory + skills
+- Theory-of-Mind: anticipates David's needs before he states them
+- Learning logger: records every action, builds fix patterns, evolves skills
 - Full write access with Telegram approval gates
 - Manages DDPs, files, GitHub, and site health
 - Accepts screenshots: "fix this" + photo = instant diagnosis + fix
@@ -31,6 +33,19 @@ import traceback
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
+# v2.0 — Vault memory system imports
+try:
+    from sitekeeper_context_loader import get_system_prompt
+    from sitekeeper_learning_logger import LearningLogger
+    _vault_available = True
+    _learning_logger = LearningLogger()
+    print("[v2.0] Vault memory system loaded.")
+except ImportError as _imp_err:
+    _vault_available = False
+    _learning_logger = None
+    print(f"[v2.0] Vault memory system NOT available: {_imp_err}")
+    print("[v2.0] Falling back to brain.md.")
+
 # ─────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────
@@ -45,6 +60,9 @@ MEMORY_FILE      = os.path.join(os.path.dirname(__file__), "memory_log.jsonl")
 ACTIVITY_FILE    = os.path.join(REPO_PATH, "agent_activity.json")
 BACKUP_DIR       = os.path.join(REPO_PATH, "backups")
 BRIDGE_PORT      = 7432
+
+# Vault-powered memory system (v2.0)
+USE_VAULT        = os.getenv("TR_USE_VAULT", "true").lower() == "true"
 
 # Full Python path for DDP runs (macOS Playwright needs this)
 PYTHON_PATH      = "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
@@ -626,7 +644,24 @@ def claude_chat(messages: list, system_prompt: str) -> dict:
     return {"error": "Rate limit exceeded after retries."}
 
 
-def build_system_prompt() -> str:
+def build_system_prompt(message: str = "", mode: str = "reactive") -> str:
+    """Build system prompt — vault-powered (v2.0) or brain.md fallback.
+
+    Args:
+        message: Current user message (for context-dependent skill/ToM loading)
+        mode: Operating mode — 'reactive', 'audit', 'consolidation'
+    """
+    if USE_VAULT and _vault_available:
+        try:
+            prompt = get_system_prompt(message=message, mode=mode, use_vault=True)
+            if prompt and len(prompt) > 500:  # Sanity check — vault loaded something meaningful
+                return prompt
+            else:
+                print("[build_system_prompt] Vault prompt too short, falling back to brain.md")
+        except Exception as e:
+            print(f"[build_system_prompt] Vault error: {e}, falling back to brain.md")
+
+    # ── FALLBACK: brain.md (v1.1 behavior) ──
     brain = load_brain()
     return f"""You are TRSitekeeper — the AI gatekeeper for trainingrun.ai. You run on David's MacBook Pro M4, powered by Claude Sonnet 4.6.
 
@@ -718,8 +753,21 @@ def keyword_intercept(text: str):
     if any(k in t for k in ("list files", "what files", "show files", "ls")):
         return ("list_files", {})
 
-    if any(k in t for k in ("brain", "show brain", "read brain", "memory")):
+    if any(k in t for k in ("brain", "show brain", "read brain")):
         return ("read_file", {"path": "web_agent/brain.md"})
+
+    # v2.0 — Vault status check
+    if any(k in t for k in ("vault", "vault status", "memory", "memory status")):
+        vault_info = f"Memory System: {'VAULT' if (USE_VAULT and _vault_available) else 'brain.md (fallback)'}\n"
+        vault_info += f"Learning Logger: {'ACTIVE' if _learning_logger else 'INACTIVE'}\n"
+        import glob as _g
+        skills = _g.glob(os.path.join(os.path.dirname(__file__), "skills", "*.md"))
+        vault_files = _g.glob(os.path.join(os.path.dirname(__file__), "vault", "*.md"))
+        memory_files = _g.glob(os.path.join(os.path.dirname(__file__), "memory", "*"))
+        vault_info += f"Vault files: {len(vault_files)}\n"
+        vault_info += f"Memory files: {len(memory_files)}\n"
+        vault_info += f"Skills loaded: {len(skills)}"
+        return ("_raw_response", {"text": vault_info})
 
     return None
 
@@ -727,6 +775,9 @@ def keyword_intercept(text: str):
 # ─────────────────────────────────────────────
 # MAIN AGENT LOOP
 # ─────────────────────────────────────────────
+
+_current_message = ""  # Tracks David's latest message for context-dependent loading
+
 
 def handle_claude_response(response, conversation_history):
     """
@@ -799,6 +850,18 @@ def handle_claude_response(response, conversation_history):
                 write_activity(f"Done: {tool_name}", location="office", status="idle")
                 print(f"[Tool result] {result[:200]}")
 
+                # v2.0 — Learning logger: record tool actions
+                if _learning_logger and tool_name in ("edit_file", "write_file"):
+                    try:
+                        _learning_logger.log_fix(
+                            file=tool_input.get("path", "unknown"),
+                            symptom=_current_message[:200],
+                            fix=f"{tool_name}: {tool_input.get('description', '')}",
+                            tool_used=tool_name,
+                        )
+                    except Exception as _log_err:
+                        print(f"[learning_logger] Error logging fix: {_log_err}")
+
                 tool_results.append({
                     "type": "tool_result",
                     "tool_use_id": tool_use_id,
@@ -812,7 +875,7 @@ def handle_claude_response(response, conversation_history):
             conversation_history.append({"role": "user", "content": tool_results})
             print(f"[Loop {loop_count + 1}] Sending {len(tool_results)} tool result(s) back to Claude...")
             write_activity("Thinking...", location="office", status="active")
-            response = claude_chat(conversation_history[-20:], build_system_prompt())
+            response = claude_chat(conversation_history[-20:], build_system_prompt(message=_current_message))
         else:
             write_activity("Ready", location="office", status="idle")
             return
@@ -825,10 +888,11 @@ def run():
     global pending_approval
 
     print("=" * 50)
-    print("  TRSitekeeper v1.1")
+    print("  TRSitekeeper v2.0")
     print(f"  Model: {CLAUDE_MODEL}")
     print(f"  Repo:  {REPO_PATH}")
-    print(f"  Brain: {BRAIN_FILE}")
+    print(f"  Memory: {'VAULT' if (USE_VAULT and _vault_available) else 'brain.md (fallback)'}")
+    print(f"  Learning: {'ACTIVE' if _learning_logger else 'INACTIVE'}")
     print("=" * 50)
 
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
@@ -848,7 +912,8 @@ def run():
     start_bridge()
     write_activity("Online and ready", location="office", status="idle")
 
-    tg_send("TRSitekeeper v1.1 online.\nPowered by Claude Sonnet 4.6\nType 'status' to check DDPs.")
+    vault_status = "Vault memory ACTIVE" if (USE_VAULT and _vault_available) else "brain.md mode"
+    tg_send(f"TRSitekeeper v2.0 online.\nPowered by Claude Sonnet 4.6\n{vault_status}\nType 'status' to check DDPs.")
     print("Startup message sent. Polling...")
 
     conversation_history = []
@@ -922,7 +987,7 @@ def run():
                                 }]
                             })
                             write_activity("Thinking...", location="office", status="active")
-                            response = claude_chat(conversation_history[-20:], build_system_prompt())
+                            response = claude_chat(conversation_history[-20:], build_system_prompt(message=_current_message))
                             handle_claude_response(response, conversation_history)
                         continue
 
@@ -941,6 +1006,9 @@ def run():
                     if intercept:
                         tool_name, tool_args = intercept
                         print(f"[Intercept] {tool_name}")
+                        if tool_name == "_raw_response":
+                            tg_send(tool_args.get("text", ""))
+                            continue
                         location = TOOL_ROOM_MAP.get(tool_name, "office")
                         write_activity(f"Running: {tool_name}", location=location, status="active")
                         result = execute_tool(tool_name, tool_args)
@@ -963,8 +1031,11 @@ def run():
 
                 conversation_history.append({"role": "user", "content": user_content})
 
+                # v2.0 — Set current message for context-dependent vault loading
+                _current_message = text
+
                 write_activity(f"Thinking: {text[:40]}", location="office", status="active")
-                response = claude_chat(conversation_history[-20:], build_system_prompt())
+                response = claude_chat(conversation_history[-20:], build_system_prompt(message=text))
                 handle_claude_response(response, conversation_history)
 
                 if len(conversation_history) > 30:
