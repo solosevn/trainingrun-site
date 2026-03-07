@@ -281,8 +281,6 @@ class AuditScheduler:
         # Send Telegram report
         self._send_telegram_report(results)
 
-        # Get intelligent analysis from Claude if available
-        self._get_claude_analysis(results)
         self._attempt_remediation(results)
 
         self.write_activity("Audit complete", location="office", status="idle")
@@ -1249,167 +1247,277 @@ class AuditScheduler:
         except Exception as e:
             logging.error(f"Error building Telegram report: {e}")
 
-    def _get_claude_analysis(self, results: Dict[str, Any]):
-        """Get intelligent analysis from Claude if available."""
+    def _diagnose_failures(self, results: dict) -> list:
+        """Use Claude to dynamically diagnose audit failures and propose fixes.
+        Returns list of dicts with structured diagnosis."""
         try:
-            if not self.claude_chat:
-                return
-
-            summary = results.get("summary", {})
             failed_checks = []
-
             for category, checks in results.get("categories", {}).items():
                 for check_name, (passed, message) in checks.items():
                     if not passed:
-                        failed_checks.append(f"- {check_name}: {message}")
+                        failed_checks.append({"check": check_name, "message": message, "category": category})
 
             if not failed_checks:
-                return  # All checks passed, no need for analysis
+                return []
 
-            # Build analysis prompt
-            prompt = f"""Analyze these site audit failures and suggest next steps:
+            # Load past fix attempts
+            past_fixes = self._load_tried_fixes()
+            past_fixes_by_check = {}
+            for fix in past_fixes:
+                cn = fix.get("check_name", "")
+                if cn not in past_fixes_by_check:
+                    past_fixes_by_check[cn] = []
+                past_fixes_by_check[cn].append(fix)
 
-Summary: {summary['passed']}/{summary['total_checks']} checks passed
-Failed Checks:
-{chr(10).join(failed_checks[:5])}
+            # Load memory context
+            memory_context = ""
+            try:
+                fp = Path(REPO_PATH) / "web_agent" / "memory" / "fix_patterns.json"
+                if fp.exists():
+                    with open(fp, "r") as f:
+                        memory_context += f"Fix patterns: {f.read()[:2000]}\n\n"
+                sk = Path(REPO_PATH) / "web_agent" / "memory" / "site_knowledge.json"
+                if sk.exists():
+                    with open(sk, "r") as f:
+                        memory_context += f"Site knowledge: {f.read()[:2000]}\n\n"
+                el = Path(REPO_PATH) / "web_agent" / "memory" / "error_log.jsonl"
+                if el.exists():
+                    with open(el, "r") as f:
+                        recent = f.readlines()[-10:]
+                    memory_context += f"Recent errors: {chr(10).join(recent)[:1500]}\n\n"
+            except Exception as e:
+                logging.warning(f"Error loading memory: {e}")
 
-Provide brief, actionable recommendations."""
+            # Build failures text with past attempts
+            failures_text = ""
+            for fc in failed_checks:
+                cn = fc["check"]
+                failures_text += f"- {cn} ({fc['category']}): {fc['message']}\n"
+                past = past_fixes_by_check.get(cn, [])
+                if past:
+                    failures_text += f"  PAST FIX ATTEMPTS ({len(past)}):\n"
+                    for p in past[-3:]:
+                        failures_text += f"    - {p.get('timestamp','?')}: tried '{p.get('fix_type','')}' => {p.get('outcome','?')}\n"
 
-            # Get Claude's analysis
-            system_prompt = "You are TRSitekeeper, an autonomous site manager for trainingrun.ai. Analyze audit failures and provide brief, actionable fixes."
-            analysis = self.claude_chat(prompt, system_prompt)
+            # Build diagnosis prompt
+            prompt = (
+                "You are TRSitekeeper diagnostic brain. Analyze audit failures and propose fixes.\n\n"
+                "REPO STRUCTURE:\n"
+                "- DDP scrapers: agent_trscode.py, agent_truscore.py, agent_trfcast.py, agent_tragents.py, agent_trs.py\n"
+                "- Scraper data: trscode-data.json, truscore-data.json, trf-data.json, tragent-data.json, trs-data.json\n"
+                "- HTML: index.html, scores.html, trscode-scores.html, truscore-scores.html, trfcast-scores.html, tragents-scores.html, hq.html, mission-control.html\n"
+                "- ticker.json and leaderboard.json are NOT produced by scrapers - they may need separate generation\n"
+                "- Special pages expected: terms.html, charter.html, belt.html, mythology.html\n"
+                "- Vault dir expected: context-vault/trainingrun/agents/trsitekeeper/\n\n"
+                f"{memory_context}"
+                f"CURRENT FAILURES:\n{failures_text}\n"
+                "RULES:\n"
+                "1. If past fix attempts FAILED, DO NOT propose same fix. Propose different or escalate.\n"
+                "2. If 2+ failed attempts on same check, set fix_type to escalate.\n"
+                "3. Be specific about root_cause.\n"
+                "4. confidence: 0.9+=sure, 0.5-0.8=worth trying, <0.5=escalate.\n"
+                "5. fix_types: rerun_scraper, git_commit, edit_file, investigate, escalate\n\n"
+                "Return ONLY a JSON array. Each element:\n"
+                '{"check_name": "...", "diagnosis": "...", "root_cause": "...", '
+                '"proposed_fix_type": "...", "proposed_action": "...", "confidence": 0.0, '
+                '"files_involved": ["..."]}'
+            )
 
-            if analysis and self.write_activity:
-                self.write_activity(
-                    f"Audit Analysis:\n{analysis}",
-                    location="audit",
-                    status="idle"
-                )
+            system_prompt = "You are an autonomous site diagnostic agent. Return ONLY valid JSON arrays. No markdown. No explanation."
+
+            if not self.claude_chat:
+                logging.warning("Claude chat not available for diagnosis")
+                return []
+
+            response = self.claude_chat(prompt, system_prompt)
+            if not response:
+                logging.error("Empty response from Claude diagnosis")
+                return []
+
+            # Parse response
+            response_text = ""
+            if isinstance(response, dict):
+                if "content" in response:
+                    for block in response.get("content", []):
+                        if isinstance(block, dict) and block.get("type") == "text":
+                            response_text = block.get("text", "")
+                            break
+                elif "text" in response:
+                    response_text = response["text"]
+            elif isinstance(response, str):
+                response_text = response
+
+            if not response_text:
+                logging.error("Could not extract text from Claude diagnosis")
+                return []
+
+            response_text = response_text.strip()
+            # Remove markdown code fences if present
+            if response_text.startswith("```"):
+                response_text = response_text.split("\n", 1)[-1]
+                if "```" in response_text:
+                    response_text = response_text[:response_text.rfind("```")].strip()
+
+            try:
+                diagnoses = json.loads(response_text)
+                if not isinstance(diagnoses, list):
+                    diagnoses = [diagnoses]
+            except json.JSONDecodeError as e:
+                logging.error(f"Failed to parse diagnosis JSON: {e}")
+                logging.error(f"Response: {response_text[:500]}")
+                return []
+
+            # Validate
+            valid = []
+            for d in diagnoses:
+                if not isinstance(d, dict):
+                    continue
+                if "check_name" not in d or "proposed_fix_type" not in d:
+                    continue
+                if d["proposed_fix_type"] not in self.KNOWN_FIX_TYPES:
+                    d["proposed_fix_type"] = "investigate"
+                if "confidence" not in d:
+                    d["confidence"] = 0.5
+                valid.append(d)
+
+            logging.info(f"Claude diagnosed {len(valid)} failures")
+            if valid and self.write_activity:
+                summary = ", ".join(f"{d['check_name']}={d['proposed_fix_type']}({d.get('confidence',0):.1f})" for d in valid)
+                self.write_activity(f"Diagnosis: {summary}", location="audit", status="idle")
+
+            return valid
 
         except Exception as e:
-            logging.error(f"Error getting Claude analysis: {e}")
+            logging.error(f"Diagnosis error: {e}")
+            return []
 
-    # ===== REMEDIATION LOOP =====
 
-    REMEDIATION_MAP = {
-        # -- DDP & Data --
-        "check_002_ddp_status": {
-            "description": "DDP data file is stale (>26h old)",
-            "fix_type": "rerun_scraper",
-            "scripts": {
-                "trscode": "agent_trscode.py",
-                "truscore": "agent_truscore.py",
-                "trfcast": "agent_trfcast.py",
-                "tragents": "agent_tragents.py",
-                "trs": "agent_trs.py",
-            }
-        },
-        "check_003_data_file_integrity": {
-            "description": "Data file missing or corrupt",
-            "fix_type": "rerun_scraper",
-            "scripts": {
-                "trscode": "agent_trscode.py",
-                "truscore": "agent_truscore.py",
-                "trfcast": "agent_trfcast.py",
-                "tragents": "agent_tragents.py",
-                "trs": "agent_trs.py",
-            }
-        },
-        # -- Local file checks --
-        "check_001_site_health": {
-            "description": "Missing ticker.json, leaderboard.json, or ddp_status",
-            "fix_type": "rerun_scraper",
-            "scripts": {
-                "trscode": "agent_trscode.py",
-                "truscore": "agent_truscore.py",
-                "trfcast": "agent_trfcast.py",
-                "tragents": "agent_tragents.py",
-                "trs": "agent_trs.py",
-            }
-        },
-        "check_005_git_status": {
-            "description": "Uncommitted files in repo",
-            "fix_type": "git_commit",
-        },
-        "check_006_vault_integrity": {
-            "description": "Vault directory not found or incomplete",
-            "fix_type": "alert_only",
-        },
-        "check_004_html_page_check": {
-            "description": "Known HTML page missing or broken",
-            "fix_type": "alert_only",
-        },
-        # -- Content & Display --
-        "check_014_special_pages": {
-            "description": "Special pages missing (terms, charter, belt, mythology)",
-            "fix_type": "alert_only",
-        },
-        "check_015_score_display": {
-            "description": "Null values displayed in score pages",
-            "fix_type": "alert_only",
-        },
-        "check_022_ticker_leaderboard": {
-            "description": "Ticker or leaderboard data not found",
-            "fix_type": "rerun_scraper",
-            "scripts": {
-                "trscode": "agent_trscode.py",
-                "truscore": "agent_truscore.py",
-                "trfcast": "agent_trfcast.py",
-                "tragents": "agent_tragents.py",
-                "trs": "agent_trs.py",
-            }
-        },
-        # -- Security --
-        "check_017_secrets_scan": {
-            "description": "Sensitive file found in repo",
-            "fix_type": "alert_only",
-        },
+    # ===== DYNAMIC REMEDIATION SYSTEM =====
+
+    # ===== DYNAMIC REMEDIATION SYSTEM =====
+    # No more static REMEDIATION_MAP. Claude diagnoses failures dynamically.
+
+    KNOWN_FIX_TYPES = ["rerun_scraper", "git_commit", "edit_file", "investigate", "escalate"]
+
+    SCRAPER_SCRIPTS = {
+        "trscode": "agent_trscode.py",
+        "truscore": "agent_truscore.py",
+        "trfcast": "agent_trfcast.py",
+        "tragents": "agent_tragents.py",
+        "trs": "agent_trs.py",
     }
 
+    TRIED_FIXES_PATH = Path(REPO_PATH) / "web_agent" / "memory" / "tried_fixes.jsonl"
+
+    def _load_tried_fixes(self, check_name: str = None) -> list:
+        """Load past fix attempts from tried_fixes.jsonl."""
+        try:
+            if not self.TRIED_FIXES_PATH.exists():
+                return []
+            fixes = []
+            with open(self.TRIED_FIXES_PATH, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        entry = json.loads(line)
+                        if check_name is None or entry.get("check_name") == check_name:
+                            fixes.append(entry)
+                    except json.JSONDecodeError:
+                        continue
+            return fixes
+        except Exception as e:
+            logging.error(f"Error loading tried fixes: {e}")
+            return []
+
+    def _record_fix_attempt(self, check_name, fix_type, action, outcome, details=""):
+        """Append a fix attempt to tried_fixes.jsonl."""
+        try:
+            self.TRIED_FIXES_PATH.parent.mkdir(parents=True, exist_ok=True)
+            entry = {
+                "check_name": check_name,
+                "fix_type": fix_type,
+                "action": action,
+                "outcome": outcome,
+                "details": details,
+                "timestamp": datetime.datetime.now().isoformat(),
+            }
+            with open(self.TRIED_FIXES_PATH, "a") as f:
+                f.write(json.dumps(entry) + "\n")
+        except Exception as e:
+            logging.error(f"Error recording fix attempt: {e}")
+
     def _attempt_remediation(self, results):
-        """After audit, propose fixes for failed checks to David via Telegram."""
+        """After audit, use Claude diagnosis to propose fixes."""
         try:
             self.pending_remediations = {}
-            failed_fixable = []
+            diagnoses = self._diagnose_failures(results)
 
-            for category, checks in results.get("categories", {}).items():
-                for check_name, (passed, message) in checks.items():
-                    if passed:
-                        continue
-                    if check_name in self.REMEDIATION_MAP:
-                        remap = self.REMEDIATION_MAP[check_name]
-                        if remap["fix_type"] == "alert_only":
-                            continue
-                        self.pending_remediations[check_name] = {
-                            "description": remap["description"],
-                            "message": message,
-                            "fix_type": remap["fix_type"],
-                            "remap": remap,
-                            "timestamp": datetime.datetime.now().isoformat(),
-                        }
-                        failed_fixable.append(
-                            f"- {check_name}: {message}\n  Fix: {remap['description']}"
-                        )
-
-            if not failed_fixable:
+            if not diagnoses:
+                logging.info("No diagnoses returned")
                 return
 
-            msg = f"REMEDIATION PROPOSALS ({len(failed_fixable)} fixable):\n\n"
-            msg += "\n\n".join(failed_fixable)
-            msg += "\n\nReply:\n"
-            msg += "'approve all' to fix everything\n"
-            msg += "'approve [check_name]' to fix one\n"
-            msg += "'reject all' to skip all\n"
-            msg += "'pending fixes' to see this list again"
+            fixable = []
+            escalations = []
 
-            if self.tg_send:
-                self.tg_send(msg)
+            for d in diagnoses:
+                check_name = d.get("check_name", "unknown")
+                fix_type = d.get("proposed_fix_type", "investigate")
+                confidence = d.get("confidence", 0.5)
+
+                if fix_type == "escalate" or confidence < 0.3:
+                    escalations.append(d)
+                    continue
+
+                if fix_type == "investigate":
+                    escalations.append(d)
+                    continue
+
+                self.pending_remediations[check_name] = {
+                    "description": d.get("diagnosis", "No description"),
+                    "message": d.get("root_cause", ""),
+                    "fix_type": fix_type,
+                    "proposed_action": d.get("proposed_action", ""),
+                    "confidence": confidence,
+                    "files_involved": d.get("files_involved", []),
+                    "diagnosis": d,
+                    "timestamp": datetime.datetime.now().isoformat(),
+                }
+                fixable.append(
+                    f"- {check_name} (confidence: {confidence:.0%})\n"
+                    f"  Diagnosis: {d.get('diagnosis', 'N/A')}\n"
+                    f"  Root cause: {d.get('root_cause', 'N/A')}\n"
+                    f"  Fix: {d.get('proposed_action', 'N/A')}"
+                )
+
+            if fixable:
+                msg = f"REMEDIATION PROPOSALS ({len(fixable)} fixable):\n\n"
+                msg += "\n\n".join(fixable)
+                msg += "\n\nReply:\n"
+                msg += "'approve all' to fix everything\n"
+                msg += "'approve [check_name]' to fix one\n"
+                msg += "'reject all' to skip all\n"
+                msg += "'pending fixes' to see this list again"
+                if self.tg_send:
+                    self.tg_send(msg)
+
+            if escalations:
+                esc_msg = f"ESCALATIONS ({len(escalations)} need attention):\n\n"
+                for e in escalations:
+                    esc_msg += f"- {e.get('check_name', '?')}\n"
+                    esc_msg += f"  Diagnosis: {e.get('diagnosis', 'N/A')}\n"
+                    esc_msg += f"  Root cause: {e.get('root_cause', 'N/A')}\n"
+                    esc_msg += f"  Recommendation: {e.get('proposed_action', 'N/A')}\n\n"
+                esc_msg += "These need manual investigation."
+                if self.tg_send:
+                    self.tg_send(esc_msg)
 
         except Exception as e:
             logging.error(f"Remediation attempt error: {e}")
 
     def process_remediation(self, check_name):
-        """Execute an approved remediation. Returns status message."""
+        """Execute an approved remediation."""
         try:
             if check_name == "all":
                 rem_results = []
@@ -1419,13 +1527,13 @@ Provide brief, actionable recommendations."""
                 self.pending_remediations = {}
                 return "Remediation results:\n" + "\n".join(rem_results)
 
-            # Partial match: allow "check_022" to match "check_022_ticker_leaderboard"
+            # Partial match
             if check_name not in self.pending_remediations:
                 matches = [k for k in self.pending_remediations if k.startswith(check_name)]
                 if len(matches) == 1:
                     check_name = matches[0]
                 elif len(matches) > 1:
-                    return f"Ambiguous: '{check_name}' matches multiple: {', '.join(matches)}. Be more specific."
+                    return f"Ambiguous: '{check_name}' matches: {', '.join(matches)}"
                 else:
                     return f"No pending remediation for '{check_name}'. Use 'pending fixes' to see options."
 
@@ -1437,36 +1545,37 @@ Provide brief, actionable recommendations."""
             return f"Remediation error: {e}"
 
     def _execute_fix(self, check_name):
-        """Execute the actual fix for a check."""
+        """Execute the actual fix. Records outcome to tried_fixes."""
         try:
             rem = self.pending_remediations.get(check_name)
             if not rem:
                 return "No remediation data found"
 
             fix_type = rem["fix_type"]
+            proposed_action = rem.get("proposed_action", "")
 
             if fix_type == "rerun_scraper":
-                remap = rem["remap"]
-                scripts = remap.get("scripts", {})
                 rerun_results = []
-                for scraper_name, script_file in scripts.items():
+                for scraper_name, script_file in self.SCRAPER_SCRIPTS.items():
                     script_path = Path(REPO_PATH) / script_file
                     if script_path.exists():
                         try:
                             result = subprocess.run(
                                 ["python3", str(script_path)],
-                                capture_output=True, text=True, timeout=120,
+                                capture_output=True, text=True, timeout=300,
                                 cwd=str(REPO_PATH)
                             )
                             if result.returncode == 0:
-                                rerun_results.append(f"{scraper_name}: re-ran OK")
+                                rerun_results.append(f"{scraper_name}: OK")
                             else:
                                 rerun_results.append(f"{scraper_name}: failed ({result.stderr[:100]})")
                         except subprocess.TimeoutExpired:
-                            rerun_results.append(f"{scraper_name}: timed out (120s)")
+                            rerun_results.append(f"{scraper_name}: timed out (300s)")
                     else:
-                        rerun_results.append(f"{scraper_name}: script not found")
-                return "Scraper re-run:\n" + "\n".join(rerun_results)
+                        rerun_results.append(f"{scraper_name}: not found")
+                outcome = "Scraper re-run:\n" + "\n".join(rerun_results)
+                self._record_fix_attempt(check_name, fix_type, "rerun all scrapers", outcome)
+                return outcome
 
             elif fix_type == "git_commit":
                 try:
@@ -1475,7 +1584,9 @@ Provide brief, actionable recommendations."""
                         capture_output=True, text=True, cwd=str(REPO_PATH)
                     )
                     if not status_out.stdout.strip():
-                        return "No uncommitted files found"
+                        outcome = "No uncommitted files found"
+                        self._record_fix_attempt(check_name, fix_type, "git commit", outcome)
+                        return outcome
                     file_list = status_out.stdout.strip().split("\n")
                     file_count = len(file_list)
                     subprocess.run(["git", "add", "-A"], capture_output=True, text=True, cwd=str(REPO_PATH))
@@ -1487,16 +1598,37 @@ Provide brief, actionable recommendations."""
                     if result.returncode == 0:
                         push = subprocess.run(["git", "push"], capture_output=True, text=True, cwd=str(REPO_PATH))
                         if push.returncode == 0:
-                            return f"Committed and pushed {file_count} files"
-                        return f"Committed {file_count} files but push failed: {push.stderr[:100]}"
-                    return f"Commit failed: {result.stderr[:100]}"
+                            outcome = f"Committed and pushed {file_count} files"
+                        else:
+                            outcome = f"Committed but push failed: {push.stderr[:100]}"
+                    else:
+                        outcome = f"Commit failed: {result.stderr[:100]}"
+                    self._record_fix_attempt(check_name, fix_type, "git commit+push", outcome)
+                    return outcome
                 except Exception as e:
-                    return f"Git error: {e}"
+                    outcome = f"Git error: {e}"
+                    self._record_fix_attempt(check_name, fix_type, "git commit", outcome)
+                    return outcome
 
-            return f"Unknown fix type: {fix_type}"
+            elif fix_type == "edit_file":
+                outcome = f"Edit proposed: {proposed_action}. Requires manual review."
+                self._record_fix_attempt(check_name, fix_type, proposed_action, outcome)
+                return outcome
+
+            elif fix_type == "investigate":
+                outcome = f"Investigation needed: {proposed_action}"
+                self._record_fix_attempt(check_name, fix_type, proposed_action, outcome)
+                return outcome
+
+            else:
+                outcome = f"Unknown fix type: {fix_type}"
+                self._record_fix_attempt(check_name, fix_type, "unknown", outcome)
+                return outcome
 
         except Exception as e:
+            self._record_fix_attempt(check_name, "error", "error", f"Exception: {e}")
             return f"Fix execution error: {e}"
+
 
     def get_pending_remediations(self):
         """Return summary of pending remediations."""
