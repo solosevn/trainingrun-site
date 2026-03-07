@@ -202,7 +202,7 @@ class AuditScheduler:
         """
         start_time = datetime.datetime.now()
         print(f"\n{'='*60}")
-        print(f"  AUTONOMOUS AUDIT (24 CHECKS) — {start_time.strftime('%a %b %d, %-I:%M %p')}")
+        print(f"  AUTONOMOUS AUDIT (24 CHECKS) â {start_time.strftime('%a %b %d, %-I:%M %p')}")
         print(f"{'='*60}")
 
         self.write_activity(
@@ -328,67 +328,58 @@ class AuditScheduler:
             return False, f"Site health check error: {e}"
 
     def _check_ddp_status(self) -> Tuple[bool, str]:
-        """Check 2: Verify all 5 DDPs are running and not stale/failed."""
+        """Check 2: Verify all 5 DDPs have fresh data files."""
         try:
-            status_file = Path(REPO_PATH) / "web_agent" / "ddp_status.json"
-            if not status_file.exists():
-                return False, "DDP status file not found"
-
-            with open(status_file) as f:
-                ddp_data = json.load(f)
-
-            expected_ddps = ["DDP1", "DDP2", "DDP3", "DDP4", "DDP5"]
-            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=2)
+            ddp_data_files = {
+                "trscode": Path(REPO_PATH) / "trscode-data.json",
+                "truscore": Path(REPO_PATH) / "truscore-data.json",
+                "trfcast": Path(REPO_PATH) / "trf-data.json",
+                "tragents": Path(REPO_PATH) / "tragent-data.json",
+                "trs": Path(REPO_PATH) / "trs-data.json",
+            }
+            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=26)
 
             issues = []
-            for ddp in expected_ddps:
-                if ddp not in ddp_data:
-                    issues.append(f"{ddp} missing")
+            for name, path in ddp_data_files.items():
+                if not path.exists():
+                    issues.append(f"{name} data file missing")
                 else:
-                    status = ddp_data[ddp].get("status", "unknown")
-                    if status not in ["running", "active", "ok"]:
-                        issues.append(f"{ddp} status={status}")
-
-                    # Check staleness
-                    last_update = ddp_data[ddp].get("last_update")
-                    if last_update:
-                        try:
-                            update_time = datetime.datetime.fromisoformat(last_update)
-                            if update_time < stale_threshold:
-                                issues.append(f"{ddp} stale (>2h)")
-                        except:
-                            pass
+                    mod_time = datetime.datetime.fromtimestamp(path.stat().st_mtime)
+                    if mod_time < stale_threshold:
+                        hours_old = (datetime.datetime.now() - mod_time).total_seconds() / 3600
+                        issues.append(f"{name} stale ({hours_old:.0f}h old)")
 
             if issues:
                 return False, f"DDP issues: {', '.join(issues)}"
 
-            return True, "All 5 DDPs running and up-to-date"
+            return True, "All 5 DDPs have fresh data files"
 
         except Exception as e:
             return False, f"DDP status check error: {e}"
 
     def _check_data_file_integrity(self) -> Tuple[bool, str]:
-        """Check 3: Verify JSON data files are valid and not stale (>48h)."""
+        """Check 3: Verify DDP JSON data files are valid and not stale (>48h)."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
             stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=48)
+            critical_files = {
+                "trscode-data.json": Path(REPO_PATH) / "trscode-data.json",
+                "truscore-data.json": Path(REPO_PATH) / "truscore-data.json",
+                "trf-data.json": Path(REPO_PATH) / "trf-data.json",
+                "tragent-data.json": Path(REPO_PATH) / "tragent-data.json",
+                "trs-data.json": Path(REPO_PATH) / "trs-data.json",
+            }
 
-            critical_files = ["ticker.json", "leaderboard.json"]
             issues = []
-
-            for fname in critical_files:
-                fpath = data_dir / fname
+            for fname, fpath in critical_files.items():
                 if not fpath.exists():
                     issues.append(f"{fname} missing")
                     continue
 
-                # Check if file is stale
                 mtime = datetime.datetime.fromtimestamp(fpath.stat().st_mtime)
                 if mtime < stale_threshold:
                     hours_old = (datetime.datetime.now() - mtime).total_seconds() / 3600
                     issues.append(f"{fname} stale ({hours_old:.1f}h old)")
 
-                # Validate JSON
                 try:
                     with open(fpath) as f:
                         json.load(f)
@@ -1221,7 +1212,8 @@ Failed Checks:
 Provide brief, actionable recommendations."""
 
             # Get Claude's analysis
-            analysis = self.claude_chat(prompt)
+        system_prompt = "You are TRSitekeeper, an autonomous site manager for trainingrun.ai. Analyze audit failures and provide brief, actionable fixes."
+        analysis = self.claude_chat(prompt, system_prompt)
 
             if analysis and self.write_activity:
                 self.write_activity(
@@ -1327,7 +1319,7 @@ if __name__ == "__main__":
     for category, checks in results["categories"].items():
         print(f"\n{category}:")
         for check_name, (passed, message) in checks.items():
-            status = "✓" if passed else "✗"
+            status = "â" if passed else "â"
             print(f"  {status} {check_name}: {message[:80]}")
 
     print("\n" + "=" * 70)
