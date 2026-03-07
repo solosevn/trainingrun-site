@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "updated": "2026-03-06",
+  "seed_source": "brain.md v2.0 file inventory + known architecture",
+
+  "pages": {
+    "index.html": {
+      "purpose": "MAIN PAGE â full leaderboard (TRSbench default), 5 DDP tabs, model card popups, sidebar filters. Primary file for all UI changes.",
+      "importance": "critical",
+      "key_sections": ["hero", "nav-tabs", "sidebar-filters", "leaderboard-table", "model-card-popup"],
+      "key_functions": ["buildLabFilter", "buildPillarSidebar", "renderTable", "openV2Modal", "getLatestScore", "filterByLab"],
+      "data_dependencies": ["trs-data.json", "trscode-data.json", "truscore-data.json", "trf-data.json", "tragent-data.json"],
+      "known_quirks": [
+        "Model card ranks must use live scores[last] calculation â stored .rank is unreliable (999, stale)",
+        "Lab filter: top 6 pinned (Google/xAI/Anthropic/DeepSeek/OpenAI/Meta), divider, rest alpha",
+        "Sidebar structure: Rank By â Pillars â Filter by Lab â License â Score Range",
+        "Promise.all() loads all 5 JSONs simultaneously on init"
+      ],
+      "common_issues": ["Data staleness", "Model name rendering", "Mobile alignment", "Sidebar label changes"],
+      "common_fix_locations": {
+        "sidebar_labels": "lines 430-465",
+        "lab_filter": "buildLabFilter() ~line 1022",
+        "model_card": "openV2Modal() ~line 1100"
+      }
+    },
+    "truscore.html": {
+      "purpose": "TRUscore standalone leaderboard page",
+      "importance": "high",
+      "data_dependencies": ["truscore-data.json"],
+      "known_quirks": [],
+      "common_issues": []
+    },
+    "trscode.html": {
+      "purpose": "TRScode standalone leaderboard page",
+      "importance": "high",
+      "data_dependencies": ["trscode-data.json"],
+      "known_quirks": [],
+      "common_issues": []
+    },
+    "trfcast.html": {
+      "purpose": "TRFcast standalone leaderboard page",
+      "importance": "high",
+      "data_dependencies": ["trf-data.json"],
+      "known_quirks": [],
+      "common_issues": []
+    },
+    "tragents.html": {
+      "purpose": "TRAgents standalone leaderboard page",
+      "importance": "high",
+      "data_dependencies": ["tragent-data.json"],
+      "known_quirks": [],
+      "common_issues": []
+    },
+    "mission-control.html": {
+      "purpose": "Live ops dashboard â reads status.json + scout-briefing.json",
+      "importance": "high",
+      "data_dependencies": ["status.json", "scout-briefing.json"],
+      "known_quirks": [
+        "Reads: top_stories[], stats.total_scraped, stats.passed_filter, narrative_brief, ai_verdict, category_label"
+      ],
+      "common_issues": ["Showing 0 stories when scout-briefing.json keys are mismatched"]
+    },
+    "hq.html": {
+      "purpose": "Agent HQ â reads agent_activity.json from bridge server port 7432",
+      "importance": "medium",
+      "data_dependencies": ["agent_activity.json"],
+      "known_quirks": [],
+      "common_issues": []
+    },
+    "news.html": {
+      "purpose": "News/scout briefing page",
+      "importance": "medium",
+      "data_dependencies": ["scout-briefing.json"],
+      "known_quirks": [],
+      "common_issues": []
+    },
+    "about.html": { "purpose": "About page", "importance": "low", "data_dependencies": [], "known_quirks": [], "common_issues": [] },
+    "sources.html": { "purpose": "Source verification page", "importance": "medium", "data_dependencies": [], "known_quirks": [], "common_issues": [] },
+    "frontier.html": { "purpose": "Frontier models page", "importance": "medium", "data_dependencies": [], "known_quirks": [], "common_issues": [] },
+    "churn.html": { "purpose": "Model churn visualization", "importance": "medium", "data_dependencies": [], "known_quirks": [], "common_issues": [] },
+    "global-race.html": { "purpose": "Global AI race visualization", "importance": "medium", "data_dependencies": [], "known_quirks": [], "common_issues": [] },
+    "gigaburn.html": { "purpose": "GPU/compute burn visualization", "importance": "medium", "data_dependencies": [], "known_quirks": [], "common_issues": [] },
+    "scores.html": { "purpose": "LEGACY â old TRSbench leaderboard (React-based). No longer primary. Keep for reference only.", "importance": "deprecated", "data_dependencies": ["trs-data.json"], "known_quirks": ["Do NOT edit for UI changes â use index.html instead"], "common_issues": [] }
+  },
+
+  "methodology_pages": {
+    "trsmethodology.html": "TRSbench methodology â linked from index.html 'View Methodology'",
+    "trscode-methodology.html": "TRScode methodology",
+    "trfcast-methodology.html": "TRFcast methodology",
+    "tragents-methodology.html": "TRAgents methodology",
+    "design_rules": "TOC sidebars on all methodology pages â fixed left, hidden at â¤1100px. Back button always links to index.html."
+  },
+
+  "shared_assets": {
+    "nav-v2.js": "Shared navigation JS loaded by all pages. Edit here for site-wide nav changes.",
+    "styles.css": "Global styles shared across pages. Check here FIRST for CSS tweaks, then page-specific <style> blocks.",
+    "CNAME": "trainingrun.ai custom domain config"
+  },
+
+  "data_files": {
+    "trs-data.json": { "written_by": "agent_trs.py", "structure": "formula_version, checksum, weights, dates[], models[], timeline_events[]" },
+    "trscode-data.json": { "written_by": "agent_trscode.py", "structure": "same as trs-data.json" },
+    "truscore-data.json": { "written_by": "agent_truscore.py", "structure": "same as trs-data.json" },
+    "trf-data.json": { "written_by": "agent_trfcast.py", "structure": "same as trs-data.json", "known_bug": "rank field is 999 sentinel â DDP never computes it. Always use live scores." },
+    "tragent-data.json": { "written_by": "agent_tragents.py", "structure": "same as trs-data.json", "known_bug": "133 models, many with null latest scores. Stored rank is stale." },
+    "status.json": { "written_by": "each DDP after run", "read_by": "mission-control.html" },
+    "scout-briefing.json": { "written_by": "Content Scout at 5:30 AM", "read_by": "mission-control.html, news.html" },
+    "agent_activity.json": { "written_by": "TRSitekeeper bridge server (port 7432)", "read_by": "hq.html" }
+  },
+
+  "brand_dna": {
+    "cyan": "#00d4ff (canonical) / #00e5ff (alternate, both acceptable)",
+    "red": "#ff3333 â TRAgents 'Agents' text ONLY",
+    "background": "#0a0f1a (near-black)",
+    "text_white": "#ffffff",
+    "text_muted": "rgba(255,255,255,0.5)",
+    "voice": "No-BS, data-driven, truth-first. Never hype.",
+    "ddp_branding": {
+      "TRSbench": "TRS cyan + bench white",
+      "TRScode": "TRS cyan + code white",
+      "TRUscore": "TRU cyan + score white",
+      "TRFcast": "TRF cyan + cast white",
+      "TRAgents": "TR cyan + Agents RED"
+    }
+  }
+}
