@@ -135,9 +135,35 @@ async def run_workflow(bot: Bot, dry_run: bool = False):
         agent.stories = get_stories_from_briefing(agent.briefing)
 
         if not agent.stories:
-            logger.warning("No stories found in briefing. Waiting for Content Scout.")
-            if not dry_run:
-                await send_error(bot, "No stories in today's Content Scout briefing. Skipping cycle.")
+            # Check briefing freshness and time-based deadline
+            now = datetime.datetime.now()
+            briefing_file = Path(SCOUT_BRIEFING_PATH)
+            briefing_age_msg = ""
+            if briefing_file.exists():
+                mtime = datetime.datetime.fromtimestamp(briefing_file.stat().st_mtime)
+                hours_old = (now - mtime).total_seconds() / 3600
+                briefing_age_msg = f" (briefing file is {hours_old:.1f}h old)"
+            else:
+                briefing_age_msg = " (no briefing file found)"
+
+            is_past_deadline = (now.hour > 5) or (now.hour == 5 and now.minute >= 45)
+
+            if is_past_deadline:
+                alert = (
+                    "⚠️ DAILY NEWS AGENT — 5:45 AM DEADLINE\n\n"
+                    f"No Content Scout briefing received{briefing_age_msg}.\n"
+                    "Content Scout may have failed or not run yet.\n\n"
+                    "Options:\n"
+                    "• Check Content Scout: cd ~/trainingrun-site && python3 content_scout/scout.py\n"
+                    "• Manual trigger: restart Daily News Agent after scout runs"
+                )
+                logger.warning(f"DEADLINE ALERT: No briefing by 5:45 AM{briefing_age_msg}")
+                if not dry_run:
+                    await send_error(bot, alert)
+            else:
+                logger.warning("No stories found in briefing. Waiting for Content Scout.")
+                if not dry_run:
+                    await send_error(bot, f"No stories in today's Content Scout briefing{briefing_age_msg}. Skipping cycle.")
             return
 
         logger.info(f"Found {len(agent.stories)} stories from Content Scout")
