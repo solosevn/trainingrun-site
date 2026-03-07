@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "updated": "2026-03-06",
+  "seed_source": "brain.md v2.0 COMMON FIX PATTERNS section",
+
+  "patterns": {
+    "sidebar_text_change": {
+      "description": "Change text or label in the sidebar",
+      "diagnostic_steps": [
+        "Identify which sidebar section needs change (Rank By, Pillars, Filter by Lab, License, Score Range)",
+        "Open index.html around lines 430-465 (sidebar section headers)",
+        "Find the exact text to change"
+      ],
+      "common_fixes": [
+        "Edit HTML directly in sidebar section",
+        "If it's a section header with .prominent class, preserve the class"
+      ],
+      "files_usually_involved": ["index.html"],
+      "times_applied": 3,
+      "success_rate": 1.0
+    },
+
+    "lab_filter_change": {
+      "description": "Reorder or change the lab filter",
+      "diagnostic_steps": [
+        "Open index.html, find buildLabFilter() function (~line 1022)",
+        "Check TOP_LABS array â controls pin order",
+        "Verify .lab-divider placement between top 6 and rest"
+      ],
+      "common_fixes": [
+        "Edit TOP_LABS array order",
+        "Add/remove labs from pinned list",
+        "Verify divider still renders correctly"
+      ],
+      "files_usually_involved": ["index.html"],
+      "times_applied": 2,
+      "success_rate": 1.0
+    },
+
+    "model_card_wrong_rank": {
+      "description": "Model card showing wrong rank",
+      "diagnostic_steps": [
+        "Open index.html, find openV2Modal() (~line 1100)",
+        "Check if rank is using live scores[last] calculation or stored model.rank",
+        "NEVER trust stored .rank â trf uses 999 sentinel, tragents has stale ranks"
+      ],
+      "common_fixes": [
+        "Ensure rank computed as: count models with higher scores[last] + 1",
+        "If current score is null or 0, show N/A"
+      ],
+      "files_usually_involved": ["index.html"],
+      "times_applied": 2,
+      "success_rate": 1.0
+    },
+
+    "scores_not_updating": {
+      "description": "Scores not updating on the live site",
+      "diagnostic_steps": [
+        "Check status.json â did the DDP actually run?",
+        "Check the relevant *-data.json dates array â what's the latest date?",
+        "Check git log â was the data file pushed?",
+        "Check if cron ran (ddp.log)",
+        "Check if Mac was awake at 4AM"
+      ],
+      "common_fixes": [
+        "If DDP didn't run: check daily_runner.py, check cron with crontab -l",
+        "If data exists but not pushed: run git push manually",
+        "If data is stale: run the specific DDP manually"
+      ],
+      "files_usually_involved": ["status.json", "daily_runner.py", "trs-data.json"],
+      "times_applied": 4,
+      "success_rate": 0.85
+    },
+
+    "mission_control_zero_stories": {
+      "description": "Mission Control showing 0 stories",
+      "diagnostic_steps": [
+        "Check scout-briefing.json exists and has content",
+        "Verify keys: top_stories[], stats.total_scraped, stats.passed_filter, narrative_brief",
+        "Check mission-control.html JS reads exact keys (ai_verdict, category_label for badges)"
+      ],
+      "common_fixes": [
+        "Fix key mismatch between scout output and HTML reader",
+        "Re-run Content Scout if data is missing"
+      ],
+      "files_usually_involved": ["scout-briefing.json", "mission-control.html"],
+      "times_applied": 1,
+      "success_rate": 1.0
+    },
+
+    "css_tweak": {
+      "description": "CSS tweak â color, size, spacing, alignment",
+      "diagnostic_steps": [
+        "Check styles.css FIRST (global styles)",
+        "Then check the specific HTML file's <style> block at top",
+        "Identify if issue is parent container or child element",
+        "Check media queries for viewport-specific behavior"
+      ],
+      "common_fixes": [
+        "Edit styles.css for global changes",
+        "Edit page-specific <style> block for page-only changes",
+        "For alignment: check parent flex/grid container first (80% of alignment issues are parent problems)"
+      ],
+      "files_usually_involved": ["styles.css", "index.html"],
+      "times_applied": 6,
+      "success_rate": 0.90
+    },
+
+    "nav_link_change": {
+      "description": "Add or remove a navigation link",
+      "diagnostic_steps": [
+        "Determine if change should be site-wide or page-specific",
+        "If site-wide: edit nav-v2.js",
+        "If page-specific: edit that page's nav block"
+      ],
+      "common_fixes": [
+        "Edit nav-v2.js for global nav changes",
+        "Edit specific HTML page's nav block for one-page changes"
+      ],
+      "files_usually_involved": ["nav-v2.js"],
+      "times_applied": 2,
+      "success_rate": 1.0
+    },
+
+    "git_push_failure": {
+      "description": "Git push not going through",
+      "diagnostic_steps": [
+        "Check for duplicate agent processes (409 Telegram conflict)",
+        "Check for rate limits (429 errors)",
+        "Check if there are merge conflicts (pull --rebase first)"
+      ],
+      "common_fixes": [
+        "Kill all duplicate processes, restart clean",
+        "Agent has retry logic: 15s â 30s â 60s backoff",
+        "Always git pull --rebase before push"
+      ],
+      "files_usually_involved": ["agent.py"],
+      "times_applied": 3,
+      "success_rate": 0.90
+    },
+
+    "alignment_issue": {
+      "description": "Visual alignment issues â elements misaligned, spacing off",
+      "diagnostic_steps": [
+        "Identify viewport (mobile, tablet, desktop)",
+        "Check parent flex/grid container properties",
+        "Check child element margin/padding",
+        "Check viewport-specific media queries"
+      ],
+      "common_fixes": [
+        "Add align-items: center to parent flex container",
+        "Use gap instead of margin between children",
+        "Check all 3 viewports after fix (375px, 768px, 1440px)"
+      ],
+      "files_usually_involved": ["index.html", "styles.css"],
+      "times_applied": 5,
+      "success_rate": 0.92
+    }
+  }
+}
