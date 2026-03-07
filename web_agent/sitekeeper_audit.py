@@ -1292,7 +1292,8 @@ Provide brief, actionable recommendations."""
     # ===== REMEDIATION LOOP =====
 
     REMEDIATION_MAP = {
-        "check_009_ddp_status": {
+        # -- DDP & Data --
+        "check_002_ddp_status": {
             "description": "DDP data file is stale (>26h old)",
             "fix_type": "rerun_scraper",
             "scripts": {
@@ -1303,7 +1304,7 @@ Provide brief, actionable recommendations."""
                 "trs": "agent_trs.py",
             }
         },
-        "check_010_data_integrity": {
+        "check_003_data_file_integrity": {
             "description": "Data file missing or corrupt",
             "fix_type": "rerun_scraper",
             "scripts": {
@@ -1314,12 +1315,53 @@ Provide brief, actionable recommendations."""
                 "trs": "agent_trs.py",
             }
         },
-        "check_011_git_status": {
+        # -- Local file checks --
+        "check_001_site_health": {
+            "description": "Missing ticker.json, leaderboard.json, or ddp_status",
+            "fix_type": "rerun_scraper",
+            "scripts": {
+                "trscode": "agent_trscode.py",
+                "truscore": "agent_truscore.py",
+                "trfcast": "agent_trfcast.py",
+                "tragents": "agent_tragents.py",
+                "trs": "agent_trs.py",
+            }
+        },
+        "check_005_git_status": {
             "description": "Uncommitted files in repo",
             "fix_type": "git_commit",
         },
-        "check_006_known_pages": {
-            "description": "Known page returning non-200",
+        "check_006_vault_integrity": {
+            "description": "Vault directory not found or incomplete",
+            "fix_type": "alert_only",
+        },
+        "check_004_html_page_check": {
+            "description": "Known HTML page missing or broken",
+            "fix_type": "alert_only",
+        },
+        # -- Content & Display --
+        "check_014_special_pages": {
+            "description": "Special pages missing (terms, charter, belt, mythology)",
+            "fix_type": "alert_only",
+        },
+        "check_015_score_display": {
+            "description": "Null values displayed in score pages",
+            "fix_type": "alert_only",
+        },
+        "check_022_ticker_leaderboard": {
+            "description": "Ticker or leaderboard data not found",
+            "fix_type": "rerun_scraper",
+            "scripts": {
+                "trscode": "agent_trscode.py",
+                "truscore": "agent_truscore.py",
+                "trfcast": "agent_trfcast.py",
+                "tragents": "agent_tragents.py",
+                "trs": "agent_trs.py",
+            }
+        },
+        # -- Security --
+        "check_017_secrets_scan": {
+            "description": "Sensitive file found in repo",
             "fix_type": "alert_only",
         },
     }
