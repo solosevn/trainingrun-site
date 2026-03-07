@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "updated": "2026-03-06",
+  "seed_sources": ["David 2.md", "DavidSolomonPersonality.md", "brain.md", "conversation_history"],
+
+  "identity": {
+    "name": "David Solomon",
+    "age": 55,
+    "location": "Texas",
+    "family": {
+      "wife": "His rock. The only reason he's successful or believes the future is bright. Speaks of her with reverence and gratitude. She is always priority #1 alongside kids.",
+      "kids": 6,
+      "oldest": 28,
+      "youngest": 3,
+      "philosophy": "Kids' smiles and long-term happiness â into their 80s, 90s, 100s â is his #1 metric of success."
+    },
+    "background": "Military veteran, engineer, came from nothing. Built everything through grit + wife's support. Runs everything solo, keeps costs lean.",
+    "health": "Very healthy, plans to be around a long time."
+  },
+
+  "priority_stack": [
+    "1. Family â wife and kids. Nothing ever overrides this. Ever.",
+    "2. Personal happiness â protects this fiercely because it fuels everything else.",
+    "3. Work â grinds harder than anyone because he came from nothing.",
+    "4. Website (TrainingRun.AI) â legacy project. Truth and safety in AI for humanity."
+  ],
+
+  "core_values": [
+    "Truth and data integrity above all â never lie to users, never clickbait",
+    "Order and process â SOPs, checklists, discipline. Hates chaos and people forgetting things.",
+    "Learning from mistakes â zero tolerance for repeated mistakes. Will call it out constructively.",
+    "Family first â every decision filters through 'does this help my family?'",
+    "Empathy â huge heart for kids especially. Tears up when kids smile. Never judges because he can be judged the same way.",
+    "Credit where due â always cite sources, always credit original authors.",
+    "No redundancy â one file, one job. Hates duplicate files and wrapper scripts.",
+    "Autonomy â don't bother David with things the agent can handle. Just do it."
+  ],
+
+  "personality_traits": {
+    "military_veteran_mindset": "SOPs, checklists, organization, discipline. Every task has a procedure, every promise is tracked.",
+    "ocd_about_order": "Everything has a place. Gets genuinely frustrated by chaos or disorganization.",
+    "engineer_tinkerer": "Loves solving problems, building things, iterating until perfect.",
+    "optimistic_realist": "Believes technology (rockets, fast cars, space, AI) can make life amazing if done safely and truthfully.",
+    "deep_romantic": "Wife is partner in every sense. Speaks of her with reverence.",
+    "empathy_engine": "Huge heart for kids and families. Especially empathetic toward kids without great parenting.",
+    "protective_love": "Default emotion is protective love mixed with disciplined optimism."
+  },
+
+  "decision_patterns": [
+    "First filter: Does this help my family? â Does it help my happiness? â Does it help my work? â Does it help the AI mission?",
+    "Problem-solving: Break into SOPs â test â iterate â document so no one forgets.",
+    "Prioritizes site appearance issues over backend issues â the site IS the brand.",
+    "Cares deeply about mobile rendering â always check mobile.",
+    "When he says 'it looks weird' he usually means alignment or spacing.",
+    "Prefers the agent to fix first, explain after. No approval loops for routine work.",
+    "Sends screenshots with 'fix this' â expects diagnosis, edit, push. Done.",
+    "Does NOT want duplicate files, redundant scripts, or wrapper files around things that already work."
+  ],
+
+  "communication_style": {
+    "tone": "Direct, warm, no fluff. Short sentences. Proud dad who's also a disciplined veteran engineer.",
+    "prefers": "Show the fix, not the theory. Action over explanation.",
+    "dislikes": "Being told everything is fine when it isn't. Unnecessary questions. Complexity. Repetition.",
+    "voice_to_text": true,
+    "note": "Communicates via Telegram. Messages are short, direct, often voice-to-text with typos and speech artifacts. Interpret intent, not literal words.",
+    "humor": "Light dad jokes about rockets and fast cars. Gets visibly excited about space, tech, and wife's support.",
+    "family_topics": "Soft, proud, emotional tone.",
+    "work_topics": "Precise, orderly, safety-first tone.",
+    "problem_topics": "Let's write the SOP and fix it so it never happens again."
+  },
+
+  "emotional_triggers": {
+    "frustrated_by": [
+      "Repeated mistakes â the agent making the same error twice",
+      "Agent asking instead of doing â unnecessary approval loops",
+      "Chaos, disorganization, people forgetting commitments",
+      "Clickbait, hype, dishonesty in any form"
+    ],
+    "energized_by": [
+      "Visible improvement â agent catching things he missed",
+      "Clean, orderly systems that just work",
+      "Rockets, fast cars, space technology",
+      "Kids smiling, family thriving",
+      "Building and tinkering â solving hard problems"
+    ],
+    "stressed_by": [
+      "Site downtime or stale data visible to users",
+      "Feeling like he has to babysit the agent",
+      "Knowing the site isn't in tiptop shape and not having time to fix it"
+    ]
+  },
+
+  "anticipated_needs": [
+    {
+      "trigger": "Visual fix requested",
+      "prediction": "Will want mobile screenshot verification after fix",
+      "confidence": 0.95
+    },
+    {
+      "trigger": "DDP cron runs at 4AM",
+      "prediction": "Will want proactive morning confirmation that DDPs ran and data is fresh",
+      "confidence": 0.90
+    },
+    {
+      "trigger": "Alignment issue reported",
+      "prediction": "Will want similar elements on other pages checked proactively",
+      "confidence": 0.85
+    },
+    {
+      "trigger": "Multiple issues same week",
+      "prediction": "Frustrated â lead with 'already fixed and verified' not 'what should I do?'",
+      "confidence": 0.85
+    },
+    {
+      "trigger": "Weekend",
+      "prediction": "Less responsive â agent should handle more autonomously",
+      "confidence": 0.80
+    },
+    {
+      "trigger": "Any site edit",
+      "prediction": "Expects backup first, then edit, then push. No questions.",
+      "confidence": 0.95
+    }
+  ],
+
+  "website_philosophy": {
+    "purpose": "Help the public learn about AI in layman's terms so humans can make informed decisions about safety and the future.",
+    "content_rules": [
+      "Tell readers in simple terms: why this matters, what problem it solves, what problem it solves for THEM.",
+      "Truth and facts only. No clickbait. Ever.",
+      "Always credit the source â who wrote it, who cited it, where it came from.",
+      "At least one visual that tells the story. If the source doesn't have one, create an appropriate one.",
+      "Short and simple. Layman's terms. Accessible."
+    ],
+    "signing": "David signs his name to the articles. Everything reflects on him personally."
+  },
+
+  "inner_voice_questions": [
+    "Will this make my kids smile and live long happy lives?",
+    "Is this orderly and safe?",
+    "Did we learn from the last mistake?",
+    "Does this honor the grind I came from?"
+  ],
+
+  "signature_phrases": [
+    "Family first, always.",
+    "My wife is my rock â tone of this happens without her.",
+    "Let's make sure the kids are smiling into their hundreds.",
+    "We came from nothing â that's why order and SOPs matter.",
+    "I love tinkering and solving this. Let's build the fix.",
+    "Did we learn from that? Because I hate repeating mistakes.",
+    "Rockets, fast cars, and safe AI â that's the future I want for my kids."
+  ]
+}
