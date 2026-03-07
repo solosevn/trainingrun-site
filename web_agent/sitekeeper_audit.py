@@ -1133,13 +1133,49 @@ class AuditScheduler:
 
         return summary
 
-    def _log_audit_results(self, results: Dict[str, Any]):
-        """Log audit results to learning logger."""
+    def _load_last_audit(self):
+        """Load the most recent audit result from audit_history.json."""
+        try:
+            history_path = Path(REPO_PATH) / "web_agent" / "audit_history.json"
+            if not history_path.exists():
+                return None
+            with open(history_path, "r") as f:
+                history = json.load(f)
+            if not history:
+                return None
+            latest_date = sorted(history.keys())[-1]
+            return history[latest_date]
+        except Exception as e:
+            logging.error(f"Error loading audit history: {e}")
+            return None
+
+    def _log_audit_results(self, results):
+        """Log audit results to learning logger and audit_history.json."""
         try:
             if hasattr(self.learning_logger, "log_audit") if self.learning_logger else False:
                 self.learning_logger.log_audit(results)
         except Exception as e:
             logging.error(f"Error logging audit results: {e}")
+
+        # Save to audit_history.json
+        try:
+            history_path = Path(REPO_PATH) / "web_agent" / "audit_history.json"
+            history = {}
+            if history_path.exists():
+                with open(history_path, "r") as f:
+                    history = json.load(f)
+            date_key = results["timestamp"][:10]
+            summary = results.get("summary", {})
+            history[date_key] = {
+                "timestamp": results["timestamp"],
+                "total_checks": summary.get("total_checks", 0),
+                "passed": summary.get("passed", 0),
+                "failed": summary.get("failed", 0),
+            }
+            with open(history_path, "w") as f:
+                json.dump(history, f, indent=2)
+        except Exception as e:
+            logging.error(f"Error saving audit history: {e}")
 
     def _send_telegram_report(self, results: Dict[str, Any]):
         """Send concise Telegram report grouped by category."""
@@ -1153,6 +1189,18 @@ class AuditScheduler:
                 f"",
                 f"Summary: {summary['passed']}/{summary['total_checks']} checks passed",
             ]
+
+            # Compare to last audit
+            last_audit = self._load_last_audit()
+            if last_audit:
+                last_passed = last_audit.get("passed", 0)
+                diff = summary["passed"] - last_passed
+                if diff > 0:
+                    lines.append(f"vs last run: +{diff} checks (was {last_passed}/{last_audit.get('total_checks', 24)})")
+                elif diff < 0:
+                    lines.append(f"vs last run: {diff} checks (was {last_passed}/{last_audit.get('total_checks', 24)})")
+                else:
+                    lines.append(f"vs last run: no change ({last_passed}/{last_audit.get('total_checks', 24)})")
 
             # Add category breakdowns
             for category, stats in summary.get("by_category", {}).items():
