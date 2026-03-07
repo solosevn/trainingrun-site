@@ -47,6 +47,9 @@ import hashlib
 import traceback
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import logging
+logger = logging.getLogger("ContentScout")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(message)s")
 
 # ─── NEW: Vault + Learning imports ─────────────────────────────
 try:
