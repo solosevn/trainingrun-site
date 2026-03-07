@@ -1,15 +1,15 @@
 {
-  "last_updated": "2026-03-06T04:21:01",
+  "last_updated": "2026-03-07T04:03:00",
   "agents": {
     "trscode": {
       "name": "TRScode DDP",
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-06T04:03:02",
-      "last_run_date": "2026-03-06",
+      "last_run": "2026-03-07T04:03:00",
+      "last_run_date": "2026-03-07",
       "status": "success",
-      "duration_seconds": 180,
+      "duration_seconds": 178,
       "sources_total": 8,
       "sources_hit": 6,
       "models_qualified": 38,
@@ -43,7 +43,7 @@
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-03-07T05:00:00",
+      "next_run": "2026-03-08T05:00:00",
       "error": null
     },
     "trfcast": {
