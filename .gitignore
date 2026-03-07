@@ -25,3 +25,11 @@ Thumbs.db
 *.swp
 *.swo
 backups/
+
+# ── Agent Runtime (caches, PID, temp) ────────────────────────
+.vault-cache/
+.cache/
+*.pid
+web_agent/.sitekeeper.pid
+daily_news_agent/staging/
+web_agent/vault/
