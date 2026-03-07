@@ -1419,8 +1419,15 @@ Provide brief, actionable recommendations."""
                 self.pending_remediations = {}
                 return "Remediation results:\n" + "\n".join(rem_results)
 
+            # Partial match: allow "check_022" to match "check_022_ticker_leaderboard"
             if check_name not in self.pending_remediations:
-                return f"No pending remediation for '{check_name}'. Use 'pending fixes' to see options."
+                matches = [k for k in self.pending_remediations if k.startswith(check_name)]
+                if len(matches) == 1:
+                    check_name = matches[0]
+                elif len(matches) > 1:
+                    return f"Ambiguous: '{check_name}' matches multiple: {', '.join(matches)}. Be more specific."
+                else:
+                    return f"No pending remediation for '{check_name}'. Use 'pending fixes' to see options."
 
             result = self._execute_fix(check_name)
             del self.pending_remediations[check_name]
