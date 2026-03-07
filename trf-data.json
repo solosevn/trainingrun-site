@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "6d47e4277bc6972efee323c26341a85acf756d9752a736fd1a8a81be04a324b2",
+  "checksum": "58eacd4b7006a41fcbf48a74da64d20bba8eb4dd91dda11096d2409daaba7b84",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,
@@ -1728,7 +1728,7 @@
         6.06,
         6.06,
         6.06,
-        6.06,
+        5.48,
         5.48
       ],
       "pillar_scores": {
@@ -2737,7 +2737,7 @@
         6.71,
         6.71,
         6.71,
-        6.71,
+        8.07,
         8.07
       ],
       "pillar_scores": {
@@ -2828,7 +2828,7 @@
         3.13,
         3.13,
         3.13,
-        3.13,
+        7.63,
         7.63
       ],
       "pillar_scores": {
@@ -3378,7 +3378,7 @@
         0.59,
         0.59,
         0.59,
-        0.59,
+        5.32,
         5.32
       ],
       "pillar_scores": {
@@ -3649,19 +3649,22 @@
         null,
         null,
         null,
-        null,
+        1.14,
         0.0
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": null,
+        "trading": 7.63,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": null
       },
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "rallies_return_pct": 2.7,
+        "rallies_win_rate": 0.0
+      }
     }
   ],
-  "run_at": "4:04 AM CST"
+  "run_at": "12:20 PM CST"
 }
