@@ -35,3 +35,54 @@ Each entry is appended automatically by `scout_learning_logger.log_scrape_cycle(
 *Entries will be appended below this line by scout_learning_logger.py*
 
 ---
+
+### Cycle 2026-03-07 08:00 CST
+- **Sources hit:** 14/8
+- **Items found:** 5
+- **Items after dedup:** 94
+- **Items dropped (stale >7d):** 0
+- **Items deprioritized (stale >3d):** 0
+- **Errors:** None
+- **Per source:**
+  - arXiv: 0 items
+  - Hugging Face: 0 items
+  - GitHub Trending: 0 items
+  - Reddit: 0 items
+  - Hacker News: 8 items
+  - Lobste.rs: 0 items
+  - YouTube: 0 items
+  - Newsletters: 0 items
+
+### Cycle 2026-03-07 08:30 CST
+- **Sources hit:** 14/8
+- **Items found:** 3
+- **Items after dedup:** 97
+- **Items dropped (stale >7d):** 0
+- **Items deprioritized (stale >3d):** 0
+- **Errors:** None
+- **Per source:**
+  - arXiv: 0 items
+  - Hugging Face: 0 items
+  - GitHub Trending: 0 items
+  - Reddit: 0 items
+  - Hacker News: 8 items
+  - Lobste.rs: 0 items
+  - YouTube: 0 items
+  - Newsletters: 0 items
+
+### Cycle 2026-03-07 09:00 CST
+- **Sources hit:** 15/8
+- **Items found:** 3
+- **Items after dedup:** 100
+- **Items dropped (stale >7d):** 0
+- **Items deprioritized (stale >3d):** 0
+- **Errors:** None
+- **Per source:**
+  - arXiv: 0 items
+  - Hugging Face: 0 items
+  - GitHub Trending: 0 items
+  - Reddit: 0 items
+  - Hacker News: 9 items
+  - Lobste.rs: 0 items
+  - YouTube: 0 items
+  - Newsletters: 0 items
