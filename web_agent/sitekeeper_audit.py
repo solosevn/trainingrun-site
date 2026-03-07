@@ -137,6 +137,7 @@ class AuditScheduler:
         self._running = False
         self._last_audit = None
         self._audit_results = None
+        self.pending_remediations = {}  # {check_name: {description, fix_cmd, timestamp}}
 
     def start(self):
         """Start the audit scheduler in a background thread."""
@@ -282,6 +283,7 @@ class AuditScheduler:
 
         # Get intelligent analysis from Claude if available
         self._get_claude_analysis(results)
+        self._attempt_remediation(results)
 
         self.write_activity("Audit complete", location="office", status="idle")
         print(f"[Audit] Complete. Passed: {results['summary']['passed']}/{results['summary']['total_checks']}, "
@@ -1223,6 +1225,179 @@ Provide brief, actionable recommendations."""
 
         except Exception as e:
             logging.error(f"Error getting Claude analysis: {e}")
+
+    # ===== REMEDIATION LOOP =====
+
+    REMEDIATION_MAP = {
+        "check_009_ddp_status": {
+            "description": "DDP data file is stale (>26h old)",
+            "fix_type": "rerun_scraper",
+            "scripts": {
+                "trscode": "agent_trscode.py",
+                "truscore": "agent_truscore.py",
+                "trfcast": "agent_trfcast.py",
+                "tragents": "agent_tragents.py",
+                "trs": "agent_trs.py",
+            }
+        },
+        "check_010_data_integrity": {
+            "description": "Data file missing or corrupt",
+            "fix_type": "rerun_scraper",
+            "scripts": {
+                "trscode": "agent_trscode.py",
+                "truscore": "agent_truscore.py",
+                "trfcast": "agent_trfcast.py",
+                "tragents": "agent_tragents.py",
+                "trs": "agent_trs.py",
+            }
+        },
+        "check_011_git_status": {
+            "description": "Uncommitted files in repo",
+            "fix_type": "git_commit",
+        },
+        "check_006_known_pages": {
+            "description": "Known page returning non-200",
+            "fix_type": "alert_only",
+        },
+    }
+
+    def _attempt_remediation(self, results):
+        """After audit, propose fixes for failed checks to David via Telegram."""
+        try:
+            self.pending_remediations = {}
+            failed_fixable = []
+
+            for category, checks in results.get("categories", {}).items():
+                for check_name, (passed, message) in checks.items():
+                    if passed:
+                        continue
+                    if check_name in self.REMEDIATION_MAP:
+                        remap = self.REMEDIATION_MAP[check_name]
+                        if remap["fix_type"] == "alert_only":
+                            continue
+                        self.pending_remediations[check_name] = {
+                            "description": remap["description"],
+                            "message": message,
+                            "fix_type": remap["fix_type"],
+                            "remap": remap,
+                            "timestamp": datetime.datetime.now().isoformat(),
+                        }
+                        failed_fixable.append(
+                            f"- {check_name}: {message}\n  Fix: {remap['description']}"
+                        )
+
+            if not failed_fixable:
+                return
+
+            msg = f"REMEDIATION PROPOSALS ({len(failed_fixable)} fixable):\n\n"
+            msg += "\n\n".join(failed_fixable)
+            msg += "\n\nReply:\n"
+            msg += "'approve all' to fix everything\n"
+            msg += "'approve [check_name]' to fix one\n"
+            msg += "'reject all' to skip all\n"
+            msg += "'pending fixes' to see this list again"
+
+            if self.tg_send:
+                self.tg_send(msg)
+
+        except Exception as e:
+            logging.error(f"Remediation attempt error: {e}")
+
+    def process_remediation(self, check_name):
+        """Execute an approved remediation. Returns status message."""
+        try:
+            if check_name == "all":
+                rem_results = []
+                for cname in list(self.pending_remediations.keys()):
+                    result = self._execute_fix(cname)
+                    rem_results.append(f"{cname}: {result}")
+                self.pending_remediations = {}
+                return "Remediation results:\n" + "\n".join(rem_results)
+
+            if check_name not in self.pending_remediations:
+                return f"No pending remediation for '{check_name}'. Use 'pending fixes' to see options."
+
+            result = self._execute_fix(check_name)
+            del self.pending_remediations[check_name]
+            return f"Remediation for {check_name}: {result}"
+
+        except Exception as e:
+            return f"Remediation error: {e}"
+
+    def _execute_fix(self, check_name):
+        """Execute the actual fix for a check."""
+        try:
+            rem = self.pending_remediations.get(check_name)
+            if not rem:
+                return "No remediation data found"
+
+            fix_type = rem["fix_type"]
+
+            if fix_type == "rerun_scraper":
+                remap = rem["remap"]
+                scripts = remap.get("scripts", {})
+                rerun_results = []
+                for scraper_name, script_file in scripts.items():
+                    script_path = Path(REPO_PATH) / script_file
+                    if script_path.exists():
+                        try:
+                            result = subprocess.run(
+                                ["python3", str(script_path)],
+                                capture_output=True, text=True, timeout=120,
+                                cwd=str(REPO_PATH)
+                            )
+                            if result.returncode == 0:
+                                rerun_results.append(f"{scraper_name}: re-ran OK")
+                            else:
+                                rerun_results.append(f"{scraper_name}: failed ({result.stderr[:100]})")
+                        except subprocess.TimeoutExpired:
+                            rerun_results.append(f"{scraper_name}: timed out (120s)")
+                    else:
+                        rerun_results.append(f"{scraper_name}: script not found")
+                return "Scraper re-run:\n" + "\n".join(rerun_results)
+
+            elif fix_type == "git_commit":
+                try:
+                    status_out = subprocess.run(
+                        ["git", "status", "--porcelain"],
+                        capture_output=True, text=True, cwd=str(REPO_PATH)
+                    )
+                    if not status_out.stdout.strip():
+                        return "No uncommitted files found"
+                    file_list = status_out.stdout.strip().split("\n")
+                    file_count = len(file_list)
+                    subprocess.run(["git", "add", "-A"], capture_output=True, text=True, cwd=str(REPO_PATH))
+                    commit_msg = f"auto: TRSitekeeper commit {file_count} files after audit"
+                    result = subprocess.run(
+                        ["git", "commit", "-m", commit_msg],
+                        capture_output=True, text=True, cwd=str(REPO_PATH)
+                    )
+                    if result.returncode == 0:
+                        push = subprocess.run(["git", "push"], capture_output=True, text=True, cwd=str(REPO_PATH))
+                        if push.returncode == 0:
+                            return f"Committed and pushed {file_count} files"
+                        return f"Committed {file_count} files but push failed: {push.stderr[:100]}"
+                    return f"Commit failed: {result.stderr[:100]}"
+                except Exception as e:
+                    return f"Git error: {e}"
+
+            return f"Unknown fix type: {fix_type}"
+
+        except Exception as e:
+            return f"Fix execution error: {e}"
+
+    def get_pending_remediations(self):
+        """Return summary of pending remediations."""
+        if not self.pending_remediations:
+            return "No pending remediations."
+        out_lines = [f"PENDING FIXES ({len(self.pending_remediations)}):"]
+        for check_name, info in self.pending_remediations.items():
+            out_lines.append(f"\n- {check_name}")
+            out_lines.append(f"  Issue: {info['message']}")
+            out_lines.append(f"  Fix: {info['description']}")
+            out_lines.append(f"  Proposed: {info['timestamp']}")
+        out_lines.append("\nReply 'approve all' or 'approve [check_name]'")
+        return "\n".join(out_lines)
 
     def get_status(self) -> str:
         """Return current scheduler status for the 'audit status' command."""
