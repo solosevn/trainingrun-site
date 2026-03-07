@@ -46,6 +46,18 @@ except ImportError as _imp_err:
     print(f"[v2.0] Vault memory system NOT available: {_imp_err}")
     print("[v2.0] Falling back to brain.md.")
 
+# v2.0 — Autonomous audit scheduler
+try:
+    from sitekeeper_audit import AuditScheduler
+    _audit_available = True
+    print("[v2.0] Audit scheduler available.")
+except ImportError:
+    _audit_available = False
+    print("[v2.0] Audit module not found — no autonomous audits.")
+
+_audit_scheduler = None  # Set in run()
+
+
 # ─────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────
@@ -769,6 +781,18 @@ def keyword_intercept(text: str):
         vault_info += f"Skills loaded: {len(skills)}"
         return ("_raw_response", {"text": vault_info})
 
+    # v2.0 — Audit commands
+    if t in ("audit", "run audit", "audit now", "check everything", "full scan"):
+        if _audit_scheduler:
+            threading.Thread(target=_audit_scheduler.run_audit, daemon=True).start()
+            return ("_raw_response", {"text": "Running autonomous audit now..."})
+        return ("_raw_response", {"text": "Audit module not available."})
+
+    if t in ("audit status", "next audit", "audit schedule"):
+        if _audit_scheduler:
+            return ("_raw_response", {"text": _audit_scheduler.get_status()})
+        return ("_raw_response", {"text": "Audit scheduler not running."})
+
     return None
 
 
@@ -910,10 +934,25 @@ def run():
         sys.exit(1)
 
     start_bridge()
+
+    # v2.0 — Start autonomous audit scheduler (6-8 AM daily)
+    global _audit_scheduler
+    if _audit_available:
+        _audit_scheduler = AuditScheduler(
+            tg_send_fn=tg_send,
+            execute_tool_fn=execute_tool,
+            write_activity_fn=write_activity,
+            claude_chat_fn=claude_chat,
+            build_prompt_fn=build_system_prompt,
+            learning_logger=_learning_logger,
+        )
+        _audit_scheduler.start()
+
     write_activity("Online and ready", location="office", status="idle")
 
     vault_status = "Vault memory ACTIVE" if (USE_VAULT and _vault_available) else "brain.md mode"
-    tg_send(f"TRSitekeeper v2.0 online.\nPowered by Claude Sonnet 4.6\n{vault_status}\nType 'status' to check DDPs.")
+    audit_status = "Audit: 6-8 AM daily" if _audit_available else "Audit: unavailable"
+    tg_send(f"TRSitekeeper v2.0 online.\nPowered by Claude Sonnet 4.6\n{vault_status}\n{audit_status}\nType 'status' to check DDPs, 'audit' to run now.")
     print("Startup message sent. Polling...")
 
     conversation_history = []
