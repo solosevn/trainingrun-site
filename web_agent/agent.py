@@ -793,6 +793,33 @@ def keyword_intercept(text: str):
             return ("_raw_response", {"text": _audit_scheduler.get_status()})
         return ("_raw_response", {"text": "Audit scheduler not running."})
 
+
+    # v2.1 — Remediation commands
+    if t in ("pending fixes", "pending", "show fixes", "what needs fixing"):
+        if _audit_scheduler:
+            return ("_raw_response", {"text": _audit_scheduler.get_pending_remediations()})
+        return ("_raw_response", {"text": "Audit module not available."})
+
+    if t.startswith("approve"):
+        if _audit_scheduler:
+            target = t.replace("approve", "").strip()
+            if not target:
+                target = "all"
+            result = _audit_scheduler.process_remediation(target)
+            return ("_raw_response", {"text": result})
+        return ("_raw_response", {"text": "Audit module not available."})
+
+    if t.startswith("reject"):
+        if _audit_scheduler:
+            target = t.replace("reject", "").strip()
+            if target == "all" or not target:
+                _audit_scheduler.pending_remediations = {}
+                return ("_raw_response", {"text": "All pending remediations cleared."})
+            elif target in _audit_scheduler.pending_remediations:
+                del _audit_scheduler.pending_remediations[target]
+                return ("_raw_response", {"text": f"Rejected remediation for {target}."})
+            return ("_raw_response", {"text": f"No pending remediation for '{target}'."})
+        return ("_raw_response", {"text": "Audit module not available."})
     return None
 
 
