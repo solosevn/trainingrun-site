@@ -475,21 +475,36 @@ class AuditScheduler:
             return False, f"Vault integrity check error: {e}"
 
     def _check_agent_activity(self) -> Tuple[bool, str]:
-        """Check 7: Verify agent is not idle for >24 hours."""
+        """Check 7: Cross-agent health monitoring — verify all agents ran recently."""
         try:
-            activity_file = Path(REPO_PATH) / "web_agent" / "activity.log"
-            if not activity_file.exists():
-                return False, "Activity log not found"
+            agents = {
+                "TRSitekeeper": Path(REPO_PATH) / "agent_activity.json",
+                "Content Scout": Path(REPO_PATH) / "content_scout" / "scout-data.json",
+                "Daily News": Path(REPO_PATH) / "daily_news_agent" / "agent.log",
+            }
+            stale_threshold = datetime.timedelta(hours=26)
+            now = datetime.datetime.now()
 
-            # Get last modification time
-            mtime = datetime.datetime.fromtimestamp(activity_file.stat().st_mtime)
-            idle_time = datetime.datetime.now() - mtime
+            healthy = []
+            issues = []
 
-            if idle_time > datetime.timedelta(hours=24):
-                hours_idle = idle_time.total_seconds() / 3600
-                return False, f"Agent idle for {hours_idle:.1f} hours (>24h)"
+            for name, path in agents.items():
+                if not path.exists():
+                    issues.append(f"{name}: no activity file")
+                    continue
+                mtime = datetime.datetime.fromtimestamp(path.stat().st_mtime)
+                age = now - mtime
+                hours = age.total_seconds() / 3600
+                if age > stale_threshold:
+                    issues.append(f"{name}: stale ({hours:.1f}h)")
+                else:
+                    healthy.append(f"{name}: active ({hours:.1f}h)")
 
-            return True, f"Agent active (last update {idle_time.total_seconds()/3600:.1f}h ago)"
+            if issues:
+                detail = " | ".join(issues)
+                return False, f"{len(issues)} agent(s) stale: {detail} ({len(healthy)}/{len(agents)} healthy)"
+
+            return True, f"All {len(agents)} agents active: " + ", ".join(healthy)
 
         except Exception as e:
             return False, f"Agent activity check error: {e}"
