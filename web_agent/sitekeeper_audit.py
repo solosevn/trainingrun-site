@@ -1212,8 +1212,8 @@ Failed Checks:
 Provide brief, actionable recommendations."""
 
             # Get Claude's analysis
-        system_prompt = "You are TRSitekeeper, an autonomous site manager for trainingrun.ai. Analyze audit failures and provide brief, actionable fixes."
-        analysis = self.claude_chat(prompt, system_prompt)
+            system_prompt = "You are TRSitekeeper, an autonomous site manager for trainingrun.ai. Analyze audit failures and provide brief, actionable fixes."
+            analysis = self.claude_chat(prompt, system_prompt)
 
             if analysis and self.write_activity:
                 self.write_activity(
