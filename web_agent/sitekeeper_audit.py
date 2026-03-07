@@ -769,27 +769,29 @@ class AuditScheduler:
 
             text = response.text
 
-            # Check for problematic patterns
+            # Strip <script> blocks so we only check rendered content, not JS code
+            visible_text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL | re.IGNORECASE)
+
+            # Check for problematic patterns in visible content only
             bad_patterns = ["undefined", "NaN", "null", "error"]
             issues = []
 
             for pattern in bad_patterns:
-                if pattern in text:
-                    # Count occurrences
-                    count = text.count(pattern)
-                    if count > 5:  # More than 5 instances might indicate a problem
+                if pattern in visible_text:
+                    count = visible_text.count(pattern)
+                    if count > 5:
                         issues.append(f"{count} instances of '{pattern}'")
 
             # Check for actual score numbers (simple heuristic)
-            score_found = bool(re.search(r'\b([0-9]{1,3}\.?[0-9]*)\b', text))
+            score_found = bool(re.search(r'\b([0-9]{1,3}\.?[0-9]*)\b', visible_text))
 
             if not score_found:
-                return False, "No score numbers found on page"
+                issues.append("No score numbers found")
 
             if issues:
-                return False, f"Score display issues: {', '.join(issues)}"
+                return False, "Score display issues: " + ", ".join(issues)
 
-            return True, "Scores displayed correctly"
+            return True, "Scores display properly with numeric values"
 
         except Exception as e:
             return False, f"Score display check error: {e}"
