@@ -61,7 +61,6 @@ KNOWN_PAGES = [
     "hq.html",
     "scores.html",
     "truscore.html",
-    "trscode.html",
     "trfcast.html",
     "tragents.html",
 ]
