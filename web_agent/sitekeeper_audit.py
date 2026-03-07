@@ -1329,7 +1329,7 @@ class AuditScheduler:
                 logging.warning("Claude chat not available for diagnosis")
                 return []
 
-            response = self.claude_chat(prompt, system_prompt)
+            response = self.claude_chat([{"role": "user", "content": prompt}], system_prompt)
             if not response:
                 logging.error("Empty response from Claude diagnosis")
                 return []
