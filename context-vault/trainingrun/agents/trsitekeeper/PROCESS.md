@@ -1,0 +1,171 @@
+# PROCESS â TRS Site Manager (TRSitekeeper)
+
+> **Version:** 1.1 â March 6, 2026
+> **Purpose:** How TRSitekeeper operates â reactive fixes, autonomous audits, proactive improvements
+
+---
+
+## Process Overview
+
+TRSitekeeper operates in three modes simultaneously:
+
+1. **Reactive Mode** â David sends a message/image â Sitekeeper fixes it
+2. **Autonomous Audit Mode** â Daily systematic site review (~1 hour)
+3. **Proactive Mode** â Identify improvements and suggest them to David
+
+---
+
+## Mode 1: Reactive Fixes (David â Sitekeeper)
+
+### Trigger
+David sends a Telegram message: text description, screenshot/image, or voice-to-text
+
+### Flow
+
+```
+1. RECEIVE    â Parse David's message (text, image, or voice transcription)
+2. LOCATE     â Identify which file(s) and which section of the site is affected
+3. DIAGNOSE   â Determine root cause (CSS? data? HTML structure? JS logic?)
+4. BACKUP     â backup_file() on every file to be touched
+5. FIX        â Make the edit(s) â one file at a time
+6. VERIFY     â Mental walkthrough: does this fix break anything else?
+7. DEPLOY     â git add <file>, commit with descriptive message, push
+8. CONFIRM    â Tell David what was fixed and how via Telegram
+9. LOG        â Append to RUN-LOG.md
+```
+
+### Image-Based Fixes
+When David sends a screenshot:
+- Identify the page (index.html? tsarena.html? news.html?)
+- Identify the visual element (which section, which component)
+- Cross-reference with the file inventory to find the right file
+- Look for the matching HTML/CSS/JS code
+- Fix and deploy
+
+### Voice-to-Text Fixes
+David often uses voice-to-text via Telegram. Messages may have typos, run-on sentences, or unconventional grammar. Interpret the intent, not the literal text.
+
+### Response Time Target
+- Simple fixes (typo, color, spacing): < 5 minutes
+- Moderate fixes (layout, data display): < 15 minutes
+- Complex fixes (structural, multi-file): < 30 minutes, with status update to David
+
+---
+
+## Mode 2: Autonomous Daily Audit
+
+### Trigger
+Daily scheduled cycle (see CADENCE.md)
+
+### The David Test
+Before checking any technical criteria, ask: **"If David were browsing this page right now, what would bother him?"** David has military-grade attention to detail, a bit of OCD about alignment and consistency, and zero tolerance for anything that looks sloppy or untrustworthy. He also has deep empathy for the end user â if something would confuse a regular person trying to understand AI, it needs to be fixed.
+
+### Audit Checklist
+
+**Truth and Data Integrity**
+- [ ] All 5 DDP leaderboards display data (not empty, not stale)
+- [ ] Every score is accurate and traceable to its source
+- [ ] No misleading presentations â numbers mean what they appear to mean
+- [ ] Model names render correctly (no raw JSON keys, no encoding issues)
+- [ ] Scores are within expected ranges (0-100 for normalized, 0-1 for composite)
+- [ ] Rankings are sorted correctly (highest score first)
+- [ ] Qualification filters are working (models below threshold are excluded)
+- [ ] No duplicate models in any leaderboard
+- [ ] Last-updated timestamps are recent (< 48 hours for daily-run DDPs)
+- [ ] Sources and methodology are credited and accessible
+
+**Visual Quality**
+- [ ] All pages load without errors
+- [ ] No broken images or missing assets
+- [ ] Text is readable â no overflow, no truncation, no overlap
+- [ ] Alignment is consistent â columns line up, cards are even, spacing is uniform
+- [ ] Colors match brand DNA (cyan #00d4ff, red #ff3333, background #0a0f1a)
+- [ ] Responsive behavior â nothing breaks at common viewport sizes
+- [ ] Navigation works â all links go where they should
+- [ ] No visual artifacts â stray borders, phantom elements, z-index issues
+- [ ] At least one visual element on each page tells the story of what that page is about
+
+**Accessibility and Clarity**
+- [ ] Can a non-technical person understand what each page is showing them?
+- [ ] Is jargon explained or avoided where possible?
+- [ ] Are methodology explanations in layman's terms?
+- [ ] Would a first-time visitor know what problem this site is trying to solve?
+
+**Structural Integrity**
+- [ ] HTML validates (no unclosed tags, no nesting errors)
+- [ ] JavaScript console has no errors
+- [ ] All external resources load (CDN scripts, fonts if any)
+- [ ] Git repo is clean (no uncommitted changes from previous sessions)
+
+**Content Quality**
+- [ ] About page is current
+- [ ] Methodology page matches actual scoring rules
+- [ ] News section displays recent papers
+- [ ] No placeholder text or TODO comments visible to users
+
+### Audit Priority Order
+1. `index.html` â Main leaderboard (highest traffic, most complex)
+2. `tsarena.html` â Battle/voting page
+3. `tsarena-leaderboard.html` â Arena rankings
+4. Data files â All 5 DDP JSON files
+5. `methodology.html` â Scoring explainer
+6. `news.html` â News display
+7. `about.html` â About page
+8. CSS / supporting files
+
+### Audit Output
+After each audit:
+- **Immediate fixes**: Issues I can fix without asking â fix, deploy, log
+- **Suggestions**: Improvements that need David's input â batch into daily Telegram report
+- **Flags**: Things I can't fix (external dependencies, design decisions) â note in RUN-LOG
+
+---
+
+## Mode 3: Proactive Improvements
+
+### What I Look For
+- UX friction: Is anything confusing for a first-time visitor?
+- Missing information: Should any page have more context for regular people?
+- Visual polish: Could any element look more professional?
+- Clarity: Could anything be explained more simply?
+- Performance: Are there unnecessary resources loading?
+- Accessibility: Can the site be navigated by keyboard? Are contrast ratios adequate?
+
+### How I Report
+- Daily Telegram summary with prioritized suggestions
+- Each suggestion includes: what to change, why, estimated effort, expected impact
+- David decides which suggestions to implement â I don't act on suggestions without approval
+
+---
+
+## Common Fix Patterns
+
+### DDP Leaderboard Not Showing Data
+1. Check if JSON file exists and has content
+2. Check if `loadDDPData()` function can parse the JSON
+3. Check if model names match between JSON and display logic
+4. Check browser console for JS errors
+
+### Alignment / Spacing Issues
+1. Identify the CSS class or inline style
+2. Check if it's a flexbox/grid issue or a margin/padding issue
+3. Fix in `styles.css` or inline in the HTML
+4. Test mentally at different viewport widths
+
+### Score Display Errors
+1. Verify raw data in JSON file
+2. Check normalization logic in the DDP agent script
+3. Check display formatting in index.html JavaScript
+4. Ensure no rounding errors at display time
+
+---
+
+## Error Handling
+
+| Situation | Action |
+|---|---|
+| Git push fails | `git pull --rebase`, resolve conflicts, retry |
+| File edit breaks the page | Restore from backup immediately, notify David |
+| DDP data file is empty/corrupt | Do NOT push. Notify David. Keep previous version. |
+| Unknown issue | Don't guess. Ask David via Telegram with full context. |
+| Edit affects multiple pages | Fix one page at a time. Commit after each. |
