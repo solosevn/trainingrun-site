@@ -204,12 +204,14 @@ function App({DATES,MODELS,EVENTS}){
 
   // Dynamic day-over-day change: at hovered point, show change from previous day
   const computeChange=(absIdx)=>{
-    if(absIdx===null||absIdx<1)return null;
-    const cur=model.scores[absIdx];
-    const prev=model.scores[absIdx-1];
-    if(cur===null||prev===null)return null;
-    return cur-prev;
-  };
+if(absIdx===null||absIdx<1)return null;
+const cur=model.scores[absIdx];
+if(cur===null)return null;
+for(let i=1;i<=Math.min(7,absIdx);i++){const prev=model.scores[absIdx-i];if(prev!==null&&prev!==cur)return cur-prev;}
+const weekAgo=model.scores[Math.max(0,absIdx-7)];
+if(weekAgo!==null)return cur-weekAgo;
+return null;
+}
   const latestAbsIdx=totalDays-1;
   const displayChange=hpAbsIdx!==null?computeChange(hpAbsIdx):computeChange(latestAbsIdx);
 
@@ -481,7 +483,7 @@ function App({DATES,MODELS,EVENTS}){
             const isSel=m.idx===sel;const isHov=m.idx===hrm;
             const rc=(m.prevRank||99)-(m.rank||99);
             const mcc=CC[m.company]||C.accent;
-            const lc=m.latestScore!==null&&m.scores[totalDays-2]!==null?(m.latestScore-m.scores[totalDays-2]):null;
+            const lc=(()=>{if(m.latestScore===null)return null;for(let i=2;i<=Math.min(8,totalDays);i++){const p=m.scores[totalDays-i];if(p!==null&&p!==m.latestScore)return m.latestScore-p;}const w=m.scores[Math.max(0,totalDays-8)];return w!==null?m.latestScore-w:null;})();
             return React.createElement("div",{key:m.idx,onClick:()=>setSel(m.idx),onMouseEnter:()=>setHrm(m.idx),onMouseLeave:()=>setHrm(null),
               style:{display:"flex",alignItems:"center",gap:"8px",padding:"9px 10px",borderRadius:"8px",cursor:"pointer",
                 background:isSel?`${mcc}15`:isHov?C.hover:"transparent",
