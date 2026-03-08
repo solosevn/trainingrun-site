@@ -21,6 +21,18 @@
 
 ## Entries
 
+### 2026-03-08 — Audit Check Fixes (001, 006, 014, 022)
+
+**What happened:** 4 of 24 audit checks were failing — but the failures were caused by wrong expectations in the checks, not real site problems. check_001 looked for phantom files (ticker.json, leaderboard.json, ddp_status.json) that never existed. check_006 pointed to a vault/ directory with 9 JSON files that don't exist — real vault is at context-vault/trainingrun/agents/trsitekeeper/ with 9 markdown files. check_014 checked for pages (terms.html, charter.html, belt.html, mythology.html) that trainingrun.ai doesn't have. check_022 cross-checked ticker/leaderboard files that don't exist.
+
+**Impact:** False positives wasted diagnostic cycles. Claude API was given wrong context in the diagnostic prompt, causing bad fix proposals. 3 stub files had been created as band-aids instead of fixing the root cause.
+
+**Action taken:** Rewrote check_001 to verify real infrastructure (agent.py, sitekeeper_audit.py, memory/ dir, 5 DDP data files with JSON validation). Fixed check_006 vault path to real location with real 9 .md files. Passed check_014 and check_022 by default since features don't exist. Fixed diagnostic prompt to reference correct files. Deleted 3 stub files. Site verified before and after — no impact.
+
+**Lesson:** A failing check is only useful if it detects a real problem. If a check fails because it looks for something that doesn't exist and shouldn't exist, the check is broken — fix the check, not the site. Never create stub files to satisfy broken checks. The diagnostic prompt must match the actual repo structure or Claude API will waste cycles on wrong fixes.
+
+---
+
 ### 2026-03-06 â Context Vault Established
 
 **What happened:** TRS Site Manager vault created. Agent has been operational since Feb 2026 with brain.md v2.0 as its knowledge base. Vault now formalizes the autonomous audit framework and learning system.
