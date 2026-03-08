@@ -8,17 +8,17 @@
     <key>ProgramArguments</key>
     <array>
         <string>/Library/Frameworks/Python.framework/Versions/3.13/bin/python3</string>
-        <string>/Users/davidsolomon/trainingrun-site/daily_news_agent/main.py</string>
+        <string>/Users/davidsolomon/trainingrun-site/agents/daily-news/main.py</string>
     </array>
 
     <key>WorkingDirectory</key>
-    <string>/Users/davidsolomon/trainingrun-site/daily_news_agent</string>
+    <string>/Users/davidsolomon/trainingrun-site/agents/daily-news</string>
 
     <key>StandardOutPath</key>
-    <string>/Users/davidsolomon/trainingrun-site/daily_news_agent/agent.log</string>
+    <string>/Users/davidsolomon/trainingrun-site/agents/daily-news/agent.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/davidsolomon/trainingrun-site/daily_news_agent/agent.log</string>
+    <string>/Users/davidsolomon/trainingrun-site/agents/daily-news/agent.log</string>
 
     <key>RunAtLoad</key>
     <true/>
