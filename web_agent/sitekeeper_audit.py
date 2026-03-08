@@ -292,18 +292,30 @@ class AuditScheduler:
     # ===== CATEGORY 1: LOCAL FILE CHECKS =====
 
     def _check_site_health(self) -> Tuple[bool, str]:
-        """Check 1: Verify site data files exist and contain valid JSON."""
+        """Check 1: Verify core agent infrastructure and DDP data files exist."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
-            if not data_dir.exists():
-                return False, "Data directory not found"
+            agent_dir = Path(REPO_PATH) / "web_agent"
+            if not agent_dir.exists():
+                return False, "web_agent directory not found"
 
-            required_files = ["ticker.json", "leaderboard.json", "ddp_status.json"]
+            required_agent_files = ["agent.py", "sitekeeper_audit.py"]
             missing = []
-            invalid = []
+            for fname in required_agent_files:
+                if not (agent_dir / fname).exists():
+                    missing.append(fname)
 
-            for fname in required_files:
-                fpath = data_dir / fname
+            # Check memory directory exists
+            memory_dir = agent_dir / "memory"
+            if not memory_dir.exists():
+                missing.append("memory/")
+
+            # Check DDP data files exist in repo root (produced by scrapers)
+            ddp_files = [
+                "trscode-data.json", "truscore-data.json", "trf-data.json",
+                "tragent-data.json", "trs-data.json"
+            ]
+            for fname in ddp_files:
+                fpath = Path(REPO_PATH) / fname
                 if not fpath.exists():
                     missing.append(fname)
                 else:
@@ -311,17 +323,12 @@ class AuditScheduler:
                         with open(fpath) as f:
                             json.load(f)
                     except json.JSONDecodeError:
-                        invalid.append(fname)
+                        missing.append(f"{fname} (invalid JSON)")
 
-            if missing or invalid:
-                msg = "Site Health FAILED: "
-                if missing:
-                    msg += f"Missing: {', '.join(missing)}. "
-                if invalid:
-                    msg += f"Invalid JSON: {', '.join(invalid)}"
-                return False, msg
+            if missing:
+                return False, f"Site Health FAILED - Missing: {', '.join(missing)}"
 
-            return True, "Site health OK - all data files present and valid"
+            return True, "Site health OK - agent files and DDP data present"
 
         except Exception as e:
             return False, f"Site health check error: {e}"
