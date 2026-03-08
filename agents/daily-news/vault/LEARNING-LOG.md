@@ -223,3 +223,85 @@ Monthly summaries are appended here on the 1st of each month (per CADENCE.md).
 
 ### Agent Reflection
 _Reflection will be added after performance data is collected._
+
+---
+
+## BUG FIX LOG — Paper 010 News Card Format | March 08, 2026
+
+### What happened
+Paper 010 was published successfully at 8:39 AM on March 8, 2026. The article page (day-010.html) rendered correctly. However, the news index card on news.html used the **wrong HTML format** — the old V1 structure instead of the V2.0 card format matching Papers 001-007.
+
+**Wrong format produced (V1 — old):**
+```html
+<div class="paper-card">
+  <div class="paper-header">
+    <span class="article-tag">AI Research</span>
+    <span class="paper-date">March 08, 2026</span>
+  </div>
+  <h3><a href="day-010.html">Paper 010: ...</a></h3>
+  <p class="paper-summary"></p>
+  <a href="day-010.html" class="read-more">Read Article →</a>
+</div>
+```
+
+**Correct format expected (V2.0):**
+```html
+<a href="day-010.html" class="paper-card">
+  <div class="paper-meta">
+    <span class="paper-badge">Paper 010</span>
+    <span class="paper-date">March 8, 2026</span>
+    <span class="paper-tag">AI Research</span>
+    <span class="paper-new">New</span>
+  </div>
+  <div class="paper-title">...</div>
+  <div class="paper-desc">...</div>
+  <div class="paper-footer">
+    <div class="paper-stats">...</div>
+    <span class="paper-cta">Read Briefing →</span>
+  </div>
+</a>
+```
+
+### Impact
+- News index page showed Paper 010 with missing PAPER 010 badge, no category tags, no description, no stats, and wrong CTA text
+- Required manual fix to news.html (commit 8336a97)
+
+### Root Cause Investigation
+Initial assumption was that the agent ran old code (before the V2.0 template fix in html_stager.py, commit 2e98dde from March 6). **This assumption was wrong.**
+
+**Actual root cause:** `github_publisher.py` had its own **duplicate, hardcoded card template** in the `update_news_index()` function that was never updated to V2.0. The publishing code path was:
+
+1. `main.py` → `do_publish()` → calls `publish_article()` from `github_publisher.py`
+2. `publish_article()` → calls `update_news_index()` in the same file
+3. `update_news_index()` → uses its own **hardcoded old V1 template** (never calls `build_news_card` from `html_stager.py`)
+
+The V2.0 fix in `html_stager.py` (commit 2e98dde, March 6) fixed `build_news_card()` — but that function was **never called** during the actual publishing flow. It was a dead code path for card generation.
+
+### Fix Applied
+**Commit:** Fix news card bug: use build_news_card from html_stager.py instead of hardcoded old template
+
+Changes to `github_publisher.py`:
+- Removed the hardcoded old V1 card template from `update_news_index()`
+- Added `from html_stager import build_news_card` — now uses the V2.0 card builder
+- Added `article_data` parameter to both `publish_article()` and `update_news_index()` for richer card data
+- Single source of truth: all card HTML now comes from `build_news_card()` in `html_stager.py`
+
+### Lessons Learned
+
+1. **SINGLE SOURCE OF TRUTH:** Never duplicate templates across files. The card HTML template existed in TWO places (`html_stager.py` AND `github_publisher.py`). When one was updated, the other was forgotten. Always import from one canonical location.
+
+2. **TRACE THE ACTUAL CODE PATH:** The fix to `html_stager.py` was correct in isolation, but the actual publishing pipeline never called that function. Always trace the full execution path from trigger to output before assuming a fix is in the right place.
+
+3. **DON'T ASSUME — VERIFY:** When a bug recurs after a fix, don't assume the fix didn't take effect. Investigate whether the fix is actually in the code path that runs. The V2.0 template was present in the codebase but was bypassed by a separate code path.
+
+4. **TEST END-TO-END:** After fixing a template or output format, verify by checking the actual output (the committed HTML on GitHub), not just the code. The code looked correct in `html_stager.py` but the output was wrong because a different code path ran.
+
+### Files Changed
+| File | Change |
+|---|---|
+| `agents/daily-news/github_publisher.py` | Replaced hardcoded V1 template with `build_news_card()` import from `html_stager.py` |
+| `news.html` | Manual fix for Paper 010 card (commit 8336a97) |
+
+### Prevention
+- `github_publisher.py` now imports `build_news_card` from `html_stager.py` — any future card format changes only need to happen in one place
+- The old template is completely removed from `github_publisher.py`
