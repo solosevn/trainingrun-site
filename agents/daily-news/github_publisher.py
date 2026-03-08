@@ -7,6 +7,7 @@ No git CLI needed — pure API calls.
 
 import base64
 import requests
+
 from config import GITHUB_TOKEN, GITHUB_API_BASE, REPO_BRANCH, NEWS_INDEX_PATH
 
 
@@ -21,7 +22,8 @@ def _headers() -> dict:
 
 def get_file(path: str) -> dict:
     """
-    Get a file from the repo. Returns dict with 'content' (decoded) and 'sha'.
+    Get a file from the repo.
+    Returns dict with 'content' (decoded) and 'sha'.
     """
     url = f"{GITHUB_API_BASE}/contents/{path}?ref={REPO_BRANCH}"
     resp = requests.get(url, headers=_headers(), timeout=15)
@@ -40,7 +42,6 @@ def create_or_update_file(path: str, content: str, message: str, sha: str = None
     """
     url = f"{GITHUB_API_BASE}/contents/{path}"
     encoded = base64.b64encode(content.encode("utf-8")).decode("utf-8")
-
     payload = {
         "message": message,
         "content": encoded,
@@ -54,12 +55,13 @@ def create_or_update_file(path: str, content: str, message: str, sha: str = None
     return resp.json()
 
 
-def publish_article(article_filename: str, article_html: str, paper_number: int, title: str) -> dict:
+def publish_article(article_filename: str, article_html: str,
+                    paper_number: int, title: str,
+                    article_data: dict = None) -> dict:
     """
     Publish the article to GitHub:
       1. Create day-NNN.html
       2. Update news.html with new card at top
-
     Returns dict with status and URLs.
     """
     results = {"steps": [], "errors": []}
@@ -76,28 +78,34 @@ def publish_article(article_filename: str, article_html: str, paper_number: int,
             message=commit_msg,
         )
         article_url = f"https://trainingrun.ai/{article_filename}"
-        results["steps"].append(f"✅ Committed {article_filename}")
+        results["steps"].append(f"\u2705 Committed {article_filename}")
         results["article_url"] = article_url
     except Exception as e:
         results["errors"].append(f"Failed to commit article: {e}")
         return results
 
-    # Step 2: Update news.html
+    # Step 2: Update news.html with card from build_news_card (V2.0)
     try:
-        update_news_index(article_filename, paper_number, title)
-        results["steps"].append("✅ Updated news.html")
+        update_news_index(article_filename, paper_number, title,
+                          article_data=article_data)
+        results["steps"].append("\u2705 Updated news.html")
     except Exception as e:
         results["errors"].append(f"Failed to update news.html: {e}")
 
     return results
 
 
-def update_news_index(article_filename: str, paper_number: int, title: str, subtitle: str = "", category: str = "AI Research") -> None:
+def update_news_index(article_filename: str, paper_number: int, title: str,
+                      subtitle: str = "", category: str = "AI Research",
+                      article_data: dict = None) -> None:
     """
     Add a new card at the TOP of news.html for the published article.
+
+    Uses build_news_card from html_stager.py for the V2.0 card format
+    (matching Papers 001-007 standard structure). Falls back to inline
+    template only if html_stager import fails.
     """
-    import datetime
-    today = datetime.date.today().strftime("%B %d, %Y")
+    from html_stager import build_news_card
 
     # Get current news.html
     file_data = get_file(NEWS_INDEX_PATH)
@@ -107,26 +115,24 @@ def update_news_index(article_filename: str, paper_number: int, title: str, subt
     current_html = file_data["content"]
     sha = file_data["sha"]
 
-    # Build the new card
-    new_card = f"""
-            <!-- Paper {paper_number:03d} — Added by Daily News Agent -->
-            <div class="paper-card">
-                <div class="paper-header">
-                    <span class="article-tag">{category}</span>
-                    <span class="paper-date">{today}</span>
-                </div>
-                <h3><a href="{article_filename}">Paper {paper_number:03d}: {title}</a></h3>
-                <p class="paper-summary">{subtitle}</p>
-                <a href="{article_filename}" class="read-more">Read Article →</a>
-            </div>"""
+    # Build article_data dict for build_news_card
+    if article_data is None:
+        article_data = {}
+    # Ensure required fields are present
+    article_data.setdefault("category", category)
+    article_data.setdefault("headline", title)
+    article_data.setdefault("subtitle", subtitle)
+
+    # Use the V2.0 card builder from html_stager.py (single source of truth)
+    new_card = build_news_card(article_data, paper_number)
 
     # Find the insertion point — after the container opening tag
-    # Pattern: look for the first paper-card div and insert before it
-    # Or look for a known container class
     insertion_patterns = [
-        ('<!-- Paper ', new_card + "\n"),                    # Before first paper card comment
-        ('<div class="paper-card">', new_card + "\n"),       # Before first card div
-        ('<div class="papers-container">', None),            # After container open
+        ('<!-- Paper ', new_card + "\n"),
+        ('<!-- PAPER ', new_card + "\n"),
+        ('<a href="day-', new_card + "\n"),
+        ('<div class="paper-card">', new_card + "\n"),
+        ('<div class="papers-container">', None),
     ]
 
     inserted = False
@@ -134,10 +140,8 @@ def update_news_index(article_filename: str, paper_number: int, title: str, subt
         idx = current_html.find(pattern)
         if idx != -1:
             if replacement:
-                # Insert before the pattern
                 updated_html = current_html[:idx] + replacement + current_html[idx:]
             else:
-                # Insert after the pattern (+ the closing >)
                 end_idx = current_html.find(">", idx) + 1
                 updated_html = current_html[:end_idx] + "\n" + new_card + current_html[end_idx:]
             inserted = True
@@ -171,26 +175,25 @@ def commit_vault_file(path: str, content: str, message: str) -> dict:
 # ──────────────────────────────────────────────────────────
 # TEST
 # ──────────────────────────────────────────────────────────
-
 def test_github_connection():
     """Quick test: verify GitHub API works by reading a file."""
     if not GITHUB_TOKEN:
-        print("[GitHubPublisher] ❌ GITHUB_TOKEN not set")
+        print("[GitHubPublisher] \u274c GITHUB_TOKEN not set")
         return False
     try:
         file_data = get_file("README.md")
         if file_data.get("sha"):
-            print(f"[GitHubPublisher] ✅ GitHub API connected (README.md sha: {file_data['sha'][:8]})")
+            print(f"[GitHubPublisher] \u2705 GitHub API connected (README.md sha: {file_data['sha'][:8]})")
             return True
         # Try news.html instead
         file_data = get_file(NEWS_INDEX_PATH)
         if file_data.get("sha"):
-            print(f"[GitHubPublisher] ✅ GitHub API connected (news.html found)")
+            print(f"[GitHubPublisher] \u2705 GitHub API connected (news.html found)")
             return True
-        print("[GitHubPublisher] ❌ Could not read any files from repo")
+        print("[GitHubPublisher] \u274c Could not read any files from repo")
         return False
     except Exception as e:
-        print(f"[GitHubPublisher] ❌ GitHub API failed: {e}")
+        print(f"[GitHubPublisher] \u274c GitHub API failed: {e}")
         return False
 
 
