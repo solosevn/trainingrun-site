@@ -27,7 +27,7 @@ logger = logging.getLogger("ContentScout.LearningLogger")
 # ─── Configuration ───────────────────────────────────────────────
 
 REPO_PATH = os.getenv("TR_REPO_PATH", str(Path.home() / "trainingrun-site"))
-VAULT_BASE = "context-vault/agents/trainingrun/daily-news/content-scout"
+VAULT_BASE = "agents/content-scout/vault"
 
 RUN_LOG_PATH = os.path.join(REPO_PATH, VAULT_BASE, "RUN-LOG.md")
 LEARNING_LOG_PATH = os.path.join(REPO_PATH, VAULT_BASE, "LEARNING-LOG.md")

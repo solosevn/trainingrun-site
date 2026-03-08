@@ -68,7 +68,7 @@ TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 REPO_PATH        = Path(os.environ.get("REPO_PATH",
                         str(Path.home() / "trainingrun-site")))
-DATA_FILE        = REPO_PATH / "trscode-data.json"
+DATA_FILE        = REPO_PATH / "data" / "data/trscode-data.json"
 TODAY            = date.today().isoformat()
 DRY_RUN          = "--dry-run"       in sys.argv
 TEST_TELEGRAM    = "--test-telegram" in sys.argv
@@ -682,7 +682,7 @@ def update_index_timestamp() -> None:
 
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "trscode-data.json", "status.json"],
+        subprocess.run(["git", "add", "data/trscode-data.json", "status.json"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)

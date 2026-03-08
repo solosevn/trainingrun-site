@@ -33,15 +33,15 @@ CACHE_TTL = 86400  # 24 hours in seconds
 
 # Vault file paths relative to repo root
 SCOUT_VAULT_FILES = {
-    "SOUL":             "context-vault/agents/trainingrun/daily-news/content-scout/SOUL.md",
-    "CONFIG":           "context-vault/agents/trainingrun/daily-news/content-scout/CONFIG.md",
-    "PROCESS":          "context-vault/agents/trainingrun/daily-news/content-scout/PROCESS.md",
-    "CADENCE":          "context-vault/agents/trainingrun/daily-news/content-scout/CADENCE.md",
-    "RUN_LOG":          "context-vault/agents/trainingrun/daily-news/content-scout/RUN-LOG.md",
-    "LEARNING_LOG":     "context-vault/agents/trainingrun/daily-news/content-scout/LEARNING-LOG.md",
-    "STYLE_EVOLUTION":  "context-vault/agents/trainingrun/daily-news/content-scout/STYLE-EVOLUTION.md",
-    "SOURCES":          "context-vault/agents/trainingrun/daily-news/content-scout/SOURCES.md",
-    "TRUTH_FILTER":     "context-vault/agents/trainingrun/daily-news/content-scout/TRUTH-FILTER.md",
+    "SOUL":             "agents/content-scout/vault/SOUL.md",
+    "CONFIG":           "agents/content-scout/vault/CONFIG.md",
+    "PROCESS":          "agents/content-scout/vault/PROCESS.md",
+    "CADENCE":          "agents/content-scout/vault/CADENCE.md",
+    "RUN_LOG":          "agents/content-scout/vault/RUN-LOG.md",
+    "LEARNING_LOG":     "agents/content-scout/vault/LEARNING-LOG.md",
+    "STYLE_EVOLUTION":  "agents/content-scout/vault/STYLE-EVOLUTION.md",
+    "SOURCES":          "agents/content-scout/vault/SOURCES.md",
+    "TRUTH_FILTER":     "agents/content-scout/vault/TRUTH-FILTER.md",
 }
 
 # Feedback file from Daily News Agent

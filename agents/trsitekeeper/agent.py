@@ -554,7 +554,7 @@ def execute_tool(name: str, args: dict) -> str:
 
     elif name == "run_ddp":
         target = args.get("target", "all")
-        cmd = [PYTHON_PATH, "daily_runner.py"]
+        cmd = [PYTHON_PATH, "agents/ddp/daily_runner.py"]
         if target != "all":
             cmd += ["--score", target]
         try:

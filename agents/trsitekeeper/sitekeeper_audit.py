@@ -294,7 +294,7 @@ class AuditScheduler:
     def _check_site_health(self) -> Tuple[bool, str]:
         """Check 1: Verify core agent infrastructure and DDP data files exist."""
         try:
-            agent_dir = Path(REPO_PATH) / "web_agent"
+            agent_dir = Path(REPO_PATH) / "agents" / "trsitekeeper"
             if not agent_dir.exists():
                 return False, "web_agent directory not found"
 
@@ -337,11 +337,11 @@ class AuditScheduler:
         """Check 2: Verify all 5 DDPs have fresh data files."""
         try:
             ddp_data_files = {
-                "trscode": Path(REPO_PATH) / "trscode-data.json",
-                "truscore": Path(REPO_PATH) / "truscore-data.json",
-                "trfcast": Path(REPO_PATH) / "trf-data.json",
-                "tragents": Path(REPO_PATH) / "tragent-data.json",
-                "trs": Path(REPO_PATH) / "trs-data.json",
+                "trscode": Path(REPO_PATH) / "data" / "trscode-data.json",
+                "truscore": Path(REPO_PATH) / "data" / "truscore-data.json",
+                "trfcast": Path(REPO_PATH) / "data" / "trf-data.json",
+                "tragents": Path(REPO_PATH) / "data" / "tragent-data.json",
+                "trs": Path(REPO_PATH) / "data" / "trs-data.json",
             }
             stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=26)
 
@@ -368,11 +368,11 @@ class AuditScheduler:
         try:
             stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=48)
             critical_files = {
-                "trscode-data.json": Path(REPO_PATH) / "trscode-data.json",
-                "truscore-data.json": Path(REPO_PATH) / "truscore-data.json",
-                "trf-data.json": Path(REPO_PATH) / "trf-data.json",
-                "tragent-data.json": Path(REPO_PATH) / "tragent-data.json",
-                "trs-data.json": Path(REPO_PATH) / "trs-data.json",
+                "trscode-data.json": Path(REPO_PATH) / "data" / "trscode-data.json",
+                "truscore-data.json": Path(REPO_PATH) / "data" / "truscore-data.json",
+                "trf-data.json": Path(REPO_PATH) / "data" / "trf-data.json",
+                "tragent-data.json": Path(REPO_PATH) / "data" / "tragent-data.json",
+                "trs-data.json": Path(REPO_PATH) / "data" / "trs-data.json",
             }
 
             issues = []
@@ -452,7 +452,7 @@ class AuditScheduler:
     def _check_vault_integrity(self) -> Tuple[bool, str]:
         """Check 6: Verify all 9 context-vault files are present."""
         try:
-            vault_dir = Path(REPO_PATH) / "context-vault" / "trainingrun" / "agents" / "trsitekeeper"
+            vault_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "vault"
             if not vault_dir.exists():
                 return False, "Vault directory not found at context-vault/trainingrun/agents/trsitekeeper/"
 
@@ -904,7 +904,7 @@ class AuditScheduler:
     def _check_comparative_audit(self) -> Tuple[bool, str]:
         """Check 21: Compare today's results to yesterday's."""
         try:
-            audit_history_file = Path(REPO_PATH) / "web_agent" / "audit_history.json"
+            audit_history_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
 
             # Load or create history
             if audit_history_file.exists():
@@ -958,7 +958,7 @@ class AuditScheduler:
     def _check_perfect_scores(self) -> Tuple[bool, str]:
         """Check 23: Flag any model scoring exactly 100 on any DDP."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
+            data_dir = Path(REPO_PATH) / "agents" / "trsitekeeper"
 
             perfect_scores = []
 
@@ -995,7 +995,7 @@ class AuditScheduler:
     def _check_stale_rankings(self) -> Tuple[bool, str]:
         """Check 24: Track rankings, flag if unchanged for 3+ days."""
         try:
-            rankings_history_file = Path(REPO_PATH) / "web_agent" / "rankings_history.json"
+            rankings_history_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "rankings_history.json"
 
             # Load or create history
             if rankings_history_file.exists():
@@ -1007,7 +1007,7 @@ class AuditScheduler:
             today = datetime.datetime.now().strftime("%Y-%m-%d")
 
             # Get current rankings
-            leaderboard_file = Path(REPO_PATH) / "web_agent" / "leaderboard.json"
+            leaderboard_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "leaderboard.json"
             if leaderboard_file.exists():
                 with open(leaderboard_file) as f:
                     leaderboard = json.load(f)
@@ -1068,7 +1068,7 @@ class AuditScheduler:
     def _load_last_audit(self):
         """Load the most recent audit result from audit_history.json."""
         try:
-            history_path = Path(REPO_PATH) / "web_agent" / "audit_history.json"
+            history_path = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
             if not history_path.exists():
                 return None
             with open(history_path, "r") as f:
@@ -1091,7 +1091,7 @@ class AuditScheduler:
 
         # Save to audit_history.json
         try:
-            history_path = Path(REPO_PATH) / "web_agent" / "audit_history.json"
+            history_path = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
             history = {}
             if history_path.exists():
                 with open(history_path, "r") as f:
@@ -1191,15 +1191,15 @@ class AuditScheduler:
             # Load memory context
             memory_context = ""
             try:
-                fp = Path(REPO_PATH) / "web_agent" / "memory" / "fix_patterns.json"
+                fp = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "fix_patterns.json"
                 if fp.exists():
                     with open(fp, "r") as f:
                         memory_context += f"Fix patterns: {f.read()[:2000]}\n\n"
-                sk = Path(REPO_PATH) / "web_agent" / "memory" / "site_knowledge.json"
+                sk = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "site_knowledge.json"
                 if sk.exists():
                     with open(sk, "r") as f:
                         memory_context += f"Site knowledge: {f.read()[:2000]}\n\n"
-                el = Path(REPO_PATH) / "web_agent" / "memory" / "error_log.jsonl"
+                el = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "error_log.jsonl"
                 if el.exists():
                     with open(el, "r") as f:
                         recent = f.readlines()[-10:]
@@ -1326,7 +1326,7 @@ class AuditScheduler:
         "trs": "agent_trs.py",
     }
 
-    TRIED_FIXES_PATH = Path(REPO_PATH) / "web_agent" / "memory" / "tried_fixes.jsonl"
+    TRIED_FIXES_PATH = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "tried_fixes.jsonl"
 
     def _load_tried_fixes(self, check_name: str = None) -> list:
         """Load past fix attempts from tried_fixes.jsonl."""

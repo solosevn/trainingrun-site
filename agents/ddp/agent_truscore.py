@@ -142,7 +142,7 @@ log = logging.getLogger("truscore_v14")
 TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 REPO_PATH        = Path(os.environ.get("REPO_PATH", str(Path.home() / "trainingrun-site")))
-DATA_FILE        = REPO_PATH / "truscore-data.json"
+DATA_FILE        = REPO_PATH / "data" / "data/truscore-data.json"
 TODAY            = date.today().isoformat()
 DRY_RUN          = "--dry-run" in sys.argv
 TEST_TELEGRAM    = "--test-telegram" in sys.argv
@@ -1136,7 +1136,7 @@ def auto_discover_models(data: dict, all_results: dict) -> list:
 def git_push(commit_msg: str) -> bool:
     try:
         subprocess.run(
-            ["git", "add", "truscore-data.json", "status.json"],
+            ["git", "add", "data/truscore-data.json", "status.json"],
             cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(
             ["git", "commit", "-m", commit_msg],

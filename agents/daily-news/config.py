@@ -53,15 +53,15 @@ CACHE_DIR.mkdir(exist_ok=True)
 # CONTEXT VAULT — Files the agent reads for instructions
 # ──────────────────────────────────────────────────────────
 VAULT_FILES = {
-    "user_md":        "context-vault/org/USER.md",
-    "reasoning_md":   "context-vault/org/shared-context/REASONING-CHECKLIST.md",
-    "soul_md":        "context-vault/agents/trainingrun/daily-news/SOUL.md",
-    "config_md":      "context-vault/agents/trainingrun/daily-news/CONFIG.md",
-    "process_md":     "context-vault/agents/trainingrun/daily-news/PROCESS.md",
-    "style_md":       "context-vault/agents/trainingrun/daily-news/STYLE-EVOLUTION.md",
-    "run_log_md":     "context-vault/agents/trainingrun/daily-news/RUN-LOG.md",
-    "learning_md":    "context-vault/agents/trainingrun/daily-news/LEARNING-LOG.md",
-    "engagement_md":  "context-vault/agents/trainingrun/daily-news/ENGAGEMENT-LOG.md",
+    "user_md":        "shared/USER.md",
+    "reasoning_md":   "shared/REASONING-CHECKLIST.md",
+    "soul_md":        "agents/daily-news/vault/SOUL.md",
+    "config_md":      "agents/daily-news/vault/CONFIG.md",
+    "process_md":     "agents/daily-news/vault/PROCESS.md",
+    "style_md":       "agents/daily-news/vault/STYLE-EVOLUTION.md",
+    "run_log_md":     "agents/daily-news/vault/RUN-LOG.md",
+    "learning_md":    "agents/daily-news/vault/LEARNING-LOG.md",
+    "engagement_md":  "agents/daily-news/vault/ENGAGEMENT-LOG.md",
 }
 
 # ──────────────────────────────────────────────────────────

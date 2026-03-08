@@ -1,6 +1,6 @@
-# LEARNING-LOG — TRS Site Manager (TRSitekeeper)
+# LEARNING-LOG â TRS Site Manager (TRSitekeeper)
 
-> **Format:** Raw memory — site issues, fix patterns, audit discoveries, operational lessons
+> **Format:** Raw memory â site issues, fix patterns, audit discoveries, operational lessons
 > **Updated:** After notable events, recurring issues, or methodology changes
 > **Started:** March 6, 2026
 
@@ -9,7 +9,7 @@
 ## Entry Format
 
 ```
-### YYYY-MM-DD — [Topic]
+### YYYY-MM-DD â [Topic]
 
 **What happened:**
 **Impact:**
@@ -21,19 +21,19 @@
 
 ## Entries
 
-### 2026-03-06 — Context Vault Established
+### 2026-03-06 â Context Vault Established
 
 **What happened:** TRS Site Manager vault created. Agent has been operational since Feb 2026 with brain.md v2.0 as its knowledge base. Vault now formalizes the autonomous audit framework and learning system.
 
-**Impact:** No operational change yet. Vault provides structured memory that brain.md doesn't have — run logs, learning patterns, style rules.
+**Impact:** No operational change yet. Vault provides structured memory that brain.md doesn't have â run logs, learning patterns, style rules.
 
 **Action taken:** 9 vault files created. Autonomous audit checklist formalized. Daily schedule defined.
 
-**Lesson:** The agent was running for weeks with only brain.md — a flat file with no append-only logs or learning structure. Vault files add the memory layer needed for true autonomy.
+**Lesson:** The agent was running for weeks with only brain.md â a flat file with no append-only logs or learning structure. Vault files add the memory layer needed for true autonomy.
 
 ---
 
-### 2026-02-24 — Model Upgrade: Ollama → Claude Sonnet 4.6
+### 2026-02-24 â Model Upgrade: Ollama â Claude Sonnet 4.6
 
 **What happened:** TRSitekeeper upgraded from local Ollama/llama model to Claude Sonnet 4.6 via Anthropic API. This was a fundamental capability upgrade.
 
@@ -45,7 +45,7 @@
 
 ---
 
-### 2026-02-26 — Brain v2.0 Written
+### 2026-02-26 â Brain v2.0 Written
 
 **What happened:** Comprehensive brain.md v2.0 created with full file inventory (49 files), index.html deep architecture, DDP data format, git workflow, backup workflow, design rules, and common fix patterns.
 
@@ -59,9 +59,18 @@
 
 ## Known Issues (as of March 6, 2026)
 
-- **Audit mode not yet active** — Agent currently operates in reactive-only mode. Autonomous daily audits are defined in PROCESS.md but need to be implemented in agent.py
-- **Image parsing not yet implemented** — David wants to send screenshots of issues. agent.py needs Claude's vision capability enabled to parse images
-- **No learning loop yet** — RUN-LOG and LEARNING-LOG exist but agent.py doesn't read or write them yet
-- **agent_activity.json** shows last active Feb 28 — may need troubleshooting if agent isn't running
+- **Audit mode not yet active** â Agent currently operates in reactive-only mode. Autonomous daily audits are defined in PROCESS.md but need to be implemented in agent.py
+- **Image parsing not yet implemented** â David wants to send screenshots of issues. agent.py needs Claude's vision capability enabled to parse images
+- **No learning loop yet** â RUN-LOG and LEARNING-LOG exist but agent.py doesn't read or write them yet
+- **agent_activity.json** shows last active Feb 28 â may need troubleshooting if agent isn't running
 
 ---
+
+---
+### 2026-03-06 â Audit Lessons
+- Site Health Issues:
+Health Check: 1 issues (15 checks)
+
+MISSING PAGE: trscode.html
+- Missing Pages: trscode.html
+- 6 uncommitted file(s) in repo
