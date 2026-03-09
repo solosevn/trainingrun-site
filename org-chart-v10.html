@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David's AI Company — Org Chart V10</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f2f5;
+    padding: 40px 20px;
+    min-width: 1400px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 40px;
+  }
+
+  /* ── ORG CHART LAYOUT ── */
+  .org-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  /* ── CARD STYLES ── */
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card .header {
+    padding: 12px 16px 8px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+  .card .body {
+    padding: 12px 16px 14px;
+  }
+  .card .name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 2px;
+  }
+  .card .role {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .card .tech-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin: 2px;
+  }
+  .card .status-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-top: 6px;
+  }
+  .card .detail {
+    font-size: 10px;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  /* Card sizes */
+  .card-ceo { width: 280px; }
+  .card-ceo .header { font-size: 16px; padding: 14px 16px 10px; }
+  .card-ceo .name { font-size: 20px; }
+
+  .card-future { width: 200px; opacity: 0.5; }
+  .card-future .header { padding: 8px 12px 6px; font-size: 12px; }
+  .card-future .body { padding: 8px 12px 10px; }
+  .card-future .name { font-size: 13px; }
+
+  .card-site { width: 260px; }
+  .card-agent { width: 240px; }
+  .card-sub { width: 220px; }
+  .card-ddp-item { width: 120px; }
+  .card-ddp-item .body { padding: 8px 10px; }
+  .card-ddp-item .name { font-size: 11px; }
+
+  /* Header colors */
+  .hdr-gold { background: linear-gradient(135deg, #b8860b, #daa520); }
+  .hdr-blue { background: linear-gradient(135deg, #1e3a5f, #2c5f8a); }
+  .hdr-teal { background: linear-gradient(135deg, #0d7377, #14a3a8); }
+  .hdr-purple { background: linear-gradient(135deg, #4a1a6b, #7b2fa0); }
+  .hdr-green { background: linear-gradient(135deg, #1a5e1a, #2d8a2d); }
+  .hdr-orange { background: linear-gradient(135deg, #8b4513, #cd6600); }
+  .hdr-gray { background: linear-gradient(135deg, #555, #888); }
+  .hdr-red { background: linear-gradient(135deg, #8b1a1a, #c0392b); }
+
+  /* Badge colors */
+  .badge-anthropic { background: #ffecd2; color: #8b4513; }
+  .badge-xai { background: #e8e0f0; color: #4a1a6b; }
+  .badge-meta { background: #e0f0e8; color: #1a5e1a; }
+  .badge-python { background: #d6eaf8; color: #1e3a5f; }
+  .badge-free { background: #d5f5e3; color: #1a5e1a; }
+  .badge-paid { background: #fadbd8; color: #922b21; }
+  .badge-local { background: #fdebd0; color: #7e5109; }
+  .badge-cloud { background: #d4e6f1; color: #1b4f72; }
+
+  .status-live { background: #d5f5e3; color: #1a7a1a; }
+  .status-built { background: #d6eaf8; color: #1e3a5f; }
+  .status-planned { background: #fdebd0; color: #8b4513; }
+  .status-partial { background: #fadbd8; color: #922b21; }
+  .status-active { background: #d5f5e3; color: #1a7a1a; }
+
+  /* Autonomy meter */
+  .autonomy {
+    margin-top: 8px;
+    text-align: center;
+  }
+  .autonomy-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .autonomy-bar {
+    width: 100%;
+    height: 8px;
+    background: #e8e8e8;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .autonomy-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .autonomy-pct {
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ── CONNECTOR LINES ── */
+  .connector-v {
+    width: 2px;
+    background: #bbb;
+    margin: 0 auto;
+  }
+  .connector-h {
+    height: 2px;
+    background: #bbb;
+  }
+
+  /* ── LAYOUT ROWS ── */
+  .row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    position: relative;
+  }
+  .row-tight { gap: 16px; }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Vertical connector */
+  .vline { width: 2px; height: 30px; background: #bbb; }
+  .vline-short { width: 2px; height: 20px; background: #bbb; }
+  .vline-long { width: 2px; height: 40px; background: #bbb; }
+
+  /* Horizontal bracket */
+  .bracket {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .bracket-line {
+    height: 2px;
+    background: #bbb;
+  }
+  .bracket-drop {
+    width: 2px;
+    height: 20px;
+    background: #bbb;
+  }
+
+  /* Section labels */
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 30px 0 10px;
+    text-align: center;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #666;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  /* DDP grid */
+  .ddp-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Telegram label */
+  .telegram {
+    font-size: 10px;
+    color: #0088cc;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* Cost label */
+  .cost-line {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .site-group {
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    padding: 20px;
+    background: rgba(255,255,255,0.4);
+    margin: 0 20px;
+  }
+  .site-group-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>David's AI Company</h1>
+<div class="subtitle">Operational Structure — V10 | March 9, 2026</div>
+
+<div class="org-chart">
+
+  <!-- CEO -->
+  <div class="col">
+    <div class="card card-ceo">
+      <div class="header hdr-gold">FOUNDER & CEO</div>
+      <div class="body">
+        <div class="name">David Solomon</div>
+        <div class="role">Owner · Operator · Final Authority</div>
+        <div class="detail">All agents report through their Site Manager</div>
+      </div>
+    </div>
+
+    <div class="vline-long"></div>
+
+    <!-- Future agents row -->
+    <div class="row" style="margin-bottom: 6px;">
+      <div class="col">
+        <div class="card card-future">
+          <div class="header hdr-gray">FUTURE</div>
+          <div class="body">
+            <div class="name">CEO Agent</div>
+            <div class="role">Cross-site orchestration</div>
+            <div class="status-badge status-planned">PLANNED</div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card card-future">
+          <div class="header hdr-gray">FUTURE</div>
+          <div class="body">
+            <div class="name">Security Agent</div>
+            <div class="role">Cross-site security</div>
+            <div class="status-badge status-planned">PLANNED</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vline-long"></div>
+  </div>
+
+  <!-- TWO SITE GROUPS -->
+  <div class="row" style="align-items: stretch; gap: 40px;">
+
+    <!-- ═══════ TRAININGRUN.AI ═══════ -->
+    <div class="site-group">
+      <div class="site-group-label">TrainingRun.AI — trainingrun.ai</div>
+
+      <!-- TRSitekeeper -->
+      <div class="col">
+        <div class="card card-site">
+          <div class="header hdr-blue">SITE MANAGER</div>
+          <div class="body">
+            <div class="name">TRSitekeeper v3.0</div>
+            <div class="role">Autonomous Site Manager</div>
+            <div style="margin: 6px 0;">
+              <span class="tech-badge badge-anthropic">MODEL AGENT</span>
+            </div>
+            <div>
+              <span class="tech-badge badge-anthropic">Anthropic</span>
+              <span class="tech-badge badge-anthropic">Claude Sonnet 4.6</span>
+            </div>
+            <div>
+              <span class="tech-badge badge-cloud">Cloud API</span>
+              <span class="tech-badge badge-paid">Paid</span>
+            </div>
+            <div class="telegram">@TRSitekeeperBot</div>
+            <div class="detail">23-check audit · 6-layer memory · launchd</div>
+            <div class="status-badge status-live">LIVE</div>
+            <div class="autonomy">
+              <div class="autonomy-label">Autonomy Level</div>
+              <div class="autonomy-bar"><div class="autonomy-fill" style="width: 40%; background: linear-gradient(90deg, #e74c3c, #f39c12);"></div></div>
+              <div class="autonomy-pct" style="color: #e67e22;">40%</div>
+              <div class="detail" style="margin-top:2px;">claude_chat() broken — audits but can't think</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vline"></div>
+
+        <!-- Three children of TRSitekeeper -->
+        <div style="display: flex; align-items: flex-start; position: relative;">
+          <!-- horizontal bracket -->
+          <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 540px; height: 2px; background: #bbb;"></div>
+          <!-- drops -->
+          <div style="position: absolute; top: 0; left: calc(50% - 270px); width: 2px; height: 20px; background: #bbb;"></div>
+          <div style="position: absolute; top: 0; left: 50%; transform: translateX(-1px); width: 2px; height: 20px; background: #bbb;"></div>
+          <div style="position: absolute; top: 0; left: calc(50% + 270px); width: 2px; height: 20px; background: #bbb;"></div>
+        </div>
+
+        <div style="height: 20px;"></div>
+
+        <div class="row">
+          <!-- Daily News Agent -->
+          <div class="col">
+            <div class="card card-agent">
+              <div class="header hdr-purple">AGENT</div>
+              <div class="body">
+                <div class="name">Daily News Agent</div>
+                <div class="role">The Journalist</div>
+                <div style="margin: 6px 0;">
+                  <span class="tech-badge badge-xai">MODEL AGENT</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-xai">xAI</span>
+                  <span class="tech-badge badge-xai">Grok-3 + Grok-3-mini</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-cloud">Cloud API</span>
+                  <span class="tech-badge badge-paid">Paid</span>
+                </div>
+                <div class="telegram">@TRnewzBot</div>
+                <div class="detail">Article writer · story selector · launchd</div>
+                <div class="status-badge status-built">BUILT</div>
+                <div class="autonomy">
+                  <div class="autonomy-label">Autonomy Level</div>
+                  <div class="autonomy-bar"><div class="autonomy-fill" style="width: 60%; background: linear-gradient(90deg, #f39c12, #f1c40f);"></div></div>
+                  <div class="autonomy-pct" style="color: #e67e22;">60%</div>
+                  <div class="detail" style="margin-top:2px;">Pipeline stuck — not drafting from scout</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="vline"></div>
+
+            <!-- Content Scout -->
+            <div class="card card-sub">
+              <div class="header hdr-teal">SUB-AGENT</div>
+              <div class="body">
+                <div class="name">Content Scout v1.2.0</div>
+                <div class="role">Intelligence Gatherer</div>
+                <div style="margin: 6px 0;">
+                  <span class="tech-badge badge-meta">HYBRID</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-meta">Meta Llama 3.1:8b</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-local">Ollama · Local · Free</span>
+                </div>
+                <div style="margin-top: 4px;">
+                  <span class="tech-badge badge-xai">xAI Grok-3-mini</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-cloud">Cloud API · Paid</span>
+                </div>
+                <div class="telegram">@TrainingRunBot</div>
+                <div class="detail">15 scrapers · Truth Filter · launchd</div>
+                <div class="status-badge status-live">LIVE v1.2.0</div>
+                <div class="autonomy">
+                  <div class="autonomy-label">Autonomy Level</div>
+                  <div class="autonomy-bar"><div class="autonomy-fill" style="width: 85%; background: linear-gradient(90deg, #27ae60, #2ecc71);"></div></div>
+                  <div class="autonomy-pct" style="color: #27ae60;">85%</div>
+                  <div class="detail" style="margin-top:2px;">Most autonomous — no self-heal if Ollama drops</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DDP Pipeline -->
+          <div class="col">
+            <div class="card card-agent">
+              <div class="header hdr-green">NON-AGENT PIPELINE</div>
+              <div class="body">
+                <div class="name">DDP Pipeline</div>
+                <div class="role">The Scoring Engine</div>
+                <div style="margin: 6px 0;">
+                  <span class="tech-badge badge-python">PYTHON SCRIPTS</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-python">No AI Model</span>
+                  <span class="tech-badge badge-python">Playwright</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-local">Local</span>
+                  <span class="tech-badge badge-free">Free</span>
+                </div>
+                <div class="detail">5 scrapers · 60+ sources · cron 4AM CST</div>
+                <div class="status-badge status-active">ACTIVE</div>
+              </div>
+            </div>
+
+            <div class="vline-short"></div>
+
+            <div class="ddp-grid">
+              <div class="card card-ddp-item">
+                <div class="header hdr-green" style="padding: 4px 8px; font-size: 10px;">SCRAPER</div>
+                <div class="body">
+                  <div class="name">TRSbench</div>
+                  <div class="detail">18 src · 7 pillars</div>
+                </div>
+              </div>
+              <div class="card card-ddp-item">
+                <div class="header hdr-green" style="padding: 4px 8px; font-size: 10px;">SCRAPER</div>
+                <div class="body">
+                  <div class="name">TRUscore</div>
+                  <div class="detail">9 src · 5 pillars</div>
+                </div>
+              </div>
+              <div class="card card-ddp-item">
+                <div class="header hdr-green" style="padding: 4px 8px; font-size: 10px;">SCRAPER</div>
+                <div class="body">
+                  <div class="name">TRScode</div>
+                  <div class="detail">8 sources</div>
+                </div>
+              </div>
+              <div class="card card-ddp-item">
+                <div class="header hdr-green" style="padding: 4px 8px; font-size: 10px;">SCRAPER</div>
+                <div class="body">
+                  <div class="name">TRFcast</div>
+                  <div class="detail">4 platforms</div>
+                </div>
+              </div>
+              <div class="card card-ddp-item">
+                <div class="header hdr-green" style="padding: 4px 8px; font-size: 10px;">SCRAPER</div>
+                <div class="body">
+                  <div class="name">TRAgents</div>
+                  <div class="detail">22+ src · 6 pillars</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CEO Agent Vault -->
+          <div class="col">
+            <div class="card card-agent" style="width: 200px;">
+              <div class="header hdr-orange">KNOWLEDGE BASE</div>
+              <div class="body">
+                <div class="name">CEO Vault</div>
+                <div class="role">Learning Documents</div>
+                <div style="margin: 6px 0;">
+                  <span class="tech-badge badge-python">NOT AN AGENT</span>
+                </div>
+                <div>
+                  <span class="tech-badge badge-python">Markdown Files</span>
+                </div>
+                <div class="detail">CEO-LEARNING-001 thru 009</div>
+                <div class="detail">agents/ceo/vault/</div>
+                <div class="status-badge status-active">ACTIVE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TS ARENA ═══════ -->
+    <div class="site-group">
+      <div class="site-group-label">TS Arena — tsarena.ai</div>
+
+      <!-- Arena Ops -->
+      <div class="col">
+        <div class="card card-site">
+          <div class="header hdr-red">SITE MANAGER</div>
+          <div class="body">
+            <div class="name">Arena Ops</div>
+            <div class="role">Chief of Operations</div>
+            <div style="margin: 6px 0;">
+              <span class="tech-badge" style="background:#f5e6e6; color:#8b1a1a;">MODEL AGENT</span>
+            </div>
+            <div class="detail">Model TBD</div>
+            <div class="status-badge status-planned">PLANNED</div>
+          </div>
+        </div>
+
+        <div class="vline"></div>
+
+        <div style="display: flex; align-items: flex-start; position: relative;">
+          <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 400px; height: 2px; background: #bbb;"></div>
+          <div style="position: absolute; top: 0; left: calc(50% - 200px); width: 2px; height: 20px; background: #bbb;"></div>
+          <div style="position: absolute; top: 0; left: calc(50% - 67px); width: 2px; height: 20px; background: #bbb;"></div>
+          <div style="position: absolute; top: 0; left: calc(50% + 67px); width: 2px; height: 20px; background: #bbb;"></div>
+          <div style="position: absolute; top: 0; left: calc(50% + 200px); width: 2px; height: 20px; background: #bbb;"></div>
+        </div>
+
+        <div style="height: 20px;"></div>
+
+        <div class="row row-tight">
+          <div class="card card-sub" style="width: 160px;">
+            <div class="header hdr-red" style="padding: 6px 10px; font-size: 11px;">AGENT</div>
+            <div class="body" style="padding: 8px 10px;">
+              <div class="name" style="font-size: 13px;">Battle Generator</div>
+              <div class="role">The Engine</div>
+              <div class="detail">OpenRouter API</div>
+              <div class="status-badge status-partial">PARTIAL</div>
+            </div>
+          </div>
+          <div class="card card-sub" style="width: 160px;">
+            <div class="header hdr-gray" style="padding: 6px 10px; font-size: 11px;">AGENT</div>
+            <div class="body" style="padding: 8px 10px;">
+              <div class="name" style="font-size: 13px;">Model Manager</div>
+              <div class="role">The Roster</div>
+              <div class="detail">70 models</div>
+              <div class="status-badge status-planned">NOT BUILT</div>
+            </div>
+          </div>
+          <div class="card card-sub" style="width: 160px;">
+            <div class="header hdr-gray" style="padding: 6px 10px; font-size: 11px;">AGENT</div>
+            <div class="body" style="padding: 8px 10px;">
+              <div class="name" style="font-size: 13px;">Prompt Curator</div>
+              <div class="role">Quality Gate</div>
+              <div class="detail">167 prompts</div>
+              <div class="status-badge status-planned">NOT BUILT</div>
+            </div>
+          </div>
+          <div class="card card-sub" style="width: 160px;">
+            <div class="header hdr-gray" style="padding: 6px 10px; font-size: 11px;">AGENT</div>
+            <div class="body" style="padding: 8px 10px;">
+              <div class="name" style="font-size: 13px;">Vote Counter</div>
+              <div class="role">The Pulse</div>
+              <div class="detail">Supabase polling</div>
+              <div class="status-badge status-active">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 10px;"></div>
+
+        <div class="row row-tight">
+          <div class="card card-sub" style="width: 160px;">
+            <div class="header hdr-gray" style="padding: 6px 10px; font-size: 11px;">AGENT</div>
+            <div class="body" style="padding: 8px 10px;">
+              <div class="name" style="font-size: 13px;">Site Builder</div>
+              <div class="role">The Storefront</div>
+              <div class="detail">GitHub Pages</div>
+              <div class="status-badge status-planned">NOT BUILT</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend" style="margin-top: 50px;">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: linear-gradient(135deg, #1e3a5f, #2c5f8a);"></div>
+      Site Manager
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: linear-gradient(135deg, #4a1a6b, #7b2fa0);"></div>
+      Model Agent (Cloud API · Paid)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: linear-gradient(135deg, #0d7377, #14a3a8);"></div>
+      Hybrid (Local + Cloud)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: linear-gradient(135deg, #1a5e1a, #2d8a2d);"></div>
+      Python Scripts (No AI · Free)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: linear-gradient(135deg, #555, #888);"></div>
+      Planned / Not Built
+    </div>
+  </div>
+
+  <!-- COST SUMMARY -->
+  <div style="margin-top: 30px; text-align: center; padding: 24px 40px; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); display: inline-block; max-width: 900px;">
+    <div style="font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px;">Monthly API Cost Forecast</div>
+    <div style="font-size: 11px; color: #999; margin-bottom: 16px;">Based on current usage patterns as of March 2026 · All estimates</div>
+
+    <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+      <thead>
+        <tr style="border-bottom: 2px solid #1a1a2e;">
+          <th style="padding: 8px 12px; color: #1a1a2e;">Agent</th>
+          <th style="padding: 8px 12px; color: #1a1a2e;">Provider</th>
+          <th style="padding: 8px 12px; color: #1a1a2e;">Model</th>
+          <th style="padding: 8px 12px; color: #1a1a2e;">API Rate</th>
+          <th style="padding: 8px 12px; color: #1a1a2e;">Usage Pattern</th>
+          <th style="padding: 8px 12px; color: #1a1a2e; text-align: right;">Est. $/mo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- TRSitekeeper -->
+        <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+          <td style="padding: 8px 12px; font-weight: 600;">TRSitekeeper</td>
+          <td style="padding: 8px 12px;"><span style="color:#8b4513;">Anthropic</span></td>
+          <td style="padding: 8px 12px;">Claude Sonnet 4.6</td>
+          <td style="padding: 8px 12px; font-size: 11px;">$3/1M in · $15/1M out</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Daily audit (23 checks + Claude analysis) + ~10 on-demand Telegram interactions/day. Vault context ~50KB loaded per session.</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #922b21;">$20–40</td>
+        </tr>
+        <!-- Daily News — Grok-3 -->
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 8px 12px; font-weight: 600;" rowspan="2">Daily News Agent</td>
+          <td style="padding: 8px 12px;" rowspan="2"><span style="color:#4a1a6b;">xAI</span></td>
+          <td style="padding: 8px 12px;">Grok-3</td>
+          <td style="padding: 8px 12px; font-size: 11px;">$3/1M in · $15/1M out</td>
+          <td style="padding: 8px 12px; font-size: 11px;">1 article/day. ~20K input tokens (scout briefing + vault context), ~5K output tokens (full article draft).</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #922b21;">$3–6</td>
+        </tr>
+        <!-- Daily News — Grok-3-mini -->
+        <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+          <td style="padding: 8px 12px;">Grok-3-mini</td>
+          <td style="padding: 8px 12px; font-size: 11px;">$0.30/1M in · $0.50/1M out</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Story selection from ~10 candidates/day. Light token usage.</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #922b21;">&lt;$1</td>
+        </tr>
+        <!-- Content Scout — Ollama -->
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 8px 12px; font-weight: 600;" rowspan="2">Content Scout</td>
+          <td style="padding: 8px 12px;"><span style="color:#1a5e1a;">Local (Ollama)</span></td>
+          <td style="padding: 8px 12px;">Meta Llama 3.1:8b</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Free (runs on Mac)</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Primary scraping + analysis. Runs every 30 min, 7:30AM–11PM CST (~31 cycles/day). Morning brief at 5:30AM.</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #1a7a1a;">$0</td>
+        </tr>
+        <!-- Content Scout — Grok verification -->
+        <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+          <td style="padding: 8px 12px;"><span style="color:#4a1a6b;">xAI</span></td>
+          <td style="padding: 8px 12px;">Grok-3-mini</td>
+          <td style="padding: 8px 12px; font-size: 11px;">$0.30/1M in · $0.50/1M out</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Truth Filter Layer 4 verification. Small API calls per scrape cycle for fact-checking flagged stories.</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #922b21;">$1–3</td>
+        </tr>
+        <!-- DDP -->
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 8px 12px; font-weight: 600;">DDP Pipeline</td>
+          <td style="padding: 8px 12px;"><span style="color:#1a5e1a;">Local</span></td>
+          <td style="padding: 8px 12px;">None (Playwright)</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Free</td>
+          <td style="padding: 8px 12px; font-size: 11px;">5 Python scrapers via cron at 4AM CST. Pure web scraping — no AI model involved. Pushes JSON to GitHub.</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #1a7a1a;">$0</td>
+        </tr>
+        <!-- Electricity -->
+        <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+          <td style="padding: 8px 12px; font-weight: 600;">Mac (Electricity)</td>
+          <td style="padding: 8px 12px;"><span style="color:#666;">Hardware</span></td>
+          <td style="padding: 8px 12px;">—</td>
+          <td style="padding: 8px 12px; font-size: 11px;">—</td>
+          <td style="padding: 8px 12px; font-size: 11px;">Running Ollama + 4 launchd services + cron 24/7. Mac running continuously as the local inference server.</td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: #666;">~$5–8</td>
+        </tr>
+      </tbody>
+      <!-- TOTAL -->
+      <tfoot>
+        <tr style="border-top: 3px solid #1a1a2e;">
+          <td colspan="5" style="padding: 12px 12px; font-weight: 700; font-size: 14px; color: #1a1a2e;">ESTIMATED MONTHLY TOTAL</td>
+          <td style="padding: 12px 12px; text-align: right; font-weight: 700; font-size: 16px; color: #922b21;">$30–58</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div style="margin-top: 16px; font-size: 11px; color: #999; line-height: 1.6; text-align: left;">
+      <strong>Notes:</strong><br>
+      • TRSitekeeper is the biggest variable — cost scales with how many Telegram interactions you have per day. Heavy usage days could spike it.<br>
+      • Anthropic API pricing: Claude Sonnet 4.6 = $3/1M input tokens, $15/1M output tokens. Output is the expensive side.<br>
+      • xAI API pricing: Grok-3 = $3/1M in, $15/1M out. Grok-3-mini = $0.30/1M in, $0.50/1M out. Mini is ~10x cheaper.<br>
+      • Ollama (Llama 3.1:8b) is completely free — runs on your Mac's GPU/CPU. Cost is only electricity.<br>
+      • DDP scrapers have zero AI cost. They're pure Python + Playwright browser automation.<br>
+      • TS Arena agents (Battle Generator, etc.) are not yet built and have no current cost. When built, Battle Generator will use OpenRouter API (variable cost per model).
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
