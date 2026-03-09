@@ -1136,7 +1136,7 @@ def auto_discover_models(data: dict, all_results: dict) -> list:
 def git_push(commit_msg: str) -> bool:
     try:
         subprocess.run(
-            ["git", "add", "truscore-data.json", "status.json"],
+            ["git", "add", "truscore-data.json"],
             cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(
             ["git", "commit", "-m", commit_msg],
