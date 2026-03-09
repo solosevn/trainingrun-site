@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "bd804665bf1e8977d9a462d93d1af197aeb29910d800e39e57f6283d66fcf74a",
+  "checksum": "770283dc3c4ec756a883b7512db8fbbe49dc286337c9d94e6d7be34f5ad5852f",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,
@@ -165,11 +165,11 @@
         14.66,
         14.96,
         14.96,
-        14.96
+        14.63
       ],
       "pillar_scores": {
         "forecasting": 100.0,
-        "trading": 19.77,
+        "trading": 17.51,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": 39.98
@@ -178,7 +178,7 @@
       "raw_data": {
         "forecastbench_baseline_brier": null,
         "forecastbench_tournament_brier": 0.102,
-        "rallies_return_pct": 7.0,
+        "rallies_return_pct": 6.2,
         "alpha_arena_return_pct": -48.4,
         "alpha_arena_sharpe": -0.055,
         "rallies_win_rate": 33.3,
@@ -459,11 +459,11 @@
         62.28,
         62.62,
         62.62,
-        62.62
+        62.92
       ],
       "pillar_scores": {
         "forecasting": 89.38,
-        "trading": 13.28,
+        "trading": 15.25,
         "calibration": 96.3,
         "financial_reasoning": 89.05,
         "market_intelligence": 24.01
@@ -472,7 +472,7 @@
       "raw_data": {
         "forecastbench_baseline_brier": 0.135,
         "forecastbench_tournament_brier": 0.135,
-        "rallies_return_pct": 4.7,
+        "rallies_return_pct": 5.4,
         "alpha_arena_return_pct": -19.15,
         "alpha_arena_sharpe": -0.037,
         "rallies_win_rate": 20.0,
@@ -655,11 +655,11 @@
         60.5,
         60.38,
         60.38,
-        60.38
+        60.34
       ],
       "pillar_scores": {
         "forecasting": 79.19,
-        "trading": 39.32,
+        "trading": 39.15,
         "calibration": 78.31,
         "financial_reasoning": 100.0,
         "market_intelligence": 82.59
@@ -668,7 +668,7 @@
       "raw_data": {
         "forecastbench_baseline_brier": 0.166,
         "forecastbench_tournament_brier": 0.126,
-        "rallies_return_pct": 3.8,
+        "rallies_return_pct": 3.7,
         "alpha_arena_return_pct": 7.3,
         "alpha_arena_sharpe": 0.0,
         "rallies_win_rate": 68.8,
@@ -753,23 +753,23 @@
         51.49,
         50.11,
         50.11,
-        50.11
+        50.15
       ],
       "pillar_scores": {
         "forecasting": 89.38,
-        "trading": 5.08,
+        "trading": 1.69,
         "calibration": 96.3,
         "financial_reasoning": null,
-        "market_intelligence": 65.43
+        "market_intelligence": 76.35
       },
       "source_count": 4,
       "raw_data": {
         "forecastbench_baseline_brier": 0.135,
         "forecastbench_tournament_brier": 0.135,
-        "rallies_return_pct": 1.8,
+        "rallies_return_pct": 0.6,
         "alpha_arena_return_pct": -10.94,
         "alpha_arena_sharpe": -0.018,
-        "rallies_win_rate": 54.5,
+        "rallies_win_rate": 63.6,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -851,23 +851,23 @@
         60.25,
         59.72,
         59.72,
-        59.72
+        59.37
       ],
       "pillar_scores": {
         "forecasting": 80.59,
-        "trading": 50.34,
+        "trading": 52.37,
         "calibration": 76.92,
         "financial_reasoning": null,
-        "market_intelligence": 75.75
+        "market_intelligence": 67.17
       },
       "source_count": 4,
       "raw_data": {
         "forecastbench_baseline_brier": 0.169,
         "forecastbench_tournament_brier": 0.116,
-        "rallies_return_pct": 6.1,
+        "rallies_return_pct": 7.3,
         "alpha_arena_return_pct": 8.88,
         "alpha_arena_sharpe": 0.009,
-        "rallies_win_rate": 42.9,
+        "rallies_win_rate": 28.6,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -1766,19 +1766,19 @@
         6.06,
         5.48,
         5.48,
-        5.48,
+        5.23,
         5.48
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": 7.06,
+        "trading": 5.37,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": 88.48
       },
       "source_count": 2,
       "raw_data": {
-        "rallies_return_pct": 2.5,
+        "rallies_return_pct": 1.9,
         "rallies_win_rate": 73.7
       }
     },
@@ -2797,19 +2797,19 @@
         6.71,
         8.07,
         8.07,
-        8.07,
+        7.39,
         8.07
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": 27.12,
+        "trading": 22.6,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": 80.07
       },
       "source_count": 2,
       "raw_data": {
-        "rallies_return_pct": 9.6,
+        "rallies_return_pct": 8.0,
         "rallies_win_rate": 66.7
       }
     },
@@ -2890,19 +2890,19 @@
         3.13,
         7.63,
         7.63,
-        7.63,
+        6.86,
         7.63
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": 17.51,
+        "trading": 12.43,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": 100.0
       },
       "source_count": 2,
       "raw_data": {
-        "rallies_return_pct": 6.2,
+        "rallies_return_pct": 4.4,
         "rallies_win_rate": 83.3
       }
     },
@@ -3452,19 +3452,19 @@
         0.59,
         5.32,
         5.32,
-        5.32,
+        4.94,
         5.32
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": 8.76,
+        "trading": 6.21,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": 80.07
       },
       "source_count": 2,
       "raw_data": {
-        "rallies_return_pct": 3.1,
+        "rallies_return_pct": 2.2,
         "rallies_win_rate": 66.7
       }
     },
@@ -3729,22 +3729,22 @@
         null,
         1.14,
         0.0,
-        1.14,
+        1.57,
         1.14
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": 7.63,
+        "trading": 10.45,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": null
       },
       "source_count": 1,
       "raw_data": {
-        "rallies_return_pct": 2.7,
+        "rallies_return_pct": 3.7,
         "rallies_win_rate": 0.0
       }
     }
   ],
-  "run_at": "7:35 AM CST"
+  "run_at": "8:56 AM CST"
 }
