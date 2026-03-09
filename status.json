@@ -16,9 +16,9 @@
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-09T07:24:00.174640",
+      "last_run": "2026-03-09T07:44:27.805950",
       "success": true,
-      "dry_run": true
+      "dry_run": false
     },
     "tragents": {
       "last_run": "2026-03-09T07:28:59.608460",
@@ -71,6 +71,52 @@
       "leaderboard_url": "/truscore-scores.html",
       "error": null,
       "formula_version": "V1.4"
+    },
+    "tragents": {
+      "name": "TRAgents DDP",
+      "label": "Agents Leaderboard",
+      "emoji": "\ud83e\udd16",
+      "enabled": true,
+      "last_run": "2026-03-09T07:49:18",
+      "last_run_date": "2026-03-09",
+      "status": "success",
+      "duration_seconds": 290,
+      "sources_total": 22,
+      "sources_hit": 6,
+      "models_qualified": 19,
+      "top_model": "Gemini 3 Flash",
+      "top_score": 78.51,
+      "top5": [
+        {
+          "rank": 1,
+          "name": "Gemini 3 Flash",
+          "score": 78.51
+        },
+        {
+          "rank": 2,
+          "name": "GLM-5",
+          "score": 65.24
+        },
+        {
+          "rank": 3,
+          "name": "Gemini 3 Pro",
+          "score": 64.15
+        },
+        {
+          "rank": 4,
+          "name": "Kimi K2.5",
+          "score": 59.06
+        },
+        {
+          "rank": 5,
+          "name": "DeepSeek V3.2",
+          "score": 58.31
+        }
+      ],
+      "leaderboard_url": "/tragents-scores.html",
+      "next_run": "2026-03-10T05:00:00",
+      "error": null
     }
-  }
+  },
+  "last_updated": "2026-03-09T07:49:18"
 }
