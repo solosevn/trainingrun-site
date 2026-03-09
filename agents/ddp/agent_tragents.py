@@ -944,7 +944,7 @@ def update_index_timestamp() -> None:
 
 def git_push(commit_msg: str) -> bool:
     try:
-        subprocess.run(["git", "add", "tragent-data.json", "status.json"],
+        subprocess.run(["git", "add", "tragent-data.json"],
                        cwd=REPO_PATH, check=True, capture_output=True)
         r = subprocess.run(["git", "commit", "-m", commit_msg],
                            cwd=REPO_PATH, capture_output=True, text=True)
