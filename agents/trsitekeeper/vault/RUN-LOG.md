@@ -404,3 +404,26 @@
         "Data files valid and current (<48h)"
       ],
       "check_00
+
+---
+### 2026-03-09 â Audit
+- **Issues found:** 0
+- **Summary:** {
+  "timestamp": "2026-03-09T06:00:06.080281",
+  "site_url": "https://trainingrun.ai",
+  "categories": {
+    "LOCAL_FILE_CHECKS": {
+      "check_001_site_health": [
+        true,
+        "Site health OK - agent files and DDP data present"
+      ],
+      "check_002_ddp_status": [
+        true,
+        "All 5 DDPs have fresh data files"
+      ],
+      "check_003_data_file_integrity": [
+        true,
+        "Data files valid and current (<48h)"
+      ],
+      "check_004_html_page_check": [
+       
