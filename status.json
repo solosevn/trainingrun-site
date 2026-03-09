@@ -6,14 +6,14 @@
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-09T07:15:27.409211",
+      "last_run": "2026-03-09T07:35:55.255758",
       "success": true,
-      "dry_run": true
+      "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-09T07:20:27.423458",
+      "last_run": "2026-03-09T07:40:55.271289",
       "success": false,
-      "dry_run": true
+      "dry_run": false
     },
     "truscore": {
       "last_run": "2026-03-09T07:24:00.174640",
@@ -24,6 +24,53 @@
       "last_run": "2026-03-09T07:28:59.608460",
       "success": true,
       "dry_run": true
+    }
+  },
+  "agents": {
+    "truscore": {
+      "name": "TRUscore DDP",
+      "label": "Truth & Reliability",
+      "emoji": "\ud83c\udfaf",
+      "enabled": true,
+      "last_run": "2026-03-09T07:44:25",
+      "last_run_date": "2026-03-09",
+      "status": "success",
+      "duration_seconds": 210,
+      "sources_total": 9,
+      "sources_hit": 8,
+      "models_qualified": 18,
+      "top_model": "Grok 4.20",
+      "top_score": 88.94,
+      "top5": [
+        {
+          "rank": 1,
+          "name": "Grok 4.20",
+          "score": 88.94
+        },
+        {
+          "rank": 2,
+          "name": "GPT-5.2",
+          "score": 87.4
+        },
+        {
+          "rank": 3,
+          "name": "Claude Sonnet 4.5",
+          "score": 80.63
+        },
+        {
+          "rank": 4,
+          "name": "Gemini 3 Pro",
+          "score": 79.19
+        },
+        {
+          "rank": 5,
+          "name": "Gemini 3 Flash",
+          "score": 74.81
+        }
+      ],
+      "leaderboard_url": "/truscore-scores.html",
+      "error": null,
+      "formula_version": "V1.4"
     }
   }
 }
