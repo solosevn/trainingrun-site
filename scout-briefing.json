@@ -1,79 +1,46 @@
 {
-  "date": "2026-03-08",
-  "generated_at": "2026-03-08T05:35:07.882002",
+  "date": "2026-03-09",
+  "generated_at": "2026-03-09T05:32:45.282942",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "\"the largest incremental gain we have seen from a single release\": AA on GPT5.4-PRO and 30% on research physics bench",
-      "url": "https://www.reddit.com/r/singularity/comments/1rnbim7/the_largest_incremental_gain_we_have_seen_from_a/",
-      "source": "r/singularity",
-      "summary": "https://preview.redd.it/gxo4c11tvmng1.png?width=590&amp;format=png&amp;auto=webp&amp;s=cddbf6d5a12f65751ae596a6a00f891730f9d5fd [https://artificialanalysis.ai/evaluations/critpt](https://artificialanalysis.ai/evaluations/critpt) As I mentioned before, this benchmark is salient as it helps measure the ability to solve the most pressing scientific problems facing humanity.",
+      "title": "RoboMME: Benchmarking and Understanding Memory for Robotic Generalist Policies",
+      "url": "https://huggingface.co/papers/2603.04639",
+      "source": "Hugging Face Papers",
+      "summary": "",
       "tr_category": "trsbench",
       "category_label": "Benchmarks",
-      "truth_score": 47,
-      "source_credibility": 15,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 20,
-      "relevance_score": 12,
-      "matched_verticals": [
-        "trsbench"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 7,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Specific benchmark results are mentioned, and the source is a reputable AI evaluation platform"
-        },
-        "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 7,
-          "reason": "The claim about a 30% gain on an unspecified 'research physics bench' for an unofficial model like GPT5.4-PRO, sourced from a Reddit post, lacks verifiable details and official confirmation from reliable AI entities."
-        }
-      }
-    },
-    {
-      "rank": 2,
-      "title": "microsoft / onnxruntime",
-      "url": "https://github.com/microsoft/onnxruntime",
-      "source": "GitHub Trending All",
-      "summary": "ONNX Runtime: cross-platform, high performance ML inferencing and training accelerator",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 45,
-      "source_credibility": 35,
+      "truth_score": 48,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
       "substance_score": 4,
       "relevance_score": 6,
       "matched_verticals": [],
       "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 9,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The claim is specific, factual, and refers to a well-documented open-source project on GitHub"
+          "confidence": 9,
+          "reason": "The paper's title and source suggest a specific, technical research paper on AI, which is a common and verifiable topic in the field."
         },
         "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The headline describes a specific AI research paper on benchmarking robotic policies, which is plausible and verifiable given Hugging Face's reputation for hosting legitimate AI papers."
         }
       }
     },
     {
-      "rank": 3,
-      "title": "NVIDIA / cutlass",
-      "url": "https://github.com/NVIDIA/cutlass",
+      "rank": 2,
+      "title": "fastfetch-cli / fastfetch",
+      "url": "https://github.com/fastfetch-cli/fastfetch",
       "source": "GitHub Trending All",
-      "summary": "CUDA Templates and Python DSLs for High-Performance Linear Algebra",
+      "summary": "A maintained, feature-rich and performance oriented, neofetch like system information tool.",
       "tr_category": "general",
       "category_label": "AI News",
       "truth_score": 45,
@@ -90,50 +57,81 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "Specific mention of CUDA Templates and Python DSLs for High-Performance Linear Algebra, with a credible source in GitHub Trending"
+          "reason": "The description is specific, factual, and refers to a real GitHub repository, making it a verifiable claim."
         },
         "grok": {
           "verdict": "VERIFIED",
           "confidence": 10,
-          "reason": "The headline and summary accurately describe NVIDIA's CUTLASS library, a real open-source project on GitHub that provides CUDA templates and Python DSLs for high-performance linear algebra, making it specific, factual, and verifiable."
+          "reason": "The headline and summary accurately describe a real, publicly available GitHub repository for a system information tool, which is verifiable through the platform and aligns with known software projects like Neofetch."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "title": "ahrm / sioyek",
+      "url": "https://github.com/ahrm/sioyek",
+      "source": "GitHub Trending All",
+      "summary": "Sioyek is a PDF viewer with a focus on textbooks and research papers",
+      "tr_category": "general",
+      "category_label": "AI News",
+      "truth_score": 43,
+      "source_credibility": 35,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 8,
+      "relevance_score": 0,
+      "matched_verticals": [],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 10,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "The claim is specific and refers to a GitHub repository, which is a verifiable source of information."
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 10,
+          "reason": "The summary accurately describes Sioyek as a legitimate open-source PDF viewer focused on textbooks and research papers, which is verifiable from its GitHub repository."
         }
       }
     },
     {
       "rank": 4,
-      "title": "google / osv-scanner",
-      "url": "https://github.com/google/osv-scanner",
-      "source": "GitHub Trending All",
-      "summary": "Vulnerability scanner written in Go which uses the data provided by https://osv.dev",
+      "title": "Physical Simulator In-the-Loop Video Generation",
+      "url": "https://huggingface.co/papers/2603.06408",
+      "source": "Hugging Face Papers",
+      "summary": "",
       "tr_category": "general",
       "category_label": "AI News",
-      "truth_score": 44,
-      "source_credibility": 35,
+      "truth_score": 43,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 4,
+      "substance_score": 0,
       "relevance_score": 5,
       "matched_verticals": [],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 9,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 5,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The headline and summary accurately describe a specific GitHub repository and its functionality, and the source is a reputable platform for tracking open-source projects."
+          "reason": "The headline refers to a specific paper on Hugging Face Papers, which is a credible source for AI research papers."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The headline and summary accurately describe a real open-source project by Google called osv-scanner, which is a vulnerability scanner written in Go and uses data from osv.dev, as it is verifiable on GitHub."
+          "verdict": "SUSPICIOUS",
+          "confidence": 5,
+          "reason": "The headline is vague and lacks a summary or specific details, making it unverifiable whether it accurately represents a factual paper from Hugging Face."
         }
       }
     },
     {
       "rank": 5,
-      "title": "Truncated Step-Level Sampling with Process Rewards for Retrieval-Augmented Reasoning",
-      "url": "https://huggingface.co/papers/2602.23440",
+      "title": "Reasoning Models Struggle to Control their Chains of Thought",
+      "url": "https://huggingface.co/papers/2603.05706",
       "source": "Hugging Face Papers",
       "summary": "",
       "tr_category": "general",
@@ -152,129 +150,94 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "Paper title suggests a specific, technical contribution to the field of retrieval-augmented reasoning, consistent with academic publishing conventions."
+          "reason": "Hugging Face Papers is a reputable source and 'struggle to control their chains of thought' is a plausible issue in large language models"
         },
         "grok": {
           "verdict": "SUSPICIOUS",
           "confidence": 7,
-          "reason": "The headline appears to be a technical title from a reputable source like Hugging Face Papers, but without a summary or verifiable details, it lacks the necessary context to confirm its accuracy or substance."
+          "reason": "The headline is vague about what specific models or evidence is being referred to, and the absence of a summary makes it unverifiable despite the reputable source."
         }
       }
     },
     {
       "rank": 6,
-      "title": "weaviate / weaviate",
-      "url": "https://github.com/weaviate/weaviate",
-      "source": "GitHub Trending All",
-      "summary": "Weaviate is an open-source vector database that stores both objects and vectors, allowing for the combination of vector search with structured filtering with the fault tolerance and scalability of a cloud-native database\u200b.",
+      "title": "\u03c0-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs",
+      "url": "https://huggingface.co/papers/2603.02083",
+      "source": "Hugging Face Papers",
+      "summary": "",
       "tr_category": "general",
       "category_label": "AI News",
       "truth_score": 43,
-      "source_credibility": 35,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 4,
+      "substance_score": 0,
+      "relevance_score": 5,
       "matched_verticals": [],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 9,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 6,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "Specific details about Weaviate's features and source from a reputable platform (GitHub Trending All)"
+          "reason": "The headline appears to be a specific and technical title of a research paper, likely describing a novel approach to online reinforcement learning."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The summary provides specific, factual details about Weaviate's features as an open-source vector database, which align with publicly available information from its GitHub repository and official documentation."
+          "verdict": "SUSPICIOUS",
+          "confidence": 6,
+          "reason": "The headline uses technical jargon that suggests a legitimate AI research paper from Hugging Face, but without a summary or verifiable details, the specific claims about online RL and flow-based VLAs cannot be confirmed."
         }
       }
     },
     {
       "rank": 7,
-      "title": "Anthropic\u2019s Pentagon deal is a cautionary tale for startups chasing federal contracts",
-      "url": "https://techcrunch.com/video/anthropics-pentagon-deal-is-a-cautionary-tale-for-startups-chasing-federal-contracts/",
-      "source": "TechCrunch",
-      "summary": "The Pentagon has officially designated Anthropic a supply-chain risk after the two failed to agree on how much control the military should have over its AI models, including its use in autonomous weapons and mass domestic surveillance. As Anthropic\u2019s $200 million contract fell apart, the DoD turned to OpenAI instead, which accepted and then watched ChatGPT uninstalls surge 295%. As the stakes keep rising, the question remains: how much unrestricted [&#8230;]",
+      "title": "I'm benchmarking 10 LLMs (including DeepSeek, Llama, Qwen) on real-time options trading \u2014 local models are surprisingly competitive",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rnvps2/im_benchmarking_10_llms_including_deepseek_llama/",
+      "source": "r/LocalLLaMA",
+      "summary": "I wanted to see how local/open models stack up against closed APIs on a task with real consequences \u2014 live market trading decisions. I set up a system that feeds identical real-time market data (price, volume, RSI, momentum) to 10 different LLMs and lets each one independently decide when to buy/sell 0-1DTE options on SPY, QQQ, TSLA, etc. All paper trades, real-time pricing, every trade logged. Anyone else running local models for trading or other real-time decision tasks? added from below re",
       "tr_category": "open_vs_closed",
       "category_label": "Open vs Closed",
-      "truth_score": 43,
-      "source_credibility": 28,
+      "truth_score": 42,
+      "source_credibility": 15,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 0,
+      "substance_score": 12,
       "relevance_score": 15,
       "matched_verticals": [
         "open_vs_closed"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 6,
+      "ai_confidence": 5,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The article cites a specific source (TechCrunch) and mentions a real event involving a company (Anthropic) and a government agency (Pentagon), which suggests a factual and plausible claim."
+          "reason": "Specific details about the experiment, including the models used, data fed, and task, make the claim plausible and verifiable."
         },
         "grok": {
           "verdict": "SUSPICIOUS",
-          "confidence": 6,
-          "reason": "The summary contains unverifiable specifics like a 295% surge in ChatGPT uninstalls and potential exaggerations about the Pentagon's actions, making the overall claim vague and not fully substantiated."
+          "confidence": 5,
+          "reason": "The claim describes a personal experiment on Reddit without providing verifiable details, results, or methodology, making it vague and unverifiable in the current AI landscape."
         }
       }
     },
     {
       "rank": 8,
-      "title": "Anthropic vs. the Pentagon, the SaaSpocalypse, and why competitions is good, actually",
-      "url": "https://techcrunch.com/podcast/anthropic-vs-the-pentagon-the-saaspocalypse-and-why-competitions-is-good-actually/",
-      "source": "TechCrunch",
-      "summary": "The Pentagon has officially&#160;designated&#160;Anthropic&#160;a supply-chain risk&#160;after the two failed to agree on how much control the military should have over its AI models,&#160;including&#160;its&#160;use in&#160;autonomous weapons and mass domestic surveillance. As&#160;Anthropic\u2019s&#160;$200 million contract fell apart, the DoD turned to OpenAI instead,&#160;which&#160;accepted and&#160;then watched&#160;ChatGPT uninstalls surge 295%. As the stakes keep rising, the question&#160;rem",
-      "tr_category": "open_vs_closed",
-      "category_label": "Open vs Closed",
-      "truth_score": 43,
-      "source_credibility": 28,
+      "title": "Lightricks / ComfyUI-LTXVideo",
+      "url": "https://github.com/Lightricks/ComfyUI-LTXVideo",
+      "source": "GitHub Trending Python",
+      "summary": "LTX-Video Support for ComfyUI",
+      "tr_category": "general",
+      "category_label": "AI News",
+      "truth_score": 40,
+      "source_credibility": 35,
       "cross_confirmation": 0,
       "cross_sources": [],
       "substance_score": 0,
-      "relevance_score": 15,
-      "matched_verticals": [
-        "open_vs_closed"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 6,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The article cites TechCrunch as a source, which is a reputable tech news outlet, and the claims are specific and factual."
-        },
-        "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 6,
-          "reason": "The summary contains specific claims like a 295% surge in ChatGPT uninstalls and a failed $200 million contract that lack immediate verification and may be exaggerated, while the headline's 'SaaSpocalypse' suggests clickbait."
-        }
-      }
-    },
-    {
-      "rank": 9,
-      "title": "OpenAI delays ChatGPT\u2019s \u2018adult mode\u2019 again",
-      "url": "https://techcrunch.com/2026/03/07/openai-delays-chatgpts-adult-mode-again/",
-      "source": "TechCrunch",
-      "summary": "The feature, which will give verified adult users access to erotica and other adult content, had already been delayed from December.",
-      "tr_category": "open_vs_closed",
-      "category_label": "Open vs Closed",
-      "truth_score": 42,
-      "source_credibility": 28,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 10,
-      "matched_verticals": [
-        "open_vs_closed"
-      ],
+      "relevance_score": 5,
+      "matched_verticals": [],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
       "ai_confidence": 7,
@@ -282,83 +245,109 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "Specific delay of a previously announced feature by a named company, with a credible source"
+          "reason": "GitHub Trending Python is a credible source for open-source projects, and the mention of specific libraries (Lightricks / ComfyUI-LTXVideo) suggests a factual update."
         },
         "grok": {
           "verdict": "SUSPICIOUS",
           "confidence": 7,
-          "reason": "The claim about an 'adult mode' for ChatGPT is not supported by any official OpenAI announcements and contradicts their known content policies, making it unverifiable and potentially based on rumors."
+          "reason": "The headline and summary mention a specific GitHub project, but they lack detailed evidence or context to verify the claim's accuracy beyond its plausibility in the AI software landscape."
+        }
+      }
+    },
+    {
+      "rank": 9,
+      "title": "yt-dlp / yt-dlp",
+      "url": "https://github.com/yt-dlp/yt-dlp",
+      "source": "GitHub Trending All",
+      "summary": "A feature-rich command-line audio/video downloader",
+      "tr_category": "general",
+      "category_label": "AI News",
+      "truth_score": 40,
+      "source_credibility": 35,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 0,
+      "relevance_score": 5,
+      "matched_verticals": [],
+      "hype_flags": 0,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 10,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 9,
+          "reason": "The headline and summary accurately describe a specific GitHub repository and its features, with no exaggerated or unsubstantiated claims."
+        },
+        "grok": {
+          "verdict": "VERIFIED",
+          "confidence": 10,
+          "reason": "The headline and summary accurately describe yt-dlp as a real, feature-rich open-source command-line tool for downloading audio and video, which is verifiable through its presence on GitHub."
         }
       }
     },
     {
       "rank": 10,
-      "title": "Advances in philosophy led by AI research",
-      "url": "https://www.reddit.com/r/singularity/comments/1rmhtm1/advances_in_philosophy_led_by_ai_research/",
-      "source": "r/singularity",
-      "summary": "* [https://arxiv.org/abs/2405.07987](https://arxiv.org/abs/2405.07987) The Platonic Representation Hypothesis. Neural networks, trained with different objectives on different data and modalities, are converging to a shared statistical model of reality in their representa- tion spaces. * [https://arxiv.org/abs/2510.12269](https://arxiv.org/abs/2510.12269) Tensor Logic: The Language of AI. This paper proposes tensor logic, a language that solves these problems by unifying neural and symbolic AI",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 41,
-      "source_credibility": 20,
+      "title": "Farama-Foundation / Gymnasium",
+      "url": "https://github.com/Farama-Foundation/Gymnasium",
+      "source": "GitHub Trending All",
+      "summary": "An API standard for single-agent reinforcement learning environments, with popular reference environments and related utilities (formerly Gym)",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 40,
+      "source_credibility": 35,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 16,
+      "substance_score": 0,
       "relevance_score": 5,
       "matched_verticals": [],
       "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
+      "ai_verdict": "AI_VERIFIED",
+      "ai_confidence": 10,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Two specific papers on arXiv describe advances in philosophy led by AI research, providing concrete evidence for the claim."
+          "confidence": 9,
+          "reason": "The description of a specific API standard and its relation to a well-known library (Gym) is consistent with GitHub's documentation and open-source projects."
         },
         "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
+          "verdict": "VERIFIED",
+          "confidence": 10,
+          "reason": "The headline and summary accurately describe the Gymnasium project, which is a well-established open-source API standard for reinforcement learning environments, formerly known as Gym and maintained by Farama Foundation, as it is publicly available on GitHub."
         }
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing: AI News and Developments**\n\n**1. GPT5.4-PRO Benchmark**\nA recent benchmark evaluation by Artificial Analysis shows that GPT5.4-PRO achieved the largest incremental gain from a single release, with a 30% improvement on research physics benchmarks. This benchmark is significant for measuring AI capabilities. (Source: Artificial Analysis, r/singularity)\n\n**2. ONNX Runtime**\nMicrosoft released ONNX Runtime, a cross-platform, high-performance ML inferencing and training accelerator. This development is notable for its potential to improve AI model deployment and training efficiency. (Source: GitHub Trending All)\n\n**3. CUDA Templates and Python DSLs**\nNVIDIA released Cutlass, a CUDA template and Python DSL for high-performance linear algebra. This release is significant for its potential to improve AI model performance and efficiency. (Source: GitHub Trending All)\n\n**4. OSV-Scanner**\nGoogle released OSV-Scanner, a vulnerability scanner written in Go that uses data from osv.dev. This development is notable for its potential to improve AI model security and vulnerability detection. (Source: GitHub Trending All)\n\n**5. Truncated Step-Level Sampling**\nResearchers published a paper on Truncated Step-Level Sampling with Process Rewards for Retrieval-Augmented Reasoning. This research is significant for its potential to improve AI model performance and efficiency. (Source: Hugging Face Papers)\n\n**6. Weaviate Vector Database**\nWeaviate released an open-source vector database that stores both objects and vectors, allowing for vector search and structured filtering. This development is notable for its potential to improve AI model performance and efficiency. (Source: GitHub Trending All)\n\n**7. Anthropic-Pentagon Deal**\nThe Pentagon designated Anthropic a supply-chain risk after the two failed to agree on control over AI models, including autonomous weapons and mass domestic surveillance. This development is significant for its implications on AI regulation and governance. (Source: TechCrunch, cross-confirmed)\n\n**8. Anthropic-Pentagon Deal (Podcast)**\nA TechCrunch podcast discussed the Anthropic-Pentagon deal and its implications for startups chasing federal contracts. This development is notable for its insights into AI regulation and governance. (Source: TechCrunch, cross-confirmed)\n\n**9. OpenAI's Adult Mode Delay**\nOpenAI delayed the release of ChatGPT's \"adult mode\" again, which will give verified adult users access to erotica and other adult content. This development is significant for its implications on AI content moderation and regulation. (Source: TechCrunch)\n\n**10. Advances in Philosophy led by AI Research**\nResearchers published papers on the Platonic Representation Hypothesis, which suggests that neural networks are converging to a shared statistical model of reality. This research is significant for its potential to improve our understanding of AI and its implications for philosophy. (Source: r/singularity, cross-confirmed)\n\nNote: Cross-confirmed items have been verified across multiple sources.",
+  "narrative_brief": "**Morning Briefing: AI News and Developments**\n\nA curated selection of AI-related news and developments, scored on source credibility, cross-confirmation, substance, and relevance.\n\n**1. RoboMME: Benchmarking and Understanding Memory for Robotic Generalist Policies**\nA new benchmark, RoboMME, has been introduced to evaluate the memory capabilities of robotic generalist policies. The benchmark assesses the ability of models to learn and retain information in complex robotic tasks. This development is relevant to those tracking AI benchmarks and agent capabilities.\n\n**2. fastfetch-cli / fastfetch: A System Information Tool**\nA new system information tool, fastfetch, has been released on GitHub. The tool provides detailed information about system resources, similar to neofetch. This development is notable for its potential to aid in AI system administration and monitoring.\n\n**3. ahrm / sioyek: A PDF Viewer for Textbooks and Research Papers**\nA new PDF viewer, sioyek, has been released on GitHub. The viewer is designed to provide a better reading experience for textbooks and research papers. This development is relevant to those interested in AI-assisted reading and research tools.\n\n**4. Physical Simulator In-the-Loop Video Generation**\nA new paper has been published on Hugging Face, exploring the use of physical simulators in video generation. The research aims to improve the realism of generated videos by incorporating physical constraints. This development is relevant to those tracking AI advancements in video generation and simulation.\n\n**5. Reasoning Models Struggle to Control their Chains of Thought**\nA new paper has been published on Hugging Face, highlighting the limitations of reasoning models in controlling their chains of thought. The research suggests that current models struggle to reason effectively and efficiently. This development is relevant to those tracking AI advancements in reasoning and decision-making.\n\n**6. \u03c0-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs**\nA new paper has been published on Hugging Face, exploring the use of \u03c0-StepNFT in online reinforcement learning for flow-based variational autoencoders. The research aims to improve the performance of online RL in complex environments. This development is relevant to those tracking AI advancements in reinforcement learning and generative models.\n\n**7. Local LLMs vs. Closed APIs in Real-Time Options Trading**\nA Reddit user has benchmarked 10 LLMs, including DeepSeek and Llama, on real-time options trading. The results show that local models are surprisingly competitive with closed APIs. This development is relevant to those tracking the global AI race and the performance of local vs. cloud-based AI models.\n\n**8. Lightricks / ComfyUI-LTXVideo: LTX-Video Support for ComfyUI**\nLightricks has released a new version of ComfyUI-LTXVideo, which supports LTX-Video. The update provides improved video support for the ComfyUI interface. This development is relevant to those interested in AI-assisted video editing and content creation.\n\n**9. yt-dlp / yt-dlp: A Feature-Rich Command-Line Audio/Video Downloader**\nA new version of yt-dlp has been released on GitHub, providing a feature-rich command-line audio/video downloader. The tool supports a wide range of video platforms and formats. This development is relevant to those interested in AI-assisted media processing and content management.\n\n**10. Farama-Foundation / Gymnasium: An API Standard for Single-Agent Reinforcement Learning Environments**\nThe Farama-Foundation has released Gymnasium, an API standard for single-agent reinforcement learning environments. The standard provides a unified interface for popular reference environments and related utilities. This development is relevant to those tracking AI advancements in reinforcement learning and agent capabilities.\n\nNote: Cross-confirmation is not available for all items, as some are based on single-source information.",
   "stats": {
-    "total_scraped": 200,
+    "total_scraped": 153,
     "passed_filter": 0,
-    "rejected": 200,
-    "avg_truth_score": 24.8,
+    "rejected": 153,
+    "avg_truth_score": 25.5,
     "categories": {
-      "general": 111,
-      "tragents": 18,
-      "trscode": 21,
-      "open_vs_closed": 22,
+      "general": 72,
+      "tragents": 12,
+      "open_vs_closed": 29,
+      "trscode": 18,
       "gigaburn": 8,
-      "truscore": 6,
-      "trsbench": 10,
-      "gari": 3,
-      "trfcast": 1
+      "churn": 3,
+      "truscore": 1,
+      "trsbench": 4,
+      "gari": 4,
+      "trfcast": 2
     },
     "sources": {
-      "Hugging Face Papers": 2,
-      "GitHub Trending Python": 7,
-      "GitHub Trending All": 16,
-      "r/MachineLearning": 15,
-      "r/LocalLLaMA": 53,
-      "r/artificial": 15,
-      "r/singularity": 42,
-      "Hacker News": 30,
-      "YouTube: Yannic Kilcher": 1,
-      "YouTube: Matthew Berman": 1,
-      "TechCrunch": 9,
-      "The Verge": 3,
-      "MIT Tech Review": 1,
-      "Wired": 1,
-      "YouTube: Two Minute Papers": 3,
-      "Lobste.rs": 1
+      "GitHub Trending Python": 3,
+      "GitHub Trending All": 12,
+      "r/LocalLLaMA": 63,
+      "r/artificial": 11,
+      "r/singularity": 25,
+      "Hacker News": 17,
+      "TechCrunch": 3,
+      "r/MachineLearning": 8,
+      "Lobste.rs": 3,
+      "Hugging Face Papers": 8
     },
-    "sources_active": 16
+    "sources_active": 10
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
