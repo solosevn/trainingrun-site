@@ -139,6 +139,108 @@ class AuditScheduler:
         self._last_audit = None
         self._audit_results = None
 
+        # Vault context — loaded fresh before each audit
+        self._vault_context = {}
+        self._memory_context = {}
+        self._tried_fixes = []
+
+    def _load_vault_context(self):
+        """Load vault and memory files before running audit.
+
+        Reads Core 7 vault files, memory files (site_knowledge, fix_patterns,
+        tried_fixes, error_log), and skills. This gives the agent full context
+        about the site, past fixes, and learned patterns before diagnosing anything.
+        """
+        vault_dir = Path(REPO_PATH) / "context-vault" / "trainingrun" / "agents" / "trsitekeeper"
+        memory_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory"
+
+        # Load Core 7 vault files
+        vault_files = ["SOUL.md", "CONFIG.md", "PROCESS.md", "CADENCE.md"]
+        self._vault_context = {}
+        for fname in vault_files:
+            fpath = vault_dir / fname
+            if fpath.exists():
+                try:
+                    self._vault_context[fname] = fpath.read_text()[:2000]  # First 2K chars
+                except Exception:
+                    pass
+
+        # Load memory files (JSON)
+        memory_files = {
+            "site_knowledge": "site_knowledge.json",
+            "fix_patterns": "fix_patterns.json",
+            "david_model": "david_model.json",
+        }
+        self._memory_context = {}
+        for key, fname in memory_files.items():
+            fpath = memory_dir / fname
+            if fpath.exists():
+                try:
+                    with open(fpath) as f:
+                        self._memory_context[key] = json.load(f)
+                except (json.JSONDecodeError, Exception):
+                    pass
+
+        # Load tried fixes (JSONL — last 20 entries)
+        tried_fixes_file = memory_dir / "tried_fixes.jsonl"
+        self._tried_fixes = []
+        if tried_fixes_file.exists():
+            try:
+                with open(tried_fixes_file) as f:
+                    lines = f.readlines()
+                for line in lines[-20:]:
+                    line = line.strip()
+                    if line and not line.startswith(("_", "#")):
+                        try:
+                            self._tried_fixes.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            pass
+            except Exception:
+                pass
+
+        # Load error log (JSONL — last 10 entries)
+        error_log_file = memory_dir / "error_log.jsonl"
+        self._recent_errors = []
+        if error_log_file.exists():
+            try:
+                with open(error_log_file) as f:
+                    lines = f.readlines()
+                for line in lines[-10:]:
+                    line = line.strip()
+                    if line:
+                        try:
+                            self._recent_errors.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            pass
+            except Exception:
+                pass
+
+        loaded = len(self._vault_context) + len(self._memory_context)
+        fixes_loaded = len(self._tried_fixes)
+        logging.info(f"Vault context loaded: {loaded} files, {fixes_loaded} past fix attempts")
+
+    def _record_fix_attempt(self, check_name: str, fix_type: str, outcome: str, details: str = ""):
+        """Append a fix attempt to tried_fixes.jsonl for learning memory."""
+        try:
+            memory_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory"
+            memory_dir.mkdir(parents=True, exist_ok=True)
+            tried_fixes_file = memory_dir / "tried_fixes.jsonl"
+
+            entry = {
+                "timestamp": datetime.datetime.now().isoformat(),
+                "check": check_name,
+                "fix_type": fix_type,
+                "outcome": outcome,
+                "details": details[:200],
+            }
+
+            with open(tried_fixes_file, "a") as f:
+                f.write(json.dumps(entry) + "\n")
+
+            logging.info(f"Recorded fix attempt: {check_name} -> {outcome}")
+        except Exception as e:
+            logging.error(f"Failed to record fix attempt: {e}")
+
     def start(self):
         """Start the audit scheduler in a background thread."""
         self._running = True
@@ -185,7 +287,76 @@ class AuditScheduler:
             now = datetime.datetime.now()
             if self.start_hour <= now.hour < self.end_hour:
                 try:
-                    self.run_audit()
+                    results = self.run_audit()
+
+                    # === WORK WINDOW: Attempt auto-fixes while still in window ===
+                    failures = results.get("summary", {}).get("failed", 0)
+                    attempt = 0
+                    max_attempts = 3  # Max fix cycles per work window
+
+                    while (failures > 0
+                           and attempt < max_attempts
+                           and self._running
+                           and datetime.datetime.now().hour < self.end_hour):
+
+                        attempt += 1
+                        pending = getattr(self, '_pending_fixes', [])
+
+                        if not pending:
+                            logging.info(f"[Work Window] No pending fixes from Claude — stopping")
+                            break
+
+                        # Filter to high-confidence auto-fixable items
+                        auto_fixes = [
+                            f for f in pending
+                            if f.get("confidence", 0) >= 80
+                            and f.get("proposed_fix_type") in ("rerun_scraper", "git_commit")
+                        ]
+
+                        if not auto_fixes:
+                            logging.info(f"[Work Window] No high-confidence auto-fixes — escalating to David")
+                            # Report what needs manual attention
+                            manual = [f for f in pending if f.get("confidence", 0) < 80 or f.get("proposed_fix_type") in ("edit_file", "investigate", "escalate")]
+                            if manual:
+                                msg = "Fixes needing your approval:\n"
+                                for fix in manual[:5]:
+                                    msg += f"• {fix.get('check_name', '?')}: {fix.get('diagnosis', '?')[:60]} (confidence: {fix.get('confidence', '?')}%)\n"
+                                msg += "\nReply 'approve <check_name>' to execute."
+                                self.tg_send(msg)
+                            break
+
+                        # Execute auto-fixes
+                        for fix in auto_fixes[:2]:  # Max 2 fixes per cycle
+                            check_name = fix.get("check_name", "unknown")
+                            fix_type = fix.get("proposed_fix_type", "unknown")
+                            action = fix.get("proposed_action", "")
+
+                            logging.info(f"[Work Window] Auto-fixing {check_name} via {fix_type}")
+                            self.tg_send(f"Auto-fixing {check_name} ({fix_type}, confidence {fix.get('confidence')}%)")
+
+                            try:
+                                if fix_type == "rerun_scraper" and self.execute_tool:
+                                    self.execute_tool("rerun_scraper", check=check_name)
+                                elif fix_type == "git_commit" and self.execute_tool:
+                                    self.execute_tool("git_commit", check=check_name, action=action)
+
+                                # Record the attempt
+                                self._record_fix_attempt(check_name, fix_type, "attempted", action)
+                            except Exception as fix_err:
+                                logging.error(f"[Work Window] Fix failed for {check_name}: {fix_err}")
+                                self._record_fix_attempt(check_name, fix_type, "failed", str(fix_err))
+
+                        # Wait a bit then re-run audit to check if fixes worked
+                        logging.info(f"[Work Window] Waiting 30s then re-auditing (attempt {attempt}/{max_attempts})")
+                        time.sleep(30)
+                        results = self.run_audit()
+                        failures = results.get("summary", {}).get("failed", 0)
+
+                    if failures == 0:
+                        self.tg_send("All checks passing! Work window complete.")
+                    elif attempt >= max_attempts:
+                        self.tg_send(f"Work window: {failures} checks still failing after {attempt} fix cycles. Will try again tomorrow.")
+
                 except Exception as e:
                     print(f"[Audit] CRITICAL ERROR: {e}")
                     try:
@@ -202,11 +373,14 @@ class AuditScheduler:
         """
         start_time = datetime.datetime.now()
         print(f"\n{'='*60}")
-        print(f"  AUTONOMOUS AUDIT (24 CHECKS) — {start_time.strftime('%a %b %d, %-I:%M %p')}")
+        print(f"  AUTONOMOUS AUDIT (23 CHECKS) — {start_time.strftime('%a %b %d, %-I:%M %p')}")
         print(f"{'='*60}")
 
+        # Step 0: Load vault context before running any checks
+        self._load_vault_context()
+
         self.write_activity(
-            "24-check autonomous audit started", location="ddp_room", status="active"
+            "23-check autonomous audit started", location="ddp_room", status="active"
         )
         self.tg_send(
             f"Starting autonomous audit "
@@ -1134,7 +1308,7 @@ class AuditScheduler:
             logging.error(f"Error building Telegram report: {e}")
 
     def _get_claude_analysis(self, results: Dict[str, Any]):
-        """Get intelligent analysis from Claude if available."""
+        """Get intelligent analysis from Claude with full vault context and memory."""
         try:
             if not self.claude_chat:
                 return
@@ -1150,14 +1324,44 @@ class AuditScheduler:
             if not failed_checks:
                 return  # All checks passed, no need for analysis
 
-            # Build analysis prompt
-            prompt = f"""Analyze these site audit failures and suggest next steps:
+            # Build context from vault memory
+            memory_context = ""
+            if self._tried_fixes:
+                recent = self._tried_fixes[-5:]
+                memory_context += "\nPast fix attempts (most recent):\n"
+                for fix in recent:
+                    memory_context += f"- {fix.get('check', '?')}: tried {fix.get('fix_type', '?')}, result: {fix.get('outcome', '?')}\n"
+
+            if self._recent_errors:
+                memory_context += "\nRecent errors:\n"
+                for err in self._recent_errors[-3:]:
+                    memory_context += f"- {err.get('error', str(err)[:100])}\n"
+
+            site_knowledge = ""
+            if self._memory_context.get("site_knowledge"):
+                sk = self._memory_context["site_knowledge"]
+                if isinstance(sk, dict):
+                    pages = sk.get("pages", sk.get("known_pages", []))
+                    if pages:
+                        site_knowledge = f"\nKnown site pages: {len(pages) if isinstance(pages, list) else 'loaded'}"
+
+            # Build analysis prompt with full context
+            prompt = f"""You are TRSitekeeper, the autonomous site guardian for trainingrun.ai.
 
 Summary: {summary['passed']}/{summary['total_checks']} checks passed
-Failed Checks:
-{chr(10).join(failed_checks[:5])}
 
-Provide brief, actionable recommendations."""
+Failed Checks:
+{chr(10).join(failed_checks[:8])}
+{memory_context}{site_knowledge}
+
+IMPORTANT RULES:
+- Real DDP data files are in the REPO ROOT: trscode-data.json, truscore-data.json, trf-data.json, tragent-data.json, trs-data.json
+- There are NO files called ticker.json, leaderboard.json, or ddp_status.json
+- The vault is at context-vault/trainingrun/agents/trsitekeeper/ with Core 7 markdown files
+- Do NOT propose creating stub files to satisfy checks — fix the checks instead
+
+Respond with JSON only:
+{{"checks": [{{"check_name": "...", "diagnosis": "...", "root_cause": "...", "proposed_fix_type": "rerun_scraper|git_commit|edit_file|investigate|escalate", "proposed_action": "...", "confidence": 0-100, "files_involved": ["..."]}}]}}"""
 
             # Get Claude's analysis
             analysis = self.claude_chat(prompt)
@@ -1168,6 +1372,25 @@ Provide brief, actionable recommendations."""
                     location="audit",
                     status="idle"
                 )
+
+            # Try to parse JSON response for actionable fixes
+            if analysis:
+                try:
+                    # Strip markdown code fences if present
+                    clean = analysis.strip()
+                    if clean.startswith("```"):
+                        clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
+                    if clean.endswith("```"):
+                        clean = clean[:-3]
+                    clean = clean.strip()
+
+                    parsed = json.loads(clean)
+                    if isinstance(parsed, dict) and "checks" in parsed:
+                        logging.info(f"Claude proposed {len(parsed['checks'])} fix(es)")
+                        # Store for approve flow
+                        self._pending_fixes = parsed["checks"]
+                except (json.JSONDecodeError, Exception):
+                    logging.warning("Claude analysis was not valid JSON — stored as commentary only")
 
         except Exception as e:
             logging.error(f"Error getting Claude analysis: {e}")
