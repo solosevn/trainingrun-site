@@ -1,6 +1,6 @@
 {
   "formula_version": "V1.4",
-  "checksum": "8b60feab5aa3a43b1551221381cdc3dd0a69511d6d5abe88cb2c457e9fe50df3",
+  "checksum": "92b2d77d7cf24740ab154a3b88ffb1f002e815acb362c294e5c691a132f93c88",
   "weights": {
     "truthfulness_simpleqa": 0.13,
     "truthfulness_facts": 0.12,
@@ -7997,7 +7997,7 @@
         69.56,
         67.64,
         67.64,
-        67.64,
+        67.49,
         67.49
       ],
       "source_count": 3,
@@ -8175,7 +8175,7 @@
         57.75,
         53.68,
         53.68,
-        53.68,
+        57.6,
         57.6
       ],
       "source_count": 2,
@@ -10302,5 +10302,5 @@
       }
     }
   ],
-  "run_at": "7:44 AM CST"
+  "run_at": "9:05 AM CST"
 }
