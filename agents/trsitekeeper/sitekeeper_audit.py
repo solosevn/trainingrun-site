@@ -61,6 +61,7 @@ KNOWN_PAGES = [
     "hq.html",
     "scores.html",
     "truscore.html",
+    "trscode.html",
     "trfcast.html",
     "tragents.html",
 ]
@@ -137,7 +138,6 @@ class AuditScheduler:
         self._running = False
         self._last_audit = None
         self._audit_results = None
-        self.pending_remediations = {}  # {check_name: {description, fix_cmd, timestamp}}
 
     def start(self):
         """Start the audit scheduler in a background thread."""
@@ -202,7 +202,7 @@ class AuditScheduler:
         """
         start_time = datetime.datetime.now()
         print(f"\n{'='*60}")
-        print(f"  AUTONOMOUS AUDIT (24 CHECKS) â {start_time.strftime('%a %b %d, %-I:%M %p')}")
+        print(f"  AUTONOMOUS AUDIT (24 CHECKS) — {start_time.strftime('%a %b %d, %-I:%M %p')}")
         print(f"{'='*60}")
 
         self.write_activity(
@@ -281,7 +281,8 @@ class AuditScheduler:
         # Send Telegram report
         self._send_telegram_report(results)
 
-        self._attempt_remediation(results)
+        # Get intelligent analysis from Claude if available
+        self._get_claude_analysis(results)
 
         self.write_activity("Audit complete", location="office", status="idle")
         print(f"[Audit] Complete. Passed: {results['summary']['passed']}/{results['summary']['total_checks']}, "
@@ -292,30 +293,18 @@ class AuditScheduler:
     # ===== CATEGORY 1: LOCAL FILE CHECKS =====
 
     def _check_site_health(self) -> Tuple[bool, str]:
-        """Check 1: Verify core agent infrastructure and DDP data files exist."""
+        """Check 1: Verify site data files exist and contain valid JSON."""
         try:
-            agent_dir = Path(REPO_PATH) / "agents" / "trsitekeeper"
-            if not agent_dir.exists():
-                return False, "web_agent directory not found"
+            data_dir = Path(REPO_PATH) / "web_agent"
+            if not data_dir.exists():
+                return False, "Data directory not found"
 
-            required_agent_files = ["agent.py", "sitekeeper_audit.py"]
+            required_files = ["ticker.json", "leaderboard.json", "ddp_status.json"]
             missing = []
-            for fname in required_agent_files:
-                if not (agent_dir / fname).exists():
-                    missing.append(fname)
+            invalid = []
 
-            # Check memory directory exists
-            memory_dir = agent_dir / "memory"
-            if not memory_dir.exists():
-                missing.append("memory/")
-
-            # Check DDP data files exist in repo root (produced by scrapers)
-            ddp_files = [
-                "trscode-data.json", "truscore-data.json", "trf-data.json",
-                "tragent-data.json", "trs-data.json"
-            ]
-            for fname in ddp_files:
-                fpath = Path(REPO_PATH) / fname
+            for fname in required_files:
+                fpath = data_dir / fname
                 if not fpath.exists():
                     missing.append(fname)
                 else:
@@ -323,69 +312,83 @@ class AuditScheduler:
                         with open(fpath) as f:
                             json.load(f)
                     except json.JSONDecodeError:
-                        missing.append(f"{fname} (invalid JSON)")
+                        invalid.append(fname)
 
-            if missing:
-                return False, f"Site Health FAILED - Missing: {', '.join(missing)}"
+            if missing or invalid:
+                msg = "Site Health FAILED: "
+                if missing:
+                    msg += f"Missing: {', '.join(missing)}. "
+                if invalid:
+                    msg += f"Invalid JSON: {', '.join(invalid)}"
+                return False, msg
 
-            return True, "Site health OK - agent files and DDP data present"
+            return True, "Site health OK - all data files present and valid"
 
         except Exception as e:
             return False, f"Site health check error: {e}"
 
     def _check_ddp_status(self) -> Tuple[bool, str]:
-        """Check 2: Verify all 5 DDPs have fresh data files."""
+        """Check 2: Verify all 5 DDPs are running and not stale/failed."""
         try:
-            ddp_data_files = {
-                "trscode": Path(REPO_PATH) / "data" / "trscode-data.json",
-                "truscore": Path(REPO_PATH) / "data" / "truscore-data.json",
-                "trfcast": Path(REPO_PATH) / "data" / "trf-data.json",
-                "tragents": Path(REPO_PATH) / "data" / "tragent-data.json",
-                "trs": Path(REPO_PATH) / "data" / "trs-data.json",
-            }
-            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=26)
+            status_file = Path(REPO_PATH) / "web_agent" / "ddp_status.json"
+            if not status_file.exists():
+                return False, "DDP status file not found"
+
+            with open(status_file) as f:
+                ddp_data = json.load(f)
+
+            expected_ddps = ["DDP1", "DDP2", "DDP3", "DDP4", "DDP5"]
+            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=2)
 
             issues = []
-            for name, path in ddp_data_files.items():
-                if not path.exists():
-                    issues.append(f"{name} data file missing")
+            for ddp in expected_ddps:
+                if ddp not in ddp_data:
+                    issues.append(f"{ddp} missing")
                 else:
-                    mod_time = datetime.datetime.fromtimestamp(path.stat().st_mtime)
-                    if mod_time < stale_threshold:
-                        hours_old = (datetime.datetime.now() - mod_time).total_seconds() / 3600
-                        issues.append(f"{name} stale ({hours_old:.0f}h old)")
+                    status = ddp_data[ddp].get("status", "unknown")
+                    if status not in ["running", "active", "ok"]:
+                        issues.append(f"{ddp} status={status}")
+
+                    # Check staleness
+                    last_update = ddp_data[ddp].get("last_update")
+                    if last_update:
+                        try:
+                            update_time = datetime.datetime.fromisoformat(last_update)
+                            if update_time < stale_threshold:
+                                issues.append(f"{ddp} stale (>2h)")
+                        except:
+                            pass
 
             if issues:
                 return False, f"DDP issues: {', '.join(issues)}"
 
-            return True, "All 5 DDPs have fresh data files"
+            return True, "All 5 DDPs running and up-to-date"
 
         except Exception as e:
             return False, f"DDP status check error: {e}"
 
     def _check_data_file_integrity(self) -> Tuple[bool, str]:
-        """Check 3: Verify DDP JSON data files are valid and not stale (>48h)."""
+        """Check 3: Verify JSON data files are valid and not stale (>48h)."""
         try:
+            data_dir = Path(REPO_PATH) / "web_agent"
             stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=48)
-            critical_files = {
-                "trscode-data.json": Path(REPO_PATH) / "data" / "trscode-data.json",
-                "truscore-data.json": Path(REPO_PATH) / "data" / "truscore-data.json",
-                "trf-data.json": Path(REPO_PATH) / "data" / "trf-data.json",
-                "tragent-data.json": Path(REPO_PATH) / "data" / "tragent-data.json",
-                "trs-data.json": Path(REPO_PATH) / "data" / "trs-data.json",
-            }
 
+            critical_files = ["ticker.json", "leaderboard.json"]
             issues = []
-            for fname, fpath in critical_files.items():
+
+            for fname in critical_files:
+                fpath = data_dir / fname
                 if not fpath.exists():
                     issues.append(f"{fname} missing")
                     continue
 
+                # Check if file is stale
                 mtime = datetime.datetime.fromtimestamp(fpath.stat().st_mtime)
                 if mtime < stale_threshold:
                     hours_old = (datetime.datetime.now() - mtime).total_seconds() / 3600
                     issues.append(f"{fname} stale ({hours_old:.1f}h old)")
 
+                # Validate JSON
                 try:
                     with open(fpath) as f:
                         json.load(f)
@@ -450,16 +453,23 @@ class AuditScheduler:
             return False, f"Git status check error: {e}"
 
     def _check_vault_integrity(self) -> Tuple[bool, str]:
-        """Check 6: Verify all 9 context-vault files are present."""
+        """Check 6: Verify all 9 vault files are present."""
         try:
-            vault_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "vault"
+            vault_dir = Path(REPO_PATH) / "vault"
             if not vault_dir.exists():
-                return False, "Vault directory not found at context-vault/trainingrun/agents/trsitekeeper/"
+                return False, "Vault directory not found"
 
+            # Expected vault files (9 total)
             expected_files = [
-                "SOUL.md", "CONFIG.md", "PROCESS.md", "CADENCE.md",
-                "RUN-LOG.md", "LEARNING-LOG.md", "STYLE-EVOLUTION.md",
-                "CAPABILITIES.md", "TASK-LOG.md"
+                "vault_config.json",
+                "vault_keys.json",
+                "vault_archive_1.json",
+                "vault_archive_2.json",
+                "vault_archive_3.json",
+                "vault_secrets.json",
+                "vault_audit_log.json",
+                "vault_backup.json",
+                "vault_metadata.json",
             ]
 
             missing = [f for f in expected_files if not (vault_dir / f).exists()]
@@ -473,36 +483,21 @@ class AuditScheduler:
             return False, f"Vault integrity check error: {e}"
 
     def _check_agent_activity(self) -> Tuple[bool, str]:
-        """Check 7: Cross-agent health monitoring — verify all agents ran recently."""
+        """Check 7: Verify agent is not idle for >24 hours."""
         try:
-            agents = {
-                "TRSitekeeper": Path(REPO_PATH) / "agent_activity.json",
-                "Content Scout": Path(REPO_PATH) / "content_scout" / "scout-data.json",
-                "Daily News": Path(REPO_PATH) / "daily_news_agent" / "agent.log",
-            }
-            stale_threshold = datetime.timedelta(hours=26)
-            now = datetime.datetime.now()
+            activity_file = Path(REPO_PATH) / "web_agent" / "activity.log"
+            if not activity_file.exists():
+                return False, "Activity log not found"
 
-            healthy = []
-            issues = []
+            # Get last modification time
+            mtime = datetime.datetime.fromtimestamp(activity_file.stat().st_mtime)
+            idle_time = datetime.datetime.now() - mtime
 
-            for name, path in agents.items():
-                if not path.exists():
-                    issues.append(f"{name}: no activity file")
-                    continue
-                mtime = datetime.datetime.fromtimestamp(path.stat().st_mtime)
-                age = now - mtime
-                hours = age.total_seconds() / 3600
-                if age > stale_threshold:
-                    issues.append(f"{name}: stale ({hours:.1f}h)")
-                else:
-                    healthy.append(f"{name}: active ({hours:.1f}h)")
+            if idle_time > datetime.timedelta(hours=24):
+                hours_idle = idle_time.total_seconds() / 3600
+                return False, f"Agent idle for {hours_idle:.1f} hours (>24h)"
 
-            if issues:
-                detail = " | ".join(issues)
-                return False, f"{len(issues)} agent(s) stale: {detail} ({len(healthy)}/{len(agents)} healthy)"
-
-            return True, f"All {len(agents)} agents active: " + ", ".join(healthy)
+            return True, f"Agent active (last update {idle_time.total_seconds()/3600:.1f}h ago)"
 
         except Exception as e:
             return False, f"Agent activity check error: {e}"
@@ -711,10 +706,54 @@ class AuditScheduler:
             return False, f"Navigation check error: {e}"
 
     def _check_special_pages(self) -> Tuple[bool, str]:
-        """Check 14: Special pages check — no special pages required for trainingrun.ai."""
-        # trainingrun.ai does not use terms, charter, belt, or mythology pages.
-        # This check passes by default. Can be repurposed when new pages are added.
-        return True, "No special pages required — check passed"
+        """Check 14: Verify terms, charter, belt, mythology pages exist and aren't empty."""
+        try:
+            special_page_patterns = [
+                ("terms", ["terms", "tos", "terms-of-service"]),
+                ("charter", ["charter", "code-of-conduct"]),
+                ("belt", ["belt", "ranks"]),
+                ("mythology", ["mythology", "lore"]),
+            ]
+
+            missing = []
+            empty = []
+
+            for page_type, patterns in special_page_patterns:
+                found = False
+                for pattern in patterns:
+                    # Try various URL patterns
+                    for sep in ["-", "_", ""]:
+                        url = urljoin(SITE_URL, f"{pattern.replace('-', sep)}.html")
+                        try:
+                            response = requests.get(url, timeout=5)
+                            if response.status_code == 200:
+                                if len(response.text) < 500:
+                                    empty.append(page_type)
+                                else:
+                                    found = True
+                                break
+                        except:
+                            pass
+
+                    if found:
+                        break
+
+                if not found:
+                    missing.append(page_type)
+
+            issues = []
+            if missing:
+                issues.append(f"Missing: {', '.join(missing)}")
+            if empty:
+                issues.append(f"Empty: {', '.join(empty)}")
+
+            if issues:
+                return False, "Special pages issue: " + "; ".join(issues)
+
+            return True, "Special pages exist and have content"
+
+        except Exception as e:
+            return False, f"Special pages check error: {e}"
 
     def _check_score_display(self) -> Tuple[bool, str]:
         """Check 15: Read scores page, look for actual numbers not undefined/NaN/blank."""
@@ -725,29 +764,27 @@ class AuditScheduler:
 
             text = response.text
 
-            # Strip <script> blocks so we only check rendered content, not JS code
-            visible_text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL | re.IGNORECASE)
-
-            # Check for problematic patterns in visible content only
+            # Check for problematic patterns
             bad_patterns = ["undefined", "NaN", "null", "error"]
             issues = []
 
             for pattern in bad_patterns:
-                if pattern in visible_text:
-                    count = visible_text.count(pattern)
-                    if count > 5:
+                if pattern in text:
+                    # Count occurrences
+                    count = text.count(pattern)
+                    if count > 5:  # More than 5 instances might indicate a problem
                         issues.append(f"{count} instances of '{pattern}'")
 
             # Check for actual score numbers (simple heuristic)
-            score_found = bool(re.search(r'\b([0-9]{1,3}\.?[0-9]*)\b', visible_text))
+            score_found = bool(re.search(r'\b([0-9]{1,3}\.?[0-9]*)\b', text))
 
             if not score_found:
-                issues.append("No score numbers found")
+                return False, "No score numbers found on page"
 
             if issues:
-                return False, "Score display issues: " + ", ".join(issues)
+                return False, f"Score display issues: {', '.join(issues)}"
 
-            return True, "Scores display properly with numeric values"
+            return True, "Scores displayed correctly"
 
         except Exception as e:
             return False, f"Score display check error: {e}"
@@ -904,7 +941,7 @@ class AuditScheduler:
     def _check_comparative_audit(self) -> Tuple[bool, str]:
         """Check 21: Compare today's results to yesterday's."""
         try:
-            audit_history_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
+            audit_history_file = Path(REPO_PATH) / "web_agent" / "audit_history.json"
 
             # Load or create history
             if audit_history_file.exists():
@@ -949,16 +986,55 @@ class AuditScheduler:
             return False, f"Comparative audit error: {e}"
 
     def _check_ticker_leaderboard(self) -> Tuple[bool, str]:
-        """Check 22: Ticker/leaderboard consistency — not applicable."""
-        # trainingrun.ai does not have separate ticker.json or leaderboard.json files.
-        # Score data lives in the 5 DDP *-data.json files checked elsewhere.
-        # This check passes by default. Can be repurposed when ticker/leaderboard features are built.
-        return True, "No ticker/leaderboard files required — check passed"
+        """Check 22: Compare ticker data vs leaderboard scores for consistency."""
+        try:
+            data_dir = Path(REPO_PATH) / "web_agent"
+            ticker_file = data_dir / "ticker.json"
+            leaderboard_file = data_dir / "leaderboard.json"
+
+            if not ticker_file.exists() or not leaderboard_file.exists():
+                return False, "Ticker or leaderboard data not found"
+
+            with open(ticker_file) as f:
+                ticker = json.load(f)
+            with open(leaderboard_file) as f:
+                leaderboard = json.load(f)
+
+            # Extract scores from both
+            ticker_scores = {}
+            for entry in ticker.get("entries", []):
+                model = entry.get("model", "")
+                score = entry.get("score", None)
+                if model and score is not None:
+                    ticker_scores[model] = score
+
+            leaderboard_scores = {}
+            for entry in leaderboard.get("entries", []):
+                model = entry.get("model", "")
+                score = entry.get("score", None)
+                if model and score is not None:
+                    leaderboard_scores[model] = score
+
+            # Check for major discrepancies
+            discrepancies = []
+            for model in ticker_scores:
+                if model in leaderboard_scores:
+                    diff = abs(ticker_scores[model] - leaderboard_scores[model])
+                    if diff > 5:  # More than 5 point difference is suspicious
+                        discrepancies.append(f"{model} (diff={diff:.1f})")
+
+            if discrepancies:
+                return False, f"Score discrepancies: {', '.join(discrepancies[:3])}"
+
+            return True, "Ticker and leaderboard scores consistent"
+
+        except Exception as e:
+            return False, f"Ticker/leaderboard check error: {e}"
 
     def _check_perfect_scores(self) -> Tuple[bool, str]:
         """Check 23: Flag any model scoring exactly 100 on any DDP."""
         try:
-            data_dir = Path(REPO_PATH) / "agents" / "trsitekeeper"
+            data_dir = Path(REPO_PATH) / "web_agent"
 
             perfect_scores = []
 
@@ -995,7 +1071,7 @@ class AuditScheduler:
     def _check_stale_rankings(self) -> Tuple[bool, str]:
         """Check 24: Track rankings, flag if unchanged for 3+ days."""
         try:
-            rankings_history_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "rankings_history.json"
+            rankings_history_file = Path(REPO_PATH) / "web_agent" / "rankings_history.json"
 
             # Load or create history
             if rankings_history_file.exists():
@@ -1007,7 +1083,7 @@ class AuditScheduler:
             today = datetime.datetime.now().strftime("%Y-%m-%d")
 
             # Get current rankings
-            leaderboard_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "leaderboard.json"
+            leaderboard_file = Path(REPO_PATH) / "web_agent" / "leaderboard.json"
             if leaderboard_file.exists():
                 with open(leaderboard_file) as f:
                     leaderboard = json.load(f)
@@ -1065,49 +1141,13 @@ class AuditScheduler:
 
         return summary
 
-    def _load_last_audit(self):
-        """Load the most recent audit result from audit_history.json."""
-        try:
-            history_path = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
-            if not history_path.exists():
-                return None
-            with open(history_path, "r") as f:
-                history = json.load(f)
-            if not history:
-                return None
-            latest_date = sorted(history.keys())[-1]
-            return history[latest_date]
-        except Exception as e:
-            logging.error(f"Error loading audit history: {e}")
-            return None
-
-    def _log_audit_results(self, results):
-        """Log audit results to learning logger and audit_history.json."""
+    def _log_audit_results(self, results: Dict[str, Any]):
+        """Log audit results to learning logger."""
         try:
             if hasattr(self.learning_logger, "log_audit") if self.learning_logger else False:
                 self.learning_logger.log_audit(results)
         except Exception as e:
             logging.error(f"Error logging audit results: {e}")
-
-        # Save to audit_history.json
-        try:
-            history_path = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
-            history = {}
-            if history_path.exists():
-                with open(history_path, "r") as f:
-                    history = json.load(f)
-            date_key = results["timestamp"][:10]
-            summary = results.get("summary", {})
-            history[date_key] = {
-                "timestamp": results["timestamp"],
-                "total_checks": summary.get("total_checks", 0),
-                "passed": summary.get("passed", 0),
-                "failed": summary.get("failed", 0),
-            }
-            with open(history_path, "w") as f:
-                json.dump(history, f, indent=2)
-        except Exception as e:
-            logging.error(f"Error saving audit history: {e}")
 
     def _send_telegram_report(self, results: Dict[str, Any]):
         """Send concise Telegram report grouped by category."""
@@ -1121,18 +1161,6 @@ class AuditScheduler:
                 f"",
                 f"Summary: {summary['passed']}/{summary['total_checks']} checks passed",
             ]
-
-            # Compare to last audit
-            last_audit = self._load_last_audit()
-            if last_audit:
-                last_passed = last_audit.get("passed", 0)
-                diff = summary["passed"] - last_passed
-                if diff > 0:
-                    lines.append(f"vs last run: +{diff} checks (was {last_passed}/{last_audit.get('total_checks', 24)})")
-                elif diff < 0:
-                    lines.append(f"vs last run: {diff} checks (was {last_passed}/{last_audit.get('total_checks', 24)})")
-                else:
-                    lines.append(f"vs last run: no change ({last_passed}/{last_audit.get('total_checks', 24)})")
 
             # Add category breakdowns
             for category, stats in summary.get("by_category", {}).items():
@@ -1166,401 +1194,44 @@ class AuditScheduler:
         except Exception as e:
             logging.error(f"Error building Telegram report: {e}")
 
-    def _diagnose_failures(self, results: dict) -> list:
-        """Use Claude to dynamically diagnose audit failures and propose fixes.
-        Returns list of dicts with structured diagnosis."""
+    def _get_claude_analysis(self, results: Dict[str, Any]):
+        """Get intelligent analysis from Claude if available."""
         try:
+            if not self.claude_chat:
+                return
+
+            summary = results.get("summary", {})
             failed_checks = []
+
             for category, checks in results.get("categories", {}).items():
                 for check_name, (passed, message) in checks.items():
                     if not passed:
-                        failed_checks.append({"check": check_name, "message": message, "category": category})
+                        failed_checks.append(f"- {check_name}: {message}")
 
             if not failed_checks:
-                return []
+                return  # All checks passed, no need for analysis
 
-            # Load past fix attempts
-            past_fixes = self._load_tried_fixes()
-            past_fixes_by_check = {}
-            for fix in past_fixes:
-                cn = fix.get("check_name", "")
-                if cn not in past_fixes_by_check:
-                    past_fixes_by_check[cn] = []
-                past_fixes_by_check[cn].append(fix)
+            # Build analysis prompt
+            prompt = f"""Analyze these site audit failures and suggest next steps:
 
-            # Load memory context
-            memory_context = ""
-            try:
-                fp = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "fix_patterns.json"
-                if fp.exists():
-                    with open(fp, "r") as f:
-                        memory_context += f"Fix patterns: {f.read()[:2000]}\n\n"
-                sk = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "site_knowledge.json"
-                if sk.exists():
-                    with open(sk, "r") as f:
-                        memory_context += f"Site knowledge: {f.read()[:2000]}\n\n"
-                el = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "error_log.jsonl"
-                if el.exists():
-                    with open(el, "r") as f:
-                        recent = f.readlines()[-10:]
-                    memory_context += f"Recent errors: {chr(10).join(recent)[:1500]}\n\n"
-            except Exception as e:
-                logging.warning(f"Error loading memory: {e}")
+Summary: {summary['passed']}/{summary['total_checks']} checks passed
+Failed Checks:
+{chr(10).join(failed_checks[:5])}
 
-            # Build failures text with past attempts
-            failures_text = ""
-            for fc in failed_checks:
-                cn = fc["check"]
-                failures_text += f"- {cn} ({fc['category']}): {fc['message']}\n"
-                past = past_fixes_by_check.get(cn, [])
-                if past:
-                    failures_text += f"  PAST FIX ATTEMPTS ({len(past)}):\n"
-                    for p in past[-3:]:
-                        failures_text += f"    - {p.get('timestamp','?')}: tried '{p.get('fix_type','')}' => {p.get('outcome','?')}\n"
+Provide brief, actionable recommendations."""
 
-            # Build diagnosis prompt
-            prompt = (
-                "You are TRSitekeeper diagnostic brain. Analyze audit failures and propose fixes.\n\n"
-                "REPO STRUCTURE:\n"
-                "- DDP scrapers: agent_trscode.py, agent_truscore.py, agent_trfcast.py, agent_tragents.py, agent_trs.py\n"
-                "- Scraper data: trscode-data.json, truscore-data.json, trf-data.json, tragent-data.json, trs-data.json\n"
-                "- HTML: index.html, scores.html, trscode-scores.html, truscore-scores.html, trfcast-scores.html, tragents-scores.html, hq.html, mission-control.html\n"
-                "- DDP data files: trscode-data.json, truscore-data.json, trf-data.json, tragent-data.json, trs-data.json (in repo root)\n"
-                "- No special pages required (terms, charter, belt, mythology do not apply to trainingrun.ai)\n"
-                "- Vault dir expected: context-vault/trainingrun/agents/trsitekeeper/\n\n"
-                f"{memory_context}"
-                f"CURRENT FAILURES:\n{failures_text}\n"
-                "RULES:\n"
-                "1. If past fix attempts FAILED, DO NOT propose same fix. Propose different or escalate.\n"
-                "2. If 2+ failed attempts on same check, set fix_type to escalate.\n"
-                "3. Be specific about root_cause.\n"
-                "4. confidence: 0.9+=sure, 0.5-0.8=worth trying, <0.5=escalate.\n"
-                "5. fix_types: rerun_scraper, git_commit, edit_file, investigate, escalate\n\n"
-                "Return ONLY a JSON array. Each element:\n"
-                '{"check_name": "...", "diagnosis": "...", "root_cause": "...", '
-                '"proposed_fix_type": "...", "proposed_action": "...", "confidence": 0.0, '
-                '"files_involved": ["..."]}'
-            )
+            # Get Claude's analysis
+            analysis = self.claude_chat(prompt)
 
-            system_prompt = "You are a JSON-only diagnostic API. You MUST respond with ONLY a raw JSON array. No tools. No preamble. No explanation. No markdown. Start your response with [ and end with ]. Nothing else."
-
-            if not self.claude_chat:
-                logging.warning("Claude chat not available for diagnosis")
-                return []
-
-            response = self.claude_chat([{"role": "user", "content": prompt}], system_prompt)
-            if not response:
-                logging.error("Empty response from Claude diagnosis")
-                return []
-
-            # Parse response
-            response_text = ""
-            if isinstance(response, dict):
-                if "content" in response:
-                    for block in response.get("content", []):
-                        if isinstance(block, dict) and block.get("type") == "text":
-                            response_text = block.get("text", "")
-                            break
-                elif "text" in response:
-                    response_text = response["text"]
-            elif isinstance(response, str):
-                response_text = response
-
-            if not response_text:
-                logging.error("Could not extract text from Claude diagnosis")
-                return []
-
-            response_text = response_text.strip()
-            # Remove markdown code fences if present
-            if response_text.startswith("```"):
-                response_text = response_text.split("\n", 1)[-1]
-                if "```" in response_text:
-                    response_text = response_text[:response_text.rfind("```")].strip()
-
-            try:
-                diagnoses = json.loads(response_text)
-                if not isinstance(diagnoses, list):
-                    diagnoses = [diagnoses]
-            except json.JSONDecodeError as e:
-                logging.error(f"Failed to parse diagnosis JSON: {e}")
-                logging.error(f"Response: {response_text[:500]}")
-                return []
-
-            # Validate
-            valid = []
-            for d in diagnoses:
-                if not isinstance(d, dict):
-                    continue
-                if "check_name" not in d or "proposed_fix_type" not in d:
-                    continue
-                if d["proposed_fix_type"] not in self.KNOWN_FIX_TYPES:
-                    d["proposed_fix_type"] = "investigate"
-                if "confidence" not in d:
-                    d["confidence"] = 0.5
-                valid.append(d)
-
-            logging.info(f"Claude diagnosed {len(valid)} failures")
-            if valid and self.write_activity:
-                summary = ", ".join(f"{d['check_name']}={d['proposed_fix_type']}({d.get('confidence',0):.1f})" for d in valid)
-                self.write_activity(f"Diagnosis: {summary}", location="audit", status="idle")
-
-            return valid
-
-        except Exception as e:
-            logging.error(f"Diagnosis error: {e}")
-            return []
-
-
-    # ===== DYNAMIC REMEDIATION SYSTEM =====
-
-    # ===== DYNAMIC REMEDIATION SYSTEM =====
-    # No more static REMEDIATION_MAP. Claude diagnoses failures dynamically.
-
-    KNOWN_FIX_TYPES = ["rerun_scraper", "git_commit", "edit_file", "investigate", "escalate"]
-
-    SCRAPER_SCRIPTS = {
-        "trscode": "agent_trscode.py",
-        "truscore": "agent_truscore.py",
-        "trfcast": "agent_trfcast.py",
-        "tragents": "agent_tragents.py",
-        "trs": "agent_trs.py",
-    }
-
-    TRIED_FIXES_PATH = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory" / "tried_fixes.jsonl"
-
-    def _load_tried_fixes(self, check_name: str = None) -> list:
-        """Load past fix attempts from tried_fixes.jsonl."""
-        try:
-            if not self.TRIED_FIXES_PATH.exists():
-                return []
-            fixes = []
-            with open(self.TRIED_FIXES_PATH, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        entry = json.loads(line)
-                        if check_name is None or entry.get("check_name") == check_name:
-                            fixes.append(entry)
-                    except json.JSONDecodeError:
-                        continue
-            return fixes
-        except Exception as e:
-            logging.error(f"Error loading tried fixes: {e}")
-            return []
-
-    def _record_fix_attempt(self, check_name, fix_type, action, outcome, details=""):
-        """Append a fix attempt to tried_fixes.jsonl."""
-        try:
-            self.TRIED_FIXES_PATH.parent.mkdir(parents=True, exist_ok=True)
-            entry = {
-                "check_name": check_name,
-                "fix_type": fix_type,
-                "action": action,
-                "outcome": outcome,
-                "details": details,
-                "timestamp": datetime.datetime.now().isoformat(),
-            }
-            with open(self.TRIED_FIXES_PATH, "a") as f:
-                f.write(json.dumps(entry) + "\n")
-        except Exception as e:
-            logging.error(f"Error recording fix attempt: {e}")
-
-    def _attempt_remediation(self, results):
-        """After audit, use Claude diagnosis to propose fixes."""
-        try:
-            self.pending_remediations = {}
-            diagnoses = self._diagnose_failures(results)
-
-            if not diagnoses:
-                logging.info("No diagnoses returned")
-                return
-
-            fixable = []
-            escalations = []
-
-            for d in diagnoses:
-                check_name = d.get("check_name", "unknown")
-                fix_type = d.get("proposed_fix_type", "investigate")
-                confidence = d.get("confidence", 0.5)
-
-                if fix_type == "escalate" or confidence < 0.3:
-                    escalations.append(d)
-                    continue
-
-                if fix_type == "investigate":
-                    escalations.append(d)
-                    continue
-
-                self.pending_remediations[check_name] = {
-                    "description": d.get("diagnosis", "No description"),
-                    "message": d.get("root_cause", ""),
-                    "fix_type": fix_type,
-                    "proposed_action": d.get("proposed_action", ""),
-                    "confidence": confidence,
-                    "files_involved": d.get("files_involved", []),
-                    "diagnosis": d,
-                    "timestamp": datetime.datetime.now().isoformat(),
-                }
-                fixable.append(
-                    f"- {check_name} (confidence: {confidence:.0%})\n"
-                    f"  Diagnosis: {d.get('diagnosis', 'N/A')}\n"
-                    f"  Root cause: {d.get('root_cause', 'N/A')}\n"
-                    f"  Fix: {d.get('proposed_action', 'N/A')}"
+            if analysis and self.write_activity:
+                self.write_activity(
+                    f"Audit Analysis:\n{analysis}",
+                    location="audit",
+                    status="idle"
                 )
 
-            if fixable:
-                msg = f"REMEDIATION PROPOSALS ({len(fixable)} fixable):\n\n"
-                msg += "\n\n".join(fixable)
-                msg += "\n\nReply:\n"
-                msg += "'approve all' to fix everything\n"
-                msg += "'approve [check_name]' to fix one\n"
-                msg += "'reject all' to skip all\n"
-                msg += "'pending fixes' to see this list again"
-                if self.tg_send:
-                    self.tg_send(msg)
-
-            if escalations:
-                esc_msg = f"ESCALATIONS ({len(escalations)} need attention):\n\n"
-                for e in escalations:
-                    esc_msg += f"- {e.get('check_name', '?')}\n"
-                    esc_msg += f"  Diagnosis: {e.get('diagnosis', 'N/A')}\n"
-                    esc_msg += f"  Root cause: {e.get('root_cause', 'N/A')}\n"
-                    esc_msg += f"  Recommendation: {e.get('proposed_action', 'N/A')}\n\n"
-                esc_msg += "These need manual investigation."
-                if self.tg_send:
-                    self.tg_send(esc_msg)
-
         except Exception as e:
-            logging.error(f"Remediation attempt error: {e}")
-
-    def process_remediation(self, check_name):
-        """Execute an approved remediation."""
-        try:
-            if check_name == "all":
-                rem_results = []
-                for cname in list(self.pending_remediations.keys()):
-                    result = self._execute_fix(cname)
-                    rem_results.append(f"{cname}: {result}")
-                self.pending_remediations = {}
-                return "Remediation results:\n" + "\n".join(rem_results)
-
-            # Partial match
-            if check_name not in self.pending_remediations:
-                matches = [k for k in self.pending_remediations if k.startswith(check_name)]
-                if len(matches) == 1:
-                    check_name = matches[0]
-                elif len(matches) > 1:
-                    return f"Ambiguous: '{check_name}' matches: {', '.join(matches)}"
-                else:
-                    return f"No pending remediation for '{check_name}'. Use 'pending fixes' to see options."
-
-            result = self._execute_fix(check_name)
-            del self.pending_remediations[check_name]
-            return f"Remediation for {check_name}: {result}"
-
-        except Exception as e:
-            return f"Remediation error: {e}"
-
-    def _execute_fix(self, check_name):
-        """Execute the actual fix. Records outcome to tried_fixes."""
-        try:
-            rem = self.pending_remediations.get(check_name)
-            if not rem:
-                return "No remediation data found"
-
-            fix_type = rem["fix_type"]
-            proposed_action = rem.get("proposed_action", "")
-
-            if fix_type == "rerun_scraper":
-                rerun_results = []
-                for scraper_name, script_file in self.SCRAPER_SCRIPTS.items():
-                    script_path = Path(REPO_PATH) / script_file
-                    if script_path.exists():
-                        try:
-                            result = subprocess.run(
-                                ["python3", str(script_path)],
-                                capture_output=True, text=True, timeout=300,
-                                cwd=str(REPO_PATH)
-                            )
-                            if result.returncode == 0:
-                                rerun_results.append(f"{scraper_name}: OK")
-                            else:
-                                rerun_results.append(f"{scraper_name}: failed ({result.stderr[:100]})")
-                        except subprocess.TimeoutExpired:
-                            rerun_results.append(f"{scraper_name}: timed out (300s)")
-                    else:
-                        rerun_results.append(f"{scraper_name}: not found")
-                outcome = "Scraper re-run:\n" + "\n".join(rerun_results)
-                self._record_fix_attempt(check_name, fix_type, "rerun all scrapers", outcome)
-                return outcome
-
-            elif fix_type == "git_commit":
-                try:
-                    status_out = subprocess.run(
-                        ["git", "status", "--porcelain"],
-                        capture_output=True, text=True, cwd=str(REPO_PATH)
-                    )
-                    if not status_out.stdout.strip():
-                        outcome = "No uncommitted files found"
-                        self._record_fix_attempt(check_name, fix_type, "git commit", outcome)
-                        return outcome
-                    file_list = status_out.stdout.strip().split("\n")
-                    file_count = len(file_list)
-                    subprocess.run(["git", "add", "-A"], capture_output=True, text=True, cwd=str(REPO_PATH))
-                    commit_msg = f"auto: TRSitekeeper commit {file_count} files after audit"
-                    result = subprocess.run(
-                        ["git", "commit", "-m", commit_msg],
-                        capture_output=True, text=True, cwd=str(REPO_PATH)
-                    )
-                    if result.returncode == 0:
-                        push = subprocess.run(["git", "push"], capture_output=True, text=True, cwd=str(REPO_PATH))
-                        if push.returncode == 0:
-                            outcome = f"Committed and pushed {file_count} files"
-                        else:
-                            outcome = f"Committed but push failed: {push.stderr[:100]}"
-                    else:
-                        outcome = f"Commit failed: {result.stderr[:100]}"
-                    self._record_fix_attempt(check_name, fix_type, "git commit+push", outcome)
-                    return outcome
-                except Exception as e:
-                    outcome = f"Git error: {e}"
-                    self._record_fix_attempt(check_name, fix_type, "git commit", outcome)
-                    return outcome
-
-            elif fix_type == "edit_file":
-                outcome = f"Edit proposed: {proposed_action}. Requires manual review."
-                self._record_fix_attempt(check_name, fix_type, proposed_action, outcome)
-                return outcome
-
-            elif fix_type == "investigate":
-                outcome = f"Investigation needed: {proposed_action}"
-                self._record_fix_attempt(check_name, fix_type, proposed_action, outcome)
-                return outcome
-
-            else:
-                outcome = f"Unknown fix type: {fix_type}"
-                self._record_fix_attempt(check_name, fix_type, "unknown", outcome)
-                return outcome
-
-        except Exception as e:
-            self._record_fix_attempt(check_name, "error", "error", f"Exception: {e}")
-            return f"Fix execution error: {e}"
-
-
-    def get_pending_remediations(self):
-        """Return summary of pending remediations."""
-        if not self.pending_remediations:
-            return "No pending remediations."
-        out_lines = [f"PENDING FIXES ({len(self.pending_remediations)}):"]
-        for check_name, info in self.pending_remediations.items():
-            out_lines.append(f"\n- {check_name}")
-            out_lines.append(f"  Issue: {info['message']}")
-            out_lines.append(f"  Fix: {info['description']}")
-            out_lines.append(f"  Proposed: {info['timestamp']}")
-        out_lines.append("\nReply 'approve all' or 'approve [check_name]'")
-        return "\n".join(out_lines)
+            logging.error(f"Error getting Claude analysis: {e}")
 
     def get_status(self) -> str:
         """Return current scheduler status for the 'audit status' command."""
@@ -1656,7 +1327,7 @@ if __name__ == "__main__":
     for category, checks in results["categories"].items():
         print(f"\n{category}:")
         for check_name, (passed, message) in checks.items():
-            status = "â" if passed else "â"
+            status = "✓" if passed else "✗"
             print(f"  {status} {check_name}: {message[:80]}")
 
     print("\n" + "=" * 70)
