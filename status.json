@@ -1,0 +1,29 @@
+{
+  "ddp": {
+    "trscode": {
+      "last_run": "2026-03-09T07:14:42.576439",
+      "success": true,
+      "dry_run": true
+    },
+    "trfcast": {
+      "last_run": "2026-03-09T07:15:27.409211",
+      "success": true,
+      "dry_run": true
+    },
+    "trs": {
+      "last_run": "2026-03-09T07:20:27.423458",
+      "success": false,
+      "dry_run": true
+    },
+    "truscore": {
+      "last_run": "2026-03-09T07:24:00.174640",
+      "success": true,
+      "dry_run": true
+    },
+    "tragents": {
+      "last_run": "2026-03-09T07:28:59.608460",
+      "success": true,
+      "dry_run": true
+    }
+  }
+}
