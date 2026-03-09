@@ -62,6 +62,7 @@ SCORE_NAMES = {
 }
 
 STATUS_FILE = os.path.join(SCRIPT_DIR, "..", "..", "status.json")
+REPO_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "..", ".."))
 
 def log(msg: str):
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -90,6 +91,26 @@ def update_status(score_key: str, success: bool, dry_run: bool):
             json.dump(status, f, indent=2)
     except Exception as e:
         log(f"  WARNING: Could not update status.json: {e}")
+
+
+def push_status(dry_run: bool):
+    """Git add, commit, and push status.json after all scrapers complete."""
+    if dry_run:
+        log("  [DRY RUN] Skipping status.json push")
+        return
+    try:
+        subprocess.run(["git", "add", "status.json"],
+                       cwd=REPO_PATH, check=True, capture_output=True)
+        r = subprocess.run(["git", "commit", "-m", "Update status.json after DDP run"],
+                           cwd=REPO_PATH, capture_output=True, text=True)
+        if "nothing to commit" in (r.stdout + r.stderr):
+            log("  status.json unchanged — nothing to push")
+            return
+        subprocess.run(["git", "push", "origin", "main"],
+                       cwd=REPO_PATH, check=True, capture_output=True)
+        log("  status.json pushed to GitHub")
+    except Exception as e:
+        log(f"  WARNING: Could not push status.json: {e}")
 
 def run_agent(score_key: str, dry_run: bool) -> bool:
     script = AGENT_SCRIPTS[score_key]
@@ -151,6 +172,7 @@ def main():
             sys.exit(1)
         success = run_agent(args.score, args.dry_run)
         update_status(args.score, success, args.dry_run)
+        push_status(args.dry_run)
         sys.exit(0 if success else 1)
 
     results = {}
@@ -174,6 +196,8 @@ def main():
         status = "✓" if result is True else ("✗" if result is False else "—")
         log(f"  {status} {SCORE_NAMES[key]}")
     log("=" * 50)
+
+    push_status(args.dry_run)
 
 if __name__ == "__main__":
     main()
