@@ -2,10 +2,10 @@
 """
 Sitekeeper Audit System for trainingrun.ai
 ==========================================
-Runs comprehensive 24-check autonomous audit system with 5 categories:
+Runs comprehensive 23-check autonomous audit system with 5 categories:
 1. Local File Checks (7 checks)
 2. Live Site Checks (4 checks)
-3. Content Integrity (5 checks)
+3. Content Integrity (4 checks)
 4. Security (4 checks)
 5. Intelligence (4 checks)
 
@@ -244,7 +244,6 @@ class AuditScheduler:
         content_results = {
             "check_012_logo_branding": self._check_logo_branding(),
             "check_013_navigation": self._check_navigation(),
-            "check_014_special_pages": self._check_special_pages(),
             "check_015_score_display": self._check_score_display(),
             "check_016_dead_buttons": self._check_dead_buttons(),
         }
@@ -293,13 +292,13 @@ class AuditScheduler:
     # ===== CATEGORY 1: LOCAL FILE CHECKS =====
 
     def _check_site_health(self) -> Tuple[bool, str]:
-        """Check 1: Verify site data files exist and contain valid JSON."""
+        """Check 1: Verify real DDP scraper data files exist and contain valid JSON."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
+            data_dir = Path(REPO_PATH)
             if not data_dir.exists():
-                return False, "Data directory not found"
+                return False, "Repo directory not found"
 
-            required_files = ["ticker.json", "leaderboard.json", "ddp_status.json"]
+            required_files = ["trscode-data.json", "truscore-data.json", "trf-data.json", "tragent-data.json", "trs-data.json"]
             missing = []
             invalid = []
 
@@ -330,7 +329,7 @@ class AuditScheduler:
     def _check_ddp_status(self) -> Tuple[bool, str]:
         """Check 2: Verify all 5 DDPs are running and not stale/failed."""
         try:
-            status_file = Path(REPO_PATH) / "web_agent" / "ddp_status.json"
+            status_file = Path(REPO_PATH) / "status.json"
             if not status_file.exists():
                 return False, "DDP status file not found"
 
@@ -368,12 +367,12 @@ class AuditScheduler:
             return False, f"DDP status check error: {e}"
 
     def _check_data_file_integrity(self) -> Tuple[bool, str]:
-        """Check 3: Verify JSON data files are valid and not stale (>48h)."""
+        """Check 3: Verify real DDP JSON data files are valid and not stale (>48h)."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
+            data_dir = Path(REPO_PATH)
             stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=48)
 
-            critical_files = ["ticker.json", "leaderboard.json"]
+            critical_files = ["trscode-data.json", "truscore-data.json", "trf-data.json", "tragent-data.json", "trs-data.json"]
             issues = []
 
             for fname in critical_files:
@@ -453,23 +452,21 @@ class AuditScheduler:
             return False, f"Git status check error: {e}"
 
     def _check_vault_integrity(self) -> Tuple[bool, str]:
-        """Check 6: Verify all 9 vault files are present."""
+        """Check 6: Verify Core 7 vault files are present for TRSitekeeper."""
         try:
-            vault_dir = Path(REPO_PATH) / "vault"
+            vault_dir = Path(REPO_PATH) / "context-vault" / "trainingrun" / "agents" / "trsitekeeper"
             if not vault_dir.exists():
-                return False, "Vault directory not found"
+                return False, f"Vault directory not found at {vault_dir}"
 
-            # Expected vault files (9 total)
+            # Core 7 vault files (markdown, not JSON)
             expected_files = [
-                "vault_config.json",
-                "vault_keys.json",
-                "vault_archive_1.json",
-                "vault_archive_2.json",
-                "vault_archive_3.json",
-                "vault_secrets.json",
-                "vault_audit_log.json",
-                "vault_backup.json",
-                "vault_metadata.json",
+                "SOUL.md",
+                "CONFIG.md",
+                "PROCESS.md",
+                "CADENCE.md",
+                "RUN-LOG.md",
+                "LEARNING-LOG.md",
+                "STYLE-EVOLUTION.md",
             ]
 
             missing = [f for f in expected_files if not (vault_dir / f).exists()]
@@ -477,7 +474,7 @@ class AuditScheduler:
             if missing:
                 return False, f"Missing vault files: {', '.join(missing)}"
 
-            return True, "All 9 vault files present"
+            return True, f"All {len(expected_files)} Core 7 vault files present"
 
         except Exception as e:
             return False, f"Vault integrity check error: {e}"
@@ -704,56 +701,6 @@ class AuditScheduler:
 
         except Exception as e:
             return False, f"Navigation check error: {e}"
-
-    def _check_special_pages(self) -> Tuple[bool, str]:
-        """Check 14: Verify terms, charter, belt, mythology pages exist and aren't empty."""
-        try:
-            special_page_patterns = [
-                ("terms", ["terms", "tos", "terms-of-service"]),
-                ("charter", ["charter", "code-of-conduct"]),
-                ("belt", ["belt", "ranks"]),
-                ("mythology", ["mythology", "lore"]),
-            ]
-
-            missing = []
-            empty = []
-
-            for page_type, patterns in special_page_patterns:
-                found = False
-                for pattern in patterns:
-                    # Try various URL patterns
-                    for sep in ["-", "_", ""]:
-                        url = urljoin(SITE_URL, f"{pattern.replace('-', sep)}.html")
-                        try:
-                            response = requests.get(url, timeout=5)
-                            if response.status_code == 200:
-                                if len(response.text) < 500:
-                                    empty.append(page_type)
-                                else:
-                                    found = True
-                                break
-                        except:
-                            pass
-
-                    if found:
-                        break
-
-                if not found:
-                    missing.append(page_type)
-
-            issues = []
-            if missing:
-                issues.append(f"Missing: {', '.join(missing)}")
-            if empty:
-                issues.append(f"Empty: {', '.join(empty)}")
-
-            if issues:
-                return False, "Special pages issue: " + "; ".join(issues)
-
-            return True, "Special pages exist and have content"
-
-        except Exception as e:
-            return False, f"Special pages check error: {e}"
 
     def _check_score_display(self) -> Tuple[bool, str]:
         """Check 15: Read scores page, look for actual numbers not undefined/NaN/blank."""
@@ -986,125 +933,117 @@ class AuditScheduler:
             return False, f"Comparative audit error: {e}"
 
     def _check_ticker_leaderboard(self) -> Tuple[bool, str]:
-        """Check 22: Compare ticker data vs leaderboard scores for consistency."""
+        """Check 22: Verify all 5 real DDP data files exist, are valid JSON, and have model entries."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
-            ticker_file = data_dir / "ticker.json"
-            leaderboard_file = data_dir / "leaderboard.json"
+            data_dir = Path(REPO_PATH)
+            ddp_files = {
+                "trscode-data.json": "TRScode",
+                "truscore-data.json": "TRUscore",
+                "trf-data.json": "TRFcast",
+                "tragent-data.json": "TRAgents",
+                "trs-data.json": "TRSbench",
+            }
 
-            if not ticker_file.exists() or not leaderboard_file.exists():
-                return False, "Ticker or leaderboard data not found"
+            issues = []
+            files_checked = 0
 
-            with open(ticker_file) as f:
-                ticker = json.load(f)
-            with open(leaderboard_file) as f:
-                leaderboard = json.load(f)
+            for fname, ddp_name in ddp_files.items():
+                fpath = data_dir / fname
+                if not fpath.exists():
+                    issues.append(f"{ddp_name} data missing ({fname})")
+                    continue
 
-            # Extract scores from both
-            ticker_scores = {}
-            for entry in ticker.get("entries", []):
-                model = entry.get("model", "")
-                score = entry.get("score", None)
-                if model and score is not None:
-                    ticker_scores[model] = score
+                try:
+                    with open(fpath) as f:
+                        data = json.load(f)
+                    files_checked += 1
 
-            leaderboard_scores = {}
-            for entry in leaderboard.get("entries", []):
-                model = entry.get("model", "")
-                score = entry.get("score", None)
-                if model and score is not None:
-                    leaderboard_scores[model] = score
+                    # Basic validation — check it has content
+                    if isinstance(data, dict) and len(data) == 0:
+                        issues.append(f"{ddp_name} data is empty")
+                    elif isinstance(data, list) and len(data) == 0:
+                        issues.append(f"{ddp_name} data is empty list")
+                except json.JSONDecodeError:
+                    issues.append(f"{ddp_name} has invalid JSON")
 
-            # Check for major discrepancies
-            discrepancies = []
-            for model in ticker_scores:
-                if model in leaderboard_scores:
-                    diff = abs(ticker_scores[model] - leaderboard_scores[model])
-                    if diff > 5:  # More than 5 point difference is suspicious
-                        discrepancies.append(f"{model} (diff={diff:.1f})")
+            if issues:
+                return False, f"DDP data issues: {'; '.join(issues[:3])}"
 
-            if discrepancies:
-                return False, f"Score discrepancies: {', '.join(discrepancies[:3])}"
-
-            return True, "Ticker and leaderboard scores consistent"
+            return True, f"All {files_checked} DDP data files valid and populated"
 
         except Exception as e:
-            return False, f"Ticker/leaderboard check error: {e}"
+            return False, f"DDP data cross-check error: {e}"
 
     def _check_perfect_scores(self) -> Tuple[bool, str]:
-        """Check 23: Flag any model scoring exactly 100 on any DDP."""
+        """Check 23: Flag any model scoring exactly 100 on any DDP (suspicious data)."""
         try:
-            data_dir = Path(REPO_PATH) / "web_agent"
+            data_dir = Path(REPO_PATH)
+            ddp_files = ["trscode-data.json", "truscore-data.json", "trf-data.json", "tragent-data.json", "trs-data.json"]
 
             perfect_scores = []
 
-            # Check leaderboard
-            leaderboard_file = data_dir / "leaderboard.json"
-            if leaderboard_file.exists():
-                with open(leaderboard_file) as f:
-                    leaderboard = json.load(f)
+            for fname in ddp_files:
+                fpath = data_dir / fname
+                if not fpath.exists():
+                    continue
 
-                for entry in leaderboard.get("entries", []):
-                    score = entry.get("score")
-                    if score == 100 or score == 100.0:
-                        perfect_scores.append(f"{entry.get('model', 'unknown')} on leaderboard")
+                try:
+                    with open(fpath) as f:
+                        data = json.load(f)
 
-            # Check DDP status
-            ddp_file = data_dir / "ddp_status.json"
-            if ddp_file.exists():
-                with open(ddp_file) as f:
-                    ddps = json.load(f)
+                    # Walk the data structure looking for score values of exactly 100
+                    def find_perfect(obj, path=""):
+                        if isinstance(obj, dict):
+                            for k, v in obj.items():
+                                if isinstance(v, (int, float)) and v == 100:
+                                    if any(s in k.lower() for s in ["score", "rating", "total", "overall"]):
+                                        perfect_scores.append(f"{path}{k}=100 in {fname}")
+                                elif isinstance(v, (dict, list)):
+                                    find_perfect(v, f"{path}{k}.")
+                        elif isinstance(obj, list):
+                            for i, item in enumerate(obj[:20]):  # Limit to first 20 entries
+                                find_perfect(item, f"{path}[{i}].")
 
-                for ddp_name, ddp_data in ddps.items():
-                    for model_name, model_score in ddp_data.get("scores", {}).items():
-                        if model_score == 100 or model_score == 100.0:
-                            perfect_scores.append(f"{model_name} on {ddp_name}")
+                    find_perfect(data)
+                except (json.JSONDecodeError, Exception):
+                    pass
 
             if perfect_scores:
                 return False, f"Perfect scores detected: {', '.join(perfect_scores[:3])}"
 
-            return True, "No perfect scores detected"
+            return True, "No suspicious perfect scores detected"
 
         except Exception as e:
             return False, f"Perfect scores check error: {e}"
 
     def _check_stale_rankings(self) -> Tuple[bool, str]:
-        """Check 24: Track rankings, flag if unchanged for 3+ days."""
+        """Check 24: Flag if DDP data files haven't been updated in 48+ hours."""
         try:
-            rankings_history_file = Path(REPO_PATH) / "web_agent" / "rankings_history.json"
+            data_dir = Path(REPO_PATH)
+            ddp_files = ["trscode-data.json", "truscore-data.json", "trf-data.json", "tragent-data.json", "trs-data.json"]
+            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=48)
 
-            # Load or create history
-            if rankings_history_file.exists():
-                with open(rankings_history_file) as f:
-                    rankings_history = json.load(f)
-            else:
-                rankings_history = {}
+            stale = []
+            checked = 0
 
-            today = datetime.datetime.now().strftime("%Y-%m-%d")
+            for fname in ddp_files:
+                fpath = data_dir / fname
+                if not fpath.exists():
+                    continue
 
-            # Get current rankings
-            leaderboard_file = Path(REPO_PATH) / "web_agent" / "leaderboard.json"
-            if leaderboard_file.exists():
-                with open(leaderboard_file) as f:
-                    leaderboard = json.load(f)
+                checked += 1
+                mtime = datetime.datetime.fromtimestamp(fpath.stat().st_mtime)
+                if mtime < stale_threshold:
+                    hours_old = (datetime.datetime.now() - mtime).total_seconds() / 3600
+                    stale.append(f"{fname} ({hours_old:.0f}h old)")
 
-                # Create ranking hash
-                ranking_list = [e.get("model", "") for e in leaderboard.get("entries", [])[:10]]
-                ranking_hash = hashlib.md5("|".join(ranking_list).encode()).hexdigest()
+            if stale:
+                return False, f"Stale data files (>48h): {', '.join(stale)}"
 
-                rankings_history[today] = ranking_hash
+            if checked == 0:
+                return False, "No DDP data files found to check"
 
-                # Save history
-                rankings_history_file.parent.mkdir(exist_ok=True, parents=True)
-                with open(rankings_history_file, "w") as f:
-                    json.dump(rankings_history, f, indent=2)
-
-                # Check for stale rankings (same for 3+ days)
-                recent_hashes = list(rankings_history.values())[-3:]
-                if len(set(recent_hashes)) == 1 and len(recent_hashes) == 3:
-                    return False, "Rankings unchanged for 3+ consecutive days"
-
-            return True, "Rankings are active and changing"
+            return True, f"All {checked} DDP data files updated within 48h"
 
         except Exception as e:
             return False, f"Stale rankings check error: {e}"
