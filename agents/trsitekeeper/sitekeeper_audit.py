@@ -139,7 +139,7 @@ class AuditScheduler:
         self._last_audit = None
         self._audit_results = None
 
-        # Vault context â loaded fresh before each audit
+        # Vault context Ã¢ÂÂ loaded fresh before each audit
         self._vault_context = {}
         self._memory_context = {}
         self._tried_fixes = []
@@ -151,7 +151,7 @@ class AuditScheduler:
         tried_fixes, error_log), and skills. This gives the agent full context
         about the site, past fixes, and learned patterns before diagnosing anything.
         """
-        vault_dir = Path(REPO_PATH) / "context-vault" / "trainingrun" / "agents" / "trsitekeeper"
+        vault_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "vault"
         memory_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "memory"
 
         # Load Core 7 vault files
@@ -181,7 +181,7 @@ class AuditScheduler:
                 except (json.JSONDecodeError, Exception):
                     pass
 
-        # Load tried fixes (JSONL â last 20 entries)
+        # Load tried fixes (JSONL Ã¢ÂÂ last 20 entries)
         tried_fixes_file = memory_dir / "tried_fixes.jsonl"
         self._tried_fixes = []
         if tried_fixes_file.exists():
@@ -198,7 +198,7 @@ class AuditScheduler:
             except Exception:
                 pass
 
-        # Load error log (JSONL â last 10 entries)
+        # Load error log (JSONL Ã¢ÂÂ last 10 entries)
         error_log_file = memory_dir / "error_log.jsonl"
         self._recent_errors = []
         if error_log_file.exists():
@@ -303,7 +303,7 @@ class AuditScheduler:
                         pending = getattr(self, '_pending_fixes', [])
 
                         if not pending:
-                            logging.info(f"[Work Window] No pending fixes from Claude â stopping")
+                            logging.info(f"[Work Window] No pending fixes from Claude Ã¢ÂÂ stopping")
                             break
 
                         # Filter to high-confidence auto-fixable items
@@ -314,13 +314,13 @@ class AuditScheduler:
                         ]
 
                         if not auto_fixes:
-                            logging.info(f"[Work Window] No high-confidence auto-fixes â escalating to David")
+                            logging.info(f"[Work Window] No high-confidence auto-fixes Ã¢ÂÂ escalating to David")
                             # Report what needs manual attention
                             manual = [f for f in pending if f.get("confidence", 0) < 80 or f.get("proposed_fix_type") in ("edit_file", "investigate", "escalate")]
                             if manual:
                                 msg = "Fixes needing your approval:\n"
                                 for fix in manual[:5]:
-                                    msg += f"â¢ {fix.get('check_name', '?')}: {fix.get('diagnosis', '?')[:60]} (confidence: {fix.get('confidence', '?')}%)\n"
+                                    msg += f"Ã¢ÂÂ¢ {fix.get('check_name', '?')}: {fix.get('diagnosis', '?')[:60]} (confidence: {fix.get('confidence', '?')}%)\n"
                                 msg += "\nReply 'approve <check_name>' to execute."
                                 self.tg_send(msg)
                             break
@@ -373,7 +373,7 @@ class AuditScheduler:
         """
         start_time = datetime.datetime.now()
         print(f"\n{'='*60}")
-        print(f"  AUTONOMOUS AUDIT (23 CHECKS) â {start_time.strftime('%a %b %d, %-I:%M %p')}")
+        print(f"  AUTONOMOUS AUDIT (23 CHECKS) Ã¢ÂÂ {start_time.strftime('%a %b %d, %-I:%M %p')}")
         print(f"{'='*60}")
 
         # Step 0: Load vault context before running any checks
@@ -509,21 +509,22 @@ class AuditScheduler:
 
             with open(status_file) as f:
                 ddp_data = json.load(f)
+            ddp_data = ddp_data.get("ddp", {})
 
-            expected_ddps = ["DDP1", "DDP2", "DDP3", "DDP4", "DDP5"]
-            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=2)
+            expected_ddps = ["trscode", "truscore", "trs", "trfcast", "tragents"]
+            stale_threshold = datetime.datetime.now() - datetime.timedelta(hours=26)
 
             issues = []
             for ddp in expected_ddps:
                 if ddp not in ddp_data:
                     issues.append(f"{ddp} missing")
                 else:
-                    status = ddp_data[ddp].get("status", "unknown")
-                    if status not in ["running", "active", "ok"]:
-                        issues.append(f"{ddp} status={status}")
+                    status = ddp_data[ddp].get("success", False)
+                    if not status:
+                        issues.append(f"{ddp} not successful")
 
                     # Check staleness
-                    last_update = ddp_data[ddp].get("last_update")
+                    last_update = ddp_data[ddp].get("last_run")
                     if last_update:
                         try:
                             update_time = datetime.datetime.fromisoformat(last_update)
@@ -628,7 +629,7 @@ class AuditScheduler:
     def _check_vault_integrity(self) -> Tuple[bool, str]:
         """Check 6: Verify Core 7 vault files are present for TRSitekeeper."""
         try:
-            vault_dir = Path(REPO_PATH) / "context-vault" / "trainingrun" / "agents" / "trsitekeeper"
+            vault_dir = Path(REPO_PATH) / "agents" / "trsitekeeper" / "vault"
             if not vault_dir.exists():
                 return False, f"Vault directory not found at {vault_dir}"
 
@@ -656,7 +657,7 @@ class AuditScheduler:
     def _check_agent_activity(self) -> Tuple[bool, str]:
         """Check 7: Verify agent is not idle for >24 hours."""
         try:
-            activity_file = Path(REPO_PATH) / "web_agent" / "activity.log"
+            activity_file = Path(REPO_PATH) / "agent_activity.json"
             if not activity_file.exists():
                 return False, "Activity log not found"
 
@@ -945,7 +946,7 @@ class AuditScheduler:
             repo_path = Path(REPO_PATH)
             found_secrets = []
 
-            # Scan .json files in web_agent and repo root
+            # Scan .json files across the repo
             for json_file in repo_path.rglob("*.json"):
                 # Skip node_modules and .git
                 if "node_modules" in str(json_file) or ".git" in str(json_file):
@@ -1062,7 +1063,7 @@ class AuditScheduler:
     def _check_comparative_audit(self) -> Tuple[bool, str]:
         """Check 21: Compare today's results to yesterday's."""
         try:
-            audit_history_file = Path(REPO_PATH) / "web_agent" / "audit_history.json"
+            audit_history_file = Path(REPO_PATH) / "agents" / "trsitekeeper" / "audit_history.json"
 
             # Load or create history
             if audit_history_file.exists():
@@ -1132,7 +1133,7 @@ class AuditScheduler:
                         data = json.load(f)
                     files_checked += 1
 
-                    # Basic validation â check it has content
+                    # Basic validation Ã¢ÂÂ check it has content
                     if isinstance(data, dict) and len(data) == 0:
                         issues.append(f"{ddp_name} data is empty")
                     elif isinstance(data, list) and len(data) == 0:
@@ -1357,8 +1358,8 @@ Failed Checks:
 IMPORTANT RULES:
 - Real DDP data files are in the REPO ROOT: trscode-data.json, truscore-data.json, trf-data.json, tragent-data.json, trs-data.json
 - There are NO files called ticker.json, leaderboard.json, or ddp_status.json
-- The vault is at context-vault/trainingrun/agents/trsitekeeper/ with Core 7 markdown files
-- Do NOT propose creating stub files to satisfy checks â fix the checks instead
+- The vault is at agents/trsitekeeper/vault/ with Core 7 markdown files
+- Do NOT propose creating stub files to satisfy checks Ã¢ÂÂ fix the checks instead
 
 Respond with JSON only:
 {{"checks": [{{"check_name": "...", "diagnosis": "...", "root_cause": "...", "proposed_fix_type": "rerun_scraper|git_commit|edit_file|investigate|escalate", "proposed_action": "...", "confidence": 0-100, "files_involved": ["..."]}}]}}"""
@@ -1400,7 +1401,7 @@ Respond with JSON only:
                         # Store for approve flow
                         self._pending_fixes = parsed["checks"]
                 except (json.JSONDecodeError, Exception):
-                    logging.warning("Claude analysis was not valid JSON â stored as commentary only")
+                    logging.warning("Claude analysis was not valid JSON Ã¢ÂÂ stored as commentary only")
 
         except Exception as e:
             logging.error(f"Error getting Claude analysis: {e}")
@@ -1499,7 +1500,7 @@ if __name__ == "__main__":
     for category, checks in results["categories"].items():
         print(f"\n{category}:")
         for check_name, (passed, message) in checks.items():
-            status = "â" if passed else "â"
+            status = "Ã¢ÂÂ" if passed else "Ã¢ÂÂ"
             print(f"  {status} {check_name}: {message[:80]}")
 
     print("\n" + "=" * 70)
