@@ -1,353 +1,219 @@
 {
-  "date": "2026-03-09",
-  "generated_at": "2026-03-09T05:32:45.282942",
+  "date": "2026-03-10",
+  "generated_at": "2026-03-10T05:31:01.975626",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "RoboMME: Benchmarking and Understanding Memory for Robotic Generalist Policies",
-      "url": "https://huggingface.co/papers/2603.04639",
+      "title": "IF-RewardBench: Benchmarking Judge Models for Instruction-Following Evaluation",
+      "url": "https://huggingface.co/papers/2603.04738",
       "source": "Hugging Face Papers",
       "summary": "",
       "tr_category": "trsbench",
       "category_label": "Benchmarks",
-      "truth_score": 48,
+      "truth_score": 58,
       "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 6,
-      "matched_verticals": [],
+      "substance_score": 8,
+      "relevance_score": 12,
+      "matched_verticals": [
+        "trsbench"
+      ],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
+      "ai_verdict": "LIKELY_TRUE",
       "ai_confidence": 9,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 9,
-          "reason": "The paper's title and source suggest a specific, technical research paper on AI, which is a common and verifiable topic in the field."
+          "reason": "The headline refers to a specific paper on Hugging Face Papers, which is a credible source for AI research papers."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline describes a specific AI research paper on benchmarking robotic policies, which is plausible and verifiable given Hugging Face's reputation for hosting legitimate AI papers."
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
         }
       }
     },
     {
       "rank": 2,
-      "title": "fastfetch-cli / fastfetch",
-      "url": "https://github.com/fastfetch-cli/fastfetch",
-      "source": "GitHub Trending All",
-      "summary": "A maintained, feature-rich and performance oriented, neofetch like system information tool.",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 45,
-      "source_credibility": 35,
+      "title": "HiMAP-Travel: Hierarchical Multi-Agent Planning for Long-Horizon Constrained Travel",
+      "url": "https://huggingface.co/papers/2603.04750",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 54,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 6,
-      "matched_verticals": [],
+      "substance_score": 0,
+      "relevance_score": 16,
+      "matched_verticals": [
+        "tragents"
+      ],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 10,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 9,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The description is specific, factual, and refers to a real GitHub repository, making it a verifiable claim."
+          "confidence": 9,
+          "reason": "The headline refers to a specific paper on Hugging Face Papers, indicating a factual and verifiable claim."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 10,
-          "reason": "The headline and summary accurately describe a real, publicly available GitHub repository for a system information tool, which is verifiable through the platform and aligns with known software projects like Neofetch."
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
         }
       }
     },
     {
       "rank": 3,
-      "title": "ahrm / sioyek",
-      "url": "https://github.com/ahrm/sioyek",
-      "source": "GitHub Trending All",
-      "summary": "Sioyek is a PDF viewer with a focus on textbooks and research papers",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 43,
-      "source_credibility": 35,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 8,
-      "relevance_score": 0,
-      "matched_verticals": [],
+      "title": "Anthropic Sues Department of Defense Over Supply-Chain-Risk Designation",
+      "url": "https://www.wired.com/story/anthropic-sues-department-of-defense-over-supply-chain-risk-designation/",
+      "source": "Wired",
+      "summary": "The Claude chatbot developer says the Trump administration overstepped by escalating a contract dispute into a federal ban on the company\u2019s technology.",
+      "tr_category": "open_vs_closed",
+      "category_label": "Open vs Closed",
+      "truth_score": 51,
+      "source_credibility": 26,
+      "cross_confirmation": 15,
+      "cross_sources": [
+        "TechCrunch"
+      ],
+      "substance_score": 0,
+      "relevance_score": 10,
+      "matched_verticals": [
+        "open_vs_closed"
+      ],
       "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 10,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The claim is specific and refers to a GitHub repository, which is a verifiable source of information."
+          "reason": "The article cites a specific source (Wired) and mentions a real company (Anthropic) and a real government agency (Department of Defense), indicating a factual and plausible claim."
         },
         "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 10,
-          "reason": "The summary accurately describes Sioyek as a legitimate open-source PDF viewer focused on textbooks and research papers, which is verifiable from its GitHub repository."
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
         }
       }
     },
     {
       "rank": 4,
-      "title": "Physical Simulator In-the-Loop Video Generation",
-      "url": "https://huggingface.co/papers/2603.06408",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 43,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 5,
-      "matched_verticals": [],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 5,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline refers to a specific paper on Hugging Face Papers, which is a credible source for AI research papers."
-        },
-        "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 5,
-          "reason": "The headline is vague and lacks a summary or specific details, making it unverifiable whether it accurately represents a factual paper from Hugging Face."
-        }
-      }
-    },
-    {
-      "rank": 5,
-      "title": "Reasoning Models Struggle to Control their Chains of Thought",
-      "url": "https://huggingface.co/papers/2603.05706",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 43,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 5,
-      "matched_verticals": [],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 7,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Hugging Face Papers is a reputable source and 'struggle to control their chains of thought' is a plausible issue in large language models"
-        },
-        "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 7,
-          "reason": "The headline is vague about what specific models or evidence is being referred to, and the absence of a summary makes it unverifiable despite the reputable source."
-        }
-      }
-    },
-    {
-      "rank": 6,
-      "title": "\u03c0-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs",
-      "url": "https://huggingface.co/papers/2603.02083",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 43,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 5,
-      "matched_verticals": [],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 6,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The headline appears to be a specific and technical title of a research paper, likely describing a novel approach to online reinforcement learning."
-        },
-        "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 6,
-          "reason": "The headline uses technical jargon that suggests a legitimate AI research paper from Hugging Face, but without a summary or verifiable details, the specific claims about online RL and flow-based VLAs cannot be confirmed."
-        }
-      }
-    },
-    {
-      "rank": 7,
-      "title": "I'm benchmarking 10 LLMs (including DeepSeek, Llama, Qwen) on real-time options trading \u2014 local models are surprisingly competitive",
-      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rnvps2/im_benchmarking_10_llms_including_deepseek_llama/",
-      "source": "r/LocalLLaMA",
-      "summary": "I wanted to see how local/open models stack up against closed APIs on a task with real consequences \u2014 live market trading decisions. I set up a system that feeds identical real-time market data (price, volume, RSI, momentum) to 10 different LLMs and lets each one independently decide when to buy/sell 0-1DTE options on SPY, QQQ, TSLA, etc. All paper trades, real-time pricing, every trade logged. Anyone else running local models for trading or other real-time decision tasks? added from below re",
+      "title": "OpenAI and Google employees rush to Anthropic\u2019s defense in DOD lawsuit",
+      "url": "https://techcrunch.com/2026/03/09/openai-and-google-employees-rush-to-anthropics-defense-in-dod-lawsuit/",
+      "source": "TechCrunch",
+      "summary": "More than 30 OpenAI and Google DeepMind employees signed onto a statement supporting Anthropic's lawsuit against the Defense Department after the agency labeled the AI firm a supply-chain risk, according to court filings.",
       "tr_category": "open_vs_closed",
       "category_label": "Open vs Closed",
-      "truth_score": 42,
-      "source_credibility": 15,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 12,
+      "truth_score": 51,
+      "source_credibility": 28,
+      "cross_confirmation": 8,
+      "cross_sources": [
+        "The Verge"
+      ],
+      "substance_score": 0,
       "relevance_score": 15,
       "matched_verticals": [
         "open_vs_closed"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 5,
+      "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "Specific details about the experiment, including the models used, data fed, and task, make the claim plausible and verifiable."
+          "reason": "Specific details about court filings and employee signatures provide a clear and verifiable claim."
         },
         "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 5,
-          "reason": "The claim describes a personal experiment on Reddit without providing verifiable details, results, or methodology, making it vague and unverifiable in the current AI landscape."
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
         }
       }
     },
     {
-      "rank": 8,
-      "title": "Lightricks / ComfyUI-LTXVideo",
-      "url": "https://github.com/Lightricks/ComfyUI-LTXVideo",
-      "source": "GitHub Trending Python",
-      "summary": "LTX-Video Support for ComfyUI",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 40,
-      "source_credibility": 35,
+      "rank": 5,
+      "title": "Mercury: Ultra-Fast Language Models Based on Diffusion",
+      "url": "https://arxiv.org/abs/2506.17298",
+      "source": "Lobste.rs",
+      "summary": "Machine learning researchers have been locked in the autoregressive bottleneck for years. A recent paper argues that instead, diffusion models can perform at scale on discrete data. The researchers trained two coding models named Mercury Coder Mini and Small. The Mini model reached a staggering 1109 tokens per second on H100 GPUs, with the Small model achieving 737. These models eclipsed competing efficient state-of-the-art models in throughput by factors of up to ten, while retaining their abil",
+      "tr_category": "gigaburn",
+      "category_label": "Compute & Power",
+      "truth_score": 50,
+      "source_credibility": 25,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 5,
-      "matched_verticals": [],
+      "substance_score": 12,
+      "relevance_score": 13,
+      "matched_verticals": [
+        "gigaburn"
+      ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 7,
+      "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "GitHub Trending Python is a credible source for open-source projects, and the mention of specific libraries (Lightricks / ComfyUI-LTXVideo) suggests a factual update."
+          "reason": "Specific results from a paper on Lobste.rs, a reputable platform for sharing research papers"
         },
         "grok": {
-          "verdict": "SUSPICIOUS",
-          "confidence": 7,
-          "reason": "The headline and summary mention a specific GitHub project, but they lack detailed evidence or context to verify the claim's accuracy beyond its plausibility in the AI software landscape."
-        }
-      }
-    },
-    {
-      "rank": 9,
-      "title": "yt-dlp / yt-dlp",
-      "url": "https://github.com/yt-dlp/yt-dlp",
-      "source": "GitHub Trending All",
-      "summary": "A feature-rich command-line audio/video downloader",
-      "tr_category": "general",
-      "category_label": "AI News",
-      "truth_score": 40,
-      "source_credibility": 35,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 5,
-      "matched_verticals": [],
-      "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 10,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The headline and summary accurately describe a specific GitHub repository and its features, with no exaggerated or unsubstantiated claims."
-        },
-        "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 10,
-          "reason": "The headline and summary accurately describe yt-dlp as a real, feature-rich open-source command-line tool for downloading audio and video, which is verifiable through its presence on GitHub."
-        }
-      }
-    },
-    {
-      "rank": 10,
-      "title": "Farama-Foundation / Gymnasium",
-      "url": "https://github.com/Farama-Foundation/Gymnasium",
-      "source": "GitHub Trending All",
-      "summary": "An API standard for single-agent reinforcement learning environments, with popular reference environments and related utilities (formerly Gym)",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 40,
-      "source_credibility": 35,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 5,
-      "matched_verticals": [],
-      "hype_flags": 0,
-      "ai_verdict": "AI_VERIFIED",
-      "ai_confidence": 10,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The description of a specific API standard and its relation to a well-known library (Gym) is consistent with GitHub's documentation and open-source projects."
-        },
-        "grok": {
-          "verdict": "VERIFIED",
-          "confidence": 10,
-          "reason": "The headline and summary accurately describe the Gymnasium project, which is a well-established open-source API standard for reinforcement learning environments, formerly known as Gym and maintained by Farama Foundation, as it is publicly available on GitHub."
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
         }
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing: AI News and Developments**\n\nA curated selection of AI-related news and developments, scored on source credibility, cross-confirmation, substance, and relevance.\n\n**1. RoboMME: Benchmarking and Understanding Memory for Robotic Generalist Policies**\nA new benchmark, RoboMME, has been introduced to evaluate the memory capabilities of robotic generalist policies. The benchmark assesses the ability of models to learn and retain information in complex robotic tasks. This development is relevant to those tracking AI benchmarks and agent capabilities.\n\n**2. fastfetch-cli / fastfetch: A System Information Tool**\nA new system information tool, fastfetch, has been released on GitHub. The tool provides detailed information about system resources, similar to neofetch. This development is notable for its potential to aid in AI system administration and monitoring.\n\n**3. ahrm / sioyek: A PDF Viewer for Textbooks and Research Papers**\nA new PDF viewer, sioyek, has been released on GitHub. The viewer is designed to provide a better reading experience for textbooks and research papers. This development is relevant to those interested in AI-assisted reading and research tools.\n\n**4. Physical Simulator In-the-Loop Video Generation**\nA new paper has been published on Hugging Face, exploring the use of physical simulators in video generation. The research aims to improve the realism of generated videos by incorporating physical constraints. This development is relevant to those tracking AI advancements in video generation and simulation.\n\n**5. Reasoning Models Struggle to Control their Chains of Thought**\nA new paper has been published on Hugging Face, highlighting the limitations of reasoning models in controlling their chains of thought. The research suggests that current models struggle to reason effectively and efficiently. This development is relevant to those tracking AI advancements in reasoning and decision-making.\n\n**6. \u03c0-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs**\nA new paper has been published on Hugging Face, exploring the use of \u03c0-StepNFT in online reinforcement learning for flow-based variational autoencoders. The research aims to improve the performance of online RL in complex environments. This development is relevant to those tracking AI advancements in reinforcement learning and generative models.\n\n**7. Local LLMs vs. Closed APIs in Real-Time Options Trading**\nA Reddit user has benchmarked 10 LLMs, including DeepSeek and Llama, on real-time options trading. The results show that local models are surprisingly competitive with closed APIs. This development is relevant to those tracking the global AI race and the performance of local vs. cloud-based AI models.\n\n**8. Lightricks / ComfyUI-LTXVideo: LTX-Video Support for ComfyUI**\nLightricks has released a new version of ComfyUI-LTXVideo, which supports LTX-Video. The update provides improved video support for the ComfyUI interface. This development is relevant to those interested in AI-assisted video editing and content creation.\n\n**9. yt-dlp / yt-dlp: A Feature-Rich Command-Line Audio/Video Downloader**\nA new version of yt-dlp has been released on GitHub, providing a feature-rich command-line audio/video downloader. The tool supports a wide range of video platforms and formats. This development is relevant to those interested in AI-assisted media processing and content management.\n\n**10. Farama-Foundation / Gymnasium: An API Standard for Single-Agent Reinforcement Learning Environments**\nThe Farama-Foundation has released Gymnasium, an API standard for single-agent reinforcement learning environments. The standard provides a unified interface for popular reference environments and related utilities. This development is relevant to those tracking AI advancements in reinforcement learning and agent capabilities.\n\nNote: Cross-confirmation is not available for all items, as some are based on single-source information.",
+  "narrative_brief": "**Morning Briefing: AI Developments and News**\n\n**1. Benchmarks: IF-RewardBench Released**\n\nA new benchmark, IF-RewardBench, has been introduced for evaluating instruction-following abilities in AI models. The benchmark assesses a model's capacity to understand and execute instructions. The paper, published on Hugging Face Papers, provides a comprehensive evaluation framework for instruction-following models. (Source: Hugging Face Papers, 58/100 truth score)\n\n**Why it matters:** This benchmark will help researchers and developers evaluate the instruction-following capabilities of AI models, which is crucial for applications like chatbots and virtual assistants.\n\n**2. Agents: Hierarchical Multi-Agent Planning for Travel**\n\nResearchers have proposed a new hierarchical multi-agent planning approach, HiMAP-Travel, for constrained travel planning. The method enables agents to plan and execute complex travel itineraries. The paper, published on Hugging Face Papers, demonstrates the effectiveness of HiMAP-Travel in real-world scenarios. (Source: Hugging Face Papers, 54/100 truth score)\n\n**Why it matters:** This research contributes to the development of more efficient and effective multi-agent planning systems, which can be applied to various domains, including logistics and transportation.\n\n**3. Open vs Closed: Anthropic Sues Department of Defense**\n\nAnthropic, the developer of the Claude chatbot, has filed a lawsuit against the Department of Defense (DOD) over a supply-chain-risk designation. The company claims the DOD overstepped by escalating a contract dispute into a federal ban on Anthropic's technology. (Source: Wired, 51/100 truth score, CROSS-CONFIRMED)\n\n**Why it matters:** This lawsuit highlights the growing tensions between AI companies and government agencies regarding supply-chain risks and technology restrictions. The outcome will impact the development and deployment of AI technologies.\n\n**4. Open vs Closed: OpenAI and Google Employees Support Anthropic**\n\nMore than 30 OpenAI and Google DeepMind employees have signed a statement supporting Anthropic's lawsuit against the DOD. The employees argue that the DOD's actions are an overreach and will harm the development of AI technologies. (Source: TechCrunch, 51/100 truth score, CROSS-CONFIRMED)\n\n**Why it matters:** This development underscores the growing concern among AI researchers and developers about government regulations and restrictions on AI technologies. The support from OpenAI and Google employees adds weight to Anthropic's lawsuit.\n\n**5. Compute & Power: Mercury Language Models**\n\nResearchers have proposed a new approach to language modeling using diffusion models, which can perform at scale on discrete data. The Mercury Coder Mini model achieved a remarkable 1109 speedup over traditional autoregressive models. The paper, published on arXiv, presents a promising alternative to traditional language modeling methods. (Source: Lobste.rs, 50/100 truth score)\n\n**Why it matters:** This research offers a potential solution to the autoregressive bottleneck in language modeling, which could lead to significant improvements in AI performance and efficiency.",
   "stats": {
-    "total_scraped": 153,
-    "passed_filter": 0,
-    "rejected": 153,
-    "avg_truth_score": 25.5,
+    "total_scraped": 284,
+    "passed_filter": 5,
+    "rejected": 279,
+    "avg_truth_score": 29.0,
     "categories": {
-      "general": 72,
-      "tragents": 12,
-      "open_vs_closed": 29,
-      "trscode": 18,
-      "gigaburn": 8,
-      "churn": 3,
-      "truscore": 1,
-      "trsbench": 4,
-      "gari": 4,
-      "trfcast": 2
+      "trscode": 22,
+      "general": 175,
+      "trsbench": 10,
+      "tragents": 30,
+      "open_vs_closed": 19,
+      "gigaburn": 13,
+      "trfcast": 10,
+      "gari": 5
     },
     "sources": {
-      "GitHub Trending Python": 3,
-      "GitHub Trending All": 12,
-      "r/LocalLLaMA": 63,
-      "r/artificial": 11,
-      "r/singularity": 25,
-      "Hacker News": 17,
-      "TechCrunch": 3,
-      "r/MachineLearning": 8,
-      "Lobste.rs": 3,
-      "Hugging Face Papers": 8
+      "Hugging Face Papers": 40,
+      "GitHub Trending Python": 8,
+      "GitHub Trending All": 21,
+      "r/MachineLearning": 14,
+      "r/LocalLLaMA": 34,
+      "r/artificial": 21,
+      "r/singularity": 29,
+      "Hacker News": 15,
+      "Lobste.rs": 25,
+      "YouTube: AI Explained": 4,
+      "YouTube: Two Minute Papers": 4,
+      "YouTube: Yannic Kilcher": 4,
+      "YouTube: Matthew Berman": 3,
+      "YouTube: Fireship": 5,
+      "Import AI (Jack Clark)": 5,
+      "TechCrunch": 12,
+      "VentureBeat": 7,
+      "Ars Technica": 7,
+      "The Verge": 9,
+      "MIT Tech Review": 7,
+      "Wired": 10
     },
-    "sources_active": 10
+    "sources_active": 21
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
