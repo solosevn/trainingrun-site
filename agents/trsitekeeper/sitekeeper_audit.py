@@ -457,6 +457,23 @@ class AuditScheduler:
         # Get intelligent analysis from Claude if available
         self._get_claude_analysis(results)
 
+        # send remediation proposals to telegram
+        pending = getattr(self, '_pending_fixes', [])
+        if pending:
+            msg = f"\n remediation proposals ({len(pending)}):\n"
+            for fix in pending:
+                name = fix.get('check_name', '?')
+                diag = fix.get('diagnosis', '?')[:80]
+                conf = fix.get('confidence', '?')
+                fix_type = fix.get('proposed_fix_type', '?')
+                msg += f"- {name}: {diag} (confidence: {conf}%, type: {fix_type})\n"
+            escalations = [f for f in pending if f.get('proposed_fix_type') in ('escalate', 'investigate') or f.get('confidence', 0) < 50]
+            if escalations:
+                msg += f"\n escalations ({len(escalations)}):\n"
+                for esc in escalations:
+                    msg += f"- {esc.get('check_name', '?')}: {esc.get('diagnosis', '?')[:60]}\n"
+            self.tg_send(msg)
+
         self.write_activity("Audit complete", location="office", status="idle")
         print(f"[Audit] Complete. Passed: {results['summary']['passed']}/{results['summary']['total_checks']}, "
               f"Duration: {results['duration_seconds']:.0f}s")
