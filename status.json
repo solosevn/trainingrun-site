@@ -1,28 +1,28 @@
 {
   "ddp": {
     "trscode": {
-      "last_run": "2026-03-10T04:03:02.842044",
+      "last_run": "2026-03-11T04:03:08.107924",
       "success": true,
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-10T04:03:53.046285",
+      "last_run": "2026-03-11T04:03:59.325133",
       "success": true,
       "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-10T04:08:53.061442",
+      "last_run": "2026-03-11T04:08:59.339339",
       "success": false,
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-10T04:12:39.931964",
+      "last_run": "2026-03-11T04:12:38.310154",
       "success": true,
       "dry_run": false
     },
     "tragents": {
-      "last_run": "2026-03-10T04:16:54.906589",
-      "success": true,
+      "last_run": "2026-03-11T04:17:38.329055",
+      "success": false,
       "dry_run": false
     }
   },
@@ -32,10 +32,10 @@
       "label": "Truth & Reliability",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-03-10T04:12:36",
-      "last_run_date": "2026-03-10",
+      "last_run": "2026-03-11T04:12:35",
+      "last_run_date": "2026-03-11",
       "status": "success",
-      "duration_seconds": 222,
+      "duration_seconds": 215,
       "sources_total": 9,
       "sources_hit": 8,
       "models_qualified": 18,
@@ -122,10 +122,10 @@
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-10T04:02:59",
-      "last_run_date": "2026-03-10",
+      "last_run": "2026-03-11T04:03:02",
+      "last_run_date": "2026-03-11",
       "status": "success",
-      "duration_seconds": 178,
+      "duration_seconds": 180,
       "sources_total": 8,
       "sources_hit": 6,
       "models_qualified": 38,
@@ -159,7 +159,7 @@
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-03-11T05:00:00",
+      "next_run": "2026-03-12T05:00:00",
       "error": null
     },
     "trfcast": {
@@ -167,20 +167,20 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-03-10T04:03:50",
-      "last_run_date": "2026-03-10",
+      "last_run": "2026-03-11T04:03:56",
+      "last_run_date": "2026-03-11",
       "status": "success",
-      "duration_seconds": 46,
+      "duration_seconds": 47,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 11,
       "top_model": "Claude Sonnet 4.5",
-      "top_score": 62.81,
+      "top_score": 62.4,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Sonnet 4.5",
-          "score": 62.81
+          "score": 62.4
         },
         {
           "rank": 2,
@@ -190,12 +190,12 @@
         {
           "rank": 3,
           "name": "GPT-5.1",
-          "score": 59.55
+          "score": 59.57
         },
         {
           "rank": 4,
           "name": "DeepSeek V3.1",
-          "score": 59.05
+          "score": 59.3
         },
         {
           "rank": 5,
@@ -204,9 +204,9 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-03-11T05:00:00",
+      "next_run": "2026-03-12T05:00:00",
       "error": null
     }
   },
-  "last_updated": "2026-03-10T04:16:51"
+  "last_updated": "2026-03-11T04:03:56"
 }
