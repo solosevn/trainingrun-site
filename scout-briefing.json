@@ -1,34 +1,38 @@
 {
-  "date": "2026-03-10",
-  "generated_at": "2026-03-10T05:31:01.975626",
+  "date": "2026-03-11",
+  "generated_at": "2026-03-11T05:30:58.060839",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "IF-RewardBench: Benchmarking Judge Models for Instruction-Following Evaluation",
-      "url": "https://huggingface.co/papers/2603.04738",
-      "source": "Hugging Face Papers",
-      "summary": "",
+      "title": "How I topped the Open LLM Leaderboard using 2x 4090 GPUs \u2014 no weights modified.",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rpxpsa/how_i_topped_the_open_llm_leaderboard_using_2x/",
+      "source": "r/LocalLLaMA",
+      "summary": "Hi LocalLLaMAs, A few years ago, I found that duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, improved performance across all Open LLM Leaderboard benchmarks and took #1. As of 2026, the top 4 models on that leaderboard are still descendants. The weird finding: single-layer duplication does nothing. Too few layers, nothing. Too many, it gets worse. Only circuit-sized blocks of \\~7 layers work. This suggests pretraining carves out discrete function",
       "tr_category": "trsbench",
       "category_label": "Benchmarks",
-      "truth_score": 58,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 8,
-      "relevance_score": 12,
+      "truth_score": 60,
+      "source_credibility": 15,
+      "cross_confirmation": 15,
+      "cross_sources": [
+        "r/MachineLearning",
+        "Hacker News"
+      ],
+      "substance_score": 12,
+      "relevance_score": 18,
       "matched_verticals": [
-        "trsbench"
+        "trsbench",
+        "open_vs_closed"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 9,
+      "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The headline refers to a specific paper on Hugging Face Papers, which is a credible source for AI research papers."
+          "confidence": 8,
+          "reason": "Specific, technical details about a specific model and experiment, with a clear explanation of results and implications."
         },
         "grok": {
           "verdict": "UNKNOWN",
@@ -39,8 +43,76 @@
     },
     {
       "rank": 2,
-      "title": "HiMAP-Travel: Hierarchical Multi-Agent Planning for Long-Horizon Constrained Travel",
-      "url": "https://huggingface.co/papers/2603.04750",
+      "title": "Agentic Planning with Reasoning for Image Styling via Offline RL",
+      "url": "https://huggingface.co/papers/2603.07148",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 58,
+      "source_credibility": 38,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 0,
+      "relevance_score": 20,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "Paper title suggests a specific, technical contribution to AI research, consistent with academic publishing conventions."
+        },
+        "grok": {
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "title": "How I topped the Open LLM Leaderboard using 2x 4090 GPUs - Research notes in Blog form",
+      "url": "https://www.reddit.com/r/MachineLearning/comments/1rq6g08/how_i_topped_the_open_llm_leaderboard_using_2x/",
+      "source": "r/MachineLearning",
+      "summary": "A few years ago, I found that duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, improved performance across all Open LLM Leaderboard benchmarks and took #1 place. As of 2026, the top 4 models on that leaderboard are still descendants. The weird finding: single-layer duplication does nothing. Too few layers, nothing. Too many, it gets worse. Only circuit-sized blocks of \\~7 layers work. This suggests pre-training carves out discrete functional circuits",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 57,
+      "source_credibility": 15,
+      "cross_confirmation": 8,
+      "cross_sources": [
+        "r/LocalLLaMA"
+      ],
+      "substance_score": 16,
+      "relevance_score": 18,
+      "matched_verticals": [
+        "trsbench"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "Specific, technical details about a research finding on the Open LLM Leaderboard, with a clear explanation of the methodology and results."
+        },
+        "grok": {
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "title": "NaviDriveVLM: Decoupling High-Level Reasoning and Motion Planning for Autonomous Driving",
+      "url": "https://huggingface.co/papers/2603.07901",
       "source": "Hugging Face Papers",
       "summary": "",
       "tr_category": "tragents",
@@ -56,82 +128,12 @@
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 9,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 9,
-          "reason": "The headline refers to a specific paper on Hugging Face Papers, indicating a factual and verifiable claim."
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 3,
-      "title": "Anthropic Sues Department of Defense Over Supply-Chain-Risk Designation",
-      "url": "https://www.wired.com/story/anthropic-sues-department-of-defense-over-supply-chain-risk-designation/",
-      "source": "Wired",
-      "summary": "The Claude chatbot developer says the Trump administration overstepped by escalating a contract dispute into a federal ban on the company\u2019s technology.",
-      "tr_category": "open_vs_closed",
-      "category_label": "Open vs Closed",
-      "truth_score": 51,
-      "source_credibility": 26,
-      "cross_confirmation": 15,
-      "cross_sources": [
-        "TechCrunch"
-      ],
-      "substance_score": 0,
-      "relevance_score": 10,
-      "matched_verticals": [
-        "open_vs_closed"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
       "ai_confidence": 8,
       "ai_checks": {
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "The article cites a specific source (Wired) and mentions a real company (Anthropic) and a real government agency (Department of Defense), indicating a factual and plausible claim."
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 4,
-      "title": "OpenAI and Google employees rush to Anthropic\u2019s defense in DOD lawsuit",
-      "url": "https://techcrunch.com/2026/03/09/openai-and-google-employees-rush-to-anthropics-defense-in-dod-lawsuit/",
-      "source": "TechCrunch",
-      "summary": "More than 30 OpenAI and Google DeepMind employees signed onto a statement supporting Anthropic's lawsuit against the Defense Department after the agency labeled the AI firm a supply-chain risk, according to court filings.",
-      "tr_category": "open_vs_closed",
-      "category_label": "Open vs Closed",
-      "truth_score": 51,
-      "source_credibility": 28,
-      "cross_confirmation": 8,
-      "cross_sources": [
-        "The Verge"
-      ],
-      "substance_score": 0,
-      "relevance_score": 15,
-      "matched_verticals": [
-        "open_vs_closed"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Specific details about court filings and employee signatures provide a clear and verifiable claim."
+          "reason": "Paper title and source suggest a specific, technical contribution to autonomous driving research"
         },
         "grok": {
           "verdict": "UNKNOWN",
@@ -142,20 +144,54 @@
     },
     {
       "rank": 5,
-      "title": "Mercury: Ultra-Fast Language Models Based on Diffusion",
-      "url": "https://arxiv.org/abs/2506.17298",
-      "source": "Lobste.rs",
-      "summary": "Machine learning researchers have been locked in the autoregressive bottleneck for years. A recent paper argues that instead, diffusion models can perform at scale on discrete data. The researchers trained two coding models named Mercury Coder Mini and Small. The Mini model reached a staggering 1109 tokens per second on H100 GPUs, with the Small model achieving 737. These models eclipsed competing efficient state-of-the-art models in throughput by factors of up to ten, while retaining their abil",
-      "tr_category": "gigaburn",
-      "category_label": "Compute & Power",
-      "truth_score": 50,
-      "source_credibility": 25,
+      "title": "AutoResearch-RL: Perpetual Self-Evaluating Reinforcement Learning Agents for Autonomous Neural Architecture Discovery",
+      "url": "https://huggingface.co/papers/2603.07300",
+      "source": "Hugging Face Papers",
+      "summary": "",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 52,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 12,
-      "relevance_score": 13,
+      "substance_score": 4,
+      "relevance_score": 10,
       "matched_verticals": [
-        "gigaburn"
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 9,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 9,
+          "reason": "The headline refers to a specific research paper on Hugging Face Papers, indicating a factual and verifiable claim."
+        },
+        "grok": {
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "title": "Auto LLM ranking tool that uses a Judge LLM for any given task",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rptdy5/auto_llm_ranking_tool_that_uses_a_judge_llm_for/",
+      "source": "r/LocalLLaMA",
+      "summary": "Most people pick LLMs like this: try a few, go with the one that \"felt better.\" That's not evaluation, that's a guess. To fix this, I built a small LLM auto-evaluation tool that replaces gut feel with task-specific benchmarking. This tool accepts a task in natural language and then uses a Judge LLM to generate task-specific test cases, runs parallel inference across candidate models, and scores outputs on accuracy, hallucination, grounding, tool-calling, and clarity. The tool outputs a ranke",
+      "tr_category": "trsbench",
+      "category_label": "Benchmarks",
+      "truth_score": 51,
+      "source_credibility": 15,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 16,
+      "relevance_score": 20,
+      "matched_verticals": [
+        "trsbench",
+        "truscore"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
@@ -164,7 +200,7 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 8,
-          "reason": "Specific results from a paper on Lobste.rs, a reputable platform for sharing research papers"
+          "reason": "The description of the tool's functionality and features is specific and plausible, and the source is a community-driven platform."
         },
         "grok": {
           "verdict": "UNKNOWN",
@@ -174,46 +210,43 @@
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing: AI Developments and News**\n\n**1. Benchmarks: IF-RewardBench Released**\n\nA new benchmark, IF-RewardBench, has been introduced for evaluating instruction-following abilities in AI models. The benchmark assesses a model's capacity to understand and execute instructions. The paper, published on Hugging Face Papers, provides a comprehensive evaluation framework for instruction-following models. (Source: Hugging Face Papers, 58/100 truth score)\n\n**Why it matters:** This benchmark will help researchers and developers evaluate the instruction-following capabilities of AI models, which is crucial for applications like chatbots and virtual assistants.\n\n**2. Agents: Hierarchical Multi-Agent Planning for Travel**\n\nResearchers have proposed a new hierarchical multi-agent planning approach, HiMAP-Travel, for constrained travel planning. The method enables agents to plan and execute complex travel itineraries. The paper, published on Hugging Face Papers, demonstrates the effectiveness of HiMAP-Travel in real-world scenarios. (Source: Hugging Face Papers, 54/100 truth score)\n\n**Why it matters:** This research contributes to the development of more efficient and effective multi-agent planning systems, which can be applied to various domains, including logistics and transportation.\n\n**3. Open vs Closed: Anthropic Sues Department of Defense**\n\nAnthropic, the developer of the Claude chatbot, has filed a lawsuit against the Department of Defense (DOD) over a supply-chain-risk designation. The company claims the DOD overstepped by escalating a contract dispute into a federal ban on Anthropic's technology. (Source: Wired, 51/100 truth score, CROSS-CONFIRMED)\n\n**Why it matters:** This lawsuit highlights the growing tensions between AI companies and government agencies regarding supply-chain risks and technology restrictions. The outcome will impact the development and deployment of AI technologies.\n\n**4. Open vs Closed: OpenAI and Google Employees Support Anthropic**\n\nMore than 30 OpenAI and Google DeepMind employees have signed a statement supporting Anthropic's lawsuit against the DOD. The employees argue that the DOD's actions are an overreach and will harm the development of AI technologies. (Source: TechCrunch, 51/100 truth score, CROSS-CONFIRMED)\n\n**Why it matters:** This development underscores the growing concern among AI researchers and developers about government regulations and restrictions on AI technologies. The support from OpenAI and Google employees adds weight to Anthropic's lawsuit.\n\n**5. Compute & Power: Mercury Language Models**\n\nResearchers have proposed a new approach to language modeling using diffusion models, which can perform at scale on discrete data. The Mercury Coder Mini model achieved a remarkable 1109 speedup over traditional autoregressive models. The paper, published on arXiv, presents a promising alternative to traditional language modeling methods. (Source: Lobste.rs, 50/100 truth score)\n\n**Why it matters:** This research offers a potential solution to the autoregressive bottleneck in language modeling, which could lead to significant improvements in AI performance and efficiency.",
+  "narrative_brief": "**Morning Briefing**\n\n**1. Open LLM Leaderboard Topped with 2x 4090 GPUs**\n\nA researcher claims to have topped the Open LLM Leaderboard by duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, using 2x 4090 GPUs. This improvement took #1 place on the leaderboard, and the top 4 models are still descendants of this approach. (Source: r/LocalLLaMA)\n\n**Why it matters:** This development could indicate a new strategy for improving LLM performance, potentially influencing future research and benchmarking efforts. However, the claim lacks cross-confirmation and detailed methodology. (Truth score: 60/100)\n\n**2. Agentic Planning with Reasoning for Image Styling via Offline RL**\n\nResearchers published a paper on Hugging Face Papers, exploring agentic planning with reasoning for image styling via offline reinforcement learning. The paper proposes a novel approach to image styling, but lacks concrete results and evaluation metrics. (Source: Hugging Face Papers)\n\n**Why it matters:** This research contributes to the development of more sophisticated image processing and generation techniques, which could have applications in various industries, including art and design. However, the paper's impact is uncertain without more concrete results. (Truth score: 58/100)\n\n**3. Duplicate of Story 1 (Cross-Confirmed)**\n\nA researcher claims to have topped the Open LLM Leaderboard by duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, using 2x 4090 GPUs. This improvement took #1 place on the leaderboard, and the top 4 models are still descendants of this approach. (Source: r/MachineLearning)\n\n**Why it matters:** This development could indicate a new strategy for improving LLM performance, potentially influencing future research and benchmarking efforts. The claim is cross-confirmed with Story 1, but lacks detailed methodology. (Truth score: 57/100)\n\n**4. NaviDriveVLM: Decoupling High-Level Reasoning and Motion Planning for Autonomous Driving**\n\nResearchers published a paper on Hugging Face Papers, proposing a novel approach to decoupling high-level reasoning and motion planning for autonomous driving. The paper presents a new architecture, but lacks concrete results and evaluation metrics. (Source: Hugging Face Papers)\n\n**Why it matters:** This research contributes to the development of more sophisticated autonomous driving systems, which could have significant implications for the automotive industry and transportation infrastructure. However, the paper's impact is uncertain without more concrete results. (Truth score: 54/100)\n\n**5. AutoResearch-RL: Perpetual Self-Evaluating Reinforcement Learning Agents for Autonomous Neural Architecture Discovery**\n\nResearchers published a paper on Hugging Face Papers, proposing a novel approach to perpetual self-evaluating reinforcement learning agents for autonomous neural architecture discovery. The paper presents a new framework, but lacks concrete results and evaluation metrics. (Source: Hugging Face Papers)\n\n**Why it matters:** This research contributes to the development of more sophisticated reinforcement learning techniques, which could have significant implications for various industries, including robotics and autonomous systems. However, the paper's impact is uncertain without more concrete results. (Truth score: 52/100)\n\n**6. Auto LLM Ranking Tool**\n\nA researcher built a small LLM auto-evaluation tool that uses a Judge LLM for task-specific benchmarking. The tool accepts a task in natural language and uses a Judge LLM to evaluate the performance of various LLMs. (Source: r/LocalLLaMA)\n\n**Why it matters:** This development could improve the evaluation and comparison of LLMs, potentially leading to more accurate benchmarking and better decision-making in AI research and development. However, the tool's effectiveness and limitations are unclear without more information. (Truth score: 51/100)",
   "stats": {
-    "total_scraped": 284,
-    "passed_filter": 5,
-    "rejected": 279,
-    "avg_truth_score": 29.0,
+    "total_scraped": 263,
+    "passed_filter": 6,
+    "rejected": 257,
+    "avg_truth_score": 29.7,
     "categories": {
-      "trscode": 22,
-      "general": 175,
-      "trsbench": 10,
-      "tragents": 30,
-      "open_vs_closed": 19,
-      "gigaburn": 13,
-      "trfcast": 10,
-      "gari": 5
+      "general": 151,
+      "trscode": 10,
+      "tragents": 35,
+      "trsbench": 13,
+      "trfcast": 3,
+      "gari": 2,
+      "gigaburn": 26,
+      "open_vs_closed": 16,
+      "truscore": 4,
+      "churn": 3
     },
     "sources": {
-      "Hugging Face Papers": 40,
-      "GitHub Trending Python": 8,
-      "GitHub Trending All": 21,
-      "r/MachineLearning": 14,
-      "r/LocalLLaMA": 34,
-      "r/artificial": 21,
-      "r/singularity": 29,
-      "Hacker News": 15,
-      "Lobste.rs": 25,
-      "YouTube: AI Explained": 4,
-      "YouTube: Two Minute Papers": 4,
-      "YouTube: Yannic Kilcher": 4,
-      "YouTube: Matthew Berman": 3,
-      "YouTube: Fireship": 5,
-      "Import AI (Jack Clark)": 5,
-      "TechCrunch": 12,
-      "VentureBeat": 7,
-      "Ars Technica": 7,
-      "The Verge": 9,
-      "MIT Tech Review": 7,
-      "Wired": 10
+      "Hugging Face Papers": 52,
+      "GitHub Trending Python": 7,
+      "GitHub Trending All": 19,
+      "r/MachineLearning": 10,
+      "r/LocalLLaMA": 45,
+      "r/artificial": 24,
+      "r/singularity": 28,
+      "Hacker News": 30,
+      "Lobste.rs": 4,
+      "YouTube: Two Minute Papers": 1,
+      "YouTube: Matthew Berman": 5,
+      "TechCrunch": 16,
+      "The Verge": 12,
+      "Wired": 4,
+      "MIT Tech Review": 5,
+      "YouTube: AI Explained": 1
     },
-    "sources_active": 21
+    "sources_active": 16
   },
   "filter_methodology": {
     "source_credibility_weight": "0-40 pts (Tier 1 Wire = 40, Tier 3 Community = 10-20)",
