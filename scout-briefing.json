@@ -1,163 +1,25 @@
 {
-  "date": "2026-03-11",
-  "generated_at": "2026-03-11T05:30:58.060839",
+  "date": "2026-03-12",
+  "generated_at": "2026-03-12T05:30:26.771515",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "How I topped the Open LLM Leaderboard using 2x 4090 GPUs \u2014 no weights modified.",
-      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rpxpsa/how_i_topped_the_open_llm_leaderboard_using_2x/",
-      "source": "r/LocalLLaMA",
-      "summary": "Hi LocalLLaMAs, A few years ago, I found that duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, improved performance across all Open LLM Leaderboard benchmarks and took #1. As of 2026, the top 4 models on that leaderboard are still descendants. The weird finding: single-layer duplication does nothing. Too few layers, nothing. Too many, it gets worse. Only circuit-sized blocks of \\~7 layers work. This suggests pretraining carves out discrete function",
+      "title": "[R] IDP Leaderboard: Open benchmark for document AI across 16 VLMs, 9,000+ documents, 3 benchmark suites",
+      "url": "https://www.reddit.com/r/MachineLearning/comments/1rqx94q/r_idp_leaderboard_open_benchmark_for_document_ai/",
+      "source": "r/MachineLearning",
+      "summary": "We're releasing the IDP Leaderboard, an open evaluation framework for document understanding tasks. 16 models tested across OlmOCR, OmniDoc, and our own IDP Core benchmark (covering KIE, table extraction, VQA, OCR, classification, and long document processing). Key results: \\- Gemini 3.1 Pro leads overall (83.2) but the margin is tight. Top 5 within 2.4 points. \\- Cheaper model variants (Flash, Sonnet) produce nearly identical extraction quality to flagship models. The differentiation only",
       "tr_category": "trsbench",
       "category_label": "Benchmarks",
-      "truth_score": 60,
+      "truth_score": 53,
       "source_credibility": 15,
-      "cross_confirmation": 15,
-      "cross_sources": [
-        "r/MachineLearning",
-        "Hacker News"
-      ],
-      "substance_score": 12,
-      "relevance_score": 18,
-      "matched_verticals": [
-        "trsbench",
-        "open_vs_closed"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Specific, technical details about a specific model and experiment, with a clear explanation of results and implications."
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 2,
-      "title": "Agentic Planning with Reasoning for Image Styling via Offline RL",
-      "url": "https://huggingface.co/papers/2603.07148",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 58,
-      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 20,
-      "matched_verticals": [
-        "tragents"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Paper title suggests a specific, technical contribution to AI research, consistent with academic publishing conventions."
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 3,
-      "title": "How I topped the Open LLM Leaderboard using 2x 4090 GPUs - Research notes in Blog form",
-      "url": "https://www.reddit.com/r/MachineLearning/comments/1rq6g08/how_i_topped_the_open_llm_leaderboard_using_2x/",
-      "source": "r/MachineLearning",
-      "summary": "A few years ago, I found that duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, improved performance across all Open LLM Leaderboard benchmarks and took #1 place. As of 2026, the top 4 models on that leaderboard are still descendants. The weird finding: single-layer duplication does nothing. Too few layers, nothing. Too many, it gets worse. Only circuit-sized blocks of \\~7 layers work. This suggests pre-training carves out discrete functional circuits",
-      "tr_category": "trsbench",
-      "category_label": "Benchmarks",
-      "truth_score": 57,
-      "source_credibility": 15,
-      "cross_confirmation": 8,
-      "cross_sources": [
-        "r/LocalLLaMA"
-      ],
-      "substance_score": 16,
+      "substance_score": 20,
       "relevance_score": 18,
       "matched_verticals": [
         "trsbench"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Specific, technical details about a research finding on the Open LLM Leaderboard, with a clear explanation of the methodology and results."
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 4,
-      "title": "NaviDriveVLM: Decoupling High-Level Reasoning and Motion Planning for Autonomous Driving",
-      "url": "https://huggingface.co/papers/2603.07901",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 54,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 0,
-      "relevance_score": 16,
-      "matched_verticals": [
-        "tragents"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "Paper title and source suggest a specific, technical contribution to autonomous driving research"
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 5,
-      "title": "AutoResearch-RL: Perpetual Self-Evaluating Reinforcement Learning Agents for Autonomous Neural Architecture Discovery",
-      "url": "https://huggingface.co/papers/2603.07300",
-      "source": "Hugging Face Papers",
-      "summary": "",
-      "tr_category": "tragents",
-      "category_label": "Agents",
-      "truth_score": 52,
-      "source_credibility": 38,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 4,
-      "relevance_score": 10,
-      "matched_verticals": [
-        "tragents"
       ],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
@@ -166,41 +28,7 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 9,
-          "reason": "The headline refers to a specific research paper on Hugging Face Papers, indicating a factual and verifiable claim."
-        },
-        "grok": {
-          "verdict": "UNKNOWN",
-          "confidence": 0,
-          "reason": "xAI/Grok unavailable"
-        }
-      }
-    },
-    {
-      "rank": 6,
-      "title": "Auto LLM ranking tool that uses a Judge LLM for any given task",
-      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rptdy5/auto_llm_ranking_tool_that_uses_a_judge_llm_for/",
-      "source": "r/LocalLLaMA",
-      "summary": "Most people pick LLMs like this: try a few, go with the one that \"felt better.\" That's not evaluation, that's a guess. To fix this, I built a small LLM auto-evaluation tool that replaces gut feel with task-specific benchmarking. This tool accepts a task in natural language and then uses a Judge LLM to generate task-specific test cases, runs parallel inference across candidate models, and scores outputs on accuracy, hallucination, grounding, tool-calling, and clarity. The tool outputs a ranke",
-      "tr_category": "trsbench",
-      "category_label": "Benchmarks",
-      "truth_score": 51,
-      "source_credibility": 15,
-      "cross_confirmation": 0,
-      "cross_sources": [],
-      "substance_score": 16,
-      "relevance_score": 20,
-      "matched_verticals": [
-        "trsbench",
-        "truscore"
-      ],
-      "hype_flags": 0,
-      "ai_verdict": "LIKELY_TRUE",
-      "ai_confidence": 8,
-      "ai_checks": {
-        "ollama": {
-          "verdict": "VERIFIED",
-          "confidence": 8,
-          "reason": "The description of the tool's functionality and features is specific and plausible, and the source is a community-driven platform."
+          "reason": "Specific details about the IDP Leaderboard, models, and benchmark suites provide a clear and verifiable claim."
         },
         "grok": {
           "verdict": "UNKNOWN",
@@ -210,41 +38,41 @@
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing**\n\n**1. Open LLM Leaderboard Topped with 2x 4090 GPUs**\n\nA researcher claims to have topped the Open LLM Leaderboard by duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, using 2x 4090 GPUs. This improvement took #1 place on the leaderboard, and the top 4 models are still descendants of this approach. (Source: r/LocalLLaMA)\n\n**Why it matters:** This development could indicate a new strategy for improving LLM performance, potentially influencing future research and benchmarking efforts. However, the claim lacks cross-confirmation and detailed methodology. (Truth score: 60/100)\n\n**2. Agentic Planning with Reasoning for Image Styling via Offline RL**\n\nResearchers published a paper on Hugging Face Papers, exploring agentic planning with reasoning for image styling via offline reinforcement learning. The paper proposes a novel approach to image styling, but lacks concrete results and evaluation metrics. (Source: Hugging Face Papers)\n\n**Why it matters:** This research contributes to the development of more sophisticated image processing and generation techniques, which could have applications in various industries, including art and design. However, the paper's impact is uncertain without more concrete results. (Truth score: 58/100)\n\n**3. Duplicate of Story 1 (Cross-Confirmed)**\n\nA researcher claims to have topped the Open LLM Leaderboard by duplicating a specific block of 7 middle layers in Qwen2-72B, without modifying any weights, using 2x 4090 GPUs. This improvement took #1 place on the leaderboard, and the top 4 models are still descendants of this approach. (Source: r/MachineLearning)\n\n**Why it matters:** This development could indicate a new strategy for improving LLM performance, potentially influencing future research and benchmarking efforts. The claim is cross-confirmed with Story 1, but lacks detailed methodology. (Truth score: 57/100)\n\n**4. NaviDriveVLM: Decoupling High-Level Reasoning and Motion Planning for Autonomous Driving**\n\nResearchers published a paper on Hugging Face Papers, proposing a novel approach to decoupling high-level reasoning and motion planning for autonomous driving. The paper presents a new architecture, but lacks concrete results and evaluation metrics. (Source: Hugging Face Papers)\n\n**Why it matters:** This research contributes to the development of more sophisticated autonomous driving systems, which could have significant implications for the automotive industry and transportation infrastructure. However, the paper's impact is uncertain without more concrete results. (Truth score: 54/100)\n\n**5. AutoResearch-RL: Perpetual Self-Evaluating Reinforcement Learning Agents for Autonomous Neural Architecture Discovery**\n\nResearchers published a paper on Hugging Face Papers, proposing a novel approach to perpetual self-evaluating reinforcement learning agents for autonomous neural architecture discovery. The paper presents a new framework, but lacks concrete results and evaluation metrics. (Source: Hugging Face Papers)\n\n**Why it matters:** This research contributes to the development of more sophisticated reinforcement learning techniques, which could have significant implications for various industries, including robotics and autonomous systems. However, the paper's impact is uncertain without more concrete results. (Truth score: 52/100)\n\n**6. Auto LLM Ranking Tool**\n\nA researcher built a small LLM auto-evaluation tool that uses a Judge LLM for task-specific benchmarking. The tool accepts a task in natural language and uses a Judge LLM to evaluate the performance of various LLMs. (Source: r/LocalLLaMA)\n\n**Why it matters:** This development could improve the evaluation and comparison of LLMs, potentially leading to more accurate benchmarking and better decision-making in AI research and development. However, the tool's effectiveness and limitations are unclear without more information. (Truth score: 51/100)",
+  "narrative_brief": "**Morning Briefing: AI Developments**\n\n**1. IDP Leaderboard Released**\n\nWhat happened: The IDP Leaderboard, an open evaluation framework for document understanding tasks, has been released. 16 models were tested across three benchmark suites, covering various document AI tasks. Gemini 3.1 Pro led the results.\n\nWhy it matters: This benchmark provides a standardized evaluation framework for document AI, allowing for more accurate comparisons between models. It's essential for developers and researchers to track progress in document understanding, a critical component of many AI applications. (Source: r/MachineLearning, 53/100 truth score)\n\n**Note:** This story is cross-confirmed by the source, but the truth score is relatively low due to the lack of external validation and peer-reviewed publications.",
   "stats": {
-    "total_scraped": 263,
-    "passed_filter": 6,
-    "rejected": 257,
-    "avg_truth_score": 29.7,
+    "total_scraped": 201,
+    "passed_filter": 1,
+    "rejected": 200,
+    "avg_truth_score": 29.5,
     "categories": {
-      "general": 151,
-      "trscode": 10,
-      "tragents": 35,
-      "trsbench": 13,
-      "trfcast": 3,
-      "gari": 2,
-      "gigaburn": 26,
-      "open_vs_closed": 16,
-      "truscore": 4,
+      "general": 107,
+      "tragents": 28,
+      "trfcast": 6,
+      "open_vs_closed": 14,
+      "trscode": 16,
+      "gigaburn": 11,
+      "trsbench": 8,
+      "truscore": 3,
+      "gari": 5,
       "churn": 3
     },
     "sources": {
-      "Hugging Face Papers": 52,
+      "Hugging Face Papers": 29,
       "GitHub Trending Python": 7,
-      "GitHub Trending All": 19,
-      "r/MachineLearning": 10,
-      "r/LocalLLaMA": 45,
-      "r/artificial": 24,
-      "r/singularity": 28,
-      "Hacker News": 30,
+      "GitHub Trending All": 21,
+      "r/MachineLearning": 13,
+      "r/LocalLLaMA": 42,
+      "r/artificial": 10,
+      "r/singularity": 19,
+      "Hacker News": 23,
       "Lobste.rs": 4,
+      "The Verge": 9,
+      "Wired": 6,
+      "MIT Tech Review": 3,
+      "TechCrunch": 12,
       "YouTube: Two Minute Papers": 1,
-      "YouTube: Matthew Berman": 5,
-      "TechCrunch": 16,
-      "The Verge": 12,
-      "Wired": 4,
-      "MIT Tech Review": 5,
-      "YouTube: AI Explained": 1
+      "YouTube: Yannic Kilcher": 1,
+      "YouTube: Matthew Berman": 1
     },
     "sources_active": 16
   },
