@@ -1,27 +1,27 @@
 {
   "ddp": {
     "trscode": {
-      "last_run": "2026-03-11T04:03:08.107924",
+      "last_run": "2026-03-12T04:03:10.474101",
       "success": true,
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-11T04:03:59.325133",
+      "last_run": "2026-03-12T04:04:23.223263",
       "success": true,
       "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-11T04:08:59.339339",
+      "last_run": "2026-03-12T04:09:23.246927",
       "success": false,
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-11T04:12:38.310154",
+      "last_run": "2026-03-12T04:13:21.815049",
       "success": true,
       "dry_run": false
     },
     "tragents": {
-      "last_run": "2026-03-11T04:17:38.329055",
+      "last_run": "2026-03-12T04:18:21.842414",
       "success": false,
       "dry_run": false
     }
@@ -32,10 +32,10 @@
       "label": "Truth & Reliability",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-03-11T04:12:35",
-      "last_run_date": "2026-03-11",
+      "last_run": "2026-03-12T04:13:16",
+      "last_run_date": "2026-03-12",
       "status": "success",
-      "duration_seconds": 215,
+      "duration_seconds": 232,
       "sources_total": 9,
       "sources_hit": 8,
       "models_qualified": 18,
@@ -122,44 +122,44 @@
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-11T04:03:02",
-      "last_run_date": "2026-03-11",
+      "last_run": "2026-03-12T04:03:04",
+      "last_run_date": "2026-03-12",
       "status": "success",
-      "duration_seconds": 180,
+      "duration_seconds": 182,
       "sources_total": 8,
-      "sources_hit": 6,
+      "sources_hit": 5,
       "models_qualified": 38,
       "top_model": "Claude Opus 4.6",
-      "top_score": 75.19,
+      "top_score": 74.42,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Opus 4.6",
-          "score": 75.19
+          "score": 74.42
         },
         {
           "rank": 2,
           "name": "GPT-5.2",
-          "score": 73.19
+          "score": 72.29
         },
         {
           "rank": 3,
           "name": "Claude Sonnet 4.5",
-          "score": 65.61
+          "score": 64.74
         },
         {
           "rank": 4,
           "name": "Gemini 3 Pro",
-          "score": 63.77
+          "score": 63.11
         },
         {
           "rank": 5,
-          "name": "GLM-5",
-          "score": 44.59
+          "name": "Grok 4.1",
+          "score": 44.53
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-03-12T05:00:00",
+      "next_run": "2026-03-13T05:00:00",
       "error": null
     },
     "trfcast": {
@@ -167,35 +167,35 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-03-11T04:03:56",
-      "last_run_date": "2026-03-11",
+      "last_run": "2026-03-12T04:04:19",
+      "last_run_date": "2026-03-12",
       "status": "success",
-      "duration_seconds": 47,
+      "duration_seconds": 68,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 11,
       "top_model": "Claude Sonnet 4.5",
-      "top_score": 62.4,
+      "top_score": 62.68,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Sonnet 4.5",
-          "score": 62.4
+          "score": 62.68
         },
         {
           "rank": 2,
+          "name": "GPT-5.1",
+          "score": 60.07
+        },
+        {
+          "rank": 3,
           "name": "O3",
           "score": 59.94
         },
         {
-          "rank": 3,
-          "name": "GPT-5.1",
-          "score": 59.57
-        },
-        {
           "rank": 4,
           "name": "DeepSeek V3.1",
-          "score": 59.3
+          "score": 59.43
         },
         {
           "rank": 5,
@@ -204,9 +204,9 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-03-12T05:00:00",
+      "next_run": "2026-03-13T05:00:00",
       "error": null
     }
   },
-  "last_updated": "2026-03-11T04:03:56"
+  "last_updated": "2026-03-12T04:04:19"
 }
