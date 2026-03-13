@@ -1,26 +1,24 @@
 {
-  "date": "2026-03-12",
-  "generated_at": "2026-03-12T05:30:26.771515",
+  "date": "2026-03-13",
+  "generated_at": "2026-03-13T05:30:51.454076",
   "version": "2.0",
   "filter": "TrainingRun Truth Filter v2.0",
   "top_stories": [
     {
       "rank": 1,
-      "title": "[R] IDP Leaderboard: Open benchmark for document AI across 16 VLMs, 9,000+ documents, 3 benchmark suites",
-      "url": "https://www.reddit.com/r/MachineLearning/comments/1rqx94q/r_idp_leaderboard_open_benchmark_for_document_ai/",
-      "source": "r/MachineLearning",
-      "summary": "We're releasing the IDP Leaderboard, an open evaluation framework for document understanding tasks. 16 models tested across OlmOCR, OmniDoc, and our own IDP Core benchmark (covering KIE, table extraction, VQA, OCR, classification, and long document processing). Key results: \\- Gemini 3.1 Pro leads overall (83.2) but the margin is tight. Top 5 within 2.4 points. \\- Cheaper model variants (Flash, Sonnet) produce nearly identical extraction quality to flagship models. The differentiation only",
+      "title": "WeEdit: A Dataset, Benchmark and Glyph-Guided Framework for Text-centric Image Editing",
+      "url": "https://huggingface.co/papers/2603.11593",
+      "source": "Hugging Face Papers",
+      "summary": "",
       "tr_category": "trsbench",
       "category_label": "Benchmarks",
-      "truth_score": 53,
-      "source_credibility": 15,
+      "truth_score": 56,
+      "source_credibility": 38,
       "cross_confirmation": 0,
       "cross_sources": [],
-      "substance_score": 20,
-      "relevance_score": 18,
-      "matched_verticals": [
-        "trsbench"
-      ],
+      "substance_score": 12,
+      "relevance_score": 6,
+      "matched_verticals": [],
       "hype_flags": 0,
       "ai_verdict": "LIKELY_TRUE",
       "ai_confidence": 9,
@@ -28,7 +26,104 @@
         "ollama": {
           "verdict": "VERIFIED",
           "confidence": 9,
-          "reason": "Specific details about the IDP Leaderboard, models, and benchmark suites provide a clear and verifiable claim."
+          "reason": "The headline refers to a specific dataset, benchmark, and framework, which is a plausible and factual description of a research paper."
+        },
+        "grok": {
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "title": "Mbed-TLS / mbedtls",
+      "url": "https://github.com/Mbed-TLS/mbedtls",
+      "source": "GitHub Trending All",
+      "summary": "An open source, portable, easy to use, readable and flexible TLS library, and reference implementation of the PSA Cryptography API. Releases are on a varying cadence, typically around 3 - 6 months between releases.",
+      "tr_category": "open_vs_closed",
+      "category_label": "Open vs Closed",
+      "truth_score": 53,
+      "source_credibility": 40,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 8,
+      "relevance_score": 5,
+      "matched_verticals": [],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 9,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 9,
+          "reason": "The description is specific, factual, and matches the characteristics of a reputable open-source library."
+        },
+        "grok": {
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "title": "langchain-ai / deepagents",
+      "url": "https://github.com/langchain-ai/deepagents",
+      "source": "GitHub Trending Python",
+      "summary": "Deep Agents is an agent harness built on langchain and langgraph. Deep Agents are equipped with a planning tool, a filesystem backend, and the ability to spawn subagents - making them well-equipped to handle complex agentic tasks.",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 51,
+      "source_credibility": 35,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 0,
+      "relevance_score": 16,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "Specific details about Deep Agents' features and tech stack are provided, and the source is a reputable platform for tracking open-source projects."
+        },
+        "grok": {
+          "verdict": "UNKNOWN",
+          "confidence": 0,
+          "reason": "xAI/Grok unavailable"
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "title": "Building a strong data infrastructure for AI agent success",
+      "url": "https://www.technologyreview.com/2026/03/10/1134083/building-a-strong-data-infrastructure-for-ai-agent-success/",
+      "source": "MIT Tech Review",
+      "summary": "In the race to adopt and show value from AI, enterprises are moving faster than ever to deploy agentic AI as copilots, assistants, and autonomous task-runners. In late 2025, nearly two-thirds of companies were experimenting with AI agents, while 88% were using AI in at least one business function, up from 78% in 2024, according&#8230;",
+      "tr_category": "tragents",
+      "category_label": "Agents",
+      "truth_score": 50,
+      "source_credibility": 30,
+      "cross_confirmation": 0,
+      "cross_sources": [],
+      "substance_score": 4,
+      "relevance_score": 16,
+      "matched_verticals": [
+        "tragents"
+      ],
+      "hype_flags": 0,
+      "ai_verdict": "LIKELY_TRUE",
+      "ai_confidence": 8,
+      "ai_checks": {
+        "ollama": {
+          "verdict": "VERIFIED",
+          "confidence": 8,
+          "reason": "Specific statistics from a reputable source (MIT Tech Review) support the claim, and the context is plausible given the current AI landscape."
         },
         "grok": {
           "verdict": "UNKNOWN",
@@ -38,41 +133,41 @@
       }
     }
   ],
-  "narrative_brief": "**Morning Briefing: AI Developments**\n\n**1. IDP Leaderboard Released**\n\nWhat happened: The IDP Leaderboard, an open evaluation framework for document understanding tasks, has been released. 16 models were tested across three benchmark suites, covering various document AI tasks. Gemini 3.1 Pro led the results.\n\nWhy it matters: This benchmark provides a standardized evaluation framework for document AI, allowing for more accurate comparisons between models. It's essential for developers and researchers to track progress in document understanding, a critical component of many AI applications. (Source: r/MachineLearning, 53/100 truth score)\n\n**Note:** This story is cross-confirmed by the source, but the truth score is relatively low due to the lack of external validation and peer-reviewed publications.",
+  "narrative_brief": "**Morning Briefing: AI Developments and Trends**\n\n**1. Text-Centric Image Editing Benchmark**\nA new dataset and benchmark, WeEdit, has been released for text-centric image editing tasks. The framework, developed by Hugging Face, provides a glyph-guided approach to editing images. This benchmark could help improve AI's ability to edit and manipulate images with text.\n\nWhy it matters: This development could impact AI's image editing capabilities, which is relevant to the Global AI Race and TRSbench.\n\n**2. Open-Source TLS Library**\nMbed-TLS, an open-source TLS library, has been trending on GitHub. The library provides a portable and flexible implementation of the PSA Cryptography API. This development is relevant to the Open vs Closed vertical, as it highlights the growth of open-source AI tools.\n\nWhy it matters: This open-source library could contribute to the development of more secure and portable AI systems, relevant to the Global AI Race and TRScode.\n\n**3. Deep Agents Framework**\nDeep Agents, a framework built on langchain and langgraph, has been trending on GitHub. The framework enables the creation of complex agents with planning tools and subagent capabilities. This development is relevant to the Agents vertical.\n\nWhy it matters: This framework could enable the creation of more sophisticated AI agents, relevant to the Agents vertical and the Global AI Race.\n\n**4. AI Agent Adoption and Data Infrastructure**\nAccording to a MIT Tech Review article, nearly two-thirds of companies were experimenting with AI agents in late 2025, while 88% were using AI in at least one business function. The article highlights the importance of building a strong data infrastructure for AI agent success.\n\nWhy it matters: This data shows the growing adoption of AI agents in enterprises, relevant to the Agents vertical and The Churn. It also highlights the need for robust data infrastructure to support AI agent development.\n\nNote: The truth scores for these stories range from 50-56, indicating a moderate level of verification and relevance.",
   "stats": {
-    "total_scraped": 201,
-    "passed_filter": 1,
-    "rejected": 200,
-    "avg_truth_score": 29.5,
+    "total_scraped": 226,
+    "passed_filter": 4,
+    "rejected": 222,
+    "avg_truth_score": 28.9,
     "categories": {
-      "general": 107,
-      "tragents": 28,
-      "trfcast": 6,
-      "open_vs_closed": 14,
-      "trscode": 16,
+      "general": 122,
+      "tragents": 32,
+      "open_vs_closed": 21,
+      "trscode": 15,
+      "truscore": 4,
+      "trfcast": 4,
       "gigaburn": 11,
-      "trsbench": 8,
-      "truscore": 3,
-      "gari": 5,
+      "trsbench": 10,
+      "gari": 4,
       "churn": 3
     },
     "sources": {
-      "Hugging Face Papers": 29,
-      "GitHub Trending Python": 7,
-      "GitHub Trending All": 21,
-      "r/MachineLearning": 13,
-      "r/LocalLLaMA": 42,
-      "r/artificial": 10,
-      "r/singularity": 19,
-      "Hacker News": 23,
-      "Lobste.rs": 4,
-      "The Verge": 9,
-      "Wired": 6,
-      "MIT Tech Review": 3,
-      "TechCrunch": 12,
-      "YouTube: Two Minute Papers": 1,
-      "YouTube: Yannic Kilcher": 1,
-      "YouTube: Matthew Berman": 1
+      "Hugging Face Papers": 40,
+      "GitHub Trending Python": 6,
+      "GitHub Trending All": 14,
+      "r/MachineLearning": 8,
+      "r/LocalLLaMA": 49,
+      "r/artificial": 9,
+      "r/singularity": 32,
+      "Hacker News": 32,
+      "TechCrunch": 13,
+      "The Verge": 8,
+      "MIT Tech Review": 5,
+      "Wired": 3,
+      "YouTube: Matthew Berman": 2,
+      "Lobste.rs": 1,
+      "YouTube: Fireship": 2,
+      "YouTube: Two Minute Papers": 2
     },
     "sources_active": 16
   },
