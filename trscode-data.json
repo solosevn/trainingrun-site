@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "31242800ba3434770460787f92f3d9a6e2078a8d11763c83e873950ebd00825e",
+  "checksum": "d0b724043480afeff1eafbec9e9e2f84bbfb33ff5604b4f07ab46f9529152626",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -88,7 +88,8 @@
     "2026-03-10",
     "2026-03-11",
     "2026-03-12",
-    "2026-03-13"
+    "2026-03-13",
+    "2026-03-14"
   ],
   "models": [
     {
@@ -172,7 +173,8 @@
         75.19,
         75.19,
         74.42,
-        74.42
+        74.42,
+        74.47
       ],
       "pillar_scores": {
         "issue_resolution": 96.1,
@@ -274,7 +276,8 @@
         65.61,
         65.61,
         64.74,
-        64.74
+        64.74,
+        64.8
       ],
       "pillar_scores": {
         "issue_resolution": 89.3,
@@ -376,7 +379,8 @@
         63.77,
         63.77,
         63.11,
-        63.11
+        63.11,
+        63.15
       ],
       "pillar_scores": {
         "issue_resolution": 93.3,
@@ -478,7 +482,8 @@
         73.19,
         73.19,
         72.29,
-        72.3
+        72.3,
+        72.36
       ],
       "pillar_scores": {
         "issue_resolution": 94.4,
@@ -580,7 +585,8 @@
         42.4,
         42.4,
         41.6,
-        41.6
+        41.6,
+        41.65
       ],
       "pillar_scores": {
         "issue_resolution": 73.5,
@@ -682,6 +688,7 @@
         27.35,
         27.35,
         27.35,
+        27.37,
         27.37
       ],
       "pillar_scores": {},
@@ -773,7 +780,8 @@
         32.03,
         32.03,
         31.48,
-        31.48
+        31.48,
+        31.51
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -865,7 +873,8 @@
         44.59,
         44.59,
         43.53,
-        43.53
+        43.53,
+        43.59
       ],
       "pillar_scores": {
         "issue_resolution": 79.6,
@@ -946,6 +955,7 @@
         null,
         null,
         50.66,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1054,6 +1064,7 @@
         7.81,
         7.81,
         7.81,
+        7.8,
         7.8
       ],
       "pillar_scores": {},
@@ -1143,7 +1154,8 @@
         30.35,
         30.35,
         29.74,
-        29.74
+        29.74,
+        29.77
       ],
       "pillar_scores": {},
       "source_count": 3,
@@ -1213,6 +1225,7 @@
         null,
         null,
         48.84,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1321,6 +1334,7 @@
         44.53,
         44.53,
         44.53,
+        44.53,
         44.53
       ],
       "pillar_scores": {},
@@ -1396,6 +1410,7 @@
         44,
         44,
         44,
+        36.5,
         36.5,
         36.5,
         36.5,
@@ -1515,6 +1530,7 @@
         24.53,
         24.53,
         24.53,
+        24.53,
         24.53
       ],
       "pillar_scores": {},
@@ -1527,7 +1543,7 @@
     {
       "name": "Gemini Flash 3",
       "company": "Google",
-      "rank": 30,
+      "rank": 31,
       "scores": [
         null,
         null,
@@ -1605,7 +1621,8 @@
         13.88,
         13.88,
         13.53,
-        13.52
+        13.52,
+        13.54
       ],
       "pillar_scores": {},
       "source_count": 3,
@@ -1618,7 +1635,7 @@
     {
       "name": "Qwen3",
       "company": "Alibaba",
-      "rank": 31,
+      "rank": 32,
       "scores": [
         null,
         null,
@@ -1696,6 +1713,7 @@
         11.66,
         11.66,
         11.66,
+        11.66,
         11.66
       ],
       "pillar_scores": {},
@@ -1765,6 +1783,7 @@
         null,
         null,
         45.59,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1873,6 +1892,7 @@
         22.5,
         22.5,
         22.5,
+        22.5,
         22.5
       ],
       "pillar_scores": {},
@@ -1943,6 +1963,7 @@
         null,
         null,
         44.51,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2051,6 +2072,7 @@
         0.0,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -2117,6 +2139,7 @@
         null,
         null,
         43.43,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2225,6 +2248,7 @@
         8.36,
         8.36,
         8.36,
+        8.35,
         8.35
       ],
       "pillar_scores": {},
@@ -2297,6 +2321,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -2403,6 +2428,7 @@
         2.45,
         2.45,
         2.45,
+        2.45,
         2.45
       ],
       "pillar_scores": {},
@@ -2475,6 +2501,7 @@
         null,
         null,
         15,
+        7.5,
         7.5,
         7.5,
         7.5,
@@ -2581,6 +2608,7 @@
         5.05,
         5.05,
         5.05,
+        5.05,
         5.05
       ],
       "pillar_scores": {},
@@ -2670,7 +2698,8 @@
         22.54,
         22.54,
         21.73,
-        21.73
+        21.73,
+        21.78
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -2762,7 +2791,8 @@
         4.06,
         4.06,
         3.56,
-        3.56
+        3.56,
+        3.59
       ],
       "pillar_scores": {},
       "source_count": 1,
@@ -2851,7 +2881,8 @@
         38.72,
         38.72,
         38.04,
-        38.04
+        38.04,
+        38.09
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -2865,7 +2896,7 @@
     {
       "name": "GPT-4",
       "company": "OpenAI",
-      "rank": 35,
+      "rank": 36,
       "scores": [
         null,
         null,
@@ -2929,6 +2960,7 @@
         7.49,
         7.49,
         7.49,
+        7.29,
         7.29,
         7.29,
         7.29,
@@ -3033,6 +3065,7 @@
         21.06,
         21.06,
         21.06,
+        21.06,
         21.06
       ],
       "pillar_scores": {},
@@ -3046,7 +3079,7 @@
     {
       "name": "GPT-4o",
       "company": "OpenAI",
-      "rank": 36,
+      "rank": 37,
       "scores": [
         null,
         null,
@@ -3110,6 +3143,7 @@
         7.49,
         7.49,
         7.49,
+        7.29,
         7.29,
         7.29,
         7.29,
@@ -3214,7 +3248,8 @@
         34.41,
         34.41,
         34.18,
-        34.17
+        34.17,
+        34.19
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -3306,7 +3341,8 @@
         29.88,
         29.88,
         29.01,
-        29.01
+        29.01,
+        29.06
       ],
       "pillar_scores": {},
       "source_count": 3,
@@ -3397,6 +3433,7 @@
         32.31,
         32.31,
         32.24,
+        32.24,
         32.24
       ],
       "pillar_scores": {},
@@ -3412,7 +3449,7 @@
     {
       "name": "Grok Code Fast 1",
       "company": "xAI",
-      "rank": 32,
+      "rank": 33,
       "scores": [
         null,
         null,
@@ -3490,7 +3527,8 @@
         11.56,
         11.56,
         11.04,
-        11.05
+        11.05,
+        11.08
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -3502,7 +3540,7 @@
     {
       "name": "Kimi K2 Instruct",
       "company": "Moonshot AI",
-      "rank": 25,
+      "rank": 26,
       "scores": [
         null,
         null,
@@ -3580,7 +3618,8 @@
         19.25,
         19.25,
         18.69,
-        18.69
+        18.69,
+        18.73
       ],
       "pillar_scores": {},
       "source_count": 3,
@@ -3671,7 +3710,8 @@
         21.8,
         21.8,
         21.07,
-        21.07
+        21.07,
+        21.12
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -3761,6 +3801,7 @@
         8.04,
         8.04,
         8.04,
+        8.04,
         8.04
       ],
       "pillar_scores": {},
@@ -3771,6 +3812,97 @@
     },
     {
       "name": "Llama 4 Maverick",
+      "company": "Meta",
+      "rank": 39,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        3.03,
+        3.03,
+        3.03,
+        3.03,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95,
+        2.95
+      ],
+      "pillar_scores": {},
+      "source_count": 2,
+      "raw_data": {
+        "swebench_verified_pct": 9.06,
+        "swebench_pro_pct": 5.24
+      }
+    },
+    {
+      "name": "Llama-3-70B-Chat",
       "company": "Meta",
       "rank": 38,
       "scores": [
@@ -3832,96 +3964,7 @@
         null,
         null,
         null,
-        3.03,
-        3.03,
-        3.03,
-        3.03,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95,
-        2.95
-      ],
-      "pillar_scores": {},
-      "source_count": 2,
-      "raw_data": {
-        "swebench_verified_pct": 9.06,
-        "swebench_pro_pct": 5.24
-      }
-    },
-    {
-      "name": "Llama-3-70B-Chat",
-      "company": "Meta",
-      "rank": 37,
-      "scores": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        6.07,
         6.07,
         6.07,
         6.07,
@@ -3952,7 +3995,7 @@
     {
       "name": "Mixtral-8x22B-Instruct",
       "company": "Mistral",
-      "rank": 26,
+      "rank": 27,
       "scores": [
         null,
         null,
@@ -4026,6 +4069,7 @@
         17.37,
         17.37,
         17.37,
+        17.89,
         17.89,
         17.89,
         17.89,
@@ -4103,6 +4147,7 @@
         null,
         null,
         null,
+        8.49,
         8.49,
         8.49,
         8.49,
@@ -4210,12 +4255,13 @@
         12.0,
         12.0,
         12.0,
-        12.0
+        12.0,
+        10.42
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "terminalbench_hard_pct": 82.5
+        "terminalbench_hard_pct": 71.0
       }
     },
     {
@@ -4299,6 +4345,7 @@
         2.45,
         2.45,
         2.45,
+        2.45,
         2.45
       ],
       "pillar_scores": {},
@@ -4310,7 +4357,7 @@
     {
       "name": "Qwen 3 Coder 480B",
       "company": "Alibaba",
-      "rank": 33,
+      "rank": 34,
       "scores": [
         null,
         null,
@@ -4388,7 +4435,8 @@
         9.84,
         9.84,
         9.29,
-        9.29
+        9.29,
+        9.32
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -4478,6 +4526,7 @@
         2.45,
         2.45,
         2.45,
+        2.45,
         2.45
       ],
       "pillar_scores": {},
@@ -4489,7 +4538,7 @@
     {
       "name": "Qwen2.5-Coder 32B Instruct",
       "company": "Alibaba",
-      "rank": 34,
+      "rank": 35,
       "scores": [
         null,
         null,
@@ -4563,6 +4612,7 @@
         7.35,
         7.35,
         7.35,
+        7.87,
         7.87,
         7.87,
         7.87,
@@ -4639,6 +4689,7 @@
         null,
         null,
         null,
+        6.88,
         6.88,
         6.88,
         6.88,
@@ -4746,6 +4797,7 @@
         21.22,
         21.22,
         21.22,
+        21.22,
         21.22
       ],
       "pillar_scores": {},
@@ -4838,6 +4890,7 @@
         7.65,
         7.65,
         7.65,
+        7.65,
         7.65
       ],
       "pillar_scores": {},
@@ -4849,6 +4902,97 @@
     {
       "name": "devstral-medium-2507",
       "company": "Mistral",
+      "rank": 30,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        13.68,
+        13.68,
+        13.68,
+        13.68,
+        13.68,
+        13.68,
+        13.68,
+        13.68,
+        13.68,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69,
+        13.69
+      ],
+      "pillar_scores": {},
+      "source_count": 2,
+      "raw_data": {
+        "bigcodebench_pct": 27.0,
+        "arena_code_elo": 1100.0
+      }
+    },
+    {
+      "name": "gemma-3-27b-it",
+      "company": "Google",
       "rank": 29,
       "scores": [
         null,
@@ -4909,96 +5053,7 @@
         null,
         null,
         null,
-        13.68,
-        13.68,
-        13.68,
-        13.68,
-        13.68,
-        13.68,
-        13.68,
-        13.68,
-        13.68,
-        13.69,
-        13.69,
-        13.69,
-        13.69,
-        13.69,
-        13.69,
-        13.69,
-        13.69,
-        13.69,
-        13.69
-      ],
-      "pillar_scores": {},
-      "source_count": 2,
-      "raw_data": {
-        "bigcodebench_pct": 27.0,
-        "arena_code_elo": 1100.0
-      }
-    },
-    {
-      "name": "gemma-3-27b-it",
-      "company": "Google",
-      "rank": 28,
-      "scores": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        14.86,
         14.86,
         14.86,
         14.86,
@@ -5108,6 +5163,7 @@
         1.95,
         1.95,
         1.95,
+        1.95,
         1.95
       ],
       "pillar_scores": {},
@@ -5197,6 +5253,7 @@
         8.35,
         8.35,
         8.35,
+        8.33,
         8.33
       ],
       "pillar_scores": {},
@@ -5286,6 +5343,7 @@
         6.42,
         6.42,
         6.42,
+        6.42,
         6.42
       ],
       "pillar_scores": {},
@@ -5297,7 +5355,7 @@
     {
       "name": "Claude 3 Haiku",
       "company": "Anthropic",
-      "rank": 23,
+      "rank": 24,
       "scores": [
         null,
         null,
@@ -5375,7 +5433,8 @@
         20.82,
         20.82,
         20.1,
-        20.1
+        20.1,
+        20.14
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -5451,6 +5510,7 @@
         12.56,
         12.56,
         12.56,
+        12.07,
         12.07,
         12.07,
         12.07,
@@ -5554,6 +5614,7 @@
         16.33,
         16.33,
         16.33,
+        16.33,
         16.33
       ],
       "pillar_scores": {},
@@ -5565,7 +5626,7 @@
     {
       "name": "GPT-5 mini",
       "company": "OpenAI",
-      "rank": 27,
+      "rank": 28,
       "scores": [
         null,
         null,
@@ -5643,7 +5704,8 @@
         18.37,
         18.37,
         17.67,
-        17.67
+        17.67,
+        17.71
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -5655,7 +5717,7 @@
     {
       "name": "Kimi K2 Thinking",
       "company": "Moonshot AI",
-      "rank": 24,
+      "rank": 25,
       "scores": [
         null,
         null,
@@ -5733,7 +5795,8 @@
         20.14,
         20.14,
         19.41,
-        19.41
+        19.41,
+        19.46
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -5806,6 +5869,7 @@
         null,
         null,
         0,
+        12.55,
         12.55,
         12.55,
         12.55,
@@ -5912,6 +5976,7 @@
         30.1,
         30.1,
         30.1,
+        30.1,
         30.1
       ],
       "pillar_scores": {},
@@ -5990,6 +6055,7 @@
         13.17,
         13.17,
         13.17,
+        12.65,
         12.65,
         12.65,
         12.65,
@@ -6093,6 +6159,7 @@
         15.0,
         15.0,
         15.0,
+        15.0,
         15.0
       ],
       "pillar_scores": {},
@@ -6104,7 +6171,7 @@
     {
       "name": "GPT-5.4",
       "company": "OpenAI",
-      "rank": 39,
+      "rank": 23,
       "scores": [
         null,
         null,
@@ -6183,7 +6250,8 @@
         null,
         null,
         0.0,
-        21.06
+        21.06,
+        21.16
       ],
       "pillar_scores": {},
       "source_count": 2,
@@ -6193,5 +6261,5 @@
       }
     }
   ],
-  "run_at": "4:02 AM CST"
+  "run_at": "4:03 AM CST"
 }
