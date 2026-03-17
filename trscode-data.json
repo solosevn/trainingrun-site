@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "d0b724043480afeff1eafbec9e9e2f84bbfb33ff5604b4f07ab46f9529152626",
+  "checksum": "a3440caf22aa929985330d3e9b32efae331627a7590c1361992ded226374bb30",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -89,7 +89,8 @@
     "2026-03-11",
     "2026-03-12",
     "2026-03-13",
-    "2026-03-14"
+    "2026-03-14",
+    "2026-03-17"
   ],
   "models": [
     {
@@ -174,6 +175,7 @@
         75.19,
         74.42,
         74.42,
+        74.47,
         74.47
       ],
       "pillar_scores": {
@@ -277,6 +279,7 @@
         65.61,
         64.74,
         64.74,
+        64.8,
         64.8
       ],
       "pillar_scores": {
@@ -380,7 +383,8 @@
         63.77,
         63.11,
         63.11,
-        63.15
+        63.15,
+        63.13
       ],
       "pillar_scores": {
         "issue_resolution": 93.3,
@@ -398,7 +402,7 @@
         "terminalbench_hard_pct": 32.6,
         "swebench_pro_pct": 34.63,
         "scicode_pct": 1.5,
-        "arena_code_elo": 1206.0
+        "arena_code_elo": 1203.0
       }
     },
     {
@@ -483,7 +487,8 @@
         73.19,
         72.29,
         72.3,
-        72.36
+        72.36,
+        72.31
       ],
       "pillar_scores": {
         "issue_resolution": 94.4,
@@ -501,7 +506,7 @@
         "terminalbench_hard_pct": 44.3,
         "swebench_pro_pct": 29.94,
         "scicode_pct": null,
-        "arena_code_elo": 1342.0
+        "arena_code_elo": 1335.0
       }
     },
     {
@@ -586,7 +591,8 @@
         42.4,
         41.6,
         41.6,
-        41.65
+        41.65,
+        41.63
       ],
       "pillar_scores": {
         "issue_resolution": 73.5,
@@ -604,7 +610,7 @@
         "terminalbench_hard_pct": 39.6,
         "swebench_pro_pct": 15.56,
         "scicode_pct": null,
-        "arena_code_elo": 1287.0
+        "arena_code_elo": 1284.0
       }
     },
     {
@@ -689,20 +695,21 @@
         27.35,
         27.35,
         27.37,
-        27.37
+        27.37,
+        27.35
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 55.4,
         "swebench_pro_pct": 38.7,
-        "arena_code_elo": 1284.0
+        "arena_code_elo": 1281.0
       }
     },
     {
       "name": "Grok 4.20",
       "company": "xAI",
-      "rank": 12,
+      "rank": 8,
       "scores": [
         null,
         null,
@@ -781,15 +788,17 @@
         32.03,
         31.48,
         31.48,
-        31.51
+        31.51,
+        40.25
       ],
       "pillar_scores": {},
-      "source_count": 4,
+      "source_count": 5,
       "raw_data": {
         "swe_rebench_pass1": 37.5,
         "livecodebench_pct": 55.9,
         "bigcodebench_pct": 31.8,
-        "terminalbench_hard_pct": 27.2
+        "terminalbench_hard_pct": 27.2,
+        "arena_code_elo": 1369.0
       }
     },
     {
@@ -874,6 +883,7 @@
         44.59,
         43.53,
         43.53,
+        43.59,
         43.59
       ],
       "pillar_scores": {
@@ -955,6 +965,7 @@
         null,
         null,
         50.66,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1065,12 +1076,13 @@
         7.81,
         7.81,
         7.8,
-        7.8
+        7.8,
+        7.79
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1223.0
+        "arena_code_elo": 1220.0
       }
     },
     {
@@ -1155,14 +1167,15 @@
         30.35,
         29.74,
         29.74,
-        29.77
+        29.77,
+        29.76
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 75.8,
         "terminalbench_hard_pct": 30.0,
-        "arena_code_elo": 1312.0
+        "arena_code_elo": 1310.0
       }
     },
     {
@@ -1225,6 +1238,7 @@
         null,
         null,
         48.84,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1335,7 +1349,8 @@
         44.53,
         44.53,
         44.53,
-        44.53
+        44.53,
+        44.51
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -1343,13 +1358,13 @@
         "swe_rebench_pass1": 52.9,
         "livecodebench_pct": 80.2,
         "bigcodebench_pct": 35.8,
-        "arena_code_elo": 1205.0
+        "arena_code_elo": 1202.0
       }
     },
     {
       "name": "DeepSeek R1",
       "company": "DeepSeek",
-      "rank": 9,
+      "rank": 10,
       "scores": [
         35.5,
         35.4,
@@ -1410,6 +1425,7 @@
         44,
         44,
         44,
+        36.5,
         36.5,
         36.5,
         36.5,
@@ -1531,6 +1547,7 @@
         24.53,
         24.53,
         24.53,
+        24.53,
         24.53
       ],
       "pillar_scores": {},
@@ -1622,14 +1639,15 @@
         13.88,
         13.53,
         13.52,
-        13.54
+        13.54,
+        13.51
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 13.52,
         "terminalbench_hard_pct": 17.1,
-        "arena_code_elo": 1254.0
+        "arena_code_elo": 1249.0
       }
     },
     {
@@ -1714,13 +1732,14 @@
         11.66,
         11.66,
         11.66,
-        11.66
+        11.66,
+        11.63
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
         "swebench_pro_pct": 21.41,
-        "arena_code_elo": 1243.0
+        "arena_code_elo": 1238.0
       }
     },
     {
@@ -1783,6 +1802,7 @@
         null,
         null,
         45.59,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1893,14 +1913,15 @@
         22.5,
         22.5,
         22.5,
-        22.5
+        22.5,
+        22.48
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 54.2,
         "swebench_pro_pct": 9.67,
-        "arena_code_elo": 1357.0
+        "arena_code_elo": 1354.0
       }
     },
     {
@@ -1963,6 +1984,7 @@
         null,
         null,
         44.51,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2073,6 +2095,7 @@
         0.0,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -2139,6 +2162,7 @@
         null,
         null,
         43.43,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2249,12 +2273,13 @@
         8.36,
         8.36,
         8.35,
-        8.35
+        8.35,
+        8.34
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1309.0
+        "arena_code_elo": 1307.0
       }
     },
     {
@@ -2321,6 +2346,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -2429,6 +2455,7 @@
         2.45,
         2.45,
         2.45,
+        2.45,
         2.45
       ],
       "pillar_scores": {},
@@ -2501,6 +2528,7 @@
         null,
         null,
         15,
+        7.5,
         7.5,
         7.5,
         7.5,
@@ -2609,6 +2637,7 @@
         5.05,
         5.05,
         5.05,
+        5.05,
         5.05
       ],
       "pillar_scores": {},
@@ -2699,6 +2728,7 @@
         22.54,
         21.73,
         21.73,
+        21.78,
         21.78
       ],
       "pillar_scores": {},
@@ -2792,6 +2822,7 @@
         4.06,
         3.56,
         3.56,
+        3.59,
         3.59
       ],
       "pillar_scores": {},
@@ -2803,7 +2834,7 @@
     {
       "name": "GLM 4.7",
       "company": "Zhipu AI",
-      "rank": 8,
+      "rank": 9,
       "scores": [
         null,
         null,
@@ -2882,6 +2913,7 @@
         38.72,
         38.04,
         38.04,
+        38.09,
         38.09
       ],
       "pillar_scores": {},
@@ -2975,6 +3007,7 @@
         7.29,
         7.29,
         7.29,
+        7.29,
         7.29
       ],
       "pillar_scores": {},
@@ -2987,7 +3020,7 @@
     {
       "name": "GPT-4.1 (2025-04-14)",
       "company": "OpenAI",
-      "rank": 22,
+      "rank": 23,
       "scores": [
         null,
         null,
@@ -3061,6 +3094,7 @@
         20.99,
         20.99,
         20.99,
+        21.06,
         21.06,
         21.06,
         21.06,
@@ -3158,6 +3192,7 @@
         7.29,
         7.29,
         7.29,
+        7.29,
         7.29
       ],
       "pillar_scores": {},
@@ -3170,7 +3205,7 @@
     {
       "name": "GPT-5-Codex",
       "company": "OpenAI",
-      "rank": 10,
+      "rank": 11,
       "scores": [
         null,
         null,
@@ -3249,14 +3284,15 @@
         34.41,
         34.18,
         34.17,
-        34.19
+        34.19,
+        34.17
       ],
       "pillar_scores": {},
       "source_count": 4,
       "raw_data": {
         "terminalbench_hard_pct": 11.5,
         "swebench_pro_pct": 41.78,
-        "arena_code_elo": 1393.0,
+        "arena_code_elo": 1390.0,
         "swebench_verified_pct": 72.8
       }
     },
@@ -3342,20 +3378,21 @@
         29.88,
         29.01,
         29.01,
-        29.06
+        29.06,
+        29.04
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 66,
         "terminalbench_hard_pct": 43.1,
-        "arena_code_elo": 1244.0
+        "arena_code_elo": 1241.0
       }
     },
     {
       "name": "gpt-oss-120b",
       "company": "OpenAI",
-      "rank": 11,
+      "rank": 12,
       "scores": [
         null,
         null,
@@ -3432,6 +3469,7 @@
         32.31,
         32.31,
         32.31,
+        32.24,
         32.24,
         32.24,
         32.24
@@ -3528,13 +3566,14 @@
         11.56,
         11.04,
         11.05,
-        11.08
+        11.08,
+        11.06
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
         "terminalbench_hard_pct": 25.8,
-        "arena_code_elo": 1143.0
+        "arena_code_elo": 1140.0
       }
     },
     {
@@ -3619,6 +3658,7 @@
         19.25,
         18.69,
         18.69,
+        18.73,
         18.73
       ],
       "pillar_scores": {},
@@ -3632,7 +3672,7 @@
     {
       "name": "Kimi K2.5",
       "company": "Moonshot AI",
-      "rank": 21,
+      "rank": 22,
       "scores": [
         null,
         null,
@@ -3711,6 +3751,7 @@
         21.8,
         21.07,
         21.07,
+        21.12,
         21.12
       ],
       "pillar_scores": {},
@@ -3802,12 +3843,13 @@
         8.04,
         8.04,
         8.04,
-        8.04
+        8.04,
+        8.02
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1260.0
+        "arena_code_elo": 1257.0
       }
     },
     {
@@ -3877,6 +3919,7 @@
         3.03,
         3.03,
         3.03,
+        2.95,
         2.95,
         2.95,
         2.95,
@@ -3964,6 +4007,7 @@
         null,
         null,
         null,
+        6.07,
         6.07,
         6.07,
         6.07,
@@ -4074,6 +4118,7 @@
         17.89,
         17.89,
         17.89,
+        17.89,
         17.89
       ],
       "pillar_scores": {},
@@ -4166,12 +4211,13 @@
         8.49,
         8.49,
         8.49,
-        8.49
+        8.49,
+        8.47
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1330.0
+        "arena_code_elo": 1327.0
       }
     },
     {
@@ -4256,6 +4302,7 @@
         12.0,
         12.0,
         12.0,
+        10.42,
         10.42
       ],
       "pillar_scores": {},
@@ -4328,6 +4375,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -4436,6 +4484,7 @@
         9.84,
         9.29,
         9.29,
+        9.32,
         9.32
       ],
       "pillar_scores": {},
@@ -4509,6 +4558,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -4617,6 +4667,7 @@
         7.87,
         7.87,
         7.87,
+        7.87,
         7.87
       ],
       "pillar_scores": {},
@@ -4689,6 +4740,7 @@
         null,
         null,
         null,
+        6.88,
         6.88,
         6.88,
         6.88,
@@ -4798,6 +4850,7 @@
         21.22,
         21.22,
         21.22,
+        21.22,
         21.22
       ],
       "pillar_scores": {},
@@ -4891,12 +4944,13 @@
         7.65,
         7.65,
         7.65,
-        7.65
+        7.65,
+        7.63
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1198.0
+        "arena_code_elo": 1195.0
       }
     },
     {
@@ -4981,13 +5035,14 @@
         13.69,
         13.69,
         13.69,
-        13.69
+        13.69,
+        13.67
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
         "bigcodebench_pct": 27.0,
-        "arena_code_elo": 1100.0
+        "arena_code_elo": 1097.0
       }
     },
     {
@@ -5053,6 +5108,7 @@
         null,
         null,
         null,
+        14.86,
         14.86,
         14.86,
         14.86,
@@ -5164,6 +5220,7 @@
         1.95,
         1.95,
         1.95,
+        1.95,
         1.95
       ],
       "pillar_scores": {},
@@ -5254,12 +5311,13 @@
         8.35,
         8.35,
         8.33,
-        8.33
+        8.33,
+        8.31
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1306.0
+        "arena_code_elo": 1302.0
       }
     },
     {
@@ -5325,6 +5383,7 @@
         null,
         null,
         null,
+        6.42,
         6.42,
         6.42,
         6.42,
@@ -5434,6 +5493,7 @@
         20.82,
         20.1,
         20.1,
+        20.14,
         20.14
       ],
       "pillar_scores": {},
@@ -5510,6 +5570,7 @@
         12.56,
         12.56,
         12.56,
+        12.07,
         12.07,
         12.07,
         12.07,
@@ -5615,6 +5676,7 @@
         16.33,
         16.33,
         16.33,
+        16.33,
         16.33
       ],
       "pillar_scores": {},
@@ -5705,6 +5767,7 @@
         18.37,
         17.67,
         17.67,
+        17.71,
         17.71
       ],
       "pillar_scores": {},
@@ -5796,6 +5859,7 @@
         20.14,
         19.41,
         19.41,
+        19.46,
         19.46
       ],
       "pillar_scores": {},
@@ -5869,6 +5933,7 @@
         null,
         null,
         0,
+        12.55,
         12.55,
         12.55,
         12.55,
@@ -5977,6 +6042,7 @@
         30.1,
         30.1,
         30.1,
+        30.1,
         30.1
       ],
       "pillar_scores": {},
@@ -6055,6 +6121,7 @@
         13.17,
         13.17,
         13.17,
+        12.65,
         12.65,
         12.65,
         12.65,
@@ -6160,6 +6227,7 @@
         15.0,
         15.0,
         15.0,
+        15.0,
         15.0
       ],
       "pillar_scores": {},
@@ -6171,7 +6239,7 @@
     {
       "name": "GPT-5.4",
       "company": "OpenAI",
-      "rank": 23,
+      "rank": 21,
       "scores": [
         null,
         null,
@@ -6251,13 +6319,14 @@
         null,
         0.0,
         21.06,
-        21.16
+        21.16,
+        21.14
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
         "terminalbench_hard_pct": 81.8,
-        "arena_code_elo": 1436.0
+        "arena_code_elo": 1432.0
       }
     }
   ],
