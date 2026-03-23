@@ -1,28 +1,28 @@
 {
   "ddp": {
     "trscode": {
-      "last_run": "2026-03-22T04:01:47.085192",
+      "last_run": "2026-03-23T04:03:11.480019",
       "success": true,
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-22T04:02:39.691517",
+      "last_run": "2026-03-23T04:04:03.782311",
       "success": true,
       "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-22T04:07:39.715216",
+      "last_run": "2026-03-23T04:09:03.807219",
       "success": false,
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-22T04:11:30.761722",
+      "last_run": "2026-03-23T04:12:52.783299",
       "success": true,
       "dry_run": false
     },
     "tragents": {
-      "last_run": "2026-03-22T04:15:53.236572",
-      "success": true,
+      "last_run": "2026-03-23T04:17:52.801785",
+      "success": false,
       "dry_run": false
     }
   },
@@ -32,20 +32,20 @@
       "label": "Truth & Reliability",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-03-22T04:11:27",
-      "last_run_date": "2026-03-22",
+      "last_run": "2026-03-23T04:12:49",
+      "last_run_date": "2026-03-23",
       "status": "success",
-      "duration_seconds": 227,
+      "duration_seconds": 225,
       "sources_total": 9,
       "sources_hit": 8,
       "models_qualified": 18,
       "top_model": "GPT-5.2",
-      "top_score": 87.71,
+      "top_score": 88.02,
       "top5": [
         {
           "rank": 1,
           "name": "GPT-5.2",
-          "score": 87.71
+          "score": 88.02
         },
         {
           "rank": 2,
@@ -55,7 +55,7 @@
         {
           "rank": 3,
           "name": "Gemini 3 Pro",
-          "score": 80.74
+          "score": 81.03
         },
         {
           "rank": 4,
@@ -65,7 +65,7 @@
         {
           "rank": 5,
           "name": "Gemini 3 Flash",
-          "score": 77.52
+          "score": 78.05
         }
       ],
       "leaderboard_url": "/truscore-scores.html",
@@ -122,10 +122,10 @@
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-22T04:01:41",
-      "last_run_date": "2026-03-22",
+      "last_run": "2026-03-23T04:03:05",
+      "last_run_date": "2026-03-23",
       "status": "success",
-      "duration_seconds": 100,
+      "duration_seconds": 184,
       "sources_total": 8,
       "sources_hit": 5,
       "models_qualified": 39,
@@ -159,7 +159,7 @@
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-03-23T05:00:00",
+      "next_run": "2026-03-24T05:00:00",
       "error": null
     },
     "trfcast": {
@@ -167,10 +167,10 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-03-22T04:02:36",
-      "last_run_date": "2026-03-22",
+      "last_run": "2026-03-23T04:04:00",
+      "last_run_date": "2026-03-23",
       "status": "success",
-      "duration_seconds": 49,
+      "duration_seconds": 48,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 10,
@@ -204,9 +204,9 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-03-23T05:00:00",
+      "next_run": "2026-03-24T05:00:00",
       "error": null
     }
   },
-  "last_updated": "2026-03-22T04:15:49"
+  "last_updated": "2026-03-23T04:04:00"
 }
