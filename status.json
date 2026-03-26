@@ -1,27 +1,27 @@
 {
   "ddp": {
     "trscode": {
-      "last_run": "2026-03-25T04:01:45.768811",
+      "last_run": "2026-03-26T04:02:12.064428",
       "success": true,
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-25T04:02:42.403248",
+      "last_run": "2026-03-26T04:03:08.764761",
       "success": true,
       "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-25T04:07:42.446736",
+      "last_run": "2026-03-26T04:08:08.801387",
       "success": false,
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-25T04:11:25.136582",
+      "last_run": "2026-03-26T04:11:57.548977",
       "success": true,
       "dry_run": false
     },
     "tragents": {
-      "last_run": "2026-03-25T04:16:25.150805",
+      "last_run": "2026-03-26T04:16:57.572582",
       "success": false,
       "dry_run": false
     }
@@ -32,10 +32,10 @@
       "label": "Truth & Reliability",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-03-25T04:11:21",
-      "last_run_date": "2026-03-25",
+      "last_run": "2026-03-26T04:11:51",
+      "last_run_date": "2026-03-26",
       "status": "success",
-      "duration_seconds": 218,
+      "duration_seconds": 222,
       "sources_total": 9,
       "sources_hit": 8,
       "models_qualified": 18,
@@ -122,10 +122,10 @@
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-25T04:01:39",
-      "last_run_date": "2026-03-25",
+      "last_run": "2026-03-26T04:02:05",
+      "last_run_date": "2026-03-26",
       "status": "success",
-      "duration_seconds": 98,
+      "duration_seconds": 123,
       "sources_total": 8,
       "sources_hit": 5,
       "models_qualified": 39,
@@ -159,7 +159,7 @@
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-03-26T05:00:00",
+      "next_run": "2026-03-27T05:00:00",
       "error": null
     },
     "trfcast": {
@@ -167,35 +167,35 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-03-25T04:02:34",
-      "last_run_date": "2026-03-25",
+      "last_run": "2026-03-26T04:03:00",
+      "last_run_date": "2026-03-26",
       "status": "success",
       "duration_seconds": 48,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 10,
       "top_model": "Claude Sonnet 4.5",
-      "top_score": 62.8,
+      "top_score": 64.08,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Sonnet 4.5",
-          "score": 62.8
+          "score": 64.08
         },
         {
           "rank": 2,
           "name": "GPT-5.1",
-          "score": 60.52
+          "score": 61.48
         },
         {
           "rank": 3,
-          "name": "O3",
-          "score": 59.94
+          "name": "DeepSeek V3.1",
+          "score": 60.68
         },
         {
           "rank": 4,
-          "name": "DeepSeek V3.1",
-          "score": 59.59
+          "name": "O3",
+          "score": 59.94
         },
         {
           "rank": 5,
@@ -204,9 +204,9 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-03-26T05:00:00",
+      "next_run": "2026-03-27T05:00:00",
       "error": null
     }
   },
-  "last_updated": "2026-03-25T04:02:34"
+  "last_updated": "2026-03-26T04:03:00"
 }
