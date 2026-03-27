@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "656b1e3835e82eca4487fbc2ede23466f0b0bf18483104916d2d732d1ee72ab1",
+  "checksum": "eefb2f28a506513a7ea329042fc00532a4c3ecc7ae0e6f9552976a17819adc92",
   "weights": {
     "swebench_verified": 0.17,
     "swe_rebench": 0.13,
@@ -99,7 +99,8 @@
     "2026-03-23",
     "2026-03-24",
     "2026-03-25",
-    "2026-03-26"
+    "2026-03-26",
+    "2026-03-27"
   ],
   "models": [
     {
@@ -192,6 +193,7 @@
         74.47,
         74.47,
         74.47,
+        74.68,
         74.68,
         74.68,
         74.68
@@ -307,6 +309,7 @@
         64.8,
         64.67,
         64.67,
+        64.67,
         64.67
       ],
       "pillar_scores": {
@@ -420,7 +423,8 @@
         63.15,
         62.94,
         62.94,
-        62.94
+        62.94,
+        62.93
       ],
       "pillar_scores": {
         "issue_resolution": 93.3,
@@ -438,7 +442,7 @@
         "terminalbench_hard_pct": 32.6,
         "swebench_pro_pct": 34.63,
         "scicode_pct": 1.5,
-        "arena_code_elo": 1205.0
+        "arena_code_elo": 1202.0
       }
     },
     {
@@ -533,7 +537,8 @@
         72.33,
         72.35,
         72.35,
-        72.35
+        72.35,
+        72.33
       ],
       "pillar_scores": {
         "issue_resolution": 94.4,
@@ -551,7 +556,7 @@
         "terminalbench_hard_pct": 44.3,
         "swebench_pro_pct": 29.94,
         "scicode_pct": null,
-        "arena_code_elo": 1338.0
+        "arena_code_elo": 1336.0
       }
     },
     {
@@ -644,6 +649,7 @@
         41.64,
         41.64,
         41.64,
+        39.89,
         39.89,
         39.89,
         39.89
@@ -759,14 +765,15 @@
         27.35,
         27.35,
         27.35,
-        27.35
+        27.35,
+        27.34
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 55.4,
         "swebench_pro_pct": 38.7,
-        "arena_code_elo": 1282.0
+        "arena_code_elo": 1280.0
       }
     },
     {
@@ -861,7 +868,8 @@
         40.27,
         41.89,
         41.89,
-        41.89
+        41.89,
+        41.92
       ],
       "pillar_scores": {},
       "source_count": 5,
@@ -870,7 +878,7 @@
         "livecodebench_pct": 55.9,
         "bigcodebench_pct": 31.8,
         "terminalbench_hard_pct": 27.2,
-        "arena_code_elo": 1373.0
+        "arena_code_elo": 1378.0
       }
     },
     {
@@ -965,6 +973,7 @@
         43.58,
         41.62,
         41.62,
+        41.62,
         41.62
       ],
       "pillar_scores": {
@@ -1046,6 +1055,7 @@
         null,
         null,
         50.66,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1176,12 +1186,13 @@
         7.79,
         7.79,
         7.79,
+        7.79,
         7.79
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1221.0
+        "arena_code_elo": 1220.0
       }
     },
     {
@@ -1276,14 +1287,15 @@
         29.75,
         29.75,
         29.75,
-        29.75
+        29.75,
+        29.72
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 75.8,
         "terminalbench_hard_pct": 30.0,
-        "arena_code_elo": 1309.0
+        "arena_code_elo": 1303.0
       }
     },
     {
@@ -1346,6 +1358,7 @@
         null,
         null,
         48.84,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1476,7 +1489,8 @@
         44.53,
         44.53,
         44.53,
-        44.53
+        44.53,
+        44.54
       ],
       "pillar_scores": {},
       "source_count": 4,
@@ -1484,7 +1498,7 @@
         "swe_rebench_pass1": 65.3,
         "livecodebench_pct": 80.2,
         "bigcodebench_pct": 35.8,
-        "arena_code_elo": 1205.0
+        "arena_code_elo": 1206.0
       }
     },
     {
@@ -1577,6 +1591,7 @@
         36.5,
         36.5,
         36.5,
+        35.49,
         35.49,
         35.49,
         35.49
@@ -1692,6 +1707,7 @@
         24.53,
         25.0,
         25.0,
+        25.0,
         25.0
       ],
       "pillar_scores": {},
@@ -1793,14 +1809,15 @@
         13.52,
         13.52,
         13.52,
-        13.52
+        13.52,
+        13.47
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 13.52,
         "terminalbench_hard_pct": 17.1,
-        "arena_code_elo": 1251.0
+        "arena_code_elo": 1242.0
       }
     },
     {
@@ -1895,13 +1912,14 @@
         11.63,
         11.63,
         11.63,
+        11.63,
         11.63
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
         "swebench_pro_pct": 21.41,
-        "arena_code_elo": 1238.0
+        "arena_code_elo": 1237.0
       }
     },
     {
@@ -1964,6 +1982,7 @@
         null,
         null,
         45.59,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2094,6 +2113,7 @@
         22.48,
         22.48,
         22.48,
+        22.48,
         22.48
       ],
       "pillar_scores": {},
@@ -2101,7 +2121,7 @@
       "raw_data": {
         "swebench_verified_pct": 54.2,
         "swebench_pro_pct": 9.67,
-        "arena_code_elo": 1354.0
+        "arena_code_elo": 1353.0
       }
     },
     {
@@ -2164,6 +2184,7 @@
         null,
         null,
         44.51,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2294,6 +2315,7 @@
         0.0,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {},
@@ -2360,6 +2382,7 @@
         null,
         null,
         43.43,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -2490,6 +2513,7 @@
         8.35,
         8.35,
         8.35,
+        8.35,
         8.35
       ],
       "pillar_scores": {},
@@ -2562,6 +2586,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -2690,6 +2715,7 @@
         2.45,
         2.45,
         2.45,
+        2.45,
         2.45
       ],
       "pillar_scores": {},
@@ -2762,6 +2788,7 @@
         null,
         null,
         15,
+        7.5,
         7.5,
         7.5,
         7.5,
@@ -2890,6 +2917,7 @@
         5.05,
         5.05,
         5.05,
+        5.05,
         5.05
       ],
       "pillar_scores": {},
@@ -2980,6 +3008,7 @@
         22.54,
         21.73,
         21.73,
+        21.78,
         21.78,
         21.78,
         21.78,
@@ -3093,6 +3122,7 @@
         3.59,
         3.59,
         3.59,
+        3.59,
         3.59
       ],
       "pillar_scores": {},
@@ -3193,6 +3223,7 @@
         38.09,
         38.59,
         38.59,
+        38.59,
         38.59
       ],
       "pillar_scores": {},
@@ -3271,6 +3302,7 @@
         7.49,
         7.49,
         7.49,
+        7.29,
         7.29,
         7.29,
         7.29,
@@ -3397,6 +3429,7 @@
         21.06,
         20.92,
         20.92,
+        20.92,
         20.92
       ],
       "pillar_scores": {},
@@ -3474,6 +3507,7 @@
         7.49,
         7.49,
         7.49,
+        7.29,
         7.29,
         7.29,
         7.29,
@@ -3600,6 +3634,7 @@
         34.18,
         34.18,
         34.18,
+        34.18,
         34.18
       ],
       "pillar_scores": {},
@@ -3703,14 +3738,15 @@
         29.04,
         29.04,
         29.04,
-        29.04
+        29.04,
+        29.03
       ],
       "pillar_scores": {},
       "source_count": 3,
       "raw_data": {
         "swebench_verified_pct": 66,
         "terminalbench_hard_pct": 43.1,
-        "arena_code_elo": 1240.0
+        "arena_code_elo": 1238.0
       }
     },
     {
@@ -3803,6 +3839,7 @@
         32.24,
         32.24,
         32.24,
+        33.15,
         33.15,
         33.15,
         33.15
@@ -3909,6 +3946,7 @@
         11.05,
         11.05,
         11.05,
+        11.05,
         11.05
       ],
       "pillar_scores": {},
@@ -4000,6 +4038,7 @@
         19.25,
         18.69,
         18.69,
+        18.73,
         18.73,
         18.73,
         18.73,
@@ -4112,6 +4151,7 @@
         21.12,
         21.12,
         21.12,
+        21.12,
         21.12
       ],
       "pillar_scores": {},
@@ -4213,12 +4253,13 @@
         8.03,
         8.03,
         8.03,
-        8.03
+        8.03,
+        8.02
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1258.0
+        "arena_code_elo": 1257.0
       }
     },
     {
@@ -4288,6 +4329,7 @@
         3.03,
         3.03,
         3.03,
+        2.95,
         2.95,
         2.95,
         2.95,
@@ -4385,6 +4427,7 @@
         null,
         null,
         null,
+        6.07,
         6.07,
         6.07,
         6.07,
@@ -4515,6 +4558,7 @@
         17.89,
         19.22,
         19.22,
+        19.22,
         19.22
       ],
       "pillar_scores": {},
@@ -4608,6 +4652,7 @@
         8.49,
         8.49,
         8.49,
+        8.47,
         8.47,
         8.47,
         8.47,
@@ -4717,6 +4762,7 @@
         10.42,
         10.42,
         10.42,
+        10.42,
         10.42
       ],
       "pillar_scores": {},
@@ -4789,6 +4835,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -4917,6 +4964,7 @@
         9.32,
         9.32,
         9.32,
+        9.32,
         9.32
       ],
       "pillar_scores": {},
@@ -4990,6 +5038,7 @@
         null,
         null,
         4.89,
+        2.45,
         2.45,
         2.45,
         2.45,
@@ -5118,6 +5167,7 @@
         7.87,
         6.76,
         6.76,
+        6.76,
         6.76
       ],
       "pillar_scores": {},
@@ -5190,6 +5240,7 @@
         null,
         null,
         null,
+        6.88,
         6.88,
         6.88,
         6.88,
@@ -5319,6 +5370,7 @@
         21.22,
         21.69,
         21.69,
+        21.69,
         21.69
       ],
       "pillar_scores": {},
@@ -5415,6 +5467,7 @@
         7.65,
         7.63,
         7.63,
+        7.65,
         7.65,
         7.65,
         7.65,
@@ -5522,13 +5575,14 @@
         13.65,
         13.65,
         13.65,
-        13.65
+        13.65,
+        13.62
       ],
       "pillar_scores": {},
       "source_count": 2,
       "raw_data": {
         "bigcodebench_pct": 27.0,
-        "arena_code_elo": 1094.0
+        "arena_code_elo": 1090.0
       }
     },
     {
@@ -5623,6 +5677,7 @@
         14.86,
         13.84,
         13.84,
+        13.84,
         13.84
       ],
       "pillar_scores": {},
@@ -5696,6 +5751,7 @@
         null,
         null,
         null,
+        1.95,
         1.95,
         1.95,
         1.95,
@@ -5825,12 +5881,13 @@
         8.31,
         8.31,
         8.31,
-        8.31
+        8.31,
+        8.3
       ],
       "pillar_scores": {},
       "source_count": 1,
       "raw_data": {
-        "arena_code_elo": 1302.0
+        "arena_code_elo": 1300.0
       }
     },
     {
@@ -5896,6 +5953,7 @@
         null,
         null,
         null,
+        6.42,
         6.42,
         6.42,
         6.42,
@@ -6025,6 +6083,7 @@
         20.14,
         20.14,
         20.14,
+        20.14,
         20.14
       ],
       "pillar_scores": {},
@@ -6101,6 +6160,7 @@
         12.56,
         12.56,
         12.56,
+        12.07,
         12.07,
         12.07,
         12.07,
@@ -6226,6 +6286,7 @@
         16.33,
         16.33,
         16.33,
+        16.33,
         16.33
       ],
       "pillar_scores": {},
@@ -6316,6 +6377,7 @@
         18.37,
         17.67,
         17.67,
+        17.71,
         17.71,
         17.71,
         17.71,
@@ -6427,6 +6489,7 @@
         19.46,
         19.46,
         19.46,
+        19.46,
         19.46
       ],
       "pillar_scores": {},
@@ -6500,6 +6563,7 @@
         null,
         null,
         0,
+        12.55,
         12.55,
         12.55,
         12.55,
@@ -6628,6 +6692,7 @@
         30.1,
         31.7,
         31.7,
+        31.7,
         31.7
       ],
       "pillar_scores": {},
@@ -6731,6 +6796,7 @@
         12.65,
         12.65,
         12.65,
+        12.65,
         12.65
       ],
       "pillar_scores": {},
@@ -6803,6 +6869,7 @@
         null,
         null,
         0.0,
+        15.0,
         15.0,
         15.0,
         15.0,
@@ -6932,6 +6999,7 @@
         21.11,
         21.11,
         21.11,
+        21.11,
         21.11
       ],
       "pillar_scores": {},
@@ -6940,7 +7008,107 @@
         "terminalbench_hard_pct": 81.8,
         "arena_code_elo": 1428.0
       }
+    },
+    {
+      "name": "mercury-2",
+      "company": "Inception",
+      "rank": 999,
+      "scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0
+      ],
+      "pillar_scores": {},
+      "source_count": 0,
+      "raw_data": {}
     }
   ],
-  "run_at": "4:02 AM CST"
+  "run_at": "4:01 AM CST"
 }
