@@ -1,27 +1,27 @@
 {
   "ddp": {
     "trscode": {
-      "last_run": "2026-03-27T04:01:40.506659",
+      "last_run": "2026-03-29T04:01:41.101356",
       "success": true,
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-27T04:02:50.304980",
+      "last_run": "2026-03-29T04:02:39.342974",
       "success": true,
       "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-27T04:07:50.322839",
+      "last_run": "2026-03-29T04:07:39.363714",
       "success": false,
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-27T04:11:31.289956",
+      "last_run": "2026-03-29T04:11:25.527171",
       "success": true,
       "dry_run": false
     },
     "tragents": {
-      "last_run": "2026-03-27T04:15:47.997637",
+      "last_run": "2026-03-29T04:15:39.146844",
       "success": true,
       "dry_run": false
     }
@@ -32,10 +32,10 @@
       "label": "Truth & Reliability",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-03-27T04:11:28",
-      "last_run_date": "2026-03-27",
+      "last_run": "2026-03-29T04:11:23",
+      "last_run_date": "2026-03-29",
       "status": "success",
-      "duration_seconds": 217,
+      "duration_seconds": 223,
       "sources_total": 9,
       "sources_hit": 8,
       "models_qualified": 18,
@@ -77,44 +77,44 @@
       "label": "Agents Leaderboard",
       "emoji": "\ud83e\udd16",
       "enabled": true,
-      "last_run": "2026-03-27T04:15:45",
-      "last_run_date": "2026-03-27",
+      "last_run": "2026-03-29T04:15:36",
+      "last_run_date": "2026-03-29",
       "status": "success",
-      "duration_seconds": 253,
+      "duration_seconds": 250,
       "sources_total": 22,
       "sources_hit": 6,
       "models_qualified": 19,
       "top_model": "MiniMax M2",
-      "top_score": 92.36,
+      "top_score": 92.86,
       "top5": [
         {
           "rank": 1,
           "name": "MiniMax M2",
-          "score": 92.36
+          "score": 92.86
         },
         {
           "rank": 2,
-          "name": "Gemini 3 Flash",
-          "score": 76.35
+          "name": "DeepSeek V3.2",
+          "score": 72.42
         },
         {
           "rank": 3,
           "name": "GLM-5",
-          "score": 69.05
+          "score": 68.44
         },
         {
           "rank": 4,
-          "name": "GPT-5",
-          "score": 67.41
+          "name": "Gemini 3 Flash",
+          "score": 68.42
         },
         {
           "rank": 5,
-          "name": "Gemini 3 Pro",
-          "score": 59.09
+          "name": "Kimi K2.5",
+          "score": 57.39
         }
       ],
       "leaderboard_url": "/tragents-scores.html",
-      "next_run": "2026-03-28T05:00:00",
+      "next_run": "2026-03-30T05:00:00",
       "error": null
     },
     "trscode": {
@@ -122,10 +122,10 @@
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-27T04:01:37",
-      "last_run_date": "2026-03-27",
+      "last_run": "2026-03-29T04:01:38",
+      "last_run_date": "2026-03-29",
       "status": "success",
-      "duration_seconds": 95,
+      "duration_seconds": 97,
       "sources_total": 8,
       "sources_hit": 5,
       "models_qualified": 39,
@@ -159,7 +159,7 @@
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-03-28T05:00:00",
+      "next_run": "2026-03-30T05:00:00",
       "error": null
     },
     "trfcast": {
@@ -167,30 +167,30 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-03-27T04:02:37",
-      "last_run_date": "2026-03-27",
+      "last_run": "2026-03-29T04:02:36",
+      "last_run_date": "2026-03-29",
       "status": "success",
-      "duration_seconds": 56,
+      "duration_seconds": 55,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 10,
       "top_model": "Claude Sonnet 4.5",
-      "top_score": 64.52,
+      "top_score": 65.24,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Sonnet 4.5",
-          "score": 64.52
+          "score": 65.24
         },
         {
           "rank": 2,
           "name": "GPT-5.1",
-          "score": 61.8
+          "score": 62.27
         },
         {
           "rank": 3,
           "name": "DeepSeek V3.1",
-          "score": 61.08
+          "score": 60.88
         },
         {
           "rank": 4,
@@ -204,9 +204,9 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-03-28T05:00:00",
+      "next_run": "2026-03-30T05:00:00",
       "error": null
     }
   },
-  "last_updated": "2026-03-27T04:15:45"
+  "last_updated": "2026-03-29T04:15:36"
 }
