@@ -1,6 +1,6 @@
 {
   "formula_version": "1.0",
-  "checksum": "256cfbfcecd4836f871aef1cf856a8cd6a98446d857d1cf34c3193cc1eb95f5d",
+  "checksum": "ad0ba165c758ebb4408f56a042eb5bde8de06d00e67c24515823b0b0338862bd",
   "weights": {
     "forecasting_baseline": 0.2,
     "forecasting_tournament": 0.1,
@@ -102,7 +102,8 @@
     "2026-03-25",
     "2026-03-26",
     "2026-03-27",
-    "2026-03-29"
+    "2026-03-29",
+    "2026-03-30"
   ],
   "models": [
     {
@@ -199,23 +200,24 @@
         10.89,
         11.19,
         11.78,
-        11.69
+        11.69,
+        11.59
       ],
       "pillar_scores": {
         "forecasting": 100.0,
-        "trading": 11.3,
+        "trading": 2.26,
         "calibration": null,
         "financial_reasoning": null,
-        "market_intelligence": null
+        "market_intelligence": 25.04
       },
-      "source_count": 2,
+      "source_count": 3,
       "raw_data": {
         "forecastbench_baseline_brier": null,
         "forecastbench_tournament_brier": 0.102,
-        "rallies_return_pct": 4.0,
+        "rallies_return_pct": 0.8,
         "alpha_arena_return_pct": -48.4,
         "alpha_arena_sharpe": -0.055,
-        "rallies_win_rate": 0.0,
+        "rallies_win_rate": 16.7,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -223,7 +225,7 @@
     {
       "name": "O3",
       "company": "OpenAI",
-      "rank": 4,
+      "rank": 3,
       "scores": [
         87.61,
         87.4,
@@ -289,6 +291,7 @@
         58.65,
         58.65,
         60.28,
+        59.94,
         59.94,
         59.94,
         59.94,
@@ -429,23 +432,24 @@
         54.46,
         53.88,
         54.12,
-        54.16
+        54.16,
+        53.14
       ],
       "pillar_scores": {
         "forecasting": 85.58,
-        "trading": 0.28,
+        "trading": 10.17,
         "calibration": 92.2,
         "financial_reasoning": 33.36,
-        "market_intelligence": 100.0
+        "market_intelligence": 49.92
       },
       "source_count": 5,
       "raw_data": {
         "forecastbench_baseline_brier": 0.141,
         "forecastbench_tournament_brier": 0.141,
-        "rallies_return_pct": 0.1,
+        "rallies_return_pct": 3.6,
         "alpha_arena_return_pct": -10.94,
         "alpha_arena_sharpe": -0.018,
-        "rallies_win_rate": 66.7,
+        "rallies_win_rate": 33.3,
         "financearena_qa_pct": 32.4,
         "financearena_elo": 31.6
       }
@@ -544,23 +548,24 @@
         62.8,
         64.08,
         64.52,
-        65.24
+        65.24,
+        67.02
       ],
       "pillar_scores": {
         "forecasting": 89.38,
-        "trading": 29.66,
+        "trading": 17.23,
         "calibration": 96.3,
         "financial_reasoning": 89.05,
-        "market_intelligence": 27.29
+        "market_intelligence": 100.0
       },
       "source_count": 5,
       "raw_data": {
         "forecastbench_baseline_brier": 0.135,
         "forecastbench_tournament_brier": 0.135,
-        "rallies_return_pct": 10.5,
+        "rallies_return_pct": 6.1,
         "alpha_arena_return_pct": -19.15,
         "alpha_arena_sharpe": -0.037,
-        "rallies_win_rate": 18.2,
+        "rallies_win_rate": 66.7,
         "financearena_qa_pct": 43.9,
         "financearena_elo": 1018
       }
@@ -659,6 +664,7 @@
         51.97,
         51.97,
         51.97,
+        51.97,
         51.97
       ],
       "pillar_scores": {
@@ -683,7 +689,7 @@
     {
       "name": "DeepSeek V3.1",
       "company": "DeepSeek",
-      "rank": 3,
+      "rank": 2,
       "scores": [
         21.46,
         21.95,
@@ -774,6 +780,7 @@
         59.59,
         60.68,
         61.08,
+        60.88,
         60.88
       ],
       "pillar_scores": {
@@ -889,6 +896,7 @@
         48.85,
         50.64,
         50.43,
+        50.95,
         50.95
       ],
       "pillar_scores": {
@@ -913,7 +921,7 @@
     {
       "name": "GPT-5.1",
       "company": "OpenAI",
-      "rank": 2,
+      "rank": 4,
       "scores": [
         27.69,
         28.24,
@@ -1004,23 +1012,24 @@
         60.52,
         61.48,
         61.8,
-        62.27
+        62.27,
+        58.76
       ],
       "pillar_scores": {
         "forecasting": 80.59,
-        "trading": 57.97,
+        "trading": 56.78,
         "calibration": 76.92,
         "financial_reasoning": null,
-        "market_intelligence": 82.16
+        "market_intelligence": 100.0
       },
       "source_count": 4,
       "raw_data": {
         "forecastbench_baseline_brier": 0.169,
         "forecastbench_tournament_brier": 0.116,
-        "rallies_return_pct": 10.6,
+        "rallies_return_pct": 9.9,
         "alpha_arena_return_pct": 8.88,
         "alpha_arena_sharpe": 0.009,
-        "rallies_win_rate": 42.9,
+        "rallies_win_rate": 0.0,
         "financearena_qa_pct": null,
         "financearena_elo": null
       }
@@ -1086,6 +1095,7 @@
         null,
         71.47,
         72.02,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1225,17 +1235,21 @@
         0.0,
         0.0,
         0.0,
-        0.0
+        0.0,
+        15.0
       ],
       "pillar_scores": {
         "forecasting": null,
-        "trading": null,
+        "trading": 100.0,
         "calibration": null,
         "financial_reasoning": null,
         "market_intelligence": null
       },
-      "source_count": 0,
-      "raw_data": {}
+      "source_count": 1,
+      "raw_data": {
+        "rallies_return_pct": 35.4,
+        "rallies_win_rate": 0.0
+      }
     },
     {
       "name": "Mistral Large",
@@ -1300,6 +1314,7 @@
         70.88,
         0.0,
         0.0,
+        4.93,
         4.93,
         4.93,
         4.93,
@@ -1440,6 +1455,7 @@
         0.0,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -1546,6 +1562,7 @@
         0.0,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -1619,6 +1636,7 @@
         null,
         68.79,
         69.39,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -1759,6 +1777,7 @@
         45.07,
         45.07,
         45.07,
+        45.07,
         45.07
       ],
       "pillar_scores": {
@@ -1839,6 +1858,7 @@
         null,
         4.36,
         0.0,
+        4.36,
         4.36,
         4.36,
         4.36,
@@ -1979,6 +1999,7 @@
         51.75,
         51.75,
         51.75,
+        51.75,
         51.75
       ],
       "pillar_scores": {
@@ -2090,6 +2111,7 @@
         4.44,
         5.65,
         5.94,
+        6.75,
         6.75
       ],
       "pillar_scores": {
@@ -2176,6 +2198,7 @@
         52.88,
         52.88,
         52.54,
+        52.88,
         52.88,
         52.88,
         52.88,
@@ -2312,6 +2335,7 @@
         47.12,
         47.12,
         47.12,
+        47.12,
         47.12
       ],
       "pillar_scores": {
@@ -2397,6 +2421,7 @@
         46.77,
         46.77,
         46.77,
+        46.42,
         46.42,
         46.42,
         46.42,
@@ -2534,6 +2559,7 @@
         54.76,
         54.76,
         54.76,
+        54.76,
         54.76
       ],
       "pillar_scores": {
@@ -2616,6 +2642,7 @@
         null,
         5.26,
         0.0,
+        5.26,
         5.26,
         5.26,
         5.26,
@@ -2758,6 +2785,7 @@
         0.0,
         0.0,
         0.0,
+        0.0,
         0.0
       ],
       "pillar_scores": {
@@ -2838,6 +2866,7 @@
         null,
         6.44,
         0.0,
+        6.44,
         6.44,
         6.44,
         6.44,
@@ -2978,6 +3007,7 @@
         6.86,
         6.86,
         6.86,
+        6.86,
         6.86
       ],
       "pillar_scores": {
@@ -3058,6 +3088,7 @@
         null,
         4.93,
         0.0,
+        4.93,
         4.93,
         4.93,
         4.93,
@@ -3198,6 +3229,7 @@
         3.2,
         3.2,
         3.2,
+        3.2,
         3.2
       ],
       "pillar_scores": {
@@ -3308,6 +3340,7 @@
         6.94,
         8.63,
         8.22,
+        7.58,
         7.58
       ],
       "pillar_scores": {
@@ -3418,6 +3451,7 @@
         3.47,
         4.42,
         5.23,
+        6.12,
         6.12
       ],
       "pillar_scores": {
@@ -3528,6 +3562,7 @@
         6.65,
         6.65,
         6.65,
+        6.65,
         6.65
       ],
       "pillar_scores": {
@@ -3608,6 +3643,7 @@
         null,
         20.78,
         0.0,
+        20.78,
         20.78,
         20.78,
         20.78,
@@ -3752,6 +3788,7 @@
         6.6,
         6.6,
         6.6,
+        6.6,
         6.6
       ],
       "pillar_scores": {
@@ -3832,6 +3869,7 @@
         null,
         14.15,
         0.0,
+        14.15,
         14.15,
         14.15,
         14.15,
@@ -3972,6 +4010,7 @@
         5.78,
         5.78,
         5.78,
+        5.78,
         5.78
       ],
       "pillar_scores": {
@@ -4082,6 +4121,7 @@
         3.39,
         5.51,
         5.74,
+        5.08,
         5.08
       ],
       "pillar_scores": {
@@ -4165,6 +4205,7 @@
         44.46,
         45.4,
         45.4,
+        44.11,
         44.11,
         44.11,
         44.11,
@@ -4300,6 +4341,7 @@
         47.12,
         47.12,
         47.12,
+        47.12,
         47.12
       ],
       "pillar_scores": {
@@ -4410,6 +4452,7 @@
         5.0,
         5.48,
         3.69,
+        4.19,
         4.19
       ],
       "pillar_scores": {
