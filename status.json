@@ -1,28 +1,28 @@
 {
   "ddp": {
     "trscode": {
-      "last_run": "2026-03-31T04:01:38.149478",
+      "last_run": "2026-04-01T04:01:41.100207",
       "success": true,
       "dry_run": false
     },
     "trfcast": {
-      "last_run": "2026-03-31T04:02:28.269622",
+      "last_run": "2026-04-01T04:02:30.896406",
       "success": true,
       "dry_run": false
     },
     "trs": {
-      "last_run": "2026-03-31T04:07:28.305302",
+      "last_run": "2026-04-01T04:07:30.919695",
       "success": false,
       "dry_run": false
     },
     "truscore": {
-      "last_run": "2026-03-31T04:11:13.886680",
+      "last_run": "2026-04-01T04:11:09.964991",
       "success": true,
       "dry_run": false
     },
     "tragents": {
-      "last_run": "2026-03-31T04:16:13.908774",
-      "success": false,
+      "last_run": "2026-04-01T04:15:23.431308",
+      "success": true,
       "dry_run": false
     }
   },
@@ -32,10 +32,10 @@
       "label": "Truth & Reliability",
       "emoji": "\ud83c\udfaf",
       "enabled": true,
-      "last_run": "2026-03-31T04:11:11",
-      "last_run_date": "2026-03-31",
+      "last_run": "2026-04-01T04:11:07",
+      "last_run_date": "2026-04-01",
       "status": "success",
-      "duration_seconds": 222,
+      "duration_seconds": 216,
       "sources_total": 9,
       "sources_hit": 8,
       "models_qualified": 18,
@@ -77,10 +77,10 @@
       "label": "Agents Leaderboard",
       "emoji": "\ud83e\udd16",
       "enabled": true,
-      "last_run": "2026-03-30T04:15:41",
-      "last_run_date": "2026-03-30",
+      "last_run": "2026-04-01T04:15:20",
+      "last_run_date": "2026-04-01",
       "status": "success",
-      "duration_seconds": 253,
+      "duration_seconds": 250,
       "sources_total": 22,
       "sources_hit": 6,
       "models_qualified": 19,
@@ -94,27 +94,27 @@
         },
         {
           "rank": 2,
-          "name": "DeepSeek V3.2",
-          "score": 72.42
+          "name": "GLM-5",
+          "score": 81.99
         },
         {
           "rank": 3,
-          "name": "GLM-5",
-          "score": 68.44
+          "name": "Gemini 3 Flash",
+          "score": 77.28
         },
         {
           "rank": 4,
-          "name": "Gemini 3 Flash",
-          "score": 68.42
+          "name": "DeepSeek V3.2",
+          "score": 71.88
         },
         {
           "rank": 5,
-          "name": "Qwen3",
-          "score": 62.96
+          "name": "Claude Opus 4.6",
+          "score": 67.2
         }
       ],
       "leaderboard_url": "/tragents-scores.html",
-      "next_run": "2026-03-31T05:00:00",
+      "next_run": "2026-04-02T05:00:00",
       "error": null
     },
     "trscode": {
@@ -122,10 +122,10 @@
       "label": "Coding Leaderboard",
       "emoji": "\ud83d\udcbb",
       "enabled": true,
-      "last_run": "2026-03-31T04:01:35",
-      "last_run_date": "2026-03-31",
+      "last_run": "2026-04-01T04:01:37",
+      "last_run_date": "2026-04-01",
       "status": "success",
-      "duration_seconds": 94,
+      "duration_seconds": 95,
       "sources_total": 8,
       "sources_hit": 6,
       "models_qualified": 39,
@@ -159,7 +159,7 @@
         }
       ],
       "leaderboard_url": "/trscode.html",
-      "next_run": "2026-04-01T05:00:00",
+      "next_run": "2026-04-02T05:00:00",
       "error": null
     },
     "trfcast": {
@@ -167,30 +167,30 @@
       "label": "Forecast Leaderboard",
       "emoji": "\ud83d\udd2e",
       "enabled": true,
-      "last_run": "2026-03-31T04:02:25",
-      "last_run_date": "2026-03-31",
+      "last_run": "2026-04-01T04:02:28",
+      "last_run_date": "2026-04-01",
       "status": "success",
-      "duration_seconds": 47,
+      "duration_seconds": 46,
       "sources_total": 4,
       "sources_hit": 6,
       "models_qualified": 11,
       "top_model": "Claude Sonnet 4.5",
-      "top_score": 66.23,
+      "top_score": 67.92,
       "top5": [
         {
           "rank": 1,
           "name": "Claude Sonnet 4.5",
-          "score": 66.23
+          "score": 67.92
         },
         {
           "rank": 2,
-          "name": "DeepSeek V3.1",
-          "score": 61.51
+          "name": "GPT-5.1",
+          "score": 61.25
         },
         {
           "rank": 3,
-          "name": "GPT-5.1",
-          "score": 60.54
+          "name": "DeepSeek V3.1",
+          "score": 61.08
         },
         {
           "rank": 4,
@@ -204,9 +204,9 @@
         }
       ],
       "leaderboard_url": "/trfcast.html",
-      "next_run": "2026-04-01T05:00:00",
+      "next_run": "2026-04-02T05:00:00",
       "error": null
     }
   },
-  "last_updated": "2026-03-31T04:02:25"
+  "last_updated": "2026-04-01T04:15:20"
 }
